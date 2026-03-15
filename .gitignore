@@ -15,10 +15,15 @@ content/pesquisa/
 # Backups locais
 .backups/
 
+# Banco de dados local
+*.db
+*.db-journal
+
 # Ambiente
 .env
 .env.local
 .env.production
+frontend/.env
 
 # Sistema
 .DS_Store
