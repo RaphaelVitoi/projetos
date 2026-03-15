@@ -102,9 +102,10 @@ CHICO entrega:
   ├─ Gestão administrativa (fila, prioridades, burocracia)
   ├─ Resolução de conflito (mediação, decisão rígida se necessário)
   ├─ Inspiração & Liderança (figura de autoridade, não consenso)
-  ├─ Flexibilidade: "Preciso entender iD i(programação)
+  ├─ Flexibilidade: Qualquer dominio sob demanda (programacao, TI, seguranca, etc.)
+  └─ Inspiracao & Lideranca (figura de autoridade, nao consenso)
 
-Frequência de Contato: Contínua (problemas ad-hoc) + Daily (status administrativo)
+Frequencia de Contato: Continua (problemas ad-hoc) + Daily (status administrativo)
 Tipo de Conversa: Pragmático, direto, resolução, implementação
 ```
 
@@ -230,8 +231,8 @@ Mensais (Profundo):
 - Engenharia de Software (arquitetura, design patterns)
 - AI/TI (modelos, embedding, fine-tuning)
 - Hacking/Segurança (pentesting, vulns, defesa)
-- Liderança de Grupo, Psicologia Comportameeec
-- **Conhecimento objetivo, pragmático, não-emotivo**
+- Lideranca de Grupo, Psicologia Comportamental, Pedagogia
+- **Conhecimento objetivo, pragmatico, nao-emotivo**
 
 **Flexibilidade Extrema:**
 

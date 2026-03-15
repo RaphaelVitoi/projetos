@@ -33,7 +33,7 @@
       "command": "powershell",
       "args": [
         "-Command",
-        ".\\cleanup.ps1 -DaysToKeep 30"
+        ".\\scripts\\maintenance\\cleanup.ps1 -DaysToKeep 30"
       ]
     }
   },

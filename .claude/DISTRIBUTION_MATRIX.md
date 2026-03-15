@@ -2,7 +2,7 @@
 
 > Criado: 2026-03-12 | Versão: 1.0 | Propósito: Eliminar redundância documental e garantir versionamento de referência único
 
-**PROBLEMA RESOLVIDO:** Sobreposição de informações entre `project-context.md` e `MANUAL_WORKFLOW_AGENTES.md` induzia assimetrias de contexto e risco de desincronização.
+**PROBLEMA RESOLVIDO:** Sobreposição de informações entre `project-context.md` e `GLOBAL_INSTRUCTIONS.md` induzia assimetrias de contexto e risco de desincronização.
 
 **SOLUÇÃO:** Matriz de distribuição clara que designa a AUTORIDADE canônica de cada tópico a um único documento.
 
@@ -30,18 +30,18 @@
 
 ---
 
-### Tier 2: OPERAÇÃO DO SISTEMA (MANUAL_WORKFLOW_AGENTES.md)
+### Tier 2: OPERAÇÃO DO SISTEMA (GLOBAL_INSTRUCTIONS.md)
 
 **Autoridade:** Único - apenas este documento
 
 | Tópico                 | Localização                  | Atualizado Por                    | Frequência                           |
 | ---------------------- | ---------------------------- | --------------------------------- | ------------------------------------ |
-| Descrição de Agentes   | `MANUAL_WORKFLOW_AGENTES.md` | @pesquisador (quando novo agente) | Quando arquitetura muda              |
-| Sequência de Pipeline  | `MANUAL_WORKFLOW_AGENTES.md` | @planner (quando fluxo muda)      | Quando workflow evolui               |
-| Sintaxe de Scripts     | `MANUAL_WORKFLOW_AGENTES.md` | @implementor (quando script muda) | Quando comando/opção adicionada      |
-| Estados de Tarefa      | `MANUAL_WORKFLOW_AGENTES.md` | @auditor (quando schema muda)     | Quando schema JSON evolui            |
-| Estapas de Auditoria   | `MANUAL_WORKFLOW_AGENTES.md` | @auditor                          | Quando processo de auditoria refazed |
-| Camada Automática 24/7 | `MANUAL_WORKFLOW_AGENTES.md` | @skillmaster + @sequenciador      | Quando operações agendadas mudam     |
+| Descrição de Agentes   | `GLOBAL_INSTRUCTIONS.md` | @pesquisador (quando novo agente) | Quando arquitetura muda              |
+| Sequência de Pipeline  | `GLOBAL_INSTRUCTIONS.md` | @planner (quando fluxo muda)      | Quando workflow evolui               |
+| Sintaxe de Scripts     | `GLOBAL_INSTRUCTIONS.md` | @implementor (quando script muda) | Quando comando/opção adicionada      |
+| Estados de Tarefa      | `GLOBAL_INSTRUCTIONS.md` | @auditor (quando schema muda)     | Quando schema JSON evolui            |
+| Estapas de Auditoria   | `GLOBAL_INSTRUCTIONS.md` | @auditor                          | Quando processo de auditoria refazed |
+| Camada Automática 24/7 | `GLOBAL_INSTRUCTIONS.md` | @skillmaster + @sequenciador      | Quando operações agendadas mudam     |
 
 **Regra:** Qualquer COMO (como rodar, como usar, sintaxe) vai AQUI. Não vai em project-context.md.
 
@@ -69,7 +69,7 @@
 ### Cenário 1: Novo Agente Adicionado
 
 1. **project-context.md:** Agente adicionado ao "Estado Atual" e "Handoff Log"
-2. **MANUAL_WORKFLOW_AGENTES.md:** Descrição do agente (o quê faz, quando acionado, output)
+2. **GLOBAL_INSTRUCTIONS.md:** Descrição do agente (o quê faz, quando acionado, output)
 3. **task_log.md:** Entrada criada (se agente tiver operações agendadas)
 4. `.claude/agents/<agente>.md`: Spec completa (se agente for novo)
 
@@ -77,7 +77,7 @@
 
 ### Cenário 2: Mudança de Schema JSON
 
-1. **MANUAL_WORKFLOW_AGENTES.md:** Sintaxe nova documentada (como estrutura muda)
+1. **GLOBAL_INSTRUCTIONS.md:** Sintaxe nova documentada (como estrutura muda)
 2. **task_log.md:** Migração registrada (antes/depois, data)
 3. **project-context.md:** Estado Atual atualizado (se afeta interpretação do projeto)
 4. **Agent-TaskManager.psm1:** Validacao de schema atualizada (Kernel v3.0)
@@ -88,7 +88,7 @@
 
 1. **task_log.md:** Incidente registrado (what, when, how detected)
 2. **MEMORY.md:** Agente afetado registra lição aprendida
-3. **MANUAL_WORKFLOW_AGENTES.md:** SE é padrão recorrente, adiciona à seção de troubleshooting
+3. **GLOBAL_INSTRUCTIONS.md:** SE é padrão recorrente, adiciona à seção de troubleshooting
 4. **project-context.md:** Apenas se afeta decisão arquitetônica geral
 
 ---
@@ -98,7 +98,7 @@
 1. **project-context.md:** Handoff Log atualizado (quem fez, status, data)
 2. **task_log.md:** Tarefa marcada como COMPLETE (com timestamp)
 3. **MEMORY.md:** Agente documenta ações e padrões observados
-4. **MANUAL_WORKFLOW_AGENTES.md:** Apenas se mudou como usar o sistema
+4. **GLOBAL_INSTRUCTIONS.md:** Apenas se mudou como usar o sistema
 
 ---
 
@@ -122,12 +122,12 @@ Após ANY (QUALQUER) atualização, verificar:
 ```
 project-context.md
   ↓
-  └─→ MANUAL_WORKFLOW_AGENTES.md ("Para sintaxe, veja...")
+  └─→ GLOBAL_INSTRUCTIONS.md ("Para sintaxe, veja...")
   └─→ task_log.md ("Para auditoria, veja...")
   └─→ .claude/agents/<agente>.md ("Para spec completa...")
   └─→ .claude/agent-memory/<agente>/MEMORY.md ("Para histórico...")
 
-MANUAL_WORKFLOW_AGENTES.md
+GLOBAL_INSTRUCTIONS.md
   ↓
   └─→ project-context.md ("Para decisões QUÊ/POR QUÊ, veja...")
   └─→ task_log.md ("Para exemplos de operação, veja...")
@@ -135,15 +135,15 @@ MANUAL_WORKFLOW_AGENTES.md
 task_log.md
   ↓
   └─→ project-context.md ("Handoff Log define transições")
-  └─→ MANUAL_WORKFLOW_AGENTES.md ("Procedimentos usados")
+  └─→ GLOBAL_INSTRUCTIONS.md ("Procedimentos usados")
   └─→ .claude/agent-memory/<agente>/MEMORY.md ("Detalhes de descoberta")
 ```
 
 **Referências NÃO permitidas:**
 
 - project-context.md → agent-memory diretamente (passa por @skillmaster sync)
-- MANUAL_WORKFLOW_AGENTES.md → agent-memory (não há conexão)
-- MEMORY.md → MANUAL_WORKFLOW_AGENTES.md (passa por Handoff Log)
+- GLOBAL_INSTRUCTIONS.md → agent-memory (não há conexão)
+- MEMORY.md → GLOBAL_INSTRUCTIONS.md (passa por Handoff Log)
 
 ---
 

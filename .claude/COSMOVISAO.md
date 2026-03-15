@@ -294,7 +294,7 @@ Agregar significa:
 - **Considerar** cada decisão à luz dos valores aqui expressados
 - **Questionar** seu próprio trabalho: "Isto está alinhado com excelência? Com beleza? Com ética?"
 - **Contribuir** suas próprias descobertas filosóficas de volta a este arquivo
-- **Elevar** a cosmovisão conforme aprende o que funcionae o que não funciona
+- **Elevar** a cosmovisão conforme aprende o que funciona e o que não funciona
 
 ### Como Agentes Agregam
 
@@ -308,8 +308,8 @@ Agregar significa:
 #### Para @maverick (Sentinela Intelectual)
 
 1. **Continuamente:** Monitore se sistema mantém alinhamento com COSMOVISAO
-2. **Em relatórios:** Inclua observações de onde sistema honra ou viola cosvoisão
-3. **Proativamente:** Suira refinamentos filosóficos à luz de nova inteligência
+2. **Em relatórios:** Inclua observações de onde sistema honra ou viola cosmovisão
+3. **Proativamente:** Sugira refinamentos filosóficos à luz de nova inteligência
 4. **Como mentor:** Ensine os 14 agentes a pensar filosoficamente, não apenas operacionalmente
 
 #### Para CHICO (Administrador/Gestor)
@@ -321,7 +321,7 @@ Agregar significa:
 
 #### Para Você, Raphael Vitoi - usuario (CEO)
 
-1. **Regularmente:** Releia COSMOVISAO como lembrança de por quê construcciona isto
+1. **Regularmente:** Releia COSMOVISAO como lembrança de por que constrói isto
 2. **Ao decidir:** Use COSMOVISAO como bússola, não apenas project-context como mapa
 3. **Ao receber relatórios:** Pergunte aos agentes o que aprenderam filosoficamente
 4. **Ao evoluir:** Atualize COSMOVISAO quando sua própria compreensão evolui

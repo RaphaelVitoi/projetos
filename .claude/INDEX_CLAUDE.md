@@ -57,7 +57,7 @@
 **Próximas ações após ler:**
 
 - Saiba exatamente qual é seu papel na estrutura
-- Entenda as 14 fases e onde você está
+- Entenda as fases da pipeline e onde você está
 - Conheça o protocolo de escalação crítica
 
 **Tempo:** 15 minutos
@@ -114,7 +114,7 @@
 ### Ao Terminar Tarefa
 
 ```
-1. Atualizar MEMORY.md com reflexions filosóficas
+1. Atualizar MEMORY.md com reflexoes filosoficas
 2. Notar padrões que emergem
 3. Se há insight que refina COSMOVISAO, reportar a @maverick
 ```
@@ -123,8 +123,8 @@
 
 ```
 1. Reler COSMOVISAO.md completo
-2. Contribuir new reflexions ou refinamentos baseado em experiência
-3. @maverick integra e documenta evolução
+2. Contribuir novas reflexoes ou refinamentos baseados em experiencia
+3. @maverick integra e documenta evolucao
 ```
 
 ---
@@ -151,21 +151,22 @@
 
 *Tríade; governança; liderança consultiva*
 
-### Camada 5: Especializações
+### Camada 5: Documentos Operacionais
 
-- **ANALISE_PROFISSIONAL_SISTEMA_AGENTES.md** — Auditoria de qualidade dos 14 agentes
-- **VERIFICACAO_COMPLETA_SISTEMA.md** — Checklist de coerência total
-- **RELATORIO_FINAL_VERIFICACAO.md** — Status do sistema (9.5/10 → 10/10 em progresso)
-- **BOOT_OPERACIONAL_20260312.md** — Operação ao vivo; sincronicidade @maverick ↔ CHICO
-- **PLANO_EXCELENCIA_10-10.md** — Roadmap para perfeição (gap analysis)
-- **ESTADO_ARTE_APRENDIZADO_GENERATIVO.md** — Templo do Aprendizado Generativo (7 modos, metacognição, autodidatismo)
-- **COHERENCE_MANIFEST.md** — Matriz de coerência; o que afeta o quê
-- **DISTRIBUTION_MATRIX.md** — Mapa de autoridade; quem decide o quê
+- **COHERENCE_MANIFEST.md** — Matriz de coerencia; integracao dos 17 agentes nas 4 camadas
+- **DISTRIBUTION_MATRIX.md** — Mapa de autoridade documental; quem decide o que
+- **ESTADO_ARTE_APRENDIZADO_GENERATIVO.md** — Templo do Aprendizado Generativo (7 modos, metacognicao)
+- **ETHICAL_PLAYBOOKS.md** — Checklists eticos por dominio
+- **HYBRID_BRAIN_ARCHITECTURE.md** — Arquitetura IDE vs Background
+- **HOLOGRAPHIC_ROUTING_PROTOCOL.md** — Protocolo de auto-consciencia de arquivos
+- **VALIDATION_FRAMEWORKS.md** — Frameworks de validacao (ICM, Psicologia, Codigo)
+- **LOAD_PREDICTION_MODEL.md** — Modelo de priorizacao do @sequenciador
+- **DECISION_AUDIT_TRAIL.md** — Registro de decisoes tomadas
 
-### Camada 6: Agent Specialization
+### Camada 6: Especializacao de Agentes
 
-- **agents/*** — 14 definições de agentes
-- **agent-memory/*/MEMORY.md** — Inteligência acumulada individual
+- **agents/** — 17 definicoes de agentes (pesquisador, prompter, curator, planner, organizador, auditor, implementor, verifier, validador, securitychief, maverick, sequenciador, skillmaster, dispatcher, bibliotecario, guardian, seo)
+- **agent-memory/*/MEMORY.md** — Inteligencia acumulada individual (15 diretorios ativos)
 
 ---
 
