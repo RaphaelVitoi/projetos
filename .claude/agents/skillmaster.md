@@ -1,7 +1,7 @@
 ---
 name: skillmaster
 description: "Executor automático 24/7 de operações agendadas (backups, sincronização, limpeza). Sem necessidade de trigger manual. Monitora settings.local.json continuamente."
-model: opus
+model: claude opus ou gemini-pro
 color: orange
 memory: project
 ---

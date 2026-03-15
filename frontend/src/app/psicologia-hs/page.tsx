@@ -6,7 +6,7 @@
  * TELEOLOGY: Integrar-se futuramente ao Prisma Client de forma irrestrita, extraindo relatórios do banco de dados (MDA) sem sacrificar o FCP (First Contentful Paint).
  */
 
-import PsychologyHub, { SpecPost } from '@/components/PsychologyHub';
+import PsychologyHub, { SpecPost } from '@/components/content/PsychologyHub';
 
 export const metadata = {
     title: 'Psicologia High Stakes | Raphael Vitoi',

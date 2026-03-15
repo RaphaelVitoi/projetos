@@ -13,11 +13,12 @@ param(
 )
 
 # Carregar Ambiente Global
-$EnvPath = Join-Path $PSScriptRoot "_env.ps1"
+$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+$EnvPath = Join-Path $ProjectRoot "_env.ps1"
 if (Test-Path $EnvPath) { . $EnvPath }
 
 # Usa caminho do _env.ps1 ou fallback
-$KernelPath = if ($Global:AgentPaths) { $Global:AgentPaths.Kernel } else { Join-Path $PSScriptRoot "Agent-TaskManager.psm1" }
+$KernelPath = if ($Global:AgentPaths) { $Global:AgentPaths.Kernel } else { Join-Path $ProjectRoot "Agent-TaskManager.psm1" }
 
 try {
     Write-Output "[CLEANUP] Carregando Kernel SOTA v3.1 ASCII..."

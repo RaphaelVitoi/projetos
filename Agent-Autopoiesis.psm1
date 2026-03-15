@@ -33,7 +33,7 @@ function Invoke-AgentMaverick {
     $Script:AgentStats["@maverick"].executions++
     Write-Host "[AUTOPOIESE] [MAVERICK] Escaneando o horizonte..." -ForegroundColor Magenta
     $tasks = Get-AgentTaskStatus -Status "pending"
-    $myTask = $tasks | Where-Object { $_.description -match "Maverick|Sentinela|Vigília" -or $_.agent -eq "@maverick" } | Select-Object -First 1
+    $myTask = $tasks | Where-Object { $_.description -match "Maverick|Sentinela|Vigilia" -or $_.agent -eq "@maverick" } | Select-Object -First 1
 
     if ($myTask) {
         try {
@@ -43,13 +43,13 @@ function Invoke-AgentMaverick {
             $myTask.status = "running"
             Add-AgentTask -NewTask $myTask
 
-            # 2. Produção de Arte (Simulada)
+            # 2. Producao de Arte (Simulada)
             Start-Sleep -Seconds 2 # "Thinking time"
             
-            # 3. Fertilização (Trigger Planner)
+            # 3. Fertilizacao (Trigger Planner)
             $plannerTask = [ordered]@{
                 id          = "PLAN-$(Get-Date -Format 'yyyyMMddHHmmss')"
-                description = "Planejar implementação baseada na visão do Maverick: $($myTask.description)"
+                description = "Planejar implementacao baseada na visao do Maverick: $($myTask.description)"
                 status      = "pending"
                 timestamp   = (Get-Date -Format "o")
                 agent       = "@planner"
@@ -285,3 +285,5 @@ function Show-AgentStats {
         Write-Host "$($agent): Execucoes=$executions, Tempo Total=$totalTime segundos" -ForegroundColor Cyan
     }
 }
+
+Export-ModuleMember -Function Invoke-AgentMaverick, Invoke-AgentPlanner, Invoke-AgentAuditor, Invoke-RoutineMaintenance, Invoke-AgentWithRetry, Start-OrganismPulse, Show-AgentStats

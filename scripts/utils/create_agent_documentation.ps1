@@ -7,7 +7,8 @@ $Agents = @(
     "maverick", "sequenciador", "skillmaster", "dispatcher", "chico"
 )
 
-$BaseDir = Join-Path $PSScriptRoot ".claude"
+$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+$BaseDir = Join-Path $ProjectRoot ".claude"
 $MemoryDir = Join-Path $BaseDir "agent-memory"
 
 Write-Host "=== INICIANDO CRIAÇÃO DE ESTRUTURA DE MEMÓRIA (10/10) ===" -ForegroundColor Cyan

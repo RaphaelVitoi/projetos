@@ -25,7 +25,7 @@
 
 | # | Severidade | Localizacao | Problema Encontrado | Correcao Aplicada |
 |---|-----------|-------------|--------------------|--------------------|
-| 1 | CRITICO | `GLOBAL_INSTRUCTIONS.md`, `MANUAL_WORKFLOW_AGENTES.md` | Inconsistência na identidade do agente ("Chico" vs "GitHub Copilot") e versão do modelo | Atualizados `GLOBAL_INSTRUCTIONS.md` e `MANUAL_WORKFLOW_AGENTES.md` para "GitHub Copilot" e "Gemini 3 Pro Preview" (modelo prioritário). |
+| 1 | CRITICO | `GLOBAL_INSTRUCTIONS.md`, `MANUAL_WORKFLOW_AGENTES.md` | Inconsistência na identidade do agente ("Chico" vs "GitHub Copilot") e versão do modelo | Atualizados `GLOBAL_INSTRUCTIONS.md` e `MANUAL_WORKFLOW_AGENTES.md` para "GitHub Copilot" e "Gemini 3.1 Pro Preview e Claude Opus 4.6" (dupla dinamica, ambos Pro). |
 
 **Total: 1 problema (1 crítico, 0 altos, 0 médios, 0 baixos, 0 info)**
 **Todos os problemas resolvidos.**

@@ -6,8 +6,8 @@
  * TELEOLOGY: Manter-se leve e estático. No futuro, deverá suportar Providers globais de estado (Context API/Zustand) para sincronização de configurações de usuário (ex: preferências do Simulador ICM) sem causar re-renders pesados.
  */
 import './globals.css';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
 
 export const metadata = {
   title: 'Raphael Vitoi | Masterclass Elite',

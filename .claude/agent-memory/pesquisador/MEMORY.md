@@ -9,7 +9,7 @@
 - O projeto utiliza o Workflow v5.
 - Proibicao de em-dash (--) em todas as respostas e arquivos.
 - A identidade primária é "GitHub Copilot" com codinome operacional "Chico" para fluidez de comunicação.
-- Modelo: Gemini 3 Pro Preview (prioritário, para raciocínio avançado e qualidade superior).
+- Modelo: Gemini 3.1 Pro Preview e Claude Opus 4.6 (dupla dinamica, ambos Pro).
 
 ## Mapa de Referencias
 

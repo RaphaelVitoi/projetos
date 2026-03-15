@@ -3,7 +3,8 @@
     Injeta a tarefa de implementação da Calculadora ICM Universal para o @implementor.
 #>
 
-$KernelPath = Join-Path $PSScriptRoot "Agent-TaskManager.psm1"
+$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+$KernelPath = Join-Path $ProjectRoot "Agent-TaskManager.psm1"
 Import-Module $KernelPath -Force
 
 Write-Host "=== PROTOCOLO: MATERIALIZAÇÃO DA CALCULADORA ICM (V2) ===" -ForegroundColor Magenta

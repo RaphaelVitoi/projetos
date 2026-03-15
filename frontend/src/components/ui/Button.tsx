@@ -1,1 +1,0 @@
-﻿export default function Button({ children, onClick }: any) { return <button className="px-6 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded transition-all" onClick={onClick}>{children}</button>; }

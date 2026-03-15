@@ -6,15 +6,16 @@ param(
     [string]$TaskId
 )
 
-$KernelPath = Join-Path $PSScriptRoot "Agent-TaskManager.psm1"
+$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+$KernelPath = Join-Path $ProjectRoot "Agent-TaskManager.psm1"
 Import-Module $KernelPath -Force
-$AutopoiesisPath = Join-Path $PSScriptRoot "Agent-Autopoiesis.psm1"
+$AutopoiesisPath = Join-Path $ProjectRoot "Agent-Autopoiesis.psm1"
 
 # A variável CurrentTaskID é usada pelo restante do script original.
 $CurrentTaskID = $TaskId
-$BaseDir = Join-Path $PSScriptRoot ".claude"
+$BaseDir = Join-Path $ProjectRoot ".claude"
 $MemoryDir = Join-Path $BaseDir "agent-memory"
-$ReportPath = Join-Path $PSScriptRoot "docs\reports\RELATORIO_SENTINELA_$(Get-Date -Format 'yyyy-MM-dd').md"
+$ReportPath = Join-Path $ProjectRoot "docs\reports\RELATORIO_SENTINELA_$(Get-Date -Format 'yyyy-MM-dd').md"
 $DocsDir = Split-Path $ReportPath
 
 Write-Host "=== [MAVERICK] SENTINELA INICIADO ===" -ForegroundColor Magenta

@@ -22,7 +22,7 @@ function Invoke-WithMutex {
     param([scriptblock]$Action)
     $mutex = New-Object System.Threading.Mutex($false, $Script:MutexName)
     try {
-        if ($mutex.WaitOne([TimeSpan]::FromSeconds(15))) {
+        if ($mutex.WaitOne([TimeSpan]::FromSeconds(30))) {
             try { & $Action } finally { $mutex.ReleaseMutex() }
         }
         else { throw "TIMEOUT KERNEL: Deadlock sistemico evitado. Mutex ocupado." }
@@ -82,23 +82,23 @@ function Add-AgentTask {
     # Interceptador Pydantic (Honestidade Radical de Dados)
     $pyScript = Join-Path $PSScriptRoot "task_executor.py"
     if (Test-Path $pyScript) {
+        $taskJson = $NewTask | ConvertTo-Json -Depth 10 -Compress:$true
+        # Criptografia estrutural (Base64) para obliterar a entropia de aspas no Windows
+        $taskB64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($taskJson))
+        
+        $PythonCmd = "python"
+        $VenvPython = Join-Path $PSScriptRoot ".venv\Scripts\python.exe"
+        if (Test-Path $VenvPython) { $PythonCmd = $VenvPython }
+        
+        $output = & $PythonCmd $pyScript add $taskB64
+        if ($LASTEXITCODE -ne 0) { throw "CRITICAL: Pydantic rejeitou o schema. Erro: $output" }
+        
         Invoke-WithMutex {
-            $taskJson = $NewTask | ConvertTo-Json -Depth 10 -Compress:$true
-            # Criptografia estrutural (Base64) para obliterar a entropia de aspas no Windows
-            $taskB64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($taskJson))
-            
-            $PythonCmd = "python"
-            $VenvPython = Join-Path $PSScriptRoot ".venv\Scripts\python.exe"
-            if (Test-Path $VenvPython) { $PythonCmd = $VenvPython }
-            
-            $output = & $PythonCmd $pyScript add $taskB64
-            if ($LASTEXITCODE -ne 0) { throw "CRITICAL: Pydantic rejeitou o schema. Erro: $output" }
-            
             $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
             try {
                 $logDir = Split-Path $Script:LogPath
                 if (-not (Test-Path $logDir)) { New-Item -ItemType Directory -Path $logDir -Force | Out-Null }
-                "[$timestamp][ENQUEUED] $($NewTask.id) - $($NewTask.status) (Pydantic Validated)" | Add-Content -Path $Script:LogPath
+                "[$timestamp][ENQUEUED] $($NewTask.id) - $($NewTask.status) (Pydantic Validated)" | Add-Content -Path $Script:LogPath -ErrorAction Stop
             }
             catch {}
         }
@@ -115,7 +115,10 @@ function Add-AgentTask {
             Write-Warning "[AGENT-TASKMANAGER] Could not split path: $($_.Exception.Message)"
         }
         if (-not (Test-Path $logDir)) { New-Item -ItemType Directory -Path $logDir -Force | Out-Null }
-        "[$timestamp][ENQUEUED] $($NewTask.id) - $($NewTask.status)" | Add-Content -Path $Script:LogPath
+        try {
+            "[$timestamp][ENQUEUED] $($NewTask.id) - $($NewTask.status)" | Add-Content -Path $Script:LogPath -ErrorAction Stop
+        }
+        catch {}
 
         $queue = @()
         if (Test-Path $Script:QueuePath) {
@@ -132,7 +135,10 @@ function Add-AgentTask {
                 Move-Item -Path $Script:QueuePath -Destination $corruptFile -Force
         
                 $msg = "[KERNEL][AUTO-HEALING] Corrupcao detectada. Entropia isolada. Sistema regenerado. Erro: $($_.Exception.Message) - $($_.Exception.StackTrace)"
-                $msg | Add-Content -Path $Script:LogPath
+                try {
+                    $msg | Add-Content -Path $Script:LogPath -ErrorAction Stop
+                }
+                catch {}
                 $queue = @()
             }
         }
@@ -140,6 +146,25 @@ function Add-AgentTask {
         # Logica Upsert: Remove versao anterior da tarefa (se existir) para permitir atualizacao de status
         $queue = @($queue | Where-Object { $_.id -ne $NewTask.id })
         $queue += $NewTask
+
+        # AUTOPOIESE: Hard-limit de segurança proposto pelo Sentinela (@maverick) para mitigar degradação de I/O
+        $HardLimit = 500
+        if ($queue.Count -gt $HardLimit) {
+            $activeTasks = @($queue | Where-Object { $_.status -match '^(pending|running)$' })
+            # Ordena descrescente para manter as mais recentes
+            $inactiveTasks = @($queue | Where-Object { $_.status -match '^(completed|failed)$' }) | Sort-Object timestamp -Descending
+            
+            $availableSlots = $HardLimit - $activeTasks.Count
+            if ($availableSlots -gt 0) {
+                $queue = @($activeTasks + @($inactiveTasks | Select-Object -First $availableSlots))
+            }
+            else {
+                $queue = @($activeTasks | Select-Object -Last $HardLimit)
+            }
+            
+            $msgLimit = "[$((Get-Date).ToString('yyyy-MM-dd HH:mm:ss'))][KERNEL] Hard-limit atingido. Fila truncada para $HardLimit itens."
+            try { $msgLimit | Add-Content -Path $Script:LogPath } catch {}
+        }
 
         # Atomic Replace
         $wrapper = New-AgentTaskWrapper -Tasks $queue
@@ -163,7 +188,10 @@ function Invoke-TaskCleanup {
 
     Invoke-WithMutex {
         if (-not (Test-Path $Script:QueuePath)) { return }
-        $raw = [System.IO.File]::ReadAllText($Script:QueuePath, [System.Text.Encoding]::UTF8)
+        
+        $raw = ""
+        try { $raw = [System.IO.File]::ReadAllText($Script:QueuePath, [System.Text.Encoding]::UTF8) } catch { return }
+        
         if ([string]::IsNullOrWhiteSpace($raw)) {
             return 
         }
@@ -212,10 +240,16 @@ function Invoke-TaskCleanup {
             foreach ($task in $toArchive) {
                 $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
                 $action = switch ($task.status) { 'completed' { '[COMPLETED]' } 'failed' { '[FAILED]' } default { '[ARCHIVED]' } }
-                "[$timestamp] $action $($task.id)" | Add-Content -Path $Script:LogPath
+                try {
+                    "[$timestamp] $action $($task.id)" | Add-Content -Path $Script:LogPath -ErrorAction Stop
+                }
+                catch {}
             }
 
-            "[$((Get-Date).ToString('yyyy-MM-dd HH:mm:ss'))] [CLEANUP] Movidas $($toArchive.Count) tarefas. Assinaturas renovadas." | Add-Content -Path $Script:LogPath
+            try {
+                "[$((Get-Date).ToString('yyyy-MM-dd HH:mm:ss'))] [CLEANUP] Movidas $($toArchive.Count) tarefas. Assinaturas renovadas." | Add-Content -Path $Script:LogPath -ErrorAction Stop
+            }
+            catch {}
         }
     }
 }
@@ -229,7 +263,9 @@ function Get-AgentTaskStatus {
     Invoke-WithMutex {
         if (-not (Test-Path $Script:QueuePath)) { return @() }
 
-        $raw = [System.IO.File]::ReadAllText($Script:QueuePath, [System.Text.Encoding]::UTF8)
+        $raw = ""
+        try { $raw = [System.IO.File]::ReadAllText($Script:QueuePath, [System.Text.Encoding]::UTF8) } catch { return @() }
+        
         if ([string]::IsNullOrWhiteSpace($raw)) { return @() }
 
         $payload = $raw | ConvertFrom-Json
@@ -239,8 +275,13 @@ function Get-AgentTaskStatus {
         $queue = $queue | Sort-Object { switch ($_.priority) { "high" { 1 }; "normal" { 2 }; "low" { 3 }; default { 2 } } }
 
         # Log RUNNING
-        foreach ($task in $queue | Where-Object { $_.status -eq "running" }) {
-            "[$((Get-Date).ToString('yyyy-MM-dd HH:mm:ss'))] [RUNNING] $($task.id)" | Add-Content -Path $Script:LogPath
+        try {
+            foreach ($task in $queue | Where-Object { $_.status -eq "running" }) {
+                "[$((Get-Date).ToString('yyyy-MM-dd HH:mm:ss'))] [RUNNING] $($task.id)" | Add-Content -Path $Script:LogPath -ErrorAction Stop
+            }
+        }
+        catch {
+            # Evita interrupção por concorrência de I/O em operação de leitura
         }
 
         if (-not [string]::IsNullOrEmpty($Status)) {
@@ -269,6 +310,46 @@ function Test-CuratorVeto {
     }
 }
 
+# -------------------------------------------------------------------
+# CORTEX VALIDATION LOGGING
+# -------------------------------------------------------------------
+function Add-CortexValidationLog {
+    param([bool]$Success, [string]$Details = "")
+    Invoke-WithMutex {
+        $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+        $status = if ($Success) { "SUCCESS" } else { "FAILED" }
+        $msg = "[$timestamp][CORTEX VALIDATION] $status - $Details"
+        try {
+            $msg | Add-Content -Path $Script:LogPath
+        }
+        catch {}
+    }
+}
+
+# -------------------------------------------------------------------
+# LOG DE CORREÇÕES E AUDITORIA
+# -------------------------------------------------------------------
+function Add-CorrectionLog {
+    param(
+        [Parameter(Mandatory = $true)][string]$TaskId,
+        [Parameter(Mandatory = $true)][string]$Phase,
+        [Parameter(Mandatory = $true)][string]$Agent,
+        [Parameter(Mandatory = $true)][string]$Description,
+        [string]$Reason = "N/A",
+        [string]$Impact = "N/A"
+    )
+    Invoke-WithMutex {
+        $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+        $msg = "[$timestamp][CORRECTION] TaskId: $TaskId | Phase: $Phase | Agent: $Agent | Desc: $Description | Reason: $Reason | Impact: $Impact"
+        try {
+            $logDir = Split-Path $Script:CorrectionsLogPath
+            if (-not (Test-Path $logDir)) { New-Item -ItemType Directory -Path $logDir -Force | Out-Null }
+            $msg | Add-Content -Path $Script:CorrectionsLogPath
+        }
+        catch {}
+    }
+}
+
 # Example usage within @auditor or @verifier:
 # try {
 #   # Perform the correction
@@ -276,24 +357,8 @@ function Test-CuratorVeto {
 #   # Handle the error
 # } finally {
 #   # Log the correction
-#   Log-Correction -TaskId $TaskId -Phase "Auditoria" -Agent "@auditor" -Description "Correcao XSS" -Reason "Input malicioso" -Impact "Seguranca"
+#   Add-CorrectionLog -TaskId $TaskId -Phase "Auditoria" -Agent "@auditor" -Description "Correcao XSS" -Reason "Input malicioso" -Impact "Seguranca"
 # }
 
 # Exporta estritamente a API do Kernel
-Export-ModuleMember -Function Test-TaskSchema, Add-AgentTask, Invoke-TaskCleanup, Get-AgentTaskStatus
-Export-ModuleMember -Function Log-Correction #Exported Function
-# Check Curator Veto AFTER verifier
-if ($Task.agent -eq "@verifier" -and $Task.phase -eq "5") {
-    if (Test-CuratorVeto -TaskId $Task.id) {
-        $correctionsLogPath = Join-Path $Script:LogPath "corrections.log"
-        # Log the veto
-        Log-Correction -TaskId $TaskId -Phase "Verificação" -Agent "@verifier" -Description "Tarefa vetada pelo @curator" -Reason "Questões éticas ou estéticas não resolvidas" -Impact "Qualidade/Ética"
-
-        # Update task status to 'vetoed'
-        $Task.status = "vetoed"
-        Add-AgentTask -NewTask $Task  # Save the updated task
-
-
-        Write-Warning "  [KERNEL] @curator VETO DETECTED. Task $($Task.id) blocked."
-        continue # Skip to the next task
-    }
+Export-ModuleMember -Function Test-TaskSchema, Add-AgentTask, Invoke-TaskCleanup, Get-AgentTaskStatus, Add-CortexValidationLog, Add-CorrectionLog

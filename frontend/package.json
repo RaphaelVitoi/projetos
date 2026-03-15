@@ -2,6 +2,7 @@
     "name": "frontend",
     "version": "1.0.0",
     "scripts": {
+        "prebuild": "node -e \"const{execSync}=require('child_process');try{execSync('cmd /c rmdir /s /q .next',{stdio:'ignore'})}catch{}\"",
         "build": "next build",
         "dev": "next dev",
         "seed": "ts-node prisma/seed.ts",
@@ -11,6 +12,8 @@
         "@prisma/client": "^5.22.0",
         "@tailwindcss/postcss": "^4.2.1",
         "@tailwindcss/typography": "^0.5.19",
+        "html2canvas": "^1.4.1",
+        "jspdf": "^4.2.0",
         "next": "^16.1.6",
         "react": "^19.2.4",
         "react-dom": "^19.2.4",

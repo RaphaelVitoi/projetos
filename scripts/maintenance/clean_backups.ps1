@@ -1,7 +1,8 @@
 # Limpeza de Backups Legados (Pós-Migração Kernel v3.0)
 # Remove arquivos *.backup gerados pelos scripts antigos (do.ps1 v1, validate-queue.ps1)
 
-$QueueDir = Join-Path $PSScriptRoot "queue"
+$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+$QueueDir = Join-Path $ProjectRoot "queue"
 
 if (Test-Path $QueueDir) {
     $files = Get-ChildItem -Path $QueueDir -Filter "*.backup"

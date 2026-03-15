@@ -1,11 +1,12 @@
 # Script de Inicialização de Inovação - Maverick -> Planner
 # Objetivo: Materializar o conceito da CLI Inteligente e enfileirar para planejamento técnico.
 
-$KernelPath = Join-Path $PSScriptRoot "Agent-TaskManager.psm1"
+$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+$KernelPath = Join-Path $ProjectRoot "Agent-TaskManager.psm1"
 Import-Module $KernelPath -Force
 
 $TaskSlug = "cli-interativa"
-$TaskDir = Join-Path $PSScriptRoot "docs\tasks\$TaskSlug"
+$TaskDir = Join-Path $ProjectRoot "docs\tasks\$TaskSlug"
 $ConceptFile = Join-Path $TaskDir "CONCEPT_MAVERICK.md"
 
 Write-Host "=== INICIANDO PROTOCOLO DE INOVAÇÃO (MAVERICK) ===" -ForegroundColor Magenta

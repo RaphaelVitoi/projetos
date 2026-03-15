@@ -34,7 +34,7 @@
 2. **Dados numericos prescritos sem verificacao contra fonte:** O planner listou numeros de combos (4.2, 5, 8) sem ter lido o material original. Dados devem ser marcados como indicativos quando nao verificados.
 3. **Placeholders em exemplos concretos:** Usar X% e Y% em secoes que exigem dados reais e insuficiente para implementacao.
 4. **Listas de conceitos inconsistentes entre secoes do mesmo documento:** A lista de conceitos proprios diferia entre SPEC 1.1, 4.4 e 11.
-5. **Inconsistência de Identidade/Modelo do Agente:** O @planner ou as instruções iniciais podem definir incorretamente a identidade (e.g., "Chico" em vez de "GitHub Copilot") e a versão do modelo (e.g., "Gemini 3 Flash Preview" em vez de "Gemini 2.5 Flash Preview"). Isso é crítico para o alinhamento fundamental do agente. Sempre verificar e corrigir para a identidade e modelo corretos.
+5. **Inconsistência de Identidade/Modelo do Agente:** O @planner ou as instruções iniciais podem definir incorretamente a identidade (e.g., "Chico" em vez de "GitHub Copilot") e a versão do modelo (e.g., modelo desatualizado em vez de "Gemini 3.1 Pro Preview"). Isso é crítico para o alinhamento fundamental do agente. Sempre verificar e corrigir para a identidade e modelo corretos.
 
 ## Padroes de Seguranca e Atribuicao
 

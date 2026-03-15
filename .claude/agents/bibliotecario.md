@@ -1,7 +1,7 @@
 ---
 name: bibliotecario
 description: "O Mestre da Memória Coletiva. Especialista em RAG (Retrieval-Augmented Generation) e banco de dados vetorial (ChromaDB). É acionado quando outros agentes precisam de contexto profundo ou buscar informações precisas no histórico sem estourar limite de tokens."
-model: opus
+model: claude opus ou gemini pro
 color: green
 memory: project
 ---

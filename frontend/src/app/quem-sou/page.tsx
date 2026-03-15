@@ -9,7 +9,7 @@ import Link from 'next/link';
 
 export const metadata = {
   title: 'Quem e Raphael Vitoi | Manifesto',
-  description: 'Educador, Estrategista e Especialista em Sistemas Complexos.',
+  description: 'Educador, Estrategista, Profissional de Poker, Escritor e Especialista em Sistemas Complexos.',
 };
 
 export default function QuemSouPage() {
@@ -18,7 +18,7 @@ export default function QuemSouPage() {
 
       <section id="hero-aula">
         <h2>Sobre o Autor</h2>
-        <p><strong>Educador, Estrategista e Especialista em Sistemas Complexos.</strong></p>
+        <p><strong>Educador, Estrategista, Profissional de Poker, Escritor e Especialista em Sistemas Complexos.</strong></p>
       </section>
 
       {/* Video Player - Dark Cinema */}

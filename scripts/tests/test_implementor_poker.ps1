@@ -3,7 +3,8 @@
     Injeta uma tarefa de teste para o @implementor (Reescrever módulo Python do Poker).
 #>
 
-$KernelPath = Join-Path $PSScriptRoot "Agent-TaskManager.psm1"
+$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+$KernelPath = Join-Path $ProjectRoot "Agent-TaskManager.psm1"
 Import-Module $KernelPath -Force
 
 Write-Host "=== TESTE DINÂMICO: IMPLEMENTOR (PYTHON) ===" -ForegroundColor Magenta

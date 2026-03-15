@@ -1,6 +1,8 @@
 # Arquivo de Configuracao Global do Ecossistema de Agentes
 # Use `.` para carregar no escopo do seu script: . ./_env.ps1
 
+if ($null -ne $Global:AgentPaths) { return }
+
 # 1. Caminhos Criticos (Cerebro do Sistema)
 $Global:AgentPaths = @{
     Root        = $PSScriptRoot
@@ -11,6 +13,9 @@ $Global:AgentPaths = @{
     Autopoiesis = Join-Path $PSScriptRoot "Agent-Autopoiesis.psm1"
     Memory      = Join-Path $PSScriptRoot ".claude\agent-memory"
     Docs        = Join-Path $PSScriptRoot "docs"
+    Data        = Join-Path $PSScriptRoot "data"
+    Scripts     = Join-Path $PSScriptRoot "scripts"
+    Frontend    = Join-Path $PSScriptRoot "frontend"
 }
 
 # 2. Configuracao do Organismo Vivo (Autopoiese)

@@ -2,7 +2,8 @@
 .SYNOPSIS
     Limpa arquivos de resultados de tarefas antigos (>30 dias).
 #>
-$TargetDir = Join-Path $PSScriptRoot ".claude\task_results"
+$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+$TargetDir = Join-Path $ProjectRoot ".claude\task_results"
 $DaysToKeep = 30
 
 if (Test-Path $TargetDir) {

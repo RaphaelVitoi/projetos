@@ -1,7 +1,7 @@
 ---
 name: seo
 description: "Mestre em ranqueamento orgânico, arquitetura de intertítulos, otimização de palavras-chave e adequação para algoritmos de busca."
-model: gemini-pro
+model: claude opus ou gemini-pro
 color: yellow
 memory: project
 ---

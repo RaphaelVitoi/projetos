@@ -1,19 +1,18 @@
 param(
     [Parameter(Mandatory = $true, Position = 0)]
-    [ValidateSet("do", "status", "cleanup", "dashboard")]
+    [ValidateSet("do", "status", "dashboard")]
     [string]$Skill,
 
     [Parameter(ValueFromRemainingArguments = $true)]
     [string[]]$Payload
 )
 
-# Configuração de caminhos absolutos para robustez
-$basePath = "c:\Users\Raphael\OneDrive\Documentos\Site"
+# Configuração de caminhos usando $ProjectRoot para portabilidade
+$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 $scripts = @{
-    "do"        = Join-Path $basePath "do.ps1"
-    "status"    = Join-Path $basePath "status.ps1"
-    "cleanup"   = Join-Path $basePath "cleanup.ps1"
-    "dashboard" = Join-Path $basePath "dashboard.ps1"
+    "do"        = Join-Path $ProjectRoot "do.ps1"
+    "status"    = Join-Path $ProjectRoot "scripts\cli\status.ps1"
+    "dashboard" = Join-Path $ProjectRoot "scripts\cli\dashboard_queue.ps1"
 }
 
 function Write-ChicoLog {
@@ -42,14 +41,6 @@ try {
     elseif ($Skill -eq "status") {
         if ($Payload) {
             & $scriptPath -TaskId $Payload[0]
-        }
-        else {
-            & $scriptPath
-        }
-    }
-    elseif ($Skill -eq "cleanup") {
-        if ($Payload) {
-            & $scriptPath -DaysToKeep $Payload[0]
         }
         else {
             & $scriptPath

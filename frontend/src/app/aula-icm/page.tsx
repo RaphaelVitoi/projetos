@@ -7,7 +7,7 @@
  */
 
 import Link from 'next/link';
-import SimuladorICM from './SimuladorICM';
+import SimuladorICM from '@/components/icm/SimuladorICM';
 
 export const metadata = {
   title: 'ICM Pos-Flop | Raphael Vitoi',
@@ -20,7 +20,7 @@ export default function AulaICMPage() {
       {/* HERO SECTION */}
       <section className="max-w-4xl mx-auto px-6 py-16 text-center">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-[10px] font-bold uppercase tracking-widest mb-6">
-          <i className="fa-solid fa-bolt"></i> State of the Art
+          <span className="fa-solid fa-bolt"></span> State of the Art
         </div>
         <h2 className="text-5xl md:text-7xl font-editorial font-bold text-white mb-6 leading-tight glow-text">
           O Edge Mudou de Lugar.
@@ -81,7 +81,7 @@ export default function AulaICMPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10 not-prose">
             <div className="bg-slate-900/50 p-5 rounded-xl border border-slate-800 hover:border-indigo-500/30 transition-colors">
               <p className="font-bold text-white mb-2">
-                <i className="fa-solid fa-shield-halved text-indigo-400 mr-2"></i> O Pacto Silencioso
+                <span className="fa-solid fa-shield-halved text-indigo-400 mr-2"></span> O Pacto Silencioso
               </p>
               <p className="text-sm text-slate-400">
                 Chip Leader vs Vice CL. O RP de ambos ultrapassa 20%. A Resolucao de Nash cria um
@@ -90,7 +90,7 @@ export default function AulaICMPage() {
             </div>
             <div className="bg-slate-900/50 p-5 rounded-xl border border-slate-800 hover:border-pink-500/30 transition-colors">
               <p className="font-bold text-white mb-2">
-                <i className="fa-solid fa-scale-unbalanced text-pink-400 mr-2"></i> Paradoxo do Valuation
+                <span className="fa-solid fa-scale-unbalanced text-pink-400 mr-2"></span> Paradoxo do Valuation
               </p>
               <p className="text-sm text-slate-400">
                 Mid Stack (IP) vs Big Blind (OOP). O Mid acha que pode pressionar, mas o BB
@@ -99,7 +99,7 @@ export default function AulaICMPage() {
             </div>
             <div className="bg-slate-900/50 p-5 rounded-xl border border-slate-800 hover:border-emerald-500/30 transition-colors">
               <p className="font-bold text-white mb-2">
-                <i className="fa-solid fa-skull text-emerald-400 mr-2"></i> A Guerra na Lama
+                <span className="fa-solid fa-skull text-emerald-400 mr-2"></span> A Guerra na Lama
               </p>
               <p className="text-sm text-slate-400">
                 Dois shorts. Quem entra em overfold massivo rezando pelo ICM acaba morrendo para os
@@ -108,7 +108,7 @@ export default function AulaICMPage() {
             </div>
             <div className="bg-slate-900/50 p-5 rounded-xl border border-slate-800 hover:border-amber-500/30 transition-colors">
               <p className="font-bold text-white mb-2">
-                <i className="fa-solid fa-crown text-amber-400 mr-2"></i> A Ameaca Organica
+                <span className="fa-solid fa-crown text-amber-400 mr-2"></span> A Ameaca Organica
               </p>
               <p className="text-sm text-slate-400">
                 Chip Leader ataca Vice. Se o CL perder, ele cria um monstro. O solver protege o seu
@@ -131,7 +131,7 @@ export default function AulaICMPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Link href="/leitura-icm" className="glass-panel p-6 rounded-xl hover:bg-slate-800/80 hover:-translate-y-1 transition-all group flex items-center gap-4">
             <div className="w-12 h-12 bg-slate-800 rounded-lg flex items-center justify-center text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white transition-colors">
-              <i className="fa-solid fa-file-lines text-xl"></i>
+              <span className="fa-solid fa-file-lines text-xl"></span>
             </div>
             <div>
               <h5 className="text-white font-bold">Ler Whitepaper</h5>
@@ -140,7 +140,7 @@ export default function AulaICMPage() {
           </Link>
           <a href="#simulador-section" className="glass-panel p-6 rounded-xl hover:bg-slate-800/80 hover:-translate-y-1 transition-all group flex items-center gap-4 ring-1 ring-emerald-500/30">
             <div className="w-12 h-12 bg-emerald-500/10 rounded-lg flex items-center justify-center text-emerald-400 group-hover:bg-emerald-500 group-hover:text-white transition-colors">
-              <i className="fa-solid fa-gamepad text-xl"></i>
+              <span className="fa-solid fa-gamepad text-xl"></span>
             </div>
             <div>
               <h5 className="text-white font-bold">Usar Simulador</h5>
@@ -149,7 +149,7 @@ export default function AulaICMPage() {
           </a>
           <Link href="/aula-1-2" className="glass-panel p-6 rounded-xl hover:bg-slate-800/80 hover:-translate-y-1 transition-all group flex items-center gap-4">
             <div className="w-12 h-12 bg-slate-800 rounded-lg flex items-center justify-center text-sky-400 group-hover:bg-sky-500 group-hover:text-white transition-colors">
-              <i className="fa-solid fa-graduation-cap text-xl"></i>
+              <span className="fa-solid fa-graduation-cap text-xl"></span>
             </div>
             <div>
               <h5 className="text-white font-bold">Aula 1.2</h5>

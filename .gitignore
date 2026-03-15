@@ -23,6 +23,7 @@ content/pesquisa/
 .env
 .env.local
 .env.production
+_env.ps1
 frontend/.env
 
 # Sistema

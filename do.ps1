@@ -3,7 +3,7 @@
  * IDENTITY: Membrana Inteligente (Smart CLI v2.0)
  * PATH: do.ps1
  * ROLE: Atuar como duto interativo de intencao, aplicando heuristica de Regex para rotear inputs humanos ao agente adequado.
- * BINDING: [Agent-TaskManager.psm1 (Kernel para enfileiramento), synonyms.psd1 (Cortex de sinonimos)]
+ * BINDING: [Agent-TaskManager.psm1 (Kernel para enfileiramento), synonyms.json (Cortex de sinonimos)]
  * TELEOLOGY: Reduzir a carga cognitiva do usuario a zero na entrada de tarefas, filtrando a entropia antes que alcance o nucleo de processamento do ecossistema.
  */
 .SYNOPSIS
@@ -16,11 +16,12 @@
     encaminha para o Agent-TaskManager com identidade visual "Cyber/Sintetica".
 #>
 
-param(
+param (
     [Parameter(Position = 0, ValueFromRemainingArguments = $true)]
     [string[]]$InputWords,
     [switch]$Force,
-    [switch]$Web # Roteamento direto para a IDE (Zero Custo API / Modelos Premium Web)
+    [switch]$Web, # Roteamento direto para a IDE (Zero Custo API / Modelos Premium Web)
+    [switch]$CheckCortex # Validar a saude das regras (Cortex) silenciosamente antes de operar
 )
 
 $InputString = $InputWords -join " "
@@ -35,48 +36,73 @@ $Script:EnvLoaded = $true
 $KernelPath = if ($Global:AgentPaths) { $Global:AgentPaths.Kernel } else { Join-Path $PSScriptRoot "Agent-TaskManager.psm1" }
 
 if (Test-Path $KernelPath) {
-    Import-Module $KernelPath -Force
+    Import-Module $KernelPath -Force -DisableNameChecking
 }
 else {
     Write-Host "[KERNEL ERROR] Agent-TaskManager.psm1 not found." -ForegroundColor Red
     exit
 }
 
-# --- SINONIMOS (Cortex Expandido) ---
-$SynonymPath = Join-Path $PSScriptRoot "synonyms.psd1"
-if (Test-Path $SynonymPath) {
-    $Synonyms = Import-PowerShellDataFile -Path $SynonymPath
+# --- FUNCOES DE CARREGAMENTO JSON ---
+function Import-ValidJson {
+    param([string]$Path, [string]$FileName, [switch]$Critical)
+    if (-not (Test-Path $Path)) {
+        if ($Critical) { Write-Host "[ERROR] $FileName not found in $PSScriptRoot." -ForegroundColor Red; exit }
+        return $null
+    }
+    try {
+        return (Get-Content -Path $Path -Raw -Encoding UTF8 | ConvertFrom-Json -ErrorAction Stop)
+    }
+    catch {
+        Write-Host "[ERROR] Malformed JSON in $FileName`nDetails: $($_.Exception.Message)" -ForegroundColor Red
+        if ($Critical) { exit }
+        return $null
+    }
 }
 
-# --- CONFIGURACAO (Cortex) ---
-$IntentMap = [ordered]@{
-    "@auditor"       = "(audit|confer|revis|compliance|check|arquitetura técnica)"
-    "@verifier"      = "(teste|qa|qualidade|revisar codigo|revisao final|verifier|verific)"
-    "@validador"     = "(validar conteudo|especialista|medicina|direito|financas|poker expert|valid)"
-    "@maverick"      = "(ideia|inova|pensar|estratégia|analis|sentinela|invent|melhorar)"
-    "@planner"       = "(planej|estrutur|spec|prd|roadmap|arquitetur|como fazer)"
-    "@implementor"   = "(cria|codific|implement|bug|fix|erro|script|codigo|js|html|css|layout|design|imersiv|refinar|ui|ux)"
-    "@pesquisador"   = "(pesquisa|busca|encontr|estado da arte|compar|lista|o que é)"
-    "@curator"       = "(etica|estetica|tom|texto|copy|revisao text|identidade|visual)"
-    "@dispatcher"    = "(epico|projeto|multiplas|fatiar|distribuir|despachar|orquestrar)"
-    "@seo"           = "(seo|ranqueamento|google|palavras-chave|keywords|serp|organico|busca)"
-    "@skillmaster"   = "(backup|sync|limp|agendad|cron|daemon|manuten|skillmaster|operac)"
-    "@securitychief" = "(privacidade|lgpd|gdpr|pirataria|vulnerabilidade|seguranca de dados|security)"
-    "@prompter"      = "(prompt|instrucao|engenharia de prompt|refinar prompt)"
-    "@organizador"   = "(organiza|documenta|indice|estrutura de pastas|limpar arquivos)"
+# --- CONFIGURACAO EXTERNA (Cortex JSON) ---
+
+# 1. IntentMap (Mapeamento de Agentes)
+$IntentMapPath = Join-Path $PSScriptRoot "data\intentmap.json"
+$IntentMap = [ordered]@{}
+
+$jsonIntentMap = Import-ValidJson -Path $IntentMapPath -FileName "intentmap.json" -Critical
+if ($null -ne $jsonIntentMap) {
+    foreach ($property in $jsonIntentMap.psobject.properties) {
+        $IntentMap[$property.Name] = $property.Value
+    }
 }
 
-# Easter Eggs (@maverick)
-$Aphorisms = @(
-    "Chaos is just unrecognized order."
-    "Code is poetry written in logic."
-    "Survival > Accumulation."
-    "The map is not the territory."
-    "Entropy is the price of structure."
-    "Silence is the loudest sound in the void."
-)
+# 2. Synonyms (Entropia Humana e Variacoes)
+$SynonymsPath = Join-Path $PSScriptRoot "data\synonyms.json"
+$Synonyms = @{}
 
-# --- FUNÇÕES ---
+$jsonSynonyms = Import-ValidJson -Path $SynonymsPath -FileName "synonyms.json"
+if ($null -ne $jsonSynonyms) {
+    foreach ($property in $jsonSynonyms.psobject.properties) {
+        $Synonyms[$property.Name] = $property.Value
+    }
+}
+else {
+    if (-not (Test-Path $SynonymsPath)) {
+        Write-Host "[WARNING] synonyms.json not found. Using exact matches only." -ForegroundColor DarkYellow
+    }
+}
+
+# 3. Aphorisms (Easter Eggs do @maverick)
+$AphorismsPath = Join-Path $PSScriptRoot "data\aphorisms.json"
+$Aphorisms = @()
+$jsonAphorisms = Import-ValidJson -Path $AphorismsPath -FileName "aphorisms.json"
+if ($null -ne $jsonAphorisms) {
+    $Aphorisms = @($jsonAphorisms)
+}
+else {
+    if (-not (Test-Path $AphorismsPath)) {
+        $Aphorisms = @("Silence is the loudest sound in the void.")
+    }
+}
+
+# --- FUNCOES ---
 
 function Invoke-CyberBeep {
     param([string]$Type)
@@ -137,9 +163,59 @@ function Show-Header {
     }
 }
 
+function Get-ValidatedAgent {
+    <#
+    .SYNOPSIS
+        Prompts the user for a manual agent ID and validates it against the IntentMap.
+    #>
+    while ($true) {
+        $manualAgent = Read-Host
+
+        if ([string]::IsNullOrWhiteSpace($manualAgent)) {
+            Write-Host "[ABORT] No agent selected." -ForegroundColor Red
+            exit
+        }
+
+        # Normalize: add '@' if missing
+        if (!$manualAgent.StartsWith('@')) { $manualAgent = "@$manualAgent" }
+
+        if ($IntentMap.Contains($manualAgent)) {
+            return $manualAgent
+        }
+        Write-Host "[ERROR] Invalid agent ID. Please try again." -ForegroundColor Red
+        Write-Host "[MANUAL INPUT] Enter target agent > " -NoNewline -ForegroundColor Cyan
+    }
+}
+
+# --- INTEGRITY CHECK SILENCIOSO ---
+if ($CheckCortex) {
+    Write-Host "`n[CORTEX] Analisando integridade do schema em background..." -ForegroundColor DarkGray
+    $CheckScriptPath = Join-Path $PSScriptRoot "scripts\setup\check-cortex.ps1"
+    
+    if (Test-Path $CheckScriptPath) {
+        # Absorve e funde todos os streams (*>&1) para suprimir poluição de Write-Host
+        $checkOutput = & $CheckScriptPath *>&1
+        $outputStr = $checkOutput -join " "
+        
+        if ($outputStr -match "\[SUCCESS\]") {
+            Add-CortexValidationLog -Success $true -Details "Validação invocada pela CLI"
+            Write-Host "[CORTEX] Homeostase confirmada. Sistema íntegro." -ForegroundColor Green
+        }
+        else {
+            Add-CortexValidationLog -Success $false -Details "Entropia detectada via CLI: $outputStr"
+            Write-Host "[CRITICAL] Entropia no Cortex. Corrupção ou violação de Schema. Abortando execução." -ForegroundColor Red
+            exit
+        }
+    }
+}
+
 # --- MODO INTERATIVO ---
 if ([string]::IsNullOrWhiteSpace($InputString)) {
     Show-Header
+    if ($Force) {
+        Write-Host "[ABORT] No input string provided and -Force is active." -ForegroundColor Red
+        exit 1
+    }
     Write-Host "[NEXUS] Awaiting Directive > " -NoNewline -ForegroundColor Cyan
     $InputString = Read-Host
 }
@@ -169,7 +245,7 @@ if ($suggestedAgent) {
         if ($confirm -match '^(n|N|no|nao|não)$') {
             Write-Host "[MANUAL OVERRIDE] Enter agent ID > " -NoNewline -ForegroundColor Cyan
             Invoke-CyberBeep -Type 'Select'
-            $agent = Read-Host
+            $agent = Get-ValidatedAgent
         }
         else {
             $agent = $suggestedAgent
@@ -178,10 +254,11 @@ if ($suggestedAgent) {
 }
 else {
     Invoke-CyberBeep -Type 'Error'
-    Write-Host "[FAIL] [NULL] Signal lost. Agent not identified." -ForegroundColor Red
-    Write-Host "[MANUAL INPUT] Enter target agent > " -NoNewline -ForegroundColor Cyan
-    Invoke-CyberBeep -Type 'Select'
-    $agent = Read-Host
+    Write-Host "[WARNING] Signal ambiguous. Falling back to default agent: " -NoNewline -ForegroundColor Yellow
+    Write-Host "'@maverick'" -ForegroundColor Cyan
+    
+    $agent = "@maverick"
+    Invoke-CyberBeep -Type 'Match'
 }
 
 if ([string]::IsNullOrWhiteSpace($agent)) {

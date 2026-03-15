@@ -3,7 +3,8 @@
     Injeta o Épico do Projeto Poker para o @dispatcher fatiar.
 #>
 
-$KernelPath = Join-Path $PSScriptRoot "Agent-TaskManager.psm1"
+$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+$KernelPath = Join-Path $ProjectRoot "Agent-TaskManager.psm1"
 Import-Module $KernelPath -Force
 
 Write-Host "=== PROTOCOLO: EPIC POKER FRONT-END ===" -ForegroundColor Magenta

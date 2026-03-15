@@ -14,11 +14,12 @@ from typing import List, Optional, Literal, Dict, Any
 from pydantic import BaseModel, Field, ValidationError
 from datetime import datetime
 
-# Configuração estética e persistente de Log (Estado da Arte)
+# Configuracao estetica e persistente de Log (Estado da Arte)
 log_dir = Path(".claude/logs")
 log_dir.mkdir(parents=True, exist_ok=True)
 
 logging.basicConfig(
+    force=True, # Garante que a nossa configuração sobrescreva qualquer outra pré-existente
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
@@ -28,7 +29,35 @@ logging.basicConfig(
     ]
 )
 
-file_lock = threading.Lock()
+# Substituicao do file_lock simples por um Mutex Global do Windows (Cross-Process)
+class GlobalMutex:
+    def __init__(self, name: str):
+        self.name = name
+        if os.name == 'nt':
+            import ctypes
+            from ctypes import wintypes
+            ctypes.windll.kernel32.CreateMutexW.restype = wintypes.HANDLE
+            ctypes.windll.kernel32.WaitForSingleObject.argtypes = [wintypes.HANDLE, wintypes.DWORD]
+            ctypes.windll.kernel32.ReleaseMutex.argtypes = [wintypes.HANDLE]
+            self.mutex = ctypes.windll.kernel32.CreateMutexW(None, False, self.name)
+        else:
+            self.mutex = threading.Lock()
+            
+    def __enter__(self):
+        if os.name == 'nt':
+            import ctypes
+            ctypes.windll.kernel32.WaitForSingleObject(self.mutex, 30000)
+        else:
+            self.mutex.acquire()
+            
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if os.name == 'nt':
+            import ctypes
+            ctypes.windll.kernel32.ReleaseMutex(self.mutex)
+        else:
+            self.mutex.release()
+
+file_lock = GlobalMutex("Global\\AgentTaskQueue_Mutex_Master")
 
 # ==========================================
 # 1. SCHEMAS (A Lei da Honestidade Radical)
@@ -50,9 +79,13 @@ class TaskQueue(BaseModel):
 # 2. GERENCIADOR DA FILA
 # ==========================================
 class QueueManager:
-    def __init__(self, queue_path: str = "queue/tasks.json"):
-        self.queue_path = Path(queue_path)
-        self.queue_path.parent.mkdir(exist_ok=True)
+    def __init__(self, queue_path: str = None):
+        if queue_path is None:
+            # Garante o caminho absoluto a partir do local deste script
+            self.queue_path = Path(__file__).parent.resolve() / "queue" / "tasks.json"
+        else:
+            self.queue_path = Path(queue_path)
+        self.queue_path.parent.mkdir(parents=True, exist_ok=True)
         
     def load_queue(self) -> TaskQueue:
         with file_lock:
@@ -61,8 +94,8 @@ class QueueManager:
                     if not self.queue_path.exists():
                         return TaskQueue()
                     with open(self.queue_path, "r", encoding="utf-8") as f:
-                        data = json.load(f)
-                        return TaskQueue(**data)
+                        json_data = f.read()
+                        return TaskQueue.model_validate_json(json_data)
                 except PermissionError:
                     time.sleep(0.2)
                 except json.JSONDecodeError:
@@ -79,7 +112,7 @@ class QueueManager:
             for _ in range(5):
                 try:
                     with open(self.queue_path, "w", encoding="utf-8") as f:
-                        json.dump(queue.model_dump(), f, indent=4, ensure_ascii=False)
+                        f.write(queue.model_dump_json(indent=4))
                     break
                 except PermissionError:
                     time.sleep(0.2)
@@ -135,7 +168,7 @@ def get_agent_system_prompt(agent_name: str) -> str:
     if agent_file.exists():
         with open(agent_file, "r", encoding="utf-8") as f:
             return f.read()
-    return f"Você é o agente especialista {agent_name}."
+    return f"Voce e o agente especialista {agent_name}."
 
 def call_gemini(model: str, system_prompt: str, user_prompt: str, api_key: str) -> str:
     url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"
@@ -235,8 +268,8 @@ def call_llm_api(agent_name: str, system_prompt: str, user_prompt: str) -> str:
 
 def apply_god_mode(text: str):
     """
-    Materialização Direta e Execução (God Mode 2.0):
-    Lê a mente do agente, forja os arquivos físicos e executa comandos de sistema.
+    Materializacao Direta e Execucao (God Mode 2.0):
+    Le a mente do agente, forja os arquivos fisicos e executa comandos de sistema.
     """
     # 1. Forjamento de Arquivos
     pattern = r"(?:Arquivo|File|Caminho|Path):\s*`?([^\n`]+)`?\s*\n+```[a-zA-Z]*\n(.*?)```"
@@ -271,7 +304,7 @@ def apply_god_mode(text: str):
             if result.returncode == 0:
                 logging.info(f"[OK] Comando executado de forma soberana: {cmd}")
             else:
-                error_msg = f"Código {result.returncode} - {result.stderr.strip()}"
+                error_msg = f"Codigo {result.returncode} - {result.stderr.strip()}"
                 logging.error(f"[FAIL] Falha no comando '{cmd}': {error_msg}")
                 raise RuntimeError(f"O comando nativo falhou: {cmd}\nDetalhes do Erro: {error_msg}")
         except Exception as e:
@@ -431,17 +464,55 @@ def execute_task_workflow(task: Task, manager: QueueManager):
 
 def start_worker():
     manager = QueueManager()
+    
+    # 1. Limpa o terminal para o God Mode Visual
+    os.system('cls' if os.name == 'nt' else 'clear')
+    
+    # 2. Varredura inicial da Fila
+    queue = manager.load_queue()
+    pending = sum(1 for t in queue.tasks if t.status == "pending")
+    running = sum(1 for t in queue.tasks if t.status == "running")
+    completed = sum(1 for t in queue.tasks if t.status == "completed")
+    failed = sum(1 for t in queue.tasks if t.status == "failed")
+    
+    W = '\033[97m' # Código ANSI para Branco Brilhante
+    R = '\033[0m'  # Código ANSI para Resetar a cor
+    # 3. Força a impressão na tela (bypass de buffer)
+    print(f"{W}==========================================================={R}", flush=True)
+    print(f"{W}         CHICO SYSTEM - ORQUESTRADOR PYTHON SOTA           {R}", flush=True)
+    print(f"{W}==========================================================={R}", flush=True)
+    print(f"{W} PENDENTES: {pending} | RODANDO: {running} | COMPLETAS: {completed} | FALHAS: {failed}{R}", flush=True)
+    print(f"{W}===========================================================\n{R}", flush=True)
+    
     logging.info("=== ORQUESTRADOR PYTHON INICIADO [MULTITHREAD] ===")
     
     with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
         try:
             while True:
-                task = manager.get_next_task()
-                if task:
-                    logging.info(f"[>>>] Metamorfose: [{task.id}] -> RUNNING (Agente: {task.agent})")
-                    manager.update_task_status(task.id, "running")
-                    executor.submit(execute_task_workflow, task, manager)
-                else:
+                try:
+                    queue = manager.load_queue()
+                    pending_count = sum(1 for t in queue.tasks if t.status == "pending")
+                    if os.name == 'nt':
+                        import ctypes
+                        current_time = datetime.now().strftime("%H:%M:%S")
+                        ctypes.windll.kernel32.SetConsoleTitleW(f"NEXUS WORKER | Pendentes: {pending_count} | Pulso: {current_time}")
+                    
+                    task = next((t for t in queue.tasks if t.status == "pending"), None)
+                    if task:
+                        logging.info(f"[>>>] Metamorfose: [{task.id}] -> RUNNING (Agente: {task.agent})")
+                        manager.update_task_status(task.id, "running")
+                        executor.submit(execute_task_workflow, task, manager)
+                    else:
+                        # Live Heartbeat (Raio-X em tempo real da fila)
+                        p_c = sum(1 for t in queue.tasks if t.status == "pending")
+                        r_c = sum(1 for t in queue.tasks if t.status == "running")
+                        c_c = sum(1 for t in queue.tasks if t.status == "completed")
+                        f_c = sum(1 for t in queue.tasks if t.status == "failed")
+                        pulse_time = datetime.now().strftime("%H:%M:%S")
+                        print(f"\r\033[K[{pulse_time}] [VIGILIA] Pendentes: {p_c} | Rodando: {r_c} | Concluidas: {c_c} | Falhas: {f_c} (Aguardando...)", end="", flush=True)
+                        time.sleep(5)
+                except Exception as inner_e:
+                    logging.error(f"[FATAL] Erro interno no laco do worker: {inner_e}")
                     time.sleep(5)
         except KeyboardInterrupt:
             logging.info("Pulso encerrado pelo usuario. Hibernando...")
@@ -460,8 +531,7 @@ if __name__ == "__main__":
                 else:
                     task_json = base64.b64decode(task_payload).decode("utf-8")
                     
-                task_data = json.loads(task_json)
-                new_task = Task(**task_data)
+                new_task = Task.model_validate_json(task_json)
                 queue = manager.load_queue()
                 
                 existing_idx = next((i for i, t in enumerate(queue.tasks) if t.id == new_task.id), None)

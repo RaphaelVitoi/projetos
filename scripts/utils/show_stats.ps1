@@ -1,7 +1,8 @@
 # Script Utilitário: Visualização de Telemetria dos Agentes
 # Exibe as estatísticas de execução acumuladas na sessão atual.
 
-$AutopoiesisPath = Join-Path $PSScriptRoot "Agent-Autopoiesis.psm1"
+$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+$AutopoiesisPath = Join-Path $ProjectRoot "Agent-Autopoiesis.psm1"
 
 if (Test-Path $AutopoiesisPath) {
     Write-Host "=== 📊 TELEMETRIA DO ECOSSISTEMA ===" -ForegroundColor Cyan

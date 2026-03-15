@@ -1,5 +1,5 @@
 # Contexto do Projeto
->
+
 > Atualizado em 2026-03-15 (auditoria integral .claude/)
 
 ## Governanca
@@ -25,7 +25,7 @@ Raphael Vitoi e seus alunos/clientes de Poker e Psicologia.
 - Workflow v5: Sistema de agentes com fila de tarefas (tasks.json), pipeline harmônica com 17 agentes.
 - GitHub Copilot: Identidade técnica principal do sistema de IA.
 - Chico: Codinome operacional de GitHub Copilot.
-- Gemini 3 Pro Preview: Modelo prioritário utilizado, garantindo raciocínio avançado e qualidade superior.
+- Gemini 3.1 Pro Preview e Claude Opus 4.6: Dupla dinamica de modelos (ambos com assinatura Pro), garantindo raciocinio avancado e qualidade superior.
 - @curator: Novo agente de integridade do produto (ética, IP, pesquisa mercado, estética).
 - @sequenciador: Orquestrador de tráfego/demanda, "número 2" operacional de alta qualidade.
 
@@ -37,6 +37,12 @@ Raphael Vitoi e seus alunos/clientes de Poker e Psicologia.
 - Consolidacao do Cerebro Hibrido e God Mode 2.0 | Workflow v6.0 | 2026-03-14 | @maverick
 - Instituicao das Regras Irrevogaveis: ASCII Back-end, Autonomia e Evolucao Perpetua (SOTA) | Workflow v6.2 | 2026-03-14 | CHICO
 - Elevacao para Workflow v6.4: Quartetos de LLM (OpenRouter SOTA), Next.js 15 Promises e Handoff | 2026-03-14 | CHICO
+- Formalizacao do Modus Operandi Global (Leis de Engenharia SOTA) contra Entropia Estrutural | 2026-03-15 | CHICO
+
+## Leis da Engenharia SOTA (Modus Operandi Global)
+
+**Para evitar deadlocks e corrupcoes sistemicas, TODOS os agentes DEVEM ler e aplicar rigorosamente as regras em `.claude/MODUS_OPERANDI.md`.**
+As 6 Leis (Absolute Paths, Headless-First, Sincronizacao OS-Level, Blindagem de Terminal, ASCII Rigido e Recuperacao de Diffs) sao irrevogaveis.
 
 ## Pipeline de Agentes
 
@@ -51,11 +57,12 @@ Raphael Vitoi e seus alunos/clientes de Poker e Psicologia.
 1. `.claude/COSMOVISAO.md` - Fundacao filosofica (ler primeiro)
 2. `.claude/CLAUDE.md` - Identidade, epistemics, tom, vinculo
 3. `.claude/GLOBAL_INSTRUCTIONS.md` - Regras operacionais, pipeline, principios
-4. `.claude/project-context.md` (este) - Decisoes, estado, dominio
-5. `.claude/DISTRIBUTION_MATRIX.md` - Autoridade entre documentos
-6. `.claude/agent-memory/*/MEMORY.md` - Inteligencia acumulada individual
+4. `.claude/MODUS_OPERANDI.md` - Leis de Engenharia e Prevencao de Entropia (SOTA)
+5. `.claude/project-context.md` (este) - Decisoes, estado, dominio
+6. `.claude/DISTRIBUTION_MATRIX.md` - Autoridade entre documentos
+7. `.claude/agent-memory/*/MEMORY.md` - Inteligencia acumulada individual
 
-**Hierarquia de instrucoes:** USER (CLAUDE.md) > PROJECT (este) > AGENT (agents/*.md)
+**Hierarquia de instrucoes:** USER (CLAUDE.md) > PROJECT (este) > AGENT (agents/\*.md)
 
 ## Memoria de Agentes (Agent-Memory System)
 
@@ -104,9 +111,6 @@ Raphael Vitoi e seus alunos/clientes de Poker e Psicologia.
 
 > Historico detalhado de 2026-03-12 consolidado. Abaixo, apenas entradas ativas.
 
-| Agente | Status | Data | Notas |
-| ------ | ------ | ---- | ----- |
-| Sistema de Agentes | OPERACIONAL | 2026-03-12 | 17 agentes definidos, 15 com agent-memory, pipeline harmonica v2.0 ativa. Triade Raphael + @maverick + CHICO formalizada. |
-| Reorganizacao Projeto | COMPLETO | 2026-03-15 | Unificacao Next.js 16, limpeza git (17k para 234 arquivos tracked), branch main, build passando. |
-| Auditoria .claude/ | COMPLETO | 2026-03-15 | Limpeza 420 para 55 arquivos. 9 correcoes aplicadas. Redundancia documental eliminada. |
-| Redundancia documental | COMPLETO | 2026-03-15 | Pipeline, triade, escalonamento, identidade consolidados em fontes unicas (GLOBAL_INSTRUCTIONS, LIDERANCA_GOVERNANCE, CLAUDE.md). project-context.md reduzido de ~454 para ~100 linhas. |
+| Agente                 | Status      | Data       | Notas                                                                                                                                                                                   |
+| ---------------------- | ----------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| @curator               | Concluído   | 2026-03-15 | Schema Prisma para PokerStrategy definido com foco em integridade, IP e público-alvo, incluindo campos para fontes (`sources`) e insights autorais (`raphaelInsight`).               |

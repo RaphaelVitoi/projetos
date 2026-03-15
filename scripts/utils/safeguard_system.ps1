@@ -1,7 +1,8 @@
 # Script de Salvaguarda Sistêmica (Snapshot de Segurança)
 # Cria backup imediato de configurações, memórias e documentação crítica.
 
-$BackupRoot = Join-Path $PSScriptRoot ".backups"
+$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+$BackupRoot = Join-Path $ProjectRoot ".backups"
 $Timestamp = Get-Date -Format "yyyy-MM-dd_HHmmss"
 $SnapshotDir = Join-Path $BackupRoot "Snapshot_$Timestamp"
 
@@ -13,7 +14,7 @@ Write-Host "[SAFEGUARD] Iniciando protocolo de salvaguarda..." -ForegroundColor 
 if (-not (Test-Path $SnapshotDir)) { New-Item -ItemType Directory -Path $SnapshotDir -Force | Out-Null }
 
 foreach ($target in $Targets) {
-    $sourcePath = Join-Path $PSScriptRoot $target
+    $sourcePath = Join-Path $ProjectRoot $target
     if (Test-Path $sourcePath) {
         $destPath = Join-Path $SnapshotDir $target
         Copy-Item -Path $sourcePath -Destination $destPath -Recurse -Force

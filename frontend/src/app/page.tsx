@@ -8,7 +8,8 @@
 
 import Link from 'next/link';
 import { Suspense } from 'react';
-import prisma from '@/lib/prisma';
+import { prisma } from '@/lib/prisma';
+
 
 // 1. Componente Assíncrono Isolado (Proteção de FCP orientada pelo @auditor)
 async function LatestPostsFeed() {
@@ -22,21 +23,21 @@ async function LatestPostsFeed() {
     console.warn("[NEXUS] Banco de dados indisponível. Injetando dados defensivos de fallback.", error);
     // Mock defensivo para evitar que a página quebre na falta do Prisma DB
     posts = [
-      { id: '1', title: 'A Ameaça Orgânica no River', excerpt: 'Como a sobrecarga de Risk Premium induz o cérebro límbico a cometer blefes irracionais.', readTime: '08 MIN', tags: ['Mindset', 'Neurobiologia'] },
-      { id: '2', title: 'O Paradoxo do Valuation no ICM', excerpt: 'Por que acumular fichas pode diminuir sua esperança matemática em spots específicos.', readTime: '12 MIN', tags: ['Teoria', 'ICM'] },
-      { id: '3', title: 'A Metáfora do Homem-Bomba', excerpt: 'O excesso de gozo lacaniano e a agressividade autodestrutiva como alívio de pressão.', readTime: '15 MIN', tags: ['Psicanálise', 'Filosofia'] }
+      { id: '1', title: 'A Ameaça Orgânica no River', excerpt: 'Como a sobrecarga de Risk Premium induz o cérebro límbico a cometer blefes irracionais.', readTime: '08 MIN', tags: 'Mindset,Neurobiologia' },
+      { id: '2', title: 'O Paradoxo do Valuation no ICM', excerpt: 'Por que acumular fichas pode diminuir sua esperança matemática em spots específicos.', readTime: '12 MIN', tags: 'Teoria,ICM' },
+      { id: '3', title: 'A Metáfora do Homem-Bomba', excerpt: 'O excesso de gozo lacaniano e a agressividade autodestrutiva como alívio de pressão.', readTime: '15 MIN', tags: 'Psicanálise,Filosofia' }
     ];
   }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-up" style={{ animationDelay: '0.2s' }}>
-      {posts.map((post: any) => (
+      {posts.map((post) => (
         <article key={post.id} className="bg-slate-900/60 backdrop-blur-md border border-white/5 rounded-xl p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent-primary/30 flex flex-col h-full group">
           <div className="flex justify-between items-start mb-4">
             <div className="flex gap-2 flex-wrap">
-              {post.tags?.map((tag: string) => (
+              {post.tags?.split(',').map((tag: string) => (
                 <span key={tag} className="text-[10px] font-bold uppercase tracking-widest text-slate-400 bg-slate-800/50 px-2 py-1 rounded border border-white/5">
-                  {tag}
+                  {tag.trim()}
                 </span>
               ))}
             </div>

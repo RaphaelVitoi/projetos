@@ -4,12 +4,13 @@
     Resolve as pendências do ciclo MAINT-20260313 (Docs, Index, Health).
 #>
 
-$EnvPath = Join-Path $PSScriptRoot "_env.ps1"
+$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+$EnvPath = Join-Path $ProjectRoot "_env.ps1"
 if (Test-Path $EnvPath) { . $EnvPath }
-$KernelPath = if ($Global:AgentPaths) { $Global:AgentPaths.Kernel } else { Join-Path $PSScriptRoot "Agent-TaskManager.psm1" }
+$KernelPath = if ($Global:AgentPaths) { $Global:AgentPaths.Kernel } else { Join-Path $ProjectRoot "Agent-TaskManager.psm1" }
 if (Test-Path $KernelPath) { Import-Module $KernelPath -Force }
 
-$DocsDir = Join-Path $PSScriptRoot "docs"
+$DocsDir = Join-Path $ProjectRoot "docs"
 $ReportsDir = Join-Path $DocsDir "reports"
 if (-not (Test-Path $ReportsDir)) { New-Item -ItemType Directory -Path $ReportsDir -Force | Out-Null }
 

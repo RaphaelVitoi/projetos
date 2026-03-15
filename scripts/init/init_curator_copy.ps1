@@ -3,7 +3,8 @@
     Aciona o @curator para revisar e refinar a copy dos CTAs da Home (ASCII).
 #>
 
-$KernelPath = Join-Path $PSScriptRoot "Agent-TaskManager.psm1"
+$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+$KernelPath = Join-Path $ProjectRoot "Agent-TaskManager.psm1"
 Import-Module $KernelPath -Force
 
 Write-Host "=== PROTOCOLO: CURADORIA DE COPY (@CURATOR) ===" -ForegroundColor Magenta

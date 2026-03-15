@@ -2,8 +2,9 @@
 # Agente: @implementor
 # Objetivo: Listar recursivamente arquivos para análise de arquitetura
 
-$SrcPath = $PSScriptRoot
-$ReportPath = Join-Path $PSScriptRoot "docs\reports\STRUCTURE_SRC.md"
+$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+$SrcPath = $ProjectRoot
+$ReportPath = Join-Path $ProjectRoot "docs\reports\STRUCTURE_SRC.md"
 $ReportDir = Split-Path $ReportPath
 
 if (-not (Test-Path $ReportDir)) { New-Item -ItemType Directory -Path $ReportDir -Force | Out-Null }
@@ -18,7 +19,7 @@ if (Test-Path $SrcPath) {
     
     if ($files) {
         $tree = $files | ForEach-Object {
-            $relativePath = $_.FullName.Replace($PSScriptRoot, "").TrimStart("\")
+            $relativePath = $_.FullName.Replace($ProjectRoot, "").TrimStart("\")
             "- $relativePath"
         }
         Add-Content -Path $ReportPath -Value $tree

@@ -3,7 +3,8 @@
 
 try {
     Write-Host "[TEST] Carregando Kernel v3.0..." -ForegroundColor Cyan
-    Import-Module "$PSScriptRoot\Agent-TaskManager.psm1" -Force
+    $ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+    Import-Module "$ProjectRoot\Agent-TaskManager.psm1" -Force
 
     $taskId = "TEST-SHA256-$(Get-Random -Minimum 1000 -Maximum 9999)"
     $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"

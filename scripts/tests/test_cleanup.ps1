@@ -3,7 +3,8 @@
 
 try {
     Write-Host "[TEST] Carregando Kernel v3.0..." -ForegroundColor Cyan
-    Import-Module "$PSScriptRoot\Agent-TaskManager.psm1" -Force
+    $ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+    Import-Module "$ProjectRoot\Agent-TaskManager.psm1" -Force
 
     Write-Host "[TEST] Invocando Cleanup com DaysToKeep=0 (Forçar Arquivamento)..." -ForegroundColor Yellow
     Invoke-TaskCleanup -DaysToKeep 0

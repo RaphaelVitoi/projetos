@@ -7,13 +7,15 @@
 
 Write-Host "=== [CHAOS INITIATIVE] BATERIA DE TESTES DE ESTRESSE E2E ===" -ForegroundColor Magenta
 
-# Definição da função Assert-SignatureValida
+$ProjectRoot = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
+
+# Definicao da funcao Assert-SignatureValida
 function Assert-SignatureValida {
     param (
         [string]$FilePath
     )
     try {
-        # Verifica se o arquivo é assinado
+        # Verifica se o arquivo e assinado
         if ((Get-AuthenticodeSignature -FilePath $FilePath).Status -eq "Valid") {
             Write-Host "  [OK] Assinatura valida: $FilePath" -ForegroundColor Green
         }
@@ -26,7 +28,7 @@ function Assert-SignatureValida {
 
 # 1. Teste de Integridade Termodinamica (Arquivos SOTA)
 Write-Host "`n[1/4] Verificando Integridade do Ecossistema Frontend..." -ForegroundColor Yellow
-$FrontendDir = Join-Path $PSScriptRoot "frontend"
+$FrontendDir = Join-Path $ProjectRoot "frontend"
 $PrismaSchema = Join-Path $FrontendDir "prisma\schema.prisma"
 $NextConfig = Join-Path $FrontendDir "next.config.ts"
 
@@ -43,7 +45,7 @@ else { Write-Host "  [WARN] Next.js config ausente." -ForegroundColor DarkYellow
 
 # 1.1. Validacao das assinaturas digitais dos scripts
 Write-Host "`n[1.1] Validando assinaturas dos scripts..." -ForegroundColor Yellow
-Get-ChildItem $PSScriptRoot\*.ps1 -File | ForEach-Object { Assert-SignatureValida $_.FullName }
+Get-ChildItem $ProjectRoot\*.ps1 -File | ForEach-Object { Assert-SignatureValida $_.FullName }
 
 # 2. Teste da Membrana Inteligente (Smart CLI)
 Write-Host "`n[2/4] Estressando a Membrana Inteligente (do.ps1)..." -ForegroundColor Yellow
@@ -51,14 +53,14 @@ try {
     $Task1 = "Quero planejar a arquitetura de banco de dados do NashSolver" # Deve ir pro @planner
     $Task2 = "Revisar o texto da carta de vendas sobre ICM" # Deve ir pro @curator
     
-    Assert-SignatureValida $PSScriptRoot\do.ps1
+    Assert-SignatureValida "$ProjectRoot\do.ps1"
     Write-Host "  > Injetando: '$Task1'" -ForegroundColor DarkGray
-    .\do.ps1 $Task1 -Force | Out-Null
+    & (Join-Path $ProjectRoot "do.ps1") $Task1 -Force | Out-Null
     Write-Host "  [OK] Tarefa 1 absorvida." -ForegroundColor Green
     
-    Assert-SignatureValida $PSScriptRoot\do.ps1
+    Assert-SignatureValida "$ProjectRoot\do.ps1"
     Write-Host "  > Injetando: '$Task2'" -ForegroundColor DarkGray
-    .\do.ps1 $Task2  -Force | Out-Null
+    & (Join-Path $ProjectRoot "do.ps1") $Task2  -Force | Out-Null
     Write-Host "  [OK] Tarefa 2 absorvida." -ForegroundColor Green
 }
 catch {
@@ -68,8 +70,8 @@ catch {
 
 # 3. Teste de Engenharia do Caos (Falha Induzida para testar Auto-Cura)
 Write-Host "`n[3/4] Injetando Entropia (Falha Induzida no @implementor)..." -ForegroundColor Yellow
-$KernelPath = Join-Path $PSScriptRoot "Agent-TaskManager.psm1"
-Import-Module $KernelPath -Force
+$KernelPath = Join-Path $ProjectRoot "Agent-TaskManager.psm1"
+Import-Module $KernelPath -Force -DisableNameChecking
 Assert-SignatureValida $KernelPath
 
 $ChaosTaskId = "CHAOS-TEST-$(Get-Date -Format 'HHmmss')"
@@ -91,10 +93,10 @@ catch {
 
 # 4. Validacao da Fila JSON e Mutex Locks
 Write-Host "`n[4/4] Inspecionando Fila de Tarefas (tasks.json)..." -ForegroundColor Yellow
-$QueueFile = Join-Path $PSScriptRoot "queue\tasks.json"
+$QueueFile = Join-Path $ProjectRoot "queue\tasks.json"
 if (Test-Path $QueueFile) {
-    $QueueData = Get-Content $QueueFile -Raw | ConvertFrom-Json
-    $PendingCount = ($QueueData.tasks | Where-Object { $_.status -eq 'pending' }).Count
+    $QueueData = Get-Content $QueueFile -Raw -Encoding UTF8 | ConvertFrom-Json
+    $PendingCount = @($QueueData.tasks | Where-Object { $_.status -eq 'pending' }).Count
     Write-Host "  [OK] Fila lida com sucesso. $PendingCount tarefas aguardando o Orquestrador Python." -ForegroundColor Green
 }
 else {
