@@ -1,147 +1,175 @@
 /**
  * IDENTITY: Landing Page Principal (Nexus Central)
  * PATH: src/app/page.tsx
- * ROLE: Atuar como a página de alta conversão do ecossistema Raphael Vitoi. O design visual foi 100% estabilizado no globals.css.
- * BINDING: [src/app/layout.tsx, globals.css, src/app/tools/icm/page.tsx, src/app/psicologia-hs/page.tsx]
- * TELEOLOGY: Atuar como a "Boca do Funil". A estrutura atual não deve ser sobrescrita por sub-módulos, mas sim evoluir para abrigar links holográficos para os futuros laboratórios de Teoria dos Jogos e Psicologia HS.
+ * ROLE: Pagina de alta conversao. Sales copy + Hub de Conteudo + Autor + CTA.
+ * BINDING: [layout.tsx, globals.css]
  */
 
 import Link from 'next/link';
-import { Suspense } from 'react';
-import { prisma } from '@/lib/prisma';
 
-
-// 1. Componente Assíncrono Isolado (Proteção de FCP orientada pelo @auditor)
-async function LatestPostsFeed() {
-  let posts = [];
-  try {
-    posts = await prisma.post.findMany({
-      take: 3,
-      orderBy: { createdAt: 'desc' },
-    });
-  } catch (error) {
-    console.warn("[NEXUS] Banco de dados indisponível. Injetando dados defensivos de fallback.", error);
-    // Mock defensivo para evitar que a página quebre na falta do Prisma DB
-    posts = [
-      { id: '1', title: 'A Ameaça Orgânica no River', excerpt: 'Como a sobrecarga de Risk Premium induz o cérebro límbico a cometer blefes irracionais.', readTime: '08 MIN', tags: 'Mindset,Neurobiologia' },
-      { id: '2', title: 'O Paradoxo do Valuation no ICM', excerpt: 'Por que acumular fichas pode diminuir sua esperança matemática em spots específicos.', readTime: '12 MIN', tags: 'Teoria,ICM' },
-      { id: '3', title: 'A Metáfora do Homem-Bomba', excerpt: 'O excesso de gozo lacaniano e a agressividade autodestrutiva como alívio de pressão.', readTime: '15 MIN', tags: 'Psicanálise,Filosofia' }
-    ];
-  }
-
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-up" style={{ animationDelay: '0.2s' }}>
-      {posts.map((post) => (
-        <article key={post.id} className="bg-slate-900/60 backdrop-blur-md border border-white/5 rounded-xl p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent-primary/30 flex flex-col h-full group">
-          <div className="flex justify-between items-start mb-4">
-            <div className="flex gap-2 flex-wrap">
-              {post.tags?.split(',').map((tag: string) => (
-                <span key={tag} className="text-[10px] font-bold uppercase tracking-widest text-slate-400 bg-slate-800/50 px-2 py-1 rounded border border-white/5">
-                  {tag.trim()}
-                </span>
-              ))}
-            </div>
-            <span className="text-xs text-slate-500 data-mono">{post.readTime || '5 MIN'}</span>
-          </div>
-          <h3 className="text-lg font-heading font-bold text-white mb-2 group-hover:text-accent-primary transition-colors">{post.title}</h3>
-          <p className="text-slate-400 text-sm flex-grow leading-relaxed">{post.excerpt}</p>
-        </article>
-      ))}
-    </div>
-  );
-}
-
-// 2. Esqueleto de Carregamento (O que o usuário vê antes do banco responder)
-function PostsSkeleton() {
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {[1, 2, 3].map((i) => (
-        <div key={i} className="bg-slate-900/40 border border-white/5 rounded-xl p-6 h-48 animate-pulse flex flex-col">
-          <div className="h-4 bg-slate-800 rounded w-1/4 mb-4"></div>
-          <div className="h-6 bg-slate-800 rounded w-3/4 mb-3"></div>
-          <div className="h-4 bg-slate-800 rounded w-full mb-2"></div>
-          <div className="h-4 bg-slate-800 rounded w-2/3"></div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// 3. A Espinha Dorsal (Página Principal Estática)
 export default function HomePage() {
   return (
-    <main className="container mx-auto px-4" style={{ padding: '4rem 0' }}>
-      
+    <main className="container mx-auto px-4">
+
       {/* Hero Section */}
-      <section className="text-center mb-16 animate-fade-up">
-        <span className="block font-mono text-xs text-accent-primary tracking-widest uppercase mb-4">O Templo do Aprendizado Generativo</span>
-        <h1 className="text-4xl md:text-6xl font-bold font-heading mb-6 leading-tight text-white">
-          O Edge Mudou de Lugar.<br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-500">Domine a Incerteza.</span>
-        </h1>
-        <p className="text-lg text-slate-400 max-w-2xl mx-auto mb-8 font-light italic">
-          A harmonia entre a frieza do código binário e a densidade da psicologia humana. 
-          Onde a intuição encontra a precisão matemática.
+      <section id="hero" className="animate-fade-up">
+        <p style={{ textTransform: 'uppercase', letterSpacing: '0.2em', fontSize: '0.9rem', color: 'var(--accent-primary)', marginBottom: '1rem', fontWeight: 700 }}>
+          ICM e Risk Premium Pos-Flop
         </p>
-      </section>
+        <h2>
+          O Edge Mudou de Lugar.{' '}
+          <span style={{ display: 'block', fontWeight: 300, color: '#fff', marginTop: '0.5rem' }}>
+            Voce Ainda Esta Jogando o Jogo de 2020?
+          </span>
+        </h2>
+        <p style={{ fontSize: '1.3rem', maxWidth: '800px', margin: '0 auto 2.5rem', color: '#94a3b8', fontWeight: 400 }}>
+          Descubra por que jogar ChipEV em mesas finais esta custando, em media,{' '}
+          <strong>mais de 10% do seu ROI</strong> e como a elite do poker usa o
+          &quot;Downward Drift&quot; para dominar o pos-flop em 2026.
+        </p>
 
-      {/* Vitrine de Laboratórios (Bifurcação do Funil) */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20 animate-fade-up" style={{ animationDelay: '0.1s' }}>
-        
-        {/* Lab ICM (Frio) */}
-        <Link href="/tools/icm" className="block group">
-          <div className="glass-panel p-8 h-full transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_10px_30px_-15px_rgba(56,189,248,0.3)] hover:border-sky-500/30">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 rounded-full bg-sky-500/10 flex items-center justify-center border border-sky-500/20 text-sky-400 font-mono font-bold">01</div>
-              <h2 className="text-2xl font-heading font-bold text-white group-hover:text-sky-400 transition-colors">Motor Algorítmico ICM</h2>
-            </div>
-            <p className="text-slate-400 text-sm mb-6">Simulador de Equidade em Torneios (Malmuth-Harville). Visualize e sinta a pressão do Risk Premium.</p>
-            <span className="text-xs font-bold tracking-widest text-sky-400 uppercase border-b border-sky-500/0 group-hover:border-sky-500/50 pb-1 transition-all">Acessar Laboratório &rarr;</span>
-          </div>
-        </Link>
-
-        {/* Lab Psicologia (Quente) */}
-        <Link href="/psicologia-hs" className="block group">
-          <div className="glass-panel p-8 h-full transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_10px_30px_-15px_rgba(217,70,239,0.3)] hover:border-fuchsia-500/30">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 rounded-full bg-fuchsia-500/10 flex items-center justify-center border border-fuchsia-500/20 text-fuchsia-400 font-mono font-bold">02</div>
-              <h2 className="text-2xl font-heading font-bold text-white group-hover:text-fuchsia-400 transition-colors">Psicologia High Stakes</h2>
-            </div>
-            <p className="text-slate-400 text-sm mb-6">Hermenêutica e contrapeso humano à rigidez do solver. O excesso de gozo lacaniano e controle límbico.</p>
-            <span className="text-xs font-bold tracking-widest text-fuchsia-400 uppercase border-b border-fuchsia-500/0 group-hover:border-fuchsia-500/50 pb-1 transition-all">Acessar Protocolos &rarr;</span>
-          </div>
-        </Link>
-
-        {/* Biblioteca (Neutro/Sábio) */}
-        <Link href="/biblioteca" className="block group">
-          <div className="glass-panel p-8 h-full transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_10px_30px_-15px_rgba(148,163,184,0.3)] hover:border-slate-400/30">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 rounded-full bg-slate-500/10 flex items-center justify-center border border-slate-500/20 text-slate-400 font-mono font-bold">03</div>
-              <h2 className="text-2xl font-heading font-bold text-white group-hover:text-slate-300 transition-colors">Biblioteca Epistêmica</h2>
-            </div>
-            <p className="text-slate-400 text-sm mb-6">Acervo de Filosofia, Psicologia e Existencialismo. A fundação teórica para suportar a variância implacável.</p>
-            <span className="text-xs font-bold tracking-widest text-slate-400 uppercase border-b border-slate-500/0 group-hover:border-slate-500/50 pb-1 transition-all">Acessar Acervo &rarr;</span>
-          </div>
-        </Link>
-      </section>
-
-      {/* Ingestão de Dados (O Streaming de UI via Prisma) */}
-      <section className="pt-10 border-t border-white/5">
-        <div className="flex justify-between items-end mb-8">
-          <div>
-            <h2 className="text-xl font-heading font-bold text-white">Últimos Protocolos</h2>
-            <p className="text-sm text-slate-500 mt-1">Sinais extraídos do banco de dados (MDA)</p>
-          </div>
-          <Link href="/psicologia-hs" className="text-xs font-bold tracking-widest text-slate-400 hover:text-white uppercase transition-colors hidden sm:block">
-            Ver Todos
+        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '2rem', flexWrap: 'wrap' }}>
+          <Link href="#metodo" className="card-cta" style={{ background: 'var(--accent-primary)', color: '#fff', padding: '1rem 2.5rem', borderRadius: '4px', border: 'none', fontSize: '1rem', marginTop: 0 }}>
+            Conhecer o Metodo &rarr;
+          </Link>
+          <Link href="/leitura-icm" className="card-cta" style={{ background: 'rgba(99, 102, 241, 0.1)', color: 'var(--accent-primary)', padding: '1rem 2.5rem', borderRadius: '4px', border: '1px solid var(--accent-primary)', fontSize: '1rem', fontWeight: 600, marginTop: 0 }}>
+            Baixar Material PDF
           </Link>
         </div>
-        
-        <Suspense fallback={<PostsSkeleton />}>
-          <LatestPostsFeed />
-        </Suspense>
       </section>
-      
+
+      <hr style={{ border: 0, borderTop: '1px solid rgba(255,255,255,0.05)', margin: '0 auto', maxWidth: '200px' }} />
+
+      {/* O Metodo (Sales Copy) */}
+      <section id="metodo">
+        <article className="sales-article" style={{ background: 'transparent', border: 'none', backdropFilter: 'none' }}>
+          <h3>A &quot;Mentira&quot; do ICM</h3>
+          <p>Se voce e como a maioria dos regulares de MTT, voce aprendeu que o ICM e um interruptor que &quot;liga&quot; na bolha ou na mesa final.</p>
+          <p>Voce estudou tabelas de Push/Fold. Voce domina o HRC e o ICMIZER. Voce acha que seu jogo de ICM esta em dia.</p>
+          <p><strong>Tenho uma ma noticia:</strong> O poker evoluiu, e o seu edge no pre-flop esta desaparecendo. Hoje, solvers resolveram o pre-flop. O gap de habilidade entre voce e o reg medio nessa area e minimo.</p>
+          <p>Mas existe uma <strong>Nova Fronteira</strong>. Um lugar onde o dinheiro real esta sendo ganho e perdido silenciosamente, longe dos olhos dos solvers basicos.</p>
+          <p style={{ fontSize: '1.4rem', color: '#fff', textAlign: 'center', margin: '2rem 0' }}><strong>O ICM Pos-Flop.</strong></p>
+
+          <div className="callout" style={{ borderLeftColor: 'var(--accent-secondary)' }}>
+            <h4 style={{ marginTop: 0, color: 'var(--accent-secondary)' }}>O Custo Invisivel</h4>
+            <p>Dados recentes do GTO Wizard (2025/2026) revelam uma verdade brutal:</p>
+            <blockquote style={{ border: 'none', padding: 0, margin: '1rem 0', fontSize: '1.1rem', color: '#fff' }}>
+              Jogar uma estrategia padrao de ChipEV (focada em acumular fichas) em spots de mesa final custa, em media, <strong>10% a 12% de todo o buy-in do torneio em $EV</strong>.
+            </blockquote>
+            <p>Em potes 3-bet? O erro custa mais de <strong>30% do valor da jogada</strong>.</p>
+            <p style={{ marginBottom: 0 }}>Pense nisso. Voce grindou 8 horas. Chegou na FT. E em duas decisoes de c-bet mal calibradas, voce devolveu todo o lucro esperado do torneio. Nao porque jogou &quot;mal&quot;, mas porque jogou com a matematica errada.</p>
+          </div>
+
+          <h3>Apresentando: O Mapa do ICM Pos-Flop</h3>
+          <p>Nesta aula inedita, nao vamos falar de tabelas de push/fold. Vamos mergulhar na fisica do jogo pos-flop sob pressao. Voce vai aprender a <strong>Antevisao</strong>: a habilidade de olhar para uma mesa e ver o &quot;campo de forca&quot; do Risk Premium antes mesmo de receber suas cartas.</p>
+
+          <h4 style={{ color: '#fff', fontSize: '1.2rem' }}>O Que Voce Vai Dominar:</h4>
+          <ul style={{ listStyle: 'none', paddingLeft: 0 }}>
+            <li><span style={{ color: 'var(--accent-emerald)' }}>&#10003;</span> <strong>O &quot;Downward Drift&quot;:</strong> A heuristica simples que ajusta automaticamente seus sizings e frequencias para a realidade do ICM.</li>
+            <li><span style={{ color: 'var(--accent-emerald)' }}>&#10003;</span> <strong>Toy-Games de Laboratorio:</strong> 8 cenarios puros para provar matematicamente conceitos contra-intuitivos.</li>
+            <li><span style={{ color: 'var(--accent-emerald)' }}>&#10003;</span> <strong>O Teto do Risk Premium:</strong> Por que overbluffar o Chip Leader e suicidio, e onde esta o limite matematico da agressao.</li>
+            <li><span style={{ color: 'var(--accent-emerald)' }}>&#10003;</span> <strong>A Mesa como Organismo:</strong> Como um all-in entre dois oponentes muda instantaneamente o valor das SUAS fichas.</li>
+          </ul>
+
+          <h3>O Que Esta Incluso</h3>
+          <div style={{ background: 'var(--bg-card)', borderRadius: 'var(--radius-md)', padding: '2rem', margin: '2rem 0', border: 'var(--glass-border)' }}>
+            <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
+              <li style={{ marginBottom: '1rem' }}><strong>Modulo 1: O Problema e o Mapa</strong><br /><span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Risk Premium, Bubble Factor, Valuations de Stack.</span></li>
+              <li style={{ marginBottom: '1rem' }}><strong>Modulo 2: Toy-Games como Laboratorio</strong><br /><span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>8 cenarios progressivos (RP 0 -&gt; 24), Pacto Silencioso, Nash sob ICM.</span></li>
+              <li style={{ marginBottom: '1rem' }}><strong>Modulo 3: ICM Pos-Flop - A Fronteira</strong><br /><span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Downward Drift, Covering Advantage, Check-Backs de Premium Hands.</span></li>
+              <li style={{ marginBottom: '1rem' }}><strong>Modulo 4: Variaveis Contextuais</strong><br /><span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Payout Structures, FGS, KO/Bounty, Dinamica de CL.</span></li>
+              <li style={{ marginBottom: '1rem' }}><strong>Modulo 5: Aplicacao Pratica e Erros Comuns</strong><br /><span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Os 10 erros mais comuns e heuristicas de mesa.</span></li>
+              <li style={{ marginTop: '1.5rem', color: 'var(--accent-primary)', borderTop: '1px solid var(--border-color)', paddingTop: '1rem' }}><strong>+ Bonus Exclusivo:</strong> Checklist de Bolso &quot;Antevisao&quot;.</li>
+            </ul>
+          </div>
+        </article>
+      </section>
+
+      {/* Autor */}
+      <section id="autor">
+        <div className="author-section">
+          <div className="video-wrapper-inline">
+            <video controls autoPlay muted playsInline loop preload="metadata">
+              <source src="/0309.mp4" type="video/mp4" />
+              Seu navegador nao suporta a tag de video.
+            </video>
+          </div>
+          <div>
+            <h3 style={{ textAlign: 'left', marginTop: 0, fontSize: '1.8rem' }}>Sobre o Autor</h3>
+            <p style={{ fontSize: '1.2rem', color: '#fff', marginBottom: '1rem' }}><strong>Raphael Vitoi</strong></p>
+            <p>Educador e Profissional de Poker ha mais de dez anos, Raphael Vitoi e um especialista em <strong>Sistemas Complexos, ICM, Multiway Spots e Teoria dos Jogos</strong>.</p>
+            <p>Sua abordagem transita entre a <strong>Analise Bayesiana, Preditiva e Recursiva</strong>, focando na adaptacao estrategica e analise comportamental (GTO e desvio). Alem das mesas, mergulha na <strong>Psicologia do Poker</strong>, dissecando os vieses cognitivos que custam dinheiro.</p>
+            <p><em>&quot;Pois o que importa de verdade e pensar bem.&quot;</em></p>
+
+            <div style={{ marginTop: '1.5rem', display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
+              <span style={{ background: 'rgba(99, 102, 241, 0.1)', color: 'var(--accent-primary)', padding: '0.2rem 0.8rem', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 700, border: '1px solid var(--accent-primary)' }}>Embaixador Deepsolver</span>
+              <span style={{ background: 'rgba(16, 185, 129, 0.1)', color: 'var(--accent-emerald)', padding: '0.2rem 0.8rem', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 700, border: '1px solid var(--accent-emerald)' }}>Afiliado GTO Wizard</span>
+              <span style={{ background: 'rgba(225, 29, 72, 0.1)', color: 'var(--accent-secondary)', padding: '0.2rem 0.8rem', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 700, border: '1px solid var(--accent-secondary)' }}>Criador trueICM.com</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Final */}
+      <section id="final-cta" style={{ textAlign: 'center', padding: '4rem 0' }}>
+        <p style={{ fontSize: '1.5rem', fontStyle: 'italic', marginBottom: '2rem', color: '#fff' }}>
+          &quot;O edge nao esta mais nas cartas que voce recebe, mas na precisao com que voce avalia o risco de joga-las.&quot;
+        </p>
+        <h2 style={{ fontSize: '2.5rem' }}>Recupere seu ROI. Domine a fronteira final.</h2>
+
+        <div style={{ marginTop: '3rem' }}>
+          <Link href="/aula-icm" className="card-cta" style={{ background: 'var(--accent-primary)', color: '#fff', padding: '1.2rem 4rem', borderRadius: '4px', fontSize: '1.2rem', boxShadow: '0 0 30px var(--accent-glow)', border: 'none', fontWeight: 800, marginTop: 0 }}>
+            ACESSAR AULA MAGNA AGORA
+          </Link>
+        </div>
+      </section>
+
+      {/* Hub de Conteudo (Biblioteca) */}
+      <section id="biblioteca">
+        <h2 style={{ textAlign: 'center', marginBottom: '3rem' }}>Biblioteca de Conhecimento</h2>
+        <div className="hub-grid">
+          <Link href="/aula-icm" className="hub-card">
+            <span className="hub-icon">&#128202;</span>
+            <h3>ICM &amp; RP: A Aula</h3>
+            <p>Aula Magna: O Edge mudou de lugar. Entenda a geometria do risco pos-flop.</p>
+            <span className="card-cta">Acessar &rarr;</span>
+          </Link>
+
+          <Link href="/psicologia-hs" className="hub-card">
+            <span className="hub-icon">&#128300;</span>
+            <h3>Protocolo de Analise</h3>
+            <p>A Fenomenologia da Incerteza: Exegese critica das heuristicas de ICM.</p>
+            <span className="card-cta">Ler &rarr;</span>
+          </Link>
+
+          <Link href="/biblioteca" className="hub-card">
+            <span className="hub-icon">&#128218;</span>
+            <h3>Biblioteca Epistemica</h3>
+            <p>Acervo de Filosofia, Psicologia e Existencialismo. A fundacao teorica.</p>
+            <span className="card-cta">Explorar &rarr;</span>
+          </Link>
+
+          <Link href="/tools/icm" className="hub-card">
+            <span className="hub-icon">&#127918;</span>
+            <h3>Simulador ICM</h3>
+            <p>Motor Algoritmico de Equidade em Torneios (Malmuth-Harville). Visualize o Risk Premium.</p>
+            <span className="card-cta">Abrir Laboratorio &rarr;</span>
+          </Link>
+
+          <Link href="/quem-sou" className="hub-card">
+            <span className="hub-icon">&#128100;</span>
+            <h3>Quem Sou</h3>
+            <p>O Manifesto. Educador, Estrategista e Especialista em Sistemas Complexos.</p>
+            <span className="card-cta">Conhecer &rarr;</span>
+          </Link>
+
+          <div className="hub-card locked">
+            <span className="hub-icon">&#129504;</span>
+            <h3>Psicologia High Stakes</h3>
+            <p>O proximo modulo avancado. Aguardando conteudo especifico.</p>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }
