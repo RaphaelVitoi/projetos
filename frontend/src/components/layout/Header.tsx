@@ -1,0 +1,1 @@
+﻿export default function Header() { return <header className="p-6 border-b border-slate-800 bg-slate-950"><h1 className="text-white font-bold tracking-widest uppercase text-xs">Templo do Aprendizado</h1></header>; }

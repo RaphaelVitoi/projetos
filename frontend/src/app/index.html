@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="O Edge Mudou de Lugar. Descubra por que jogar ChipEV em mesas finais está custando seu ROI e como a elite do poker domina o pós-flop.">
+    <title>Poker Racional | ICM e Risk Premium Pós-Flop</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="canonical" href="https://raphaelvitoi.github.io/">
+    <meta property="og:title" content="Poker Racional | ICM e Risk Premium Pos-Flop">
+    <meta property="og:description" content="O Edge Mudou de Lugar. Descubra por que jogar ChipEV em mesas finais esta custando seu ROI.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://raphaelvitoi.github.io/">
+    <link rel="stylesheet" href="style.css">
+    <script src="analytics.js" defer></script>
+    <style>
+        /* Custom Styles for LP */
+        .logo {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 1.5rem;
+            letter-spacing: -0.05em;
+            text-transform: uppercase;
+        }
+        .logo .accent {
+            color: var(--accent-primary);
+            font-weight: 300;
+        }
+        .sales-article {
+            max-width: 840px;
+            font-size: 1.1rem;
+        }
+        .sales-article h3 {
+            font-size: 2rem;
+            margin-top: 4rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .sales-article ul {
+            margin-bottom: 2rem;
+        }
+        .sales-article li {
+            margin-bottom: 0.8rem;
+        }
+        .author-section {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 3rem;
+            align-items: start;
+            margin-top: 3rem;
+        }
+        @media (max-width: 768px) {
+            .author-section {
+                grid-template-columns: 1fr;
+            }
+        }
+        .video-wrapper-inline {
+            position: relative;
+            width: 100%;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #000;
+            padding-bottom: 56.25%; 
+            height: 0;
+        }
+        .video-wrapper-inline video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <h1 class="logo">Poker<span class="accent">Racional</span></h1>
+            <nav>
+                <ul>
+                    <li><a href="#metodo">O Método</a></li>
+                    <li><a href="#autor">O Autor</a></li>
+                    <li><a href="#biblioteca">Biblioteca</a></li>
+                    <li><a href="#contato">Contato</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="hero">
+            <p style="text-transform: uppercase; letter-spacing: 0.2em; font-size: 0.9rem; color: var(--accent-primary); margin-bottom: 1rem; font-weight: 700;">ICM e Risk Premium Pós-Flop</p>
+            <h2 style="font-size: 3.5rem; line-height: 1.1; margin-bottom: 1.5rem;">O Edge Mudou de Lugar. <span style="display: block; font-weight: 300; color: #fff; margin-top: 0.5rem;">Você Ainda Está Jogando o Jogo de 2020?</span></h2>
+            <p style="font-size: 1.3rem; max-width: 800px; margin: 0 auto 2.5rem; color: #94a3b8; font-weight: 400;">Descubra por que jogar ChipEV em mesas finais está custando, em média, <strong>mais de 10% do seu ROI</strong> — e como a elite do poker usa o "Downward Drift" para dominar o pós-flop em 2026.</p>
+            
+            <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
+                <a href="#metodo" class="card-cta" style="background: var(--accent-primary); color: #fff; padding: 1rem 2.5rem; border-radius: 4px; text-decoration: none; border: none; font-size: 1rem;">Conhecer o Método →</a>
+                <a href="leitura-icm.html" target="_blank" class="card-cta" style="background: rgba(99, 102, 241, 0.1); color: var(--accent-primary); padding: 1rem 2.5rem; border-radius: 4px; text-decoration: none; border: 1px solid var(--accent-primary); font-size: 1rem; font-weight: 600;">Baixar Material PDF</a>
+            </div>
+        </section>
+
+        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.05); margin: 0 auto; max-width: 200px;">
+
+        <section id="metodo">
+            <article class="sales-article">
+                <h3>A "Mentira" do ICM</h3>
+                <p>Se você é como a maioria dos regulares de MTT, você aprendeu que o ICM é um interruptor que "liga" na bolha ou na mesa final.</p>
+                <p>Você estudou tabelas de Push/Fold. Você domina o HRC e o ICMIZER. Você acha que seu jogo de ICM está em dia.</p>
+                
+                <p><strong>Tenho uma má notícia:</strong> O poker evoluiu, e o seu edge no pré-flop está desaparecendo. Hoje, solvers resolveram o pré-flop. O gap de habilidade entre você e o reg médio nessa área é mínimo.</p>
+                
+                <p>Mas existe uma <strong>Nova Fronteira</strong>. Um lugar onde o dinheiro real está sendo ganho e perdido silenciosamente, longe dos olhos dos solvers básicos.</p>
+                <p style="font-size: 1.4rem; color: #fff; text-align: center; margin: 2rem 0;"><strong>O ICM Pós-Flop.</strong></p>
+
+                <div class="callout" style="border-left-color: var(--accent-secondary);">
+                    <h4>O Custo Invisível</h4>
+                    <p>Dados recentes do GTO Wizard (2025/2026) revelam uma verdade brutal:</p>
+                    <blockquote style="border: none; padding: 0; margin: 1rem 0; font-size: 1.1rem; color: #fff;">
+                        Jogar uma estratégia padrão de ChipEV (focada em acumular fichas) em spots de mesa final custa, em média, <strong>10% a 12% de todo o buy-in do torneio em $EV</strong>.
+                    </blockquote>
+                    <p>Em potes 3-bet? O erro custa mais de <strong>30% do valor da jogada</strong>.</p>
+                    <p>Pense nisso. Você grindou 8 horas. Chegou na FT. E em duas decisões de c-bet mal calibradas, você devolveu todo o lucro esperado do torneio. Não porque jogou "mal", mas porque jogou com a matemática errada.</p>
+                </div>
+
+                <h3>Apresentando: O Mapa do ICM Pós-Flop</h3>
+                <p>Nesta aula inédita, não vamos falar de tabelas de push/fold. Vamos mergulhar na física do jogo pós-flop sob pressão. Você vai aprender a <strong>Antevisão</strong>: a habilidade de olhar para uma mesa e ver o "campo de força" do Risk Premium antes mesmo de receber suas cartas.</p>
+
+                <h4>O Que Você Vai Dominar:</h4>
+                <ul style="list-style: none; padding-left: 0;">
+                    <li><span style="color: var(--accent-emerald);">✓</span> <strong>O "Downward Drift":</strong> A heurística simples que ajusta automaticamente seus sizings e frequências para a realidade do ICM (e por que seus sizings de cash game estão queimando dinheiro).</li>
+                    <li><span style="color: var(--accent-emerald);">✓</span> <strong>Toy-Games de Laboratório:</strong> Vamos dissecar 8 cenários puros para provar matematicamente conceitos contra-intuitivos — como o fato de que, às vezes, <strong>quem tem menos risco deve foldar MAIS</strong> (O Paradoxo da Pressão Invertida).</li>
+                    <li><span style="color: var(--accent-emerald);">✓</span> <strong>O Teto do Risk Premium:</strong> Por que overbluffar o Chip Leader é suicídio, e onde está o limite matemático da agressão.</li>
+                    <li><span style="color: var(--accent-emerald);">✓</span> <strong>A Mesa como Organismo:</strong> Como um all-in entre dois oponentes muda instantaneamente o valor das SUAS fichas e como explorar isso.</li>
+                </ul>
+
+                <h3>Para Quem É Isso?</h3>
+                <p>Este material não é para iniciantes. É para jogadores profissionais e semi-profissionais (AVG $109-$530) que:</p>
+                <ol style="margin-left: 1.5rem;">
+                    <li>Já entendem o básico de ICM pré-flop.</li>
+                    <li>Estão cansados de "sentir" que estão cometendo erros em FTs, mas não sabem onde.</li>
+                    <li>Querem uma vantagem técnica real que o field ainda não estuda.</li>
+                </ul>
+
+                <h3>O Que Está Incluso</h3>
+                <div style="background: var(--bg-card); border-radius: var(--radius-md); padding: 2rem; margin: 2rem 0; border: var(--glass-border);">
+                    <ul style="padding-left: 0; list-style: none;">
+                        <li style="margin-bottom: 1rem;"><strong>Módulo 1: O Problema e o Mapa</strong><br><span style="font-size: 0.9rem; color: var(--text-muted);">Risk Premium, Bubble Factor, Valuations de Stack.</span></li>
+                        <li style="margin-bottom: 1rem;"><strong>Módulo 2: Toy-Games como Laboratório</strong><br><span style="font-size: 0.9rem; color: var(--text-muted);">8 cenários progressivos (RP 0 -> 24), Pacto Silencioso, Nash sob ICM.</span></li>
+                        <li style="margin-bottom: 1rem;"><strong>Módulo 3: ICM Pós-Flop — A Fronteira</strong><br><span style="font-size: 0.9rem; color: var(--text-muted);">Downward Drift, Covering Advantage, Check-Backs de Premium Hands.</span></li>
+                        <li style="margin-bottom: 1rem;"><strong>Módulo 4: Variáveis Contextuais</strong><br><span style="font-size: 0.9rem; color: var(--text-muted);">Payout Structures, FGS, KO/Bounty, Dinâmica de CL.</span></li>
+                        <li style="margin-bottom: 1rem;"><strong>Módulo 5: Aplicação Prática e Erros Comuns</strong><br><span style="font-size: 0.9rem; color: var(--text-muted);">Os 10 erros mais comuns e heurísticas de mesa.</span></li>
+                        <li style="margin-top: 1.5rem; color: var(--accent-primary); border-top: 1px solid var(--border-color); padding-top: 1rem;"><strong>+ Bônus Exclusivo:</strong> Checklist de Bolso "Antevisão".</li>
+                    </ul>
+                </div>
+
+                <h3>Elementos Diferenciadores</h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li><strong>1. Metodologia de toy-games:</strong> isolamento de variáveis para construir intuição antes de aplicar a situações reais.</li>
+                    <li><strong>2. Conceitos próprios nomeados:</strong> Teto do RP, RP de ida vs volta -- nomenclatura clara e própria que o mercado não usa.</li>
+                    <li><strong>3. ICM pós-flop como tese central:</strong> a maioria do conteúdo existente trata ICM como fenômeno pré-flop. Esta aula trata ICM pós-flop como o edge inexplorado real.</li>
+                    <li><strong>4. Crítica fundamentada aos solvers:</strong> solvers como mapa, não como território.</li>
+                    <li><strong>5. Conexões interdisciplinares reais:</strong> Prospect Theory, Teoria de Sistemas e Teoria dos Jogos usadas como lentes interpretativas.</li>
+                </ul>
+            </article>
+        </section>
+
+        <section id="autor">
+            <div class="author-section">
+                <div class="video-wrapper-inline">
+                    <video controls autoplay muted playsinline loop preload="metadata">
+                        <source src="0309.mp4" type="video/mp4">
+                        Seu navegador não suporta a tag de vídeo.
+                    </video>
+                </div>
+                <div>
+                    <h3 style="text-align: left; margin-top: 0; font-size: 1.8rem;">Sobre o Autor</h3>
+                    <p style="font-size: 1.2rem; color: #fff; margin-bottom: 1rem;"><strong>Raphael Vitoi</strong></p>
+                    <p>Educador e Profissional de Poker há mais de dez anos, Raphael Vitoi é um especialista em <strong>Sistemas Complexos, ICM, Multiway Spots e Teoria dos Jogos</strong>.</p>
+                    <p>Sua abordagem transita entre a <strong>Análise Bayesiana, Preditiva e Recursiva</strong>, focando na adaptação estratégica e análise comportamental (GTO e desvio). Além das mesas, mergulha na <strong>Psicologia do Poker</strong>, dissecando os vieses cognitivos que custam dinheiro.</p>
+                    <p><em>"Pois o que importa de verdade é pensar bem."</em></p>
+                    
+                    <div style="margin-top: 1.5rem; display: flex; flex-wrap: wrap; gap: 1rem;">
+                        <span style="background: rgba(99, 102, 241, 0.1); color: var(--accent-primary); padding: 0.2rem 0.8rem; border-radius: 4px; font-size: 0.8rem; font-weight: 700; border: 1px solid var(--accent-primary);">Embaixador Deepsolver</span>
+                        <span style="background: rgba(16, 185, 129, 0.1); color: var(--accent-emerald); padding: 0.2rem 0.8rem; border-radius: 4px; font-size: 0.8rem; font-weight: 700; border: 1px solid var(--accent-emerald);">Afiliado GTO Wizard</span>
+                        <span style="background: rgba(225, 29, 72, 0.1); color: var(--accent-secondary); padding: 0.2rem 0.8rem; border-radius: 4px; font-size: 0.8rem; font-weight: 700; border: 1px solid var(--accent-secondary);">Criador trueICM.com</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="final-cta" style="text-align: center; padding: 4rem 0;">
+            <p style="font-size: 1.5rem; font-style: italic; margin-bottom: 2rem; color: #fff;">"O edge não está mais nas cartas que você recebe, mas na precisão com que você avalia o risco de jogá-las."</p>
+            <h2 style="font-size: 2.5rem;">Recupere seu ROI. Domine a fronteira final.</h2>
+            
+            <div style="margin-top: 3rem;">
+                <a href="aula-icm.html" class="card-cta" style="background: var(--accent-primary); color: #fff; padding: 1.2rem 4rem; border-radius: 4px; font-size: 1.2rem; text-decoration: none; box-shadow: 0 0 30px var(--accent-glow); border: none; font-weight: 800;">ACESSAR AULA MAGNA AGORA</a>
+            </div>
+        </section>
+
+        <!-- HUB DE CONTEÚDO -->
+        <section id="biblioteca">
+            <h2 style="text-align: center; margin-bottom: 3rem;">Biblioteca de Conhecimento</h2>
+            <div class="hub-grid">
+                <!-- CARD 1: AULA ICM (ATIVO) -->
+                <a href="aula-icm.html" class="hub-card">
+                    <span class="hub-icon">📊</span>
+                    <h3>ICM & RP: A Aula</h3>
+                    <p>Aula Magna: O Edge mudou de lugar. Entenda a geometria do risco pós-flop.</p>
+                    <span class="card-cta">Acessar →</span>
+                </a>
+
+                <!-- CARD 3: PROTOCOLO DE ANÁLISE (ATIVO) -->
+                <a href="psicologia-hs.html" class="hub-card">
+                    <span class="hub-icon">🔬</span>
+                    <h3>Protocolo de Análise</h3>
+                    <p>A Fenomenologia da Incerteza: Exegese crítica das heurísticas de ICM.</p>
+                    <span class="card-cta">Ler →</span>
+                </a>
+
+                <!-- CARD 4: PSICOLOGIA HIGH STAKES (EM BREVE) -->
+                <div class="hub-card locked">
+                    <span class="hub-icon">🧠</span>
+                    <h3>Psicologia High Stakes</h3>
+                    <p>O próximo módulo. Aguardando conteúdo específico.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contato">
+            <h3 style="margin-bottom: 2rem;">Conecte-se</h3>
+            <ul>
+                <li><a href="https://www.twitch.tv/RaphaelVitoiPoker" target="_blank" rel="noopener"><strong>Twitch:</strong> RaphaelVitoiPoker</a></li>
+                <li><a href="https://www.youtube.com/results?search_query=Raphael+Vitoi" target="_blank" rel="noopener"><strong>YouTube:</strong> Raphael Vitoi</a></li>
+                <li><a href="https://www.instagram.com/raphaelvitoi/" target="_blank" rel="noopener"><strong>Instagram:</strong> @raphaelvitoi</a></li>
+            </ul>
+        </section>
+    </main>
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>

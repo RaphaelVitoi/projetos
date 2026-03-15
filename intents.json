@@ -1,0 +1,88 @@
+{
+    "intents": [
+        {
+            "id": "security_audit",
+            "keywords": ["vulnerabilidade", "seguranca", "security", "auditoria", "pentest", "exploit", "xss", "injection"],
+            "agent": "@securitychief",
+            "description": "Auditoria de Seguranca e Vulnerabilidades"
+        },
+        {
+            "id": "research_deep",
+            "keywords": ["pesquisar", "investigar", "estado da arte", "mapear", "descobrir", "verdade sobre"],
+            "agent": "@pesquisador",
+            "description": "Pesquisa Profunda de Dominio"
+        },
+        {
+            "id": "code_refactor",
+            "keywords": ["refatorar", "otimizar", "clean code", "melhoria de codigo", "refactor", "implementar", "codigo"],
+            "agent": "@implementor",
+            "description": "Refatoracao e Implementacao de Codigo"
+        },
+        {
+            "id": "plan_feature",
+            "keywords": ["planejar", "arquitetura", "spec", "prd", "projetar", "design system"],
+            "agent": "@planner",
+            "description": "Planejamento e Arquitetura de Features"
+        },
+        {
+            "id": "structure_prompt",
+            "keywords": ["prompt", "estruturar", "clarificar", "definir escopo"],
+            "agent": "@prompter",
+            "description": "Estruturacao de Prompts para Pipeline"
+        },
+        {
+            "id": "audit_spec",
+            "keywords": ["auditar", "validar spec", "revisar plano", "paranoia", "verificar spec"],
+            "agent": "@auditor",
+            "description": "Auditoria Tecnica de PRD/SPEC"
+        },
+        {
+            "id": "verify_implementation",
+            "keywords": ["verificar", "qa", "testar", "review", "pos-implementacao"],
+            "agent": "@verifier",
+            "description": "Verificacao de Qualidade Pos-Implementacao"
+        },
+        {
+            "id": "validate_content",
+            "keywords": ["validar conteudo", "precisao", "factual", "dominio", "poker correto"],
+            "agent": "@validador",
+            "description": "Validacao de Conteudo Especializado"
+        },
+        {
+            "id": "curate_quality",
+            "keywords": ["curadoria", "etica", "estetica", "integridade", "plagio", "mercado", "competidor"],
+            "agent": "@curator",
+            "description": "Curadoria de Integridade e Estetica"
+        },
+        {
+            "id": "strategic_analysis",
+            "keywords": ["estrategia", "visao", "analise", "critica", "mentoria", "risco sistemico", "pensar"],
+            "agent": "@maverick",
+            "description": "Analise Estrategica e Mentoria Intelectual"
+        },
+        {
+            "id": "organize_docs",
+            "keywords": ["organizar", "documentacao", "health check", "consistencia", "limpar docs"],
+            "agent": "@organizador",
+            "description": "Organizacao e Health Check Documental"
+        },
+        {
+            "id": "prioritize_backlog",
+            "keywords": ["priorizar", "backlog", "ideias", "pipeline", "o que fazer", "proxima tarefa"],
+            "agent": "@dispatcher",
+            "description": "Priorizacao de Backlog e Roteamento"
+        },
+        {
+            "id": "orchestrate_flow",
+            "keywords": ["orquestrar", "fluxo", "demanda", "gargalo", "balancear", "coordenar"],
+            "agent": "@sequenciador",
+            "description": "Orquestracao Operacional de Trafego"
+        },
+        {
+            "id": "scheduled_ops",
+            "keywords": ["backup", "sync", "limpeza", "agendamento", "manutencao", "cron"],
+            "agent": "@skillmaster",
+            "description": "Operacoes Agendadas e Manutencao 24/7"
+        }
+    ]
+}
