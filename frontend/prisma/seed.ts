@@ -15,7 +15,7 @@ async function main() {
       title: 'O Paradoxo do Valuation no ICM',
       content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
       readTime: 8,
-      tags: ['ICM', 'Teoria'],
+      tags: JSON.stringify(['ICM', 'Teoria']),
     },
   });
 
@@ -24,7 +24,7 @@ async function main() {
       title: 'A Ameaça Orgânica',
       content: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
       readTime: 12,
-      tags: ['Mindset'],
+      tags: JSON.stringify(['Mindset']),
     },
   });
 
@@ -33,7 +33,7 @@ async function main() {
       title: 'O Motor de Diluição',
       content: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
       readTime: 5,
-      tags: [],
+      tags: JSON.stringify([]),
     },
   });
 
