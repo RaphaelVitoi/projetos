@@ -7,9 +7,10 @@ __pycache__/
 .next/
 frontend/.next/
 
-# Binarios pesados
-assets/docs/
+# Binarios pesados (docx, mp4 em content/)
 *.docx
+content/aulas/*.mp4
+content/pesquisa/
 
 # Backups locais
 .backups/
