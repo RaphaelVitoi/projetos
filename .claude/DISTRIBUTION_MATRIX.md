@@ -14,17 +14,17 @@
 
 **Autoridade:** Único - apenas este documento
 
-| Tópico | Localização | Atualizado Por | Frequência |
-|--------|-----------|----------------|-----------|
-| Domínio do Projeto | `project-context.md` | @pesquisador | Quando domínio muda |
-| Público-alvo | `project-context.md` | @pesquisador | Quando alvo muda |
-| Fontes Autorizadas | `project-context.md` | @pesquisador | Quando novas referências confirmadas |
-| Terminologia Confirmada | `project-context.md` | @pesquisador | Quando termos adicionados/corrigidos |
-| Decisões Tomadas | `project-context.md` | Todos agentes | Após cada decisão confirmada |
-| Estado Atual da Codebase | `project-context.md` | Último agente na pipeline | Ao final de cada executa |
-| Contexto Comportamental | `project-context.md` | @pesquisador | Apenas quando mudam regras do usuario |
-| Agent-Memory System Status | `project-context.md` | @skillmaster | Hourly (sync automático) |
-| Handoff Log | `project-context.md` | Todos agentes | Após cada handoff |
+| Tópico                     | Localização          | Atualizado Por            | Frequência                            |
+| -------------------------- | -------------------- | ------------------------- | ------------------------------------- |
+| Domínio do Projeto         | `project-context.md` | @pesquisador              | Quando domínio muda                   |
+| Público-alvo               | `project-context.md` | @pesquisador              | Quando alvo muda                      |
+| Fontes Autorizadas         | `project-context.md` | @pesquisador              | Quando novas referências confirmadas  |
+| Terminologia Confirmada    | `project-context.md` | @pesquisador              | Quando termos adicionados/corrigidos  |
+| Decisões Tomadas           | `project-context.md` | Todos agentes             | Após cada decisão confirmada          |
+| Estado Atual da Codebase   | `project-context.md` | Último agente na pipeline | Ao final de cada executa              |
+| Contexto Comportamental    | `project-context.md` | @pesquisador              | Apenas quando mudam regras do usuario |
+| Agent-Memory System Status | `project-context.md` | @skillmaster              | Hourly (sync automático)              |
+| Handoff Log                | `project-context.md` | Todos agentes             | Após cada handoff                     |
 
 **Regra:** Qualquer mudança nestes tópicos DEVE ser refletida APENAS aqui. Referências em outros docs apontam para este arquivo.
 
@@ -34,14 +34,14 @@
 
 **Autoridade:** Único - apenas este documento
 
-| Tópico | Localização | Atualizado Por | Frequência |
-|--------|-----------|----------------|-----------|
-| Descrição de Agentes | `MANUAL_WORKFLOW_AGENTES.md` | @pesquisador (quando novo agente) | Quando arquitetura muda |
-| Sequência de Pipeline | `MANUAL_WORKFLOW_AGENTES.md` | @planner (quando fluxo muda) | Quando workflow evolui |
-| Sintaxe de Scripts | `MANUAL_WORKFLOW_AGENTES.md` | @implementor (quando script muda) | Quando comando/opção adicionada |
-| Estados de Tarefa | `MANUAL_WORKFLOW_AGENTES.md` | @auditor (quando schema muda) | Quando schema JSON evolui |
-| Estapas de Auditoria | `MANUAL_WORKFLOW_AGENTES.md` | @auditor | Quando processo de auditoria refazed |
-| Camada Automática 24/7 | `MANUAL_WORKFLOW_AGENTES.md` | @skillmaster + @sequenciador | Quando operações agendadas mudam |
+| Tópico                 | Localização                  | Atualizado Por                    | Frequência                           |
+| ---------------------- | ---------------------------- | --------------------------------- | ------------------------------------ |
+| Descrição de Agentes   | `MANUAL_WORKFLOW_AGENTES.md` | @pesquisador (quando novo agente) | Quando arquitetura muda              |
+| Sequência de Pipeline  | `MANUAL_WORKFLOW_AGENTES.md` | @planner (quando fluxo muda)      | Quando workflow evolui               |
+| Sintaxe de Scripts     | `MANUAL_WORKFLOW_AGENTES.md` | @implementor (quando script muda) | Quando comando/opção adicionada      |
+| Estados de Tarefa      | `MANUAL_WORKFLOW_AGENTES.md` | @auditor (quando schema muda)     | Quando schema JSON evolui            |
+| Estapas de Auditoria   | `MANUAL_WORKFLOW_AGENTES.md` | @auditor                          | Quando processo de auditoria refazed |
+| Camada Automática 24/7 | `MANUAL_WORKFLOW_AGENTES.md` | @skillmaster + @sequenciador      | Quando operações agendadas mudam     |
 
 **Regra:** Qualquer COMO (como rodar, como usar, sintaxe) vai AQUI. Não vai em project-context.md.
 
@@ -51,14 +51,14 @@
 
 **Autoridade:** Distribuída
 
-| Tópico | Localização | Atualizado Por | Frequência |
-|--------|-----------|----------------|-----------|
-| Histórico de Operações | `task_log.md` | @skillmaster (automático) | Após cada operação |
-| Matriz de Recuperação | `task_log.md` | @auditor (quando novo cenário) | Quando novo padrão de falha |
-| Métricas de Qualidade | `task_log.md` | @skillmaster | Hourly |
-| Ações Realizadas por Agente | `.claude/agent-memory/<agente>/MEMORY.md` | Respectivo agente | Apé de cada tarefa |
-| Padrões Observados | `.claude/agent-memory/<agente>/MEMORY.md` | Respectivo agente | Contínuo |
-| Referências Contextuais | `.claude/agent-memory/<agente>/MEMORY.md` | @pesquisador (sync) | Hourly via skillmaster |
+| Tópico                      | Localização                               | Atualizado Por                 | Frequência                  |
+| --------------------------- | ----------------------------------------- | ------------------------------ | --------------------------- |
+| Histórico de Operações      | `task_log.md`                             | @skillmaster (automático)      | Após cada operação          |
+| Matriz de Recuperação       | `task_log.md`                             | @auditor (quando novo cenário) | Quando novo padrão de falha |
+| Métricas de Qualidade       | `task_log.md`                             | @skillmaster                   | Hourly                      |
+| Ações Realizadas por Agente | `.claude/agent-memory/<agente>/MEMORY.md` | Respectivo agente              | Apé de cada tarefa          |
+| Padrões Observados          | `.claude/agent-memory/<agente>/MEMORY.md` | Respectivo agente              | Contínuo                    |
+| Referências Contextuais     | `.claude/agent-memory/<agente>/MEMORY.md` | @pesquisador (sync)            | Hourly via skillmaster      |
 
 **Regra:** Executivo (o que FOI feito, detalhes de problema X que ocorreu) vai aqui. Não vai em project-context.md.
 
@@ -104,7 +104,7 @@
 
 ## Checklist de Sincronização Documental
 
-Após ANY atualização, verificar:
+Após ANY (QUALQUER) atualização, verificar:
 
 - [ ] Documento primário (autoridade) foi atualizado?
 - [ ] Referências em documentos secundários ainda são válidas?
@@ -149,13 +149,13 @@ task_log.md
 
 ## Impacto Esperado
 
-| Métrica | Antes | Depois | Melhoria |
-|---------|-------|--------|----------|
-| Campos redundantes entre docs | 7 | 0 | -100% |
-| Assimetrias de informação possíveis | HIGH | LOW | -85% |
-| Tempo para encontrar autoridade canônica | ~3-5 min | <30 sec | -90% |
-| Risco de desincronização | ALTO | MUITO BAIXO | -95% |
-| Clareza de "quem atualiza o quê" | Vaga | Crystal clear | 100% |
+| Métrica                                  | Antes    | Depois        | Melhoria |
+| ---------------------------------------- | -------- | ------------- | -------- |
+| Campos redundantes entre docs            | 7        | 0             | -100%    |
+| Assimetrias de informação possíveis      | HIGH     | LOW           | -85%     |
+| Tempo para encontrar autoridade canônica | ~3-5 min | <30 sec       | -90%     |
+| Risco de desincronização                 | ALTO     | MUITO BAIXO   | -95%     |
+| Clareza de "quem atualiza o quê"         | Vaga     | Crystal clear | 100%     |
 
 ---
 
@@ -181,6 +181,6 @@ task_log.md
 
 ## Versão & Changelog
 
-| Versão | Data | O Quê Mudou | Autoridade |
-|--------|------|-----------|-----------|
-| 1.0 | 2026-03-12 | Criação inicial - Matriz de distribuição | @auditor |
+| Versão | Data       | O Quê Mudou                              | Autoridade |
+| ------ | ---------- | ---------------------------------------- | ---------- |
+| 1.0    | 2026-03-12 | Criação inicial - Matriz de distribuição | @auditor   |
