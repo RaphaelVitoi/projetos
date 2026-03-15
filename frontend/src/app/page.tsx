@@ -152,11 +152,39 @@ export default function HomePage() {
             <span className="card-cta">Acessar &rarr;</span>
           </Link>
 
+          <Link href="/leitura-icm" className="hub-card">
+            <span className="hub-icon">&#128209;</span>
+            <h3>Entendendo o ICM</h3>
+            <p>Whitepaper completo: Toy Games, Risk Premium, RP de ida/volta e o Teto do RP.</p>
+            <span className="card-cta">Ler Whitepaper &rarr;</span>
+          </Link>
+
+          <Link href="/artigos/estado-da-arte" className="hub-card">
+            <span className="hub-icon">&#128161;</span>
+            <h3>Estado da Arte 2025</h3>
+            <p>Donk Bet meta, Efeito de Irradiacao, IA vs HRC Pro. Tendencias High Stakes.</p>
+            <span className="card-cta">Ler &rarr;</span>
+          </Link>
+
+          <Link href="/artigos/smart-sniper" className="hub-card">
+            <span className="hub-icon">&#127919;</span>
+            <h3>Protocolo Smart Sniper</h3>
+            <p>Gestao de carreira, rotina semanal, estrategia de domingo e validacao Monte Carlo.</p>
+            <span className="card-cta">Ler &rarr;</span>
+          </Link>
+
           <Link href="/psicologia-hs" className="hub-card">
             <span className="hub-icon">&#128300;</span>
-            <h3>Protocolo de Analise</h3>
+            <h3>Psicologia High Stakes</h3>
             <p>A Fenomenologia da Incerteza: Exegese critica das heuristicas de ICM.</p>
             <span className="card-cta">Ler &rarr;</span>
+          </Link>
+
+          <Link href="/tools/icm" className="hub-card">
+            <span className="hub-icon">&#127918;</span>
+            <h3>Simulador ICM</h3>
+            <p>Calculadora Malmuth-Harville + Simulador de Cenarios com Risk Premium.</p>
+            <span className="card-cta">Abrir Laboratorio &rarr;</span>
           </Link>
 
           <Link href="/biblioteca" className="hub-card">
@@ -166,25 +194,12 @@ export default function HomePage() {
             <span className="card-cta">Explorar &rarr;</span>
           </Link>
 
-          <Link href="/tools/icm" className="hub-card">
-            <span className="hub-icon">&#127918;</span>
-            <h3>Simulador ICM</h3>
-            <p>Motor Algoritmico de Equidade em Torneios (Malmuth-Harville). Visualize o Risk Premium.</p>
-            <span className="card-cta">Abrir Laboratorio &rarr;</span>
-          </Link>
-
           <Link href="/quem-sou" className="hub-card">
             <span className="hub-icon">&#128100;</span>
             <h3>Quem Sou</h3>
             <p>O Manifesto. Educador, Estrategista e Especialista em Sistemas Complexos.</p>
             <span className="card-cta">Conhecer &rarr;</span>
           </Link>
-
-          <div className="hub-card locked">
-            <span className="hub-icon">&#129504;</span>
-            <h3>Psicologia High Stakes</h3>
-            <p>O proximo modulo avancado. Aguardando conteudo especifico.</p>
-          </div>
         </div>
       </section>
     </main>

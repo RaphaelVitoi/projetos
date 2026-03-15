@@ -10,7 +10,8 @@ const Header = () => {
         <nav>
           <ul>
             <li><Link href="/aula-icm">A Aula</Link></li>
-            <li><Link href="/psicologia-hs">Psicologia HS</Link></li>
+            <li><Link href="/leitura-icm">ICM</Link></li>
+            <li><Link href="/psicologia-hs">Psicologia</Link></li>
             <li><Link href="/biblioteca">Biblioteca</Link></li>
             <li><Link href="/quem-sou">Quem Sou</Link></li>
             <li>
