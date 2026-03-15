@@ -65,11 +65,19 @@ export default function HomePage() {
 
           <h4 style={{ color: '#fff', fontSize: '1.2rem' }}>O Que Voce Vai Dominar:</h4>
           <ul style={{ listStyle: 'none', paddingLeft: 0 }}>
-            <li><span style={{ color: 'var(--accent-emerald)' }}>&#10003;</span> <strong>O &quot;Downward Drift&quot;:</strong> A heuristica simples que ajusta automaticamente seus sizings e frequencias para a realidade do ICM.</li>
-            <li><span style={{ color: 'var(--accent-emerald)' }}>&#10003;</span> <strong>Toy-Games de Laboratorio:</strong> 8 cenarios puros para provar matematicamente conceitos contra-intuitivos.</li>
+            <li><span style={{ color: 'var(--accent-emerald)' }}>&#10003;</span> <strong>O &quot;Downward Drift&quot;:</strong> A heuristica simples que ajusta automaticamente seus sizings e frequencias para a realidade do ICM (e por que seus sizings de cash game estao queimando dinheiro).</li>
+            <li><span style={{ color: 'var(--accent-emerald)' }}>&#10003;</span> <strong>Toy-Games de Laboratorio:</strong> Vamos dissecar 8 cenarios puros para provar matematicamente conceitos contra-intuitivos.</li>
             <li><span style={{ color: 'var(--accent-emerald)' }}>&#10003;</span> <strong>O Teto do Risk Premium:</strong> Por que overbluffar o Chip Leader e suicidio, e onde esta o limite matematico da agressao.</li>
-            <li><span style={{ color: 'var(--accent-emerald)' }}>&#10003;</span> <strong>A Mesa como Organismo:</strong> Como um all-in entre dois oponentes muda instantaneamente o valor das SUAS fichas.</li>
+            <li><span style={{ color: 'var(--accent-emerald)' }}>&#10003;</span> <strong>A Mesa como Organismo:</strong> Como um all-in entre dois oponentes muda instantaneamente o valor das SUAS fichas e como explorar isso.</li>
           </ul>
+
+          <h3>Para Quem E Isso?</h3>
+          <p>Este material nao e para iniciantes. E para jogadores profissionais e semi-profissionais (AVG $109-$530) que:</p>
+          <ol style={{ marginLeft: '1.5rem', color: '#cbd5e1' }}>
+            <li style={{ marginBottom: '0.5rem' }}>Ja entendem o basico de ICM pre-flop.</li>
+            <li style={{ marginBottom: '0.5rem' }}>Estao cansados de &quot;sentir&quot; que estao cometendo erros em FTs, mas nao sabem onde.</li>
+            <li style={{ marginBottom: '0.5rem' }}>Querem uma vantagem tecnica real que o field ainda nao estuda.</li>
+          </ol>
 
           <h3>O Que Esta Incluso</h3>
           <div style={{ background: 'var(--bg-card)', borderRadius: 'var(--radius-md)', padding: '2rem', margin: '2rem 0', border: 'var(--glass-border)' }}>
@@ -82,6 +90,15 @@ export default function HomePage() {
               <li style={{ marginTop: '1.5rem', color: 'var(--accent-primary)', borderTop: '1px solid var(--border-color)', paddingTop: '1rem' }}><strong>+ Bonus Exclusivo:</strong> Checklist de Bolso &quot;Antevisao&quot;.</li>
             </ul>
           </div>
+
+          <h3>Elementos Diferenciadores</h3>
+          <ul style={{ listStyle: 'none', padding: 0 }}>
+            <li style={{ marginBottom: '0.8rem' }}><strong>1. Metodologia de toy-games:</strong> isolamento de variaveis para construir intuicao antes de aplicar a situacoes reais.</li>
+            <li style={{ marginBottom: '0.8rem' }}><strong>2. Conceitos proprios nomeados:</strong> Teto do RP, RP de ida vs volta: nomenclatura clara e propria que o mercado nao usa.</li>
+            <li style={{ marginBottom: '0.8rem' }}><strong>3. ICM pos-flop como tese central:</strong> a maioria do conteudo existente trata ICM como fenomeno pre-flop. Esta aula trata ICM pos-flop como o edge inexplorado real.</li>
+            <li style={{ marginBottom: '0.8rem' }}><strong>4. Critica fundamentada aos solvers:</strong> solvers como mapa, nao como territorio.</li>
+            <li style={{ marginBottom: '0.8rem' }}><strong>5. Conexoes interdisciplinares reais:</strong> Prospect Theory, Teoria de Sistemas e Teoria dos Jogos usadas como lentes interpretativas.</li>
+          </ul>
         </article>
       </section>
 

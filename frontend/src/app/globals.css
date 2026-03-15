@@ -4,7 +4,7 @@
 
 @layer base {
     @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css');
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700;800&family=Montserrat:wght@700;800;900&family=Great+Vibes&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700;800&family=Montserrat:wght@700;800;900&family=Playfair+Display:ital,wght@0,700;1,700&family=Great+Vibes&display=swap');
 
     :root {
         /* === Paleta de Cores (Sincronizada com Legacy style.css) === */
@@ -39,6 +39,7 @@
 
         /* Fontes */
         --font-heading: 'Montserrat', sans-serif;
+        --font-editorial: 'Playfair Display', serif;
         --font-body: 'Inter', sans-serif;
         --font-mono: 'JetBrains Mono', monospace;
     }
@@ -607,7 +608,7 @@
         -webkit-text-fill-color: transparent;
     }
 
-    /* === Footer / Contato (Legacy) === */
+    /* === Footer / Contato (Premium) === */
     #contato {
         padding: 4rem 0;
         text-align: center;
@@ -631,6 +632,46 @@
     #contato a:hover {
         color: var(--accent-secondary);
     }
+
+    .footer-premium {
+        padding: 3rem 0 2rem;
+        text-align: center;
+        border-top: var(--glass-border);
+        margin-top: 6rem;
+    }
+
+    .footer-social {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .social-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: rgba(15, 23, 42, 0.8);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-muted);
+        font-size: 1rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .social-icon:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .social-icon .fa-twitch:hover,
+    .social-icon:hover .fa-twitch { color: #9146FF; }
+    .social-icon:hover:has(.fa-twitch) { border-color: #9146FF; color: #9146FF; }
+
+    .social-icon:hover:has(.fa-youtube) { border-color: #FF0000; color: #FF0000; }
+
+    .social-icon:hover:has(.fa-instagram) { border-color: #E1306C; color: #E1306C; }
 
     /* === Author Section (Landing Page) === */
     .author-section {
@@ -695,6 +736,10 @@
 @layer utilities {
     .font-inter {
         font-family: 'Inter', sans-serif;
+    }
+
+    .font-editorial {
+        font-family: var(--font-editorial);
     }
 
     .data-mono {

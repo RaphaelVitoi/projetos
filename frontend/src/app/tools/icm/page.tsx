@@ -1,21 +1,30 @@
 /**
  * IDENTITY: Rota Principal do Simulador ICM
  * PATH: frontend/src/app/tools/icm/page.tsx
- * ROLE: Ponto de entrada do laboratório visual de Valuation e Diluição
+ * ROLE: Ponto de entrada do laboratorio visual de ICM Equity e Risk Premium
  * BINDING: [IcmSimulator]
  */
 
 import IcmSimulator from '@/components/icm/IcmSimulator';
 
+export const metadata = {
+  title: 'Simulador ICM | Raphael Vitoi',
+  description: 'Motor Algoritmico de Equidade em Torneios (Malmuth-Harville). Laboratorio interativo de ICM e Risk Premium.',
+};
+
 export default function IcmPage() {
   return (
-    <main className="min-h-screen bg-black p-4 md:p-8">
-      <header className="mb-8">
-        <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight flex flex-col md:flex-row md:items-baseline">
-          Simulador ICM 
-          <span className="text-zinc-500 text-base md:text-lg font-normal md:ml-2 mt-1 md:mt-0">Valuation & Cap Table</span>
+    <main style={{ minHeight: '100vh', padding: '2rem 1.5rem' }}>
+      <header style={{ maxWidth: '1200px', margin: '0 auto 2rem', textAlign: 'center' }}>
+        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--accent-primary)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '0.5rem' }}>
+          Laboratorio Interativo
+        </p>
+        <h1 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.5rem)', fontWeight: 700, color: '#fff', marginBottom: '0.5rem' }}>
+          Simulador ICM
         </h1>
-        <p className="text-zinc-400 mt-2">Laboratório interativo para análise de diluição de fundadores e formação de pool de opções.</p>
+        <p style={{ color: 'var(--text-muted)', maxWidth: '600px', margin: '0 auto' }}>
+          Motor Algoritmico de Equidade em Torneios (Malmuth-Harville). Visualize o impacto do Risk Premium nas suas decisoes.
+        </p>
       </header>
       <IcmSimulator />
     </main>

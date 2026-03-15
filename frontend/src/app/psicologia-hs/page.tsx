@@ -14,15 +14,17 @@ export const metadata = {
 
 export default function PsicologiaHSPage() {
   return (
-    <main className="container" style={{ padding: '4rem 0' }}>
+    <main className="container" style={{ maxWidth: '900px', margin: '0 auto', padding: '4rem 1.5rem' }}>
       <section id="hero-aula">
+        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--accent-primary)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '0.5rem' }}>
+          Protocolo de Analise Textual Complexa
+        </p>
         <h2>Psicologia High Stakes</h2>
         <p><strong>Analisando o Protocolo de Analise Textual de Poker Complexo.</strong></p>
       </section>
 
       <section>
         <article>
-          <span style={{ display: 'block', textAlign: 'center', fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--accent-primary)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '1rem' }}>Protocolo de Analise Textual Complexa</span>
           <h2 style={{ textAlign: 'center', fontSize: '2rem', background: 'linear-gradient(to right, #fff, #94a3b8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginTop: 0 }}>A Fenomenologia da Incerteza e a Transubstanciacao do Valor</h2>
           <p style={{ textAlign: 'center', fontStyle: 'italic', opacity: 0.8, marginBottom: '3rem' }}>Uma Exegese Critica das Heuristicas de ICM e da Arquitetura de Solvers em Ambientes de Informacao Imperfeita</p>
 
@@ -90,6 +92,12 @@ export default function PsicologiaHSPage() {
           </div>
         </article>
       </section>
+
+      <div style={{ marginTop: '2rem', textAlign: 'center' }}>
+        <Link href="/" style={{ color: 'var(--text-muted)', textDecoration: 'underline', fontSize: '0.9rem' }}>
+          &larr; Retornar ao Hub Central
+        </Link>
+      </div>
     </main>
   );
 }

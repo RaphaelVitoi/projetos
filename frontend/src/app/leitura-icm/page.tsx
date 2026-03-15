@@ -9,13 +9,13 @@ export default function LeituraICM() {
     return (
         <main className="container" style={{ maxWidth: '800px', margin: '0 auto', padding: '4rem 1.5rem' }}>
             <div style={{ textAlign: 'center', marginBottom: '4rem', paddingBottom: '2rem', borderBottom: '1px solid var(--border-color)' }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                    Documento Tecnico - Versao 1.0
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
+                    Documento Tecnico &bull; Versao 1.0
                 </span>
                 <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', background: 'linear-gradient(135deg, #fff 0%, #a5b4fc 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '1rem', marginTop: '1rem' }}>
                     Entendendo o ICM e suas Heuristicas
                 </h1>
-                <p>Decisoes Pos-Flop em Final Tables e a Nova Fronteira do Edge.</p>
+                <p style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>Decisoes Pos-Flop em Final Tables e a Nova Fronteira do Edge.</p>
             </div>
 
             <article>
@@ -94,7 +94,7 @@ export default function LeituraICM() {
 
                 <div className="callout" style={{ borderLeftColor: 'var(--accent-emerald)', background: 'rgba(16, 185, 129, 0.1)' }}>
                     <h4 style={{ color: 'var(--accent-emerald)', marginTop: 0 }}>Checklist de Decisao (Tempo Real)</h4>
-                    <ol style={{ marginTop: '1rem', marginLeft: '1.5rem', listStyleType: 'decimal', color: '#fff' }}>
+                    <ol style={{ marginTop: '1rem', marginLeft: '1.5rem', listStyleType: 'decimal', color: '#cbd5e1' }}>
                         <li><strong>Quem Cobre Quem?</strong> (Define a Vantagem de Risco)</li>
                         <li><strong>Short Stacks Presentes?</strong> (Eleva o RP geral)</li>
                         <li><strong>Estrutura de Pagamentos?</strong> (Flat vs Top-Heavy)</li>
