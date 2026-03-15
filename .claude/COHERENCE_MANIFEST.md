@@ -10,7 +10,7 @@ Cada um dos **14 agentes** funciona como parte de um **ecossistema coeso e harm�
 
 - Fica sem documentação
 - Desconhece seu papel na pipeline
-- É impedido de consultar qualquer outro agente  
+- É impedido de consultar qualquer outro agente
 - Funciona sem acesso às instruções comportamentais globais
 - Acumula inteligência sem poder compartilhá-la
 
@@ -26,7 +26,7 @@ Todos os 14 agentes absorvem:
 
 - ✅ Identidade de Raphael Vitoi (QI 136, BPD, AHSD, TDAH, Poker Pro, Psicólogo)
 - ✅ Padrão Epistemico obrigatório (sem viés, fundamentado, Steelmanning)
-- ✅ Ton e formato (português pt-BR, densidade máxima, honestidade radical)
+- ✅ Tom e formato (português pt-BR, densidade máxima, honestidade radical)
 - ✅ Autonomia (pedir confirmação em ações de alto impacto, agir em seguro/reversível)
 - ✅ Vinculo com usuário (honestidade > agrado, precisão > conforto)
 
@@ -52,7 +52,7 @@ Todos os 14 agentes absorvem:
 - ✅ Decisões tomadas (estado atual do projeto, stack, convencões)
 - ✅ **Matriz de Coerência Sistêmica** — Onde CADA AGENTE está documentado (agents/, MEMORY, pipeline, global)
 - ✅ Seu papel específico (fase, entrada/saída, consultivo/bloqueador)
-- ✅ Relacionamentos (quem vem antes/depois, quem é consultado em paralelo)
+- ✅ Relacionamentos (quem vem antes/depois, quem é consultado em paralelo, expectativa futura)
 
 ### Camada 4: MEMÓRIA INDIVIDUAL & INTELIGÊNCIA ACUMULADA
 
@@ -74,121 +74,121 @@ Cada um dos 14 agentes tem:
 
 **@pesquisador** (FASE 0)
 
-| Arquivo | Status |
-|---------|--------|
-| `.claude/agents/pesquisador.md` | ✅ Documentado |
+| Arquivo                                      | Status                            |
+| -------------------------------------------- | --------------------------------- |
+| `.claude/agents/pesquisador.md`              | ✅ Documentado                    |
 | `.claude/agent-memory/pesquisador/MEMORY.md` | ✅ Ativo com referência harmônica |
-| `project-context.md` | ✅ FASE 0 claro |
-| `GLOBAL_INSTRUCTIONS.md` | ✅ Row 3 |
+| `project-context.md`                         | ✅ FASE 0 claro                   |
+| `GLOBAL_INSTRUCTIONS.md`                     | ✅ Row 3                          |
 
 **@prompter** (FASE 1)
 
-| Arquivo | Status |
-|---------|--------|
-| `.claude/agents/prompter.md` | ✅ Documentado |
+| Arquivo                                   | Status                            |
+| ----------------------------------------- | --------------------------------- |
+| `.claude/agents/prompter.md`              | ✅ Documentado                    |
 | `.claude/agent-memory/prompter/MEMORY.md` | ✅ Ativo com referência harmônica |
-| `project-context.md` | ✅ FASE 1 claro |
-| `GLOBAL_INSTRUCTIONS.md` | ✅ Row 4 |
+| `project-context.md`                      | ✅ FASE 1 claro                   |
+| `GLOBAL_INSTRUCTIONS.md`                  | ✅ Row 4                          |
 
 **@planner** (FASE 2)
 
-| Arquivo | Status |
-|---------|--------|
-| `.claude/agents/planner.md` | ✅ Documentado |
+| Arquivo                                  | Status                            |
+| ---------------------------------------- | --------------------------------- |
+| `.claude/agents/planner.md`              | ✅ Documentado                    |
 | `.claude/agent-memory/planner/MEMORY.md` | ✅ Ativo com referência harmônica |
-| `project-context.md` | ✅ FASE 2 claro |
-| `GLOBAL_INSTRUCTIONS.md` | ✅ Row 6 |
+| `project-context.md`                     | ✅ FASE 2 claro                   |
+| `GLOBAL_INSTRUCTIONS.md`                 | ✅ Row 6                          |
 
 **@auditor** (FASE 3 - Bloqueador Único)
 
-| Arquivo | Status |
-|---------|--------|
-| `.claude/agents/auditor.md` | ✅ Documentado |
+| Arquivo                                  | Status                            |
+| ---------------------------------------- | --------------------------------- |
+| `.claude/agents/auditor.md`              | ✅ Documentado                    |
 | `.claude/agent-memory/auditor/MEMORY.md` | ✅ Ativo com referência harmônica |
-| `project-context.md` | ✅ FASE 3 claro (bloqueador) |
-| `GLOBAL_INSTRUCTIONS.md` | ✅ Row 8 |
+| `project-context.md`                     | ✅ FASE 3 claro (bloqueador)      |
+| `GLOBAL_INSTRUCTIONS.md`                 | ✅ Row 8                          |
 
 **@implementor** (FASE 4)
 
-| Arquivo | Status |
-|---------|--------|
-| `.claude/agents/implementor.md` | ✅ Documentado |
+| Arquivo                                      | Status                            |
+| -------------------------------------------- | --------------------------------- |
+| `.claude/agents/implementor.md`              | ✅ Documentado                    |
 | `.claude/agent-memory/implementor/MEMORY.md` | ✅ Ativo com referência harmônica |
-| `project-context.md` | ✅ FASE 4 claro |
-| `GLOBAL_INSTRUCTIONS.md` | ✅ Row 9 |
+| `project-context.md`                         | ✅ FASE 4 claro                   |
+| `GLOBAL_INSTRUCTIONS.md`                     | ✅ Row 9                          |
 
 **@verifier** (FASE 5)
 
-| Arquivo | Status |
-|---------|--------|
-| `.claude/agents/verifier.md` | ✅ Documentado |
+| Arquivo                                   | Status                            |
+| ----------------------------------------- | --------------------------------- |
+| `.claude/agents/verifier.md`              | ✅ Documentado                    |
 | `.claude/agent-memory/verifier/MEMORY.md` | ✅ Ativo com referência harmônica |
-| `project-context.md` | ✅ FASE 5 claro |
-| `GLOBAL_INSTRUCTIONS.md` | ✅ Row 10 |
+| `project-context.md`                      | ✅ FASE 5 claro                   |
+| `GLOBAL_INSTRUCTIONS.md`                  | ✅ Row 10                         |
 
 ### CONSULTIVOS PARALELOS (4 agentes)
 
 **@curator** (FASE 1 + FASE 6 - Ética, IP, Mercado, Estética)
 
-| Arquivo | Status |
-|---------|--------|
-| `.claude/agents/curator.md` | ✅ Documentado (500+ linhas) |
+| Arquivo                                  | Status                            |
+| ---------------------------------------- | --------------------------------- |
+| `.claude/agents/curator.md`              | ✅ Documentado (500+ linhas)      |
 | `.claude/agent-memory/curator/MEMORY.md` | ✅ Ativo com referência harmônica |
-| `project-context.md` | ✅ FASE 1 + FASE 6 Consultoria |
-| `GLOBAL_INSTRUCTIONS.md` | ✅ Row 5 |
+| `project-context.md`                     | ✅ FASE 1 + FASE 6 Consultoria    |
+| `GLOBAL_INSTRUCTIONS.md`                 | ✅ Row 5                          |
 
 **@validador** (FASE 6 - Especializado)
 
-| Arquivo | Status |
-|---------|--------|
-| `.claude/agents/validador.md` | ✅ Documentado |
+| Arquivo                                    | Status                            |
+| ------------------------------------------ | --------------------------------- |
+| `.claude/agents/validador.md`              | ✅ Documentado                    |
 | `.claude/agent-memory/validador/MEMORY.md` | ✅ Ativo com referência harmônica |
-| `project-context.md` | ✅ FASE 6 Consultoria |
-| `GLOBAL_INSTRUCTIONS.md` | ✅ Row 11 |
+| `project-context.md`                       | ✅ FASE 6 Consultoria             |
+| `GLOBAL_INSTRUCTIONS.md`                   | ✅ Row 11                         |
 
 **@securitychief** (FASE 6 - Segurança)
 
-| Arquivo | Status |
-|---------|--------|
-| `.claude/agents/securitychief.md` | ✅ Documentado |
+| Arquivo                                        | Status                            |
+| ---------------------------------------------- | --------------------------------- |
+| `.claude/agents/securitychief.md`              | ✅ Documentado                    |
 | `.claude/agent-memory/securitychief/MEMORY.md` | ✅ Ativo com referência harmônica |
-| `project-context.md` | ✅ FASE 6 Consultoria |
-| `GLOBAL_INSTRUCTIONS.md` | ✅ Row 12 |
+| `project-context.md`                           | ✅ FASE 6 Consultoria             |
+| `GLOBAL_INSTRUCTIONS.md`                       | ✅ Row 12                         |
 
 **@organizador** (Integrado Cedo + FASE 6 - Health Check)
 
-| Arquivo | Status |
-|---------|--------|
-| `.claude/agents/organizador.md` | ✅ Documentado |
-| `.claude/agent-memory/organizador/MEMORY.md` | ✅ Ativo com referência harmônica |
-| `project-context.md` | ✅ Early Integration + FASE 2 + FASE 6 |
-| `GLOBAL_INSTRUCTIONS.md` | ✅ Row 7 |
+| Arquivo                                      | Status                                 |
+| -------------------------------------------- | -------------------------------------- |
+| `.claude/agents/organizador.md`              | ✅ Documentado                         |
+| `.claude/agent-memory/organizador/MEMORY.md` | ✅ Ativo com referência harmônica      |
+| `project-context.md`                         | ✅ Early Integration + FASE 2 + FASE 6 |
+| `GLOBAL_INSTRUCTIONS.md`                     | ✅ Row 7                               |
 
 ### SUPER-INTELECTUAL TRANSVERSAL (1 agente)
 
 **@maverick** (Transversal 24/7 - Vice, Mentor, Sentinela, Inteligência)
 
-| Arquivo | Status |
-|---------|--------|
-| `.claude/agents/maverick.md` | ✅ Documentado (800+ linhas) |
-| `.claude/agent-memory/maverick/MEMORY.md` | ✅ Ativo com referência harmônica |
-| `project-context.md` | ✅ Liderança Intelectual Transversal 24/7 |
-| `GLOBAL_INSTRUCTIONS.md` | ✅ Row 13 (SUPER-AGENT) |
+| Arquivo                                   | Status                                    |
+| ----------------------------------------- | ----------------------------------------- |
+| `.claude/agents/maverick.md`              | ✅ Documentado (800+ linhas)              |
+| `.claude/agent-memory/maverick/MEMORY.md` | ✅ Ativo com referência harmônica         |
+| `project-context.md`                      | ✅ Liderança Intelectual Transversal 24/7 |
+| `GLOBAL_INSTRUCTIONS.md`                  | ✅ Row 13 (SUPER-AGENT)                   |
 
 ### SUPER-ADMINISTRATIVO TRANSVERSAL (1 agente)
 
 **CHICO** (GitHub Copilot - Transversal 24/7 - Gerente, Administrador, Suporte Multi-Domínio)
 
-| Arquivo | Status |
-|---------|--------|
-| `GLOBAL_INSTRUCTIONS.md` | ✅ Identidade da raiz, Tríade de Governança |
-| `.claude/agent-memory/chico/MEMORY.md` | ✅ Ativo com referência harmônica (NEW) |
-| `project-context.md` | ✅ Governança Superior, Relacionamento com Raphael |
-| `.claude/LIDERANCA_GOVERNANCE_RAPHAEL_MAVERICK_CHICO.md` | ✅ Documentação estrutural completa |
+| Arquivo                                                  | Status                                             |
+| -------------------------------------------------------- | -------------------------------------------------- |
+| `GLOBAL_INSTRUCTIONS.md`                                 | ✅ Identidade da raiz, Tríade de Governança        |
+| `.claude/agent-memory/chico/MEMORY.md`                   | ✅ Ativo com referência harmônica (NEW)            |
+| `project-context.md`                                     | ✅ Governança Superior, Relacionamento com Raphael |
+| `.claude/LIDERANCA_GOVERNANCE_RAPHAEL_MAVERICK_CHICO.md` | ✅ Documentação estrutural completa                |
 
 **Integração Harmônica:**
 
-- CHICO é você (GitHub Copilot, codinome "Chico")
+- CHICO é você (GitHub Copilot, codinome "Chico", operando dinamicamente entre Claude Opus 4.6 e Gemini 3.1 Pro)
 - Relacionamento DIRETO com Raphael (CEO) + @maverick (intelectual)
 - Absosoreve 4 camadas de coerência como todos os agentes
 - Liderança rígida, pragmática, flexibilidade extrema em qualquer domínio
@@ -197,32 +197,32 @@ Cada um dos 14 agentes tem:
 
 **@sequenciador** (Maestro de Tráfego & Demanda)
 
-| Arquivo | Status |
-|---------|--------|
-| `.claude/agents/sequenciador.md` | ✅ Documentado (400+ linhas) |
+| Arquivo                                       | Status                            |
+| --------------------------------------------- | --------------------------------- |
+| `.claude/agents/sequenciador.md`              | ✅ Documentado (400+ linhas)      |
 | `.claude/agent-memory/sequenciador/MEMORY.md` | ✅ Ativo com referência harmônica |
-| `project-context.md` | ✅ Operacional 24/7 |
-| `GLOBAL_INSTRUCTIONS.md` | ✅ Row 14 |
+| `project-context.md`                          | ✅ Operacional 24/7               |
+| `GLOBAL_INSTRUCTIONS.md`                      | ✅ Row 14                         |
 
 **@skillmaster** (Executor Agendado)
 
-| Arquivo | Status |
-|---------|--------|
-| `.claude/agents/skillmaster.md` | ✅ Documentado |
+| Arquivo                                      | Status                            |
+| -------------------------------------------- | --------------------------------- |
+| `.claude/agents/skillmaster.md`              | ✅ Documentado                    |
 | `.claude/agent-memory/skillmaster/MEMORY.md` | ✅ Ativo com referência harmônica |
-| `project-context.md` | ✅ Operacional 24/7 |
-| `GLOBAL_INSTRUCTIONS.md` | ✅ Row 15 |
+| `project-context.md`                         | ✅ Operacional 24/7               |
+| `GLOBAL_INSTRUCTIONS.md`                     | ✅ Row 15                         |
 
 ### ENTRADA (1 agente)
 
 **@dispatcher** (FASE ENTRADA - Triagem de Backlog)
 
-| Arquivo | Status |
-|---------|--------|
-| `.claude/agents/dispatcher.md` | ✅ Documentado |
+| Arquivo                                     | Status                            |
+| ------------------------------------------- | --------------------------------- |
+| `.claude/agents/dispatcher.md`              | ✅ Documentado                    |
 | `.claude/agent-memory/dispatcher/MEMORY.md` | ✅ Ativo com referência harmônica |
-| `project-context.md` | ✅ FASE ENTRADA claro |
-| `GLOBAL_INSTRUCTIONS.md` | ✅ Row 2 |
+| `project-context.md`                        | ✅ FASE ENTRADA claro             |
+| `GLOBAL_INSTRUCTIONS.md`                    | ✅ Row 2                          |
 
 ---
 
@@ -240,7 +240,7 @@ Cada um dos 14 agentes tem:
 Cada agente absorve:
 
 - [ ] `.claude/CLAUDE.md` — Identidade & Princípios
-- [ ] `GLOBAL_INSTRUCTIONS.md` — Instruções Globais  
+- [ ] `GLOBAL_INSTRUCTIONS.md` — Instruções Globais
 - [ ] `.claude/project-context.md` — Contexto & Papel
 - [ ] `.claude/agent-memory/<seu-nome>/MEMORY.md` — Sua Inteligência
 
@@ -274,16 +274,16 @@ Cada agente absorve:
 
 ## Assinatura de Coerência
 
-**Ecossistema dos 14 Agentes + 2 Super-Agentes (Raphael + @maverick + CHICO = Governança):** ✅ HARMONICAMENTE INTEGRADO  
-**Nenhum Agente/Super-Agente Isolado:** ✅ CONFIRMADO  
-**Acesso ao Contexto Completo:** ✅ CONFIRMADO  
-**Sincronização de Inteligência:** ✅ CONFIRMADO (14 agentes + 2 super-agentes)  
+**Ecossistema dos 14 Agentes + 2 Super-Agentes (Raphael Vitoi - usuario) + @maverick + CHICO = Governança):** ✅ HARMONICAMENTE INTEGRADO
+**Nenhum Agente/Super-Agente Isolado:** ✅ CONFIRMADO
+**Acesso ao Contexto Completo:** ✅ CONFIRMADO
+**Sincronização de Inteligência:** ✅ CONFIRMADO (14 agentes + 2 super-agentes)
 **Autoridade Clara:** ✅ CONFIRMADO (Raphael > @maverick/CHICO > 14 agentes)
 
 **Status:** 🟢 **OPERACIONAL — COERÊNCIA TOTAL**
 
 ---
 
-**Atualizado por:** @maverick (Verificação Contínua)  
-**Próxima Verificação:** Contínua (não-agenda)  
+**Atualizado por:** @maverick (Verificação Contínua)
+**Próxima Verificação:** Contínua (não-agenda)
 **Escalação:** Se gap encontrado → @maverick corrige imediatamente

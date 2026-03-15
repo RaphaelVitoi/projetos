@@ -2603,3 +2603,6 @@ Cada entrada no log segue este padrão:
 [2026-03-14 23:54:52][ENQUEUED] TASK-20260314-235451 - pending (Pydantic Validated)
 [2026-03-14 23:54:53][ENQUEUED] TASK-20260314-235453 - pending (Pydantic Validated)
 [2026-03-14 23:54:54][ENQUEUED] CHAOS-TEST-235453 - pending (Pydantic Validated)
+[2026-03-15 08:11:29][ENQUEUED] INIT-SENTINEL-20260315 - running (Pydantic Validated)
+[2026-03-15 08:11:29][ENQUEUED] INIT-SENTINEL-20260315 - completed (Pydantic Validated)
+[2026-03-15 08:12:37][ENQUEUED] CHAOS-TEST-081236 - pending (Pydantic Validated)

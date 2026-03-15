@@ -12,6 +12,7 @@ if (Test-Path $EnvPath) { . $EnvPath } else { throw "CRITICAL: _env.ps1 not foun
 $Script:QueuePath = $Global:AgentPaths.Queue
 $Script:ArchivePath = $Global:AgentPaths.Archive
 $Script:LogPath = $Global:AgentPaths.Log
+$Script:CorrectionsLogPath = Join-Path $Global:AgentPaths.Log "corrections.log"
 $Script:MutexName = $Global:TaskManagerConfig.MutexName
 
 # -------------------------------------------------------------------
@@ -249,5 +250,50 @@ function Get-AgentTaskStatus {
     }
 }
 
+# -------------------------------------------------------------------
+# CURATOR VETO (Implementar lógica de veto do @curator)
+# -------------------------------------------------------------------
+function Test-CuratorVeto {
+    param([Parameter(Mandatory = $true)][string]$TaskId)
+
+    $vetoFile = Join-Path $Script:LogPath "$TaskId-veto.log"
+
+    # Check if the veto file exists
+    if (Test-Path $vetoFile) {
+        Write-Host "  [CURATOR] Veto DETECTADO para tarefa: $TaskId" -ForegroundColor Red
+        return $true
+    }
+    else {
+        Write-Host "  [CURATOR] Sem veto para tarefa: $TaskId" -ForegroundColor Green
+        return $false
+    }
+}
+
+# Example usage within @auditor or @verifier:
+# try {
+#   # Perform the correction
+# } catch {
+#   # Handle the error
+# } finally {
+#   # Log the correction
+#   Log-Correction -TaskId $TaskId -Phase "Auditoria" -Agent "@auditor" -Description "Correcao XSS" -Reason "Input malicioso" -Impact "Seguranca"
+# }
+
 # Exporta estritamente a API do Kernel
 Export-ModuleMember -Function Test-TaskSchema, Add-AgentTask, Invoke-TaskCleanup, Get-AgentTaskStatus
+Export-ModuleMember -Function Log-Correction #Exported Function
+# Check Curator Veto AFTER verifier
+if ($Task.agent -eq "@verifier" -and $Task.phase -eq "5") {
+    if (Test-CuratorVeto -TaskId $Task.id) {
+        $correctionsLogPath = Join-Path $Script:LogPath "corrections.log"
+        # Log the veto
+        Log-Correction -TaskId $TaskId -Phase "Verificação" -Agent "@verifier" -Description "Tarefa vetada pelo @curator" -Reason "Questões éticas ou estéticas não resolvidas" -Impact "Qualidade/Ética"
+
+        # Update task status to 'vetoed'
+        $Task.status = "vetoed"
+        Add-AgentTask -NewTask $Task  # Save the updated task
+
+
+        Write-Warning "  [KERNEL] @curator VETO DETECTED. Task $($Task.id) blocked."
+        continue # Skip to the next task
+    }
