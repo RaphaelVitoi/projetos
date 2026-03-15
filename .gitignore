@@ -1,0 +1,31 @@
+# Dependencias
+node_modules/
+.venv/
+__pycache__/
+
+# Build
+.next/
+frontend/.next/
+
+# Binarios pesados
+assets/docs/
+*.docx
+
+# Backups locais
+.backups/
+
+# Ambiente
+.env
+.env.local
+.env.production
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+.claude/logs/
+
+# Task results
+.claude/task_results/
