@@ -16,9 +16,9 @@ $NextConfig = Join-Path $FrontendDir "next.config.ts"
 if (Test-Path $PrismaSchema) { Write-Host "  [OK] Prisma Schema detectado." -ForegroundColor Green }
 else { Write-Host "  [WARN] Prisma Schema ausente." -ForegroundColor DarkYellow }
 
-# Test Prisma
-#if (Select-String -Path $PrismaSchema -Pattern '"provider" = "sqlite"'){ Write-Host "  [OK] SQLite provider detectado." -ForegroundColor Green }
-#else { Write-Host "  [WARN] SQLite provider ausente." -ForegroundColor DarkYellow }
+#Test Prisma
+if (Select-String -Path $PrismaSchema -Pattern '"provider" = "sqlite"') { Write-Host "  [OK] SQLite provider detectado." -ForegroundColor Green }
+else { Write-Host "  [WARN] SQLite provider ausente." -ForegroundColor DarkYellow }
 
 
 if (Test-Path $NextConfig) { Write-Host "  [OK] Next.js SOTA Config detectado." -ForegroundColor Green }
