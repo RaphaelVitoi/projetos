@@ -37,11 +37,10 @@ $Global:TaskManagerConfig = @{
 }
 
 # 4. Chaves de API (Cognicao)
-# Chave Primaria Ativa (Cota Renovada)
-$env:GEMINI_API_KEY = "REDACTED"
-# Chave Secundaria (Em recarga / Backup)
-# $env:GEMINI_API_KEY_BACKUP = "REDACTED"
-$env:OPENROUTER_API_KEY = "" # Terceira Via de Seguranca (Modelos Free Tier SOTA ex: DeepSeek R1)
-$env:ANTHROPIC_API_KEY = "REDACTED"
+# IMPORTANTE: Nunca commitar chaves reais. Use _env.example.ps1 como template.
+# Carregue suas chaves de um arquivo local nao versionado ou variavel de ambiente do sistema.
+$env:GEMINI_API_KEY = $env:GEMINI_API_KEY
+$env:OPENROUTER_API_KEY = $env:OPENROUTER_API_KEY
+$env:ANTHROPIC_API_KEY = $env:ANTHROPIC_API_KEY
 
 Write-Host "[ENV] Ambiente e caminhos globais carregados." -ForegroundColor DarkGray
