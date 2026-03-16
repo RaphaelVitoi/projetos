@@ -1,7 +1,7 @@
 /**
- * IDENTITY: Laboratorio Toy Games (Predator Mode)
+ * IDENTITY: Laboratório Toy Games (Predator Mode)
  * PATH: src/app/tools/toy-games/page.tsx
- * ROLE: Renderizar cenarios didaticos extremos de ICM para gamificacao do aprendizado.
+ * ROLE: Renderizar cenários didáticos extremos de ICM para gamificação do aprendizado.
  * BINDING: [layout.tsx, globals.css]
  */
 'use client';
@@ -16,39 +16,39 @@ const SCENARIOS = [
         subtitle: 'Blind War: SB (Hero) vs BB',
         icon: 'fa-crosshairs',
         color: 'emerald',
-        ip: { pos: 'SB (Hero)', stack: '50bb', rp: 12, role: 'Chipleader', desc: 'Licenca para matar. Pode shovar 100% (ATC).' },
-        oop: { pos: 'BB (Villain)', stack: '12bb', rp: 45, role: 'Short Stack', desc: 'Death Zone. Paralisado pela existencia de stacks de 8bb e 9bb na mesa.' },
-        analysis: 'Predator Mode Ativado: Voce e o Chipleader no SB. O BB tem 12bb e um Risk Premium de 45% (Death Zone). Matematicamente, ele nao pode pagar com quase nada porque cair antes dos stacks de 8bb e 9bb e catastrofico. Seu range de shove aqui deve ser 100% (Any Two Cards).'
+        ip: { pos: 'SB (Hero)', stack: '50bb', rp: 12, role: 'Chipleader', desc: 'Licença para matar. Pode shovar 100% (ATC).' },
+        oop: { pos: 'BB (Villain)', stack: '12bb', rp: 45, role: 'Short Stack', desc: 'Death Zone. Paralisado pela existência de stacks de 8bb e 9bb na mesa.' },
+        analysis: 'Predator Mode Ativado: Você é o Chipleader no SB. O BB tem 12bb e um Risk Premium de 45% (Death Zone). Matematicamente, ele não pode pagar com quase nada porque cair antes dos stacks de 8bb e 9bb é catastrófico. Seu range de shove aqui deve ser 100% (Any Two Cards).'
     },
     {
         id: 'bully',
-        label: 'O Bully do Botao',
+        label: 'O Bully do Botão',
         subtitle: 'Bolha do ITM: BTN vs Blinds',
         icon: 'fa-skull-crossbones',
         color: 'rose',
-        ip: { pos: 'BTN (Hero)', stack: '80bb', rp: 5, role: 'Bully', desc: 'RP infimo. Agressao quase sem custo.' },
+        ip: { pos: 'BTN (Hero)', stack: '80bb', rp: 5, role: 'Bully', desc: 'RP ínfimo. Agressão quase sem custo.' },
         oop: { pos: 'SB (Villain)', stack: '20bb', rp: 42, role: 'Pressionado', desc: 'RP massivo (>40%). Paralisia na bolha.' },
-        analysis: 'Estamos na Bolha. Voce tem 80bb e os blinds tem 20bb/18bb. Seu Risk Premium e infimo (5%). O deles e massivo (>40%). Isso cria uma assimetria brutal. O solver sugere agressao desproporcional.'
+        analysis: 'Estamos na Bolha. Você tem 80bb e os blinds têm 20bb/18bb. Seu Risk Premium é ínfimo (5%). O deles é massivo (>40%). Isso cria uma assimetria brutal. O solver sugere agressão desproporcional.'
     },
     {
         id: 'paradoxo',
         label: 'O Paradoxo do Valuation',
-        subtitle: 'Estrutura Padrao: Mid vs Big',
+        subtitle: 'Estrutura Padrão: Mid vs Big',
         icon: 'fa-scale-balanced',
         color: 'amber',
-        ip: { pos: 'BTN (Hero)', stack: '40bb', rp: 21.4, role: 'Inelastico', desc: 'RP de ida quase o dobro do RP de volta do BB.' },
+        ip: { pos: 'BTN (Hero)', stack: '40bb', rp: 21.4, role: 'Inelástico', desc: 'RP de ida quase o dobro do RP de volta do BB.' },
         oop: { pos: 'BB (CL)', stack: '55bb', rp: 12.9, role: 'Defensivo Condensado', desc: 'Sobrevive a um all-in. Vantagem de risco.' },
-        analysis: 'O senso comum dita que o BTN com 40bb possui conforto suficiente para oprimir a mesa. Contudo, o RP de ida do BTN e quase o dobro do RP de volta do BB. Se errar um hero-bluff, e aniquilado. A capacidade de blefar e estrangulada pela Esperanca Matematica.'
+        analysis: 'O senso comum dita que o BTN com 40bb possui conforto suficiente para oprimir a mesa. Contudo, o RP de ida do BTN é quase o dobro do RP de volta do BB. Se errar um hero-bluff, é aniquilado. A capacidade de blefar é estrangulada pela Esperança Matemática.'
     },
     {
         id: 'pacto',
         label: 'O Pacto Silencioso',
-        subtitle: 'Colisao de Gigantes',
+        subtitle: 'Colisão de Gigantes',
         icon: 'fa-handshake',
         color: 'indigo',
-        ip: { pos: 'Vice CL', stack: '65bb', rp: 24.5, role: 'Linear Especulativo', desc: 'Destruicao mutua e o pior cenario possivel.' },
-        oop: { pos: 'CL', stack: '70bb', rp: 23.5, role: 'Flat Call Massivo', desc: 'As fichas perdidas viram payjumps gratis.' },
-        analysis: 'Dois gigantes colidem. A destruicao mutua e o pior cenario possivel. As fichas perdidas viram payjumps gratis aos inativos. Ocorre um Pacto Silencioso. A agressao letal (3-bet) colapsa. Os ranges de flat call inflam absurdamente, incluindo o topo.'
+        ip: { pos: 'Vice CL', stack: '65bb', rp: 24.5, role: 'Linear Especulativo', desc: 'Destruição mútua é o pior cenário possível.' },
+        oop: { pos: 'CL', stack: '70bb', rp: 23.5, role: 'Flat Call Massivo', desc: 'As fichas perdidas viram payjumps grátis.' },
+        analysis: 'Dois gigantes colidem. A destruição mútua é o pior cenário possível. As fichas perdidas viram payjumps grátis aos inativos. Ocorre um Pacto Silencioso. A agressão letal (3-bet) colapsa. Os ranges de flat call inflam absurdamente, incluindo o topo.'
     }
 ];
 
@@ -91,18 +91,18 @@ export default function ToyGamesPage() {
         <main style={{ minHeight: '100vh', padding: '2rem 1.5rem' }}>
             <header style={{ maxWidth: '1200px', margin: '0 auto 2rem', textAlign: 'center' }}>
                 <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--accent-secondary)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '0.5rem' }}>
-                    <span className="fa-solid fa-crosshairs" style={{ marginRight: '0.5rem' }}></span> Laboratorio Interativo
+                    <span className="fa-solid fa-crosshairs" style={{ marginRight: '0.5rem' }}></span> Laboratório Interativo
                 </p>
                 <h1 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', fontWeight: 900, color: '#fff', marginBottom: '0.5rem' }}>
                     Toy Games: <span style={{ background: 'linear-gradient(135deg, #ef4444, #f97316)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Predator Mode</span>
                 </h1>
                 <p style={{ color: 'var(--text-muted)', maxWidth: '600px', margin: '0 auto', fontStyle: 'italic', fontSize: '0.9rem' }}>
-                    Isolando a mecanica do Risk Premium. Sinta a impunidade de agredir quando o oponente esta paralisado.
+                    Isolando a mecânica do Risk Premium. Sinta a impunidade de agredir quando o oponente está paralisado.
                 </p>
             </header>
 
             <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-                {/* Selecao de cenarios */}
+                {/* Seleção de cenários */}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '0.75rem', marginBottom: '2rem' }}>
                     {SCENARIOS.map(sc => {
                         const isActive = sc.id === activeId;
@@ -129,7 +129,7 @@ export default function ToyGamesPage() {
                     })}
                 </div>
 
-                {/* Palco do cenario ativo */}
+                {/* Palco do cenário ativo */}
                 <div style={{ background: 'rgba(15, 23, 42, 0.6)', border: `1px solid ${colors.border}`, borderRadius: '16px', padding: 'clamp(1.5rem, 3vw, 2.5rem)', backdropFilter: 'blur(12px)' }}>
                     {/* Confronto IP vs OOP */}
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: '1.5rem', alignItems: 'center', marginBottom: '2.5rem' }}>
@@ -162,9 +162,9 @@ export default function ToyGamesPage() {
                         </div>
                     </div>
 
-                    {/* Analise */}
+                    {/* Análise */}
                     <div className="callout" style={{ borderLeftColor: colors.accent, background: colors.bg }}>
-                        <h4 style={{ marginTop: 0, color: colors.accent }}>Analise do Cenario</h4>
+                        <h4 style={{ marginTop: 0, color: colors.accent }}>Análise do Cenário</h4>
                         <p style={{ marginBottom: 0, fontSize: '0.95rem' }}>{active.analysis}</p>
                     </div>
                 </div>

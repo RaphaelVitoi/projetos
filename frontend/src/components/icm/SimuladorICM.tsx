@@ -23,7 +23,7 @@ function loadScript(src: string, options?: { type?: string; target?: 'head' | 'b
   });
 }
 
-// Carrega os scripts do motor em sequencia apos ApexCharts estar pronto
+// Carrega os scripts do motor em sequência após ApexCharts estar pronto
 async function loadMotorScripts(): Promise<void> {
   await loadScript('/simulador/scenarios.js', { type: 'module' });
   await loadScript('/simulador/risk-gauge.js', { type: 'module' });
@@ -39,7 +39,7 @@ export default function SimuladorICM() {
     if (scriptsLoaded.current) return;
     scriptsLoaded.current = true;
 
-    // Carregar dependencias externas
+    // Carregar dependências externas
     const apexScript = loadScript('https://cdn.jsdelivr.net/npm/apexcharts', { target: 'head' });
     const pdfScript = loadScript(
       'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js',
@@ -52,7 +52,7 @@ export default function SimuladorICM() {
     link.href = '/simulador/style-overrides.css';
     document.head.appendChild(link);
 
-    // Apos ApexCharts carregar, iniciar o motor em sequencia
+    // Após ApexCharts carregar, iniciar o motor em sequência
     apexScript.then(() => loadMotorScripts());
 
     return () => {
@@ -87,10 +87,10 @@ export default function SimuladorICM() {
 
         {/* Corpo do Simulador */}
         <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[600px]">
-          {/* Sidebar de Cenarios */}
+          {/* Sidebar de Cenários */}
           <div className="lg:col-span-4 border-b lg:border-b-0 lg:border-r border-slate-800 bg-[#0a0f1c] p-4">
             <div className="text-[9px] font-bold uppercase tracking-widest text-slate-500 mb-4 px-2 flex items-center gap-2">
-              <span className="fa-solid fa-list-ul"></span> Selecao Tatica
+              <span className="fa-solid fa-list-ul"></span> Seleção Tática
             </div>
             {/* Web Component: Scenario List */}
             <div dangerouslySetInnerHTML={{ __html: '<scenario-list id="main-scenario-list"></scenario-list>' }} />
@@ -98,7 +98,7 @@ export default function SimuladorICM() {
 
           {/* Painel Principal */}
           <div className="lg:col-span-8 bg-slate-950 relative p-6 md:p-8">
-            {/* Visao Cenario Unico */}
+            {/* Visão Cenário Único */}
             <div id="single-scenario-view">
               <div className="flex flex-col mb-8">
                 <div
@@ -128,11 +128,11 @@ export default function SimuladorICM() {
                 </div>
               </div>
 
-              {/* Area Dinamica gerada pelo motor */}
+              {/* Área Dinâmica gerada pelo motor */}
               <div id="content-area"></div>
             </div>
 
-            {/* Visao de Comparacao */}
+            {/* Visão de Comparação */}
             <div id="compare-area" className="hidden"></div>
           </div>
         </div>

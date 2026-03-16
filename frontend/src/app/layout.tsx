@@ -10,15 +10,15 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
 export const metadata = {
-  title: 'Raphael Vitoi | Masterclass Elite',
-  description: 'A Geometria do Risco - ICM e Teoria dos Jogos',
+  title: 'Raphael Vitoi | Masterclass de ICM e Teoria dos Jogos',
+  description: 'A Geometria do Risco: ICM Pós-Flop, Risk Premium e a Nova Fronteira do Edge no Poker.',
 };
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <html lang="pt-BR" className="scroll-smooth">
       <head>

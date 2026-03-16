@@ -1,47 +1,108 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const Header = () => {
   const [toolsOpen, setToolsOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  // Fecha o menu mobile ao navegar
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileOpen]);
+
+  const closeMobile = () => setMobileOpen(false);
 
   return (
-    <header className="main-header">
-      <div className="container">
-        <h1 className="logo">
-          <Link href="/">Poker<span className="accent">Racional</span></Link>
-        </h1>
-        <nav>
-          <ul>
-            <li><Link href="/aula-icm">A Aula</Link></li>
-            <li><Link href="/leitura-icm">ICM</Link></li>
-            <li><Link href="/psicologia-hs">Psicologia</Link></li>
-            <li><Link href="/biblioteca">Biblioteca</Link></li>
-            <li><Link href="/quem-sou">Quem Sou</Link></li>
-            <li className="nav-dropdown" onMouseEnter={() => setToolsOpen(true)} onMouseLeave={() => setToolsOpen(false)}>
-              <button className="nav-tools-trigger" aria-expanded={toolsOpen}>
-                <span className="fa-solid fa-flask"></span> Lab
-                <span className="fa-solid fa-chevron-down" style={{ fontSize: '0.5rem', marginLeft: '0.25rem', transition: 'transform 0.2s', transform: toolsOpen ? 'rotate(180deg)' : 'none' }}></span>
-              </button>
-              {toolsOpen && (
-                <div className="nav-dropdown-menu">
-                  <Link href="/tools/icm" onClick={() => setToolsOpen(false)}>
-                    <span className="fa-solid fa-calculator"></span> Simulador ICM
-                  </Link>
-                  <Link href="/tools/masterclass" onClick={() => setToolsOpen(false)}>
-                    <span className="fa-solid fa-graduation-cap"></span> Masterclass
-                  </Link>
-                  <Link href="/tools/toy-games" onClick={() => setToolsOpen(false)}>
-                    <span className="fa-solid fa-crosshairs"></span> Toy Games
-                  </Link>
-                </div>
-              )}
-            </li>
-          </ul>
-        </nav>
+    <>
+      <header className="main-header">
+        <div className="container">
+          <h1 className="logo">
+            <Link href="/">Poker<span className="accent">Racional</span></Link>
+          </h1>
+          <nav>
+            <ul>
+              <li><Link href="/aula-icm">A Aula</Link></li>
+              <li><Link href="/leitura-icm">ICM</Link></li>
+              <li><Link href="/psicologia-hs">Psicologia</Link></li>
+              <li><Link href="/biblioteca">Biblioteca</Link></li>
+              <li><Link href="/quem-sou">Quem Sou</Link></li>
+              <li className="nav-dropdown" onMouseEnter={() => setToolsOpen(true)} onMouseLeave={() => setToolsOpen(false)}>
+                <button className="nav-tools-trigger" aria-expanded={toolsOpen}>
+                  <span className="fa-solid fa-flask"></span>{' '}Lab{' '}
+                  <span className="fa-solid fa-chevron-down" style={{ fontSize: '0.5rem', marginLeft: '0.25rem', transition: 'transform 0.2s', transform: toolsOpen ? 'rotate(180deg)' : 'none' }}></span>
+                </button>
+                {toolsOpen && (
+                  <div className="nav-dropdown-menu">
+                    <Link href="/tools/icm" onClick={() => setToolsOpen(false)}>
+                      <span className="fa-solid fa-calculator"></span> Simulador ICM
+                    </Link>
+                    <Link href="/tools/masterclass" onClick={() => setToolsOpen(false)}>
+                      <span className="fa-solid fa-graduation-cap"></span> Masterclass
+                    </Link>
+                    <Link href="/tools/toy-games" onClick={() => setToolsOpen(false)}>
+                      <span className="fa-solid fa-crosshairs"></span> Toy Games
+                    </Link>
+                  </div>
+                )}
+              </li>
+            </ul>
+          </nav>
+          <button className="hamburger-btn" onClick={() => setMobileOpen(true)} aria-label="Menu">
+            <span className="fa-solid fa-bars"></span>
+          </button>
+        </div>
+      </header>
+
+      {/* Menu Mobile Fullscreen */}
+      <div className={`mobile-nav ${mobileOpen ? 'open' : ''}`}>
+        <button className="mobile-nav-close" onClick={closeMobile} aria-label="Fechar menu">
+          <span className="fa-solid fa-xmark"></span>
+        </button>
+
+        <span className="mobile-nav-section-title">Conteúdo</span>
+        <Link href="/aula-icm" onClick={closeMobile}>
+          <span className="fa-solid fa-chalkboard-user"></span> A Aula
+        </Link>
+        <Link href="/leitura-icm" onClick={closeMobile}>
+          <span className="fa-solid fa-file-lines"></span> Entendendo o ICM
+        </Link>
+        <Link href="/artigos/estado-da-arte" onClick={closeMobile}>
+          <span className="fa-solid fa-lightbulb"></span> Estado da Arte 2025
+        </Link>
+        <Link href="/artigos/smart-sniper" onClick={closeMobile}>
+          <span className="fa-solid fa-bullseye"></span> Protocolo Smart Sniper
+        </Link>
+        <Link href="/psicologia-hs" onClick={closeMobile}>
+          <span className="fa-solid fa-brain"></span> Psicologia High Stakes
+        </Link>
+
+        <span className="mobile-nav-section-title">Laboratório</span>
+        <Link href="/tools/icm" onClick={closeMobile}>
+          <span className="fa-solid fa-calculator"></span> Simulador ICM
+        </Link>
+        <Link href="/tools/masterclass" onClick={closeMobile}>
+          <span className="fa-solid fa-graduation-cap"></span> Masterclass Interativa
+        </Link>
+        <Link href="/tools/toy-games" onClick={closeMobile}>
+          <span className="fa-solid fa-crosshairs"></span> Toy Games: Predator Mode
+        </Link>
+
+        <span className="mobile-nav-section-title">Mais</span>
+        <Link href="/biblioteca" onClick={closeMobile}>
+          <span className="fa-solid fa-book"></span> Biblioteca Epistêmica
+        </Link>
+        <Link href="/quem-sou" onClick={closeMobile}>
+          <span className="fa-solid fa-user"></span> Quem Sou
+        </Link>
       </div>
-    </header>
+    </>
   );
 };
 

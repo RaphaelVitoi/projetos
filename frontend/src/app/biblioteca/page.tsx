@@ -2,7 +2,7 @@ import Link from 'next/link';
 import CodeBlock from '@/components/content/CodeBlock';
 
 export const metadata = {
-  title: 'Biblioteca Epistemica | Raphael Vitoi',
+  title: 'Biblioteca Epistêmica | Raphael Vitoi',
   description: 'Acervo SOTA de Teoria dos Jogos, Psicologia e Existencialismo.',
 };
 
@@ -19,26 +19,26 @@ const MOCK_ARTICLES: MockArticle[] = [
   {
     id: '1',
     title: 'O Paradoxo do Valuation no ICM',
-    excerpt: 'Por que acumular fichas pode diminuir sua esperanca matematica em spots especificos da reta final.',
+    excerpt: 'Por que acumular fichas pode diminuir sua esperança matemática em spots específicos da reta final.',
     slug: 'paradoxo-valuation-icm',
     readTime: '12 MIN',
-    tags: ['Teoria', 'ICM', 'Matematica']
+    tags: ['Teoria', 'ICM', 'Matemática']
   },
   {
     id: '2',
-    title: 'Hermeneutica do Blefe',
-    excerpt: 'Lendo as intencoes do oponente atraves da lente do excesso de gozo e da psicanalise lacaniana.',
+    title: 'Hermenêutica do Blefe',
+    excerpt: 'Lendo as intenções do oponente através da lente do excesso de gozo e da psicanálise lacaniana.',
     slug: 'hermeneutica-do-blefe',
     readTime: '15 MIN',
     tags: ['Psicologia', 'Comportamento']
   },
   {
     id: '3',
-    title: 'O Motor de Diluicao',
-    excerpt: 'Como o Risk Premium afeta os ranges de call de forma nao-linear.',
+    title: 'O Motor de Diluição',
+    excerpt: 'Como o Risk Premium afeta os ranges de call de forma não-linear.',
     slug: 'motor-de-diluicao',
     readTime: '8 MIN',
-    tags: ['ICM', 'Estrategia']
+    tags: ['ICM', 'Estratégia']
   }
 ];
 
@@ -49,13 +49,13 @@ export default function BibliotecaPage() {
       {/* Hero */}
       <section id="hero-aula" className="animate-fade-up">
         <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '0.5rem' }}>
-          <span className="fa-solid fa-book-journal-whills" style={{ marginRight: '0.5rem' }}></span> Dominio Teorico
+          <span className="fa-solid fa-book-journal-whills" style={{ marginRight: '0.5rem' }}></span> Domínio Teórico
         </p>
         <h2 style={{ background: 'linear-gradient(135deg, #fff 0%, #94a3b8 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-          Biblioteca Epistemica
+          Biblioteca Epistêmica
         </h2>
         <p style={{ maxWidth: '700px', margin: '0 auto', fontStyle: 'italic' }}>
-          Acervo SOTA de Teoria dos Jogos, Psicologia e Existencialismo. A fundacao teorica para suportar a variancia implacavel e transcender o solver.
+          Acervo SOTA de Teoria dos Jogos, Psicologia e Existencialismo. A fundação teórica para suportar a variância implacável e transcender o solver.
         </p>
       </section>
 
@@ -87,18 +87,18 @@ export default function BibliotecaPage() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2rem', alignItems: 'center' }}>
           <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '0.5rem' }}>
-              <span className="fa-solid fa-microchip" style={{ marginRight: '0.5rem' }}></span> Integracao Sistemica
+              <span className="fa-solid fa-microchip" style={{ marginRight: '0.5rem' }}></span> Integração Sistêmica
             </p>
-            <h3 style={{ fontSize: '1.8rem', marginBottom: '1rem' }}>Fragmentos Executaveis</h3>
+            <h3 style={{ fontSize: '1.8rem', marginBottom: '1rem' }}>Fragmentos Executáveis</h3>
             <p style={{ maxWidth: '600px', margin: '0 auto 2rem' }}>
-              A biblioteca nao e apenas texto. E codigo, heuristica e motores matematicos.
+              A biblioteca não é apenas texto. É código, heurística e motores matemáticos.
             </p>
           </div>
           <div>
             <CodeBlock
               language="typescript"
               code={`export function calculateICM(stacks: number[], payouts: number[]): number[] {
-  // Logica recursiva de Estado da Arte para calculo ICM
+  // Lógica recursiva de Estado da Arte para cálculo ICM
   // Reflete a assimetria do risco nos torneios
   return stacks.map(() => 0);
 }`}

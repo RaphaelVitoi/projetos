@@ -1,5 +1,5 @@
 import { SCENARIOS } from './scenarios.js';
-import { TOY_GAMES } from '../../../scenarios_toygame.js';
+import { TOY_GAMES } from './scenarios_toygame.js';
 import { NashSolver } from './NashSolver.js';
 import './risk-gauge.js';
 import './scenario-list.js';

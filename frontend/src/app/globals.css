@@ -259,11 +259,11 @@
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    /* === Hub Grid e Cards (Legacy) === */
+    /* === Hub Grid e Cards === */
     .hub-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 2rem;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
         margin-top: 3rem;
     }
 
@@ -289,17 +289,22 @@
     }
 
     .hub-icon {
-        font-size: 2.5rem;
-        margin-bottom: 1.5rem;
+        font-size: 2rem;
+        margin-bottom: 1rem;
         display: block;
+        line-height: 1;
     }
 
     .hub-card h3 {
         color: var(--text-main);
+        font-size: 1.15rem;
+        margin-bottom: 0.5rem;
     }
 
     .hub-card p {
         flex-grow: 1;
+        font-size: 0.9rem;
+        line-height: 1.6;
     }
 
     .locked {
@@ -1061,6 +1066,104 @@
     50% { filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.8)); }
 }
 
+/* === Hamburger Button (Mobile) === */
+.hamburger-btn {
+    display: none;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    color: var(--text-muted);
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+}
+
+.hamburger-btn:hover {
+    color: #fff;
+    border-color: var(--accent-primary);
+}
+
+/* Mobile Nav Overlay */
+.mobile-nav {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    background: rgba(2, 6, 23, 0.95);
+    backdrop-filter: blur(20px);
+    padding: 5rem 2rem 2rem;
+    flex-direction: column;
+    gap: 0.5rem;
+    animation: fadeUp 0.2s ease;
+}
+
+.mobile-nav.open {
+    display: flex;
+}
+
+.mobile-nav a,
+.mobile-nav-section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-lg);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: all 0.15s;
+}
+
+.mobile-nav a:hover,
+.mobile-nav a:active {
+    background: rgba(99, 102, 241, 0.1);
+    color: #fff;
+}
+
+.mobile-nav-section-title {
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--accent-primary);
+    padding-bottom: 0.25rem;
+    margin-top: 1rem;
+    pointer-events: none;
+}
+
+.mobile-nav .fa-solid {
+    width: 20px;
+    text-align: center;
+    font-size: 0.85rem;
+}
+
+.mobile-nav-close {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    color: var(--text-muted);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 1rem;
+}
+
+.mobile-nav-close:hover {
+    color: #fff;
+    border-color: var(--accent-secondary);
+}
+
 /* === Responsive === */
 @media (max-width: 768px) {
     #hero h2, #hero-aula h2 {
@@ -1076,21 +1179,12 @@
         height: 64px;
     }
 
-    .main-header nav ul {
-        gap: 0.75rem;
+    .main-header nav {
+        display: none;
     }
 
-    .main-header nav a {
-        font-size: 0.8rem;
-    }
-
-    .nav-dropdown-menu {
-        right: -1rem;
-    }
-
-    .nav-tools-trigger {
-        padding: 0.3rem 0.6rem;
-        font-size: 0.7rem;
+    .hamburger-btn {
+        display: flex;
     }
 
     .author-section {
@@ -1098,7 +1192,7 @@
     }
 
     .hub-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
         gap: 1.25rem;
     }
 
@@ -1123,18 +1217,20 @@
         gap: 1rem;
         align-items: center;
     }
+
+    .article-nav {
+        flex-direction: column;
+        gap: 0.75rem;
+        text-align: center;
+    }
+
+    .btn-primary, .btn-secondary {
+        width: 100%;
+        justify-content: center;
+    }
 }
 
 @media (max-width: 480px) {
-    .main-header nav ul {
-        gap: 0.4rem;
-        font-size: 0.75rem;
-    }
-
-    .main-header nav a {
-        font-size: 0.72rem;
-    }
-
     .logo {
         font-size: 1.1rem;
     }
@@ -1146,5 +1242,13 @@
     .hub-icon {
         font-size: 2rem;
         margin-bottom: 1rem;
+    }
+
+    .hub-card {
+        padding: 1.5rem;
+    }
+
+    .hub-grid {
+        grid-template-columns: 1fr;
     }
 }
