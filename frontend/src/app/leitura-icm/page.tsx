@@ -15,14 +15,10 @@ export const metadata = {
 export default function LeituraICM() {
     return (
         <main className="container" style={{ maxWidth: '800px', margin: '0 auto', padding: '4rem 1.5rem' }}>
-            <div style={{ textAlign: 'center', marginBottom: '4rem', paddingBottom: '2rem', borderBottom: '1px solid var(--border-color)' }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
-                    Documento Técnico &bull; Versão 1.0
-                </span>
-                <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', background: 'linear-gradient(135deg, #fff 0%, #a5b4fc 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '1rem', marginTop: '1rem' }}>
-                    Entendendo o ICM e suas Heurísticas
-                </h1>
-                <p style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>Decisões Pós-Flop em Final Tables e a Nova Fronteira do Edge.</p>
+            <div className="article-header">
+                <span className="article-tag">Documento Técnico &bull; Versão 1.0</span>
+                <h1>Entendendo o ICM e suas Heurísticas</h1>
+                <p className="article-subtitle">Decisões Pós-Flop em Final Tables e a Nova Fronteira do Edge.</p>
             </div>
 
             <article>

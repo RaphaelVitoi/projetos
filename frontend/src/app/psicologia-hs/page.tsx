@@ -15,13 +15,13 @@ export const metadata = {
 export default function PsicologiaHSPage() {
   return (
     <main className="container" style={{ maxWidth: '900px', margin: '0 auto', padding: '4rem 1.5rem' }}>
-      <section id="hero-aula">
-        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--accent-primary)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '0.5rem' }}>
-          Protocolo de Análise Textual Complexa
+      <header className="page-header" style={{ paddingBottom: '1rem' }}>
+        <p className="page-label">
+          <span className="fa-solid fa-brain"></span> Protocolo de Análise Textual Complexa
         </p>
-        <h2>Psicologia High Stakes</h2>
-        <p><strong>Analisando o Protocolo de Análise Textual de Poker Complexo.</strong></p>
-      </section>
+        <h1>Psicologia High Stakes</h1>
+        <p className="page-subtitle">Analisando o Protocolo de Análise Textual de Poker Complexo.</p>
+      </header>
 
       <section>
         <article>

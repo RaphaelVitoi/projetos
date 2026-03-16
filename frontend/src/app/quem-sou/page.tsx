@@ -16,13 +16,13 @@ export default function QuemSouPage() {
   return (
     <main className="container" style={{ maxWidth: '900px', margin: '0 auto', padding: '0 1.5rem' }}>
 
-      <section id="hero-aula">
-        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--accent-primary)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '0.5rem' }}>
-          Manifesto
+      <header className="page-header" style={{ paddingBottom: '1rem' }}>
+        <p className="page-label">
+          <span className="fa-solid fa-user"></span> Manifesto
         </p>
-        <h2>Sobre o Autor</h2>
-        <p><strong>Educador, Estrategista, Profissional de Poker, Escritor e Especialista em Sistemas Complexos.</strong></p>
-      </section>
+        <h1>Sobre o Autor</h1>
+        <p className="page-subtitle">Educador, Estrategista, Profissional de Poker, Escritor e Especialista em Sistemas Complexos.</p>
+      </header>
 
       {/* Video Player */}
       <section>

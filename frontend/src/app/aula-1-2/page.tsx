@@ -15,15 +15,15 @@ export const metadata = {
 export default function Aula12Page() {
   return (
     <main className="container">
-      <section id="hero-aula">
-        <h2>Entendendo o ICM e suas Heurísticas</h2>
-        <p>
-          <strong>
-            Aplicando as noções de RP pós-flop: Comparativos entre CHIPEV (GTO Wizard) e ICMev (HRC
-            Pós-Flop)
-          </strong>
+      <header className="page-header" style={{ paddingBottom: '1rem' }}>
+        <p className="page-label">
+          <span className="fa-solid fa-graduation-cap"></span> Material Complementar
         </p>
-      </section>
+        <h1>Entendendo o ICM e suas Heurísticas</h1>
+        <p className="page-subtitle">
+          Aplicando as noções de RP pós-flop: Comparativos entre CHIPEV (GTO Wizard) e ICMev (HRC Pós-Flop).
+        </p>
+      </header>
 
       <section>
         <article>

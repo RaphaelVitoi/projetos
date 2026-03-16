@@ -6,6 +6,7 @@
  */
 
 import RiskGeometryMasterclass from '@/components/icm/RiskGeometryMasterclass';
+import Link from 'next/link';
 
 export const metadata = {
     title: 'A Geometria do Risco | Masterclass | Raphael Vitoi',
@@ -13,5 +14,15 @@ export const metadata = {
 };
 
 export default function MasterclassPage() {
-    return <RiskGeometryMasterclass />;
+    return (
+        <>
+            <RiskGeometryMasterclass />
+            <div className="sim-container" style={{ paddingBottom: '4rem' }}>
+                <nav className="article-nav">
+                    <Link href="/tools/icm">&larr; Simulador ICM</Link>
+                    <Link href="/tools/toy-games">Toy Games: Predator Mode &rarr;</Link>
+                </nav>
+            </div>
+        </>
+    );
 }

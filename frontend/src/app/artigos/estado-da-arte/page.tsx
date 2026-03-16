@@ -15,15 +15,11 @@ export const metadata = {
 export default function EstadoDaArtePage() {
     return (
         <main className="container" style={{ maxWidth: '800px', margin: '0 auto', padding: '4rem 1.5rem' }}>
-            <div style={{ textAlign: 'center', marginBottom: '4rem', paddingBottom: '2rem', borderBottom: '1px solid var(--border-color)' }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
-                    Whitepaper &bull; Nível Avançado
-                </span>
-                <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', background: 'linear-gradient(135deg, #fff 0%, #a5b4fc 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '1rem', marginTop: '1rem' }}>
-                    O Estado da Arte do ICM 2025
-                </h1>
-                <p style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>Novas Fronteiras, Tendências High Stakes e Ferramentas de Elite.</p>
-                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '1rem' }}>Autor: Raphael Vitoi &bull; Novembro de 2025</p>
+            <div className="article-header">
+                <span className="article-tag">Whitepaper &bull; Nível Avançado</span>
+                <h1>O Estado da Arte do ICM 2025</h1>
+                <p className="article-subtitle">Novas Fronteiras, Tendências High Stakes e Ferramentas de Elite.</p>
+                <p className="article-meta">Autor: Raphael Vitoi &bull; Novembro de 2025</p>
             </div>
 
             <article>

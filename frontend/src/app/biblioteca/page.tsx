@@ -47,17 +47,15 @@ export default function BibliotecaPage() {
     <main className="container" style={{ maxWidth: '1100px', margin: '0 auto', padding: '4rem 1.5rem' }}>
 
       {/* Hero */}
-      <section id="hero-aula" className="animate-fade-up">
-        <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '0.5rem' }}>
-          <span className="fa-solid fa-book-journal-whills" style={{ marginRight: '0.5rem' }}></span> Domínio Teórico
+      <header className="page-header animate-fade-up" style={{ padding: '2rem 0 1rem' }}>
+        <p className="page-label">
+          <span className="fa-solid fa-book-journal-whills"></span> Domínio Teórico
         </p>
-        <h2 style={{ background: 'linear-gradient(135deg, #fff 0%, #94a3b8 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-          Biblioteca Epistêmica
-        </h2>
-        <p style={{ maxWidth: '700px', margin: '0 auto', fontStyle: 'italic' }}>
+        <h1>Biblioteca Epistêmica</h1>
+        <p className="page-subtitle" style={{ maxWidth: '700px' }}>
           Acervo SOTA de Teoria dos Jogos, Psicologia e Existencialismo. A fundação teórica para suportar a variância implacável e transcender o solver.
         </p>
-      </section>
+      </header>
 
       {/* Grade de Artigos */}
       <div className="hub-grid animate-fade-up" style={{ animationDelay: '0.1s' }}>
