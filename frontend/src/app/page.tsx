@@ -29,10 +29,10 @@ export default function HomePage() {
         </p>
 
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '2rem', flexWrap: 'wrap' }}>
-          <Link href="#metodo" className="card-cta" style={{ background: 'var(--accent-primary)', color: '#fff', padding: '1rem 2.5rem', borderRadius: '4px', border: 'none', fontSize: '1rem', marginTop: 0 }}>
+          <Link href="#metodo" className="btn-primary" style={{ padding: '1rem 2.5rem', fontSize: '0.95rem' }}>
             Conhecer o Metodo &rarr;
           </Link>
-          <Link href="/leitura-icm" className="card-cta" style={{ background: 'rgba(99, 102, 241, 0.1)', color: 'var(--accent-primary)', padding: '1rem 2.5rem', borderRadius: '4px', border: '1px solid var(--accent-primary)', fontSize: '1rem', fontWeight: 600, marginTop: 0 }}>
+          <Link href="/leitura-icm" className="btn-secondary" style={{ padding: '1rem 2.5rem', fontSize: '0.95rem' }}>
             Baixar Material PDF
           </Link>
         </div>
@@ -135,7 +135,7 @@ export default function HomePage() {
         <h2 style={{ fontSize: '2.5rem' }}>Recupere seu ROI. Domine a fronteira final.</h2>
 
         <div style={{ marginTop: '3rem' }}>
-          <Link href="/aula-icm" className="card-cta" style={{ background: 'var(--accent-primary)', color: '#fff', padding: '1.2rem 4rem', borderRadius: '4px', fontSize: '1.2rem', boxShadow: '0 0 30px var(--accent-glow)', border: 'none', fontWeight: 800, marginTop: 0 }}>
+          <Link href="/aula-icm" className="btn-primary" style={{ padding: '1.2rem 4rem', fontSize: '1.1rem', boxShadow: '0 0 30px var(--accent-glow)' }}>
             ACESSAR AULA MAGNA AGORA
           </Link>
         </div>
@@ -167,7 +167,7 @@ export default function HomePage() {
           </Link>
 
           <Link href="/artigos/smart-sniper" className="hub-card">
-            <span className="hub-icon">&#127919;</span>
+            <span className="hub-icon">&#9878;</span>
             <h3>Protocolo Smart Sniper</h3>
             <p>Gestao de carreira, rotina semanal, estrategia de domingo e validacao Monte Carlo.</p>
             <span className="card-cta">Ler &rarr;</span>
@@ -185,6 +185,20 @@ export default function HomePage() {
             <h3>Simulador ICM</h3>
             <p>Calculadora Malmuth-Harville + Simulador de Cenarios com Risk Premium.</p>
             <span className="card-cta">Abrir Laboratorio &rarr;</span>
+          </Link>
+
+          <Link href="/tools/masterclass" className="hub-card">
+            <span className="hub-icon">&#127891;</span>
+            <h3>Masterclass: Geometria do Risco</h3>
+            <p>6 cenarios clinicos com NashSolver, quizzes interativos e diluicao SPR.</p>
+            <span className="card-cta">Iniciar Masterclass &rarr;</span>
+          </Link>
+
+          <Link href="/tools/toy-games" className="hub-card">
+            <span className="hub-icon">&#127919;</span>
+            <h3>Toy Games: Predator Mode</h3>
+            <p>Cenarios extremos de ICM. Sinta a impunidade de agredir quando o oponente esta paralisado.</p>
+            <span className="card-cta">Entrar no Lab &rarr;</span>
           </Link>
 
           <Link href="/biblioteca" className="hub-card">

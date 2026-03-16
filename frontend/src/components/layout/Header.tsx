@@ -1,6 +1,11 @@
+'use client';
+
 import Link from 'next/link';
+import { useState } from 'react';
 
 const Header = () => {
+  const [toolsOpen, setToolsOpen] = useState(false);
+
   return (
     <header className="main-header">
       <div className="container">
@@ -14,10 +19,24 @@ const Header = () => {
             <li><Link href="/psicologia-hs">Psicologia</Link></li>
             <li><Link href="/biblioteca">Biblioteca</Link></li>
             <li><Link href="/quem-sou">Quem Sou</Link></li>
-            <li>
-              <Link href="/tools/icm" className="card-cta" style={{ marginTop: 0, padding: '0.4rem 0.8rem', border: '1px solid var(--accent-primary)', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.75rem', letterSpacing: '0.05em' }}>
-                <span className="fa-solid fa-microchip"></span> Simulador
-              </Link>
+            <li className="nav-dropdown" onMouseEnter={() => setToolsOpen(true)} onMouseLeave={() => setToolsOpen(false)}>
+              <button className="nav-tools-trigger" aria-expanded={toolsOpen}>
+                <span className="fa-solid fa-flask"></span> Lab
+                <span className="fa-solid fa-chevron-down" style={{ fontSize: '0.5rem', marginLeft: '0.25rem', transition: 'transform 0.2s', transform: toolsOpen ? 'rotate(180deg)' : 'none' }}></span>
+              </button>
+              {toolsOpen && (
+                <div className="nav-dropdown-menu">
+                  <Link href="/tools/icm" onClick={() => setToolsOpen(false)}>
+                    <span className="fa-solid fa-calculator"></span> Simulador ICM
+                  </Link>
+                  <Link href="/tools/masterclass" onClick={() => setToolsOpen(false)}>
+                    <span className="fa-solid fa-graduation-cap"></span> Masterclass
+                  </Link>
+                  <Link href="/tools/toy-games" onClick={() => setToolsOpen(false)}>
+                    <span className="fa-solid fa-crosshairs"></span> Toy Games
+                  </Link>
+                </div>
+              )}
             </li>
           </ul>
         </nav>

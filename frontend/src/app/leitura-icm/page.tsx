@@ -151,7 +151,7 @@ export default function LeituraICM() {
                 </table>
 
                 <div style={{ textAlign: 'center', margin: '3rem 0' }}>
-                    <Link href="/tools/icm" className="card-cta" style={{ border: '1px solid var(--accent-primary)', padding: '1rem 2rem', borderRadius: '8px', fontSize: '1rem' }}>
+                    <Link href="/tools/icm" className="btn-primary">
                         &#127918; Abrir Simulador Interativo
                     </Link>
                 </div>
@@ -315,14 +315,10 @@ export default function LeituraICM() {
                 </div>
             </article>
 
-            <div style={{ marginTop: '4rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Link href="/aula-icm" style={{ color: 'var(--text-muted)', textDecoration: 'underline', fontSize: '0.9rem' }}>
-                    &larr; Voltar para a Aula
-                </Link>
-                <Link href="/artigos/estado-da-arte" style={{ color: 'var(--text-muted)', textDecoration: 'underline', fontSize: '0.9rem' }}>
-                    Estado da Arte ICM 2025 &rarr;
-                </Link>
-            </div>
+            <nav className="article-nav">
+                <Link href="/aula-icm">&larr; Voltar para a Aula</Link>
+                <Link href="/artigos/estado-da-arte">Estado da Arte ICM 2025 &rarr;</Link>
+            </nav>
         </main>
     );
 }

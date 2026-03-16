@@ -224,14 +224,10 @@ export default function SmartSniperPage() {
                 </div>
             </article>
 
-            <div style={{ marginTop: '4rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Link href="/artigos/estado-da-arte" style={{ color: 'var(--text-muted)', textDecoration: 'underline', fontSize: '0.9rem' }}>
-                    &larr; Estado da Arte ICM
-                </Link>
-                <Link href="/" style={{ color: 'var(--text-muted)', textDecoration: 'underline', fontSize: '0.9rem' }}>
-                    Hub Central &rarr;
-                </Link>
-            </div>
+            <nav className="article-nav">
+                <Link href="/artigos/estado-da-arte">&larr; Estado da Arte ICM</Link>
+                <Link href="/">Hub Central &rarr;</Link>
+            </nav>
         </main>
     );
 }

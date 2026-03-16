@@ -1,0 +1,179 @@
+/**
+ * IDENTITY: Laboratorio Toy Games (Predator Mode)
+ * PATH: src/app/tools/toy-games/page.tsx
+ * ROLE: Renderizar cenarios didaticos extremos de ICM para gamificacao do aprendizado.
+ * BINDING: [layout.tsx, globals.css]
+ */
+'use client';
+
+import React, { useState } from 'react';
+import Link from 'next/link';
+
+const SCENARIOS = [
+    {
+        id: 'sniper',
+        label: 'O Franco-Atirador',
+        subtitle: 'Blind War: SB (Hero) vs BB',
+        icon: 'fa-crosshairs',
+        color: 'emerald',
+        ip: { pos: 'SB (Hero)', stack: '50bb', rp: 12, role: 'Chipleader', desc: 'Licenca para matar. Pode shovar 100% (ATC).' },
+        oop: { pos: 'BB (Villain)', stack: '12bb', rp: 45, role: 'Short Stack', desc: 'Death Zone. Paralisado pela existencia de stacks de 8bb e 9bb na mesa.' },
+        analysis: 'Predator Mode Ativado: Voce e o Chipleader no SB. O BB tem 12bb e um Risk Premium de 45% (Death Zone). Matematicamente, ele nao pode pagar com quase nada porque cair antes dos stacks de 8bb e 9bb e catastrofico. Seu range de shove aqui deve ser 100% (Any Two Cards).'
+    },
+    {
+        id: 'bully',
+        label: 'O Bully do Botao',
+        subtitle: 'Bolha do ITM: BTN vs Blinds',
+        icon: 'fa-skull-crossbones',
+        color: 'rose',
+        ip: { pos: 'BTN (Hero)', stack: '80bb', rp: 5, role: 'Bully', desc: 'RP infimo. Agressao quase sem custo.' },
+        oop: { pos: 'SB (Villain)', stack: '20bb', rp: 42, role: 'Pressionado', desc: 'RP massivo (>40%). Paralisia na bolha.' },
+        analysis: 'Estamos na Bolha. Voce tem 80bb e os blinds tem 20bb/18bb. Seu Risk Premium e infimo (5%). O deles e massivo (>40%). Isso cria uma assimetria brutal. O solver sugere agressao desproporcional.'
+    },
+    {
+        id: 'paradoxo',
+        label: 'O Paradoxo do Valuation',
+        subtitle: 'Estrutura Padrao: Mid vs Big',
+        icon: 'fa-scale-balanced',
+        color: 'amber',
+        ip: { pos: 'BTN (Hero)', stack: '40bb', rp: 21.4, role: 'Inelastico', desc: 'RP de ida quase o dobro do RP de volta do BB.' },
+        oop: { pos: 'BB (CL)', stack: '55bb', rp: 12.9, role: 'Defensivo Condensado', desc: 'Sobrevive a um all-in. Vantagem de risco.' },
+        analysis: 'O senso comum dita que o BTN com 40bb possui conforto suficiente para oprimir a mesa. Contudo, o RP de ida do BTN e quase o dobro do RP de volta do BB. Se errar um hero-bluff, e aniquilado. A capacidade de blefar e estrangulada pela Esperanca Matematica.'
+    },
+    {
+        id: 'pacto',
+        label: 'O Pacto Silencioso',
+        subtitle: 'Colisao de Gigantes',
+        icon: 'fa-handshake',
+        color: 'indigo',
+        ip: { pos: 'Vice CL', stack: '65bb', rp: 24.5, role: 'Linear Especulativo', desc: 'Destruicao mutua e o pior cenario possivel.' },
+        oop: { pos: 'CL', stack: '70bb', rp: 23.5, role: 'Flat Call Massivo', desc: 'As fichas perdidas viram payjumps gratis.' },
+        analysis: 'Dois gigantes colidem. A destruicao mutua e o pior cenario possivel. As fichas perdidas viram payjumps gratis aos inativos. Ocorre um Pacto Silencioso. A agressao letal (3-bet) colapsa. Os ranges de flat call inflam absurdamente, incluindo o topo.'
+    }
+];
+
+const COLOR_MAP: Record<string, { accent: string; bg: string; border: string }> = {
+    emerald: { accent: 'var(--accent-emerald)', bg: 'rgba(16, 185, 129, 0.08)', border: 'rgba(16, 185, 129, 0.3)' },
+    rose: { accent: 'var(--accent-secondary)', bg: 'rgba(225, 29, 72, 0.08)', border: 'rgba(225, 29, 72, 0.3)' },
+    amber: { accent: 'var(--accent-amber)', bg: 'rgba(245, 158, 11, 0.08)', border: 'rgba(245, 158, 11, 0.3)' },
+    indigo: { accent: 'var(--accent-primary)', bg: 'rgba(99, 102, 241, 0.08)', border: 'rgba(99, 102, 241, 0.3)' },
+};
+
+function RpGauge({ value, label, color }: Readonly<{ value: number; label: string; color: string }>) {
+    const pct = Math.min(100, (value / 50) * 100);
+    const isHigh = value > 30;
+    return (
+        <div style={{ textAlign: 'center' }}>
+            <div style={{ position: 'relative', width: '120px', height: '120px', margin: '0 auto' }}>
+                <svg viewBox="0 0 36 36" style={{ display: 'block', width: '100%', height: '100%' }}>
+                    <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(30,41,59,0.8)" strokeWidth="2.5" />
+                    <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round"
+                        strokeDasharray={`${pct}, 100`}
+                        style={{ transition: 'stroke-dasharray 1s cubic-bezier(0.16, 1, 0.3, 1)', filter: `drop-shadow(0 0 6px ${color})` }} />
+                </svg>
+                <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.5rem', fontWeight: 900, color: '#fff' }}>{value.toFixed(1)}%</span>
+                    <span style={{ fontSize: '0.55rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', color, marginTop: '2px' }}>R. Premium</span>
+                </div>
+            </div>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em', marginTop: '0.75rem', marginBottom: 0 }}>{label}</p>
+            {isHigh && <span style={{ fontSize: '0.6rem', color: 'var(--accent-secondary)', fontWeight: 700, textTransform: 'uppercase' }}>Death Zone</span>}
+        </div>
+    );
+}
+
+export default function ToyGamesPage() {
+    const [activeId, setActiveId] = useState(SCENARIOS[0].id);
+    const active = SCENARIOS.find(s => s.id === activeId) ?? SCENARIOS[0];
+    const colors = COLOR_MAP[active.color];
+
+    return (
+        <main style={{ minHeight: '100vh', padding: '2rem 1.5rem' }}>
+            <header style={{ maxWidth: '1200px', margin: '0 auto 2rem', textAlign: 'center' }}>
+                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--accent-secondary)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '0.5rem' }}>
+                    <span className="fa-solid fa-crosshairs" style={{ marginRight: '0.5rem' }}></span> Laboratorio Interativo
+                </p>
+                <h1 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', fontWeight: 900, color: '#fff', marginBottom: '0.5rem' }}>
+                    Toy Games: <span style={{ background: 'linear-gradient(135deg, #ef4444, #f97316)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Predator Mode</span>
+                </h1>
+                <p style={{ color: 'var(--text-muted)', maxWidth: '600px', margin: '0 auto', fontStyle: 'italic', fontSize: '0.9rem' }}>
+                    Isolando a mecanica do Risk Premium. Sinta a impunidade de agredir quando o oponente esta paralisado.
+                </p>
+            </header>
+
+            <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+                {/* Selecao de cenarios */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '0.75rem', marginBottom: '2rem' }}>
+                    {SCENARIOS.map(sc => {
+                        const isActive = sc.id === activeId;
+                        const c = COLOR_MAP[sc.color];
+                        return (
+                            <button key={sc.id} onClick={() => setActiveId(sc.id)}
+                                style={{
+                                    padding: '1rem 1.25rem', borderRadius: '12px', cursor: 'pointer', textAlign: 'left',
+                                    background: isActive ? c.bg : 'rgba(15, 23, 42, 0.5)',
+                                    border: `1px solid ${isActive ? c.border : 'rgba(255,255,255,0.06)'}`,
+                                    transition: 'all 0.3s', color: isActive ? '#fff' : 'var(--text-muted)',
+                                    transform: isActive ? 'translateY(-2px)' : 'none',
+                                    boxShadow: isActive ? `0 8px 24px rgba(0,0,0,0.3)` : 'none',
+                                }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                    <span className={`fa-solid ${sc.icon}`} style={{ fontSize: '1rem', color: isActive ? c.accent : 'var(--text-muted)' }}></span>
+                                    <div>
+                                        <span style={{ display: 'block', fontWeight: 700, fontSize: '0.9rem' }}>{sc.label}</span>
+                                        <span style={{ fontSize: '0.7rem', opacity: 0.7 }}>{sc.subtitle}</span>
+                                    </div>
+                                </div>
+                            </button>
+                        );
+                    })}
+                </div>
+
+                {/* Palco do cenario ativo */}
+                <div style={{ background: 'rgba(15, 23, 42, 0.6)', border: `1px solid ${colors.border}`, borderRadius: '16px', padding: 'clamp(1.5rem, 3vw, 2.5rem)', backdropFilter: 'blur(12px)' }}>
+                    {/* Confronto IP vs OOP */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: '1.5rem', alignItems: 'center', marginBottom: '2.5rem' }}>
+                        {/* IP */}
+                        <div style={{ textAlign: 'center' }}>
+                            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--accent-emerald)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '0.5rem' }}>Agressor (IP)</p>
+                            <h3 style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>{active.ip.pos}</h3>
+                            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--text-muted)', background: 'rgba(15,23,42,0.8)', padding: '0.2rem 0.6rem', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.06)' }}>{active.ip.stack}</span>
+                            <div style={{ marginTop: '1.25rem' }}>
+                                <RpGauge value={active.ip.rp} label={active.ip.role} color="var(--accent-sky)" />
+                            </div>
+                            <p style={{ fontSize: '0.8rem', color: '#cbd5e1', marginTop: '0.75rem', marginBottom: 0 }}>{active.ip.desc}</p>
+                        </div>
+
+                        {/* VS */}
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(15,23,42,0.9)', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, color: 'var(--text-muted)', fontStyle: 'italic', fontSize: '1rem' }}>VS</div>
+                            <div style={{ width: '1px', height: '80px', background: 'linear-gradient(to bottom, rgba(255,255,255,0.1), transparent)', marginTop: '0.5rem' }}></div>
+                        </div>
+
+                        {/* OOP */}
+                        <div style={{ textAlign: 'center' }}>
+                            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--accent-secondary)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '0.5rem' }}>Defensor (OOP)</p>
+                            <h3 style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>{active.oop.pos}</h3>
+                            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--text-muted)', background: 'rgba(15,23,42,0.8)', padding: '0.2rem 0.6rem', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.06)' }}>{active.oop.stack}</span>
+                            <div style={{ marginTop: '1.25rem' }}>
+                                <RpGauge value={active.oop.rp} label={active.oop.role} color="var(--accent-secondary)" />
+                            </div>
+                            <p style={{ fontSize: '0.8rem', color: '#cbd5e1', marginTop: '0.75rem', marginBottom: 0 }}>{active.oop.desc}</p>
+                        </div>
+                    </div>
+
+                    {/* Analise */}
+                    <div className="callout" style={{ borderLeftColor: colors.accent, background: colors.bg }}>
+                        <h4 style={{ marginTop: 0, color: colors.accent }}>Analise do Cenario</h4>
+                        <p style={{ marginBottom: 0, fontSize: '0.95rem' }}>{active.analysis}</p>
+                    </div>
+                </div>
+
+                <nav className="article-nav" style={{ marginTop: '3rem' }}>
+                    <Link href="/tools/icm">&larr; Simulador ICM</Link>
+                    <Link href="/tools/masterclass">Masterclass Completa &rarr;</Link>
+                </nav>
+            </div>
+        </main>
+    );
+}

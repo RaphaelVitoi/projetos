@@ -131,14 +131,10 @@ export default function EstadoDaArtePage() {
                 </div>
             </article>
 
-            <div style={{ marginTop: '4rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Link href="/leitura-icm" style={{ color: 'var(--text-muted)', textDecoration: 'underline', fontSize: '0.9rem' }}>
-                    &larr; Entendendo o ICM
-                </Link>
-                <Link href="/artigos/smart-sniper" style={{ color: 'var(--text-muted)', textDecoration: 'underline', fontSize: '0.9rem' }}>
-                    Protocolo Smart Sniper &rarr;
-                </Link>
-            </div>
+            <nav className="article-nav">
+                <Link href="/leitura-icm">&larr; Entendendo o ICM</Link>
+                <Link href="/artigos/smart-sniper">Protocolo Smart Sniper &rarr;</Link>
+            </nav>
         </main>
     );
 }
