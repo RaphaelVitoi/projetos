@@ -2,9 +2,6 @@
 # Objetivo: Materializar o conceito da CLI Inteligente e enfileirar para planejamento técnico.
 
 $ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
-$KernelPath = Join-Path $ProjectRoot "Agent-TaskManager.psm1"
-Import-Module $KernelPath -Force
-
 $TaskSlug = "cli-interativa"
 $TaskDir = Join-Path $ProjectRoot "docs\tasks\$TaskSlug"
 $ConceptFile = Join-Path $TaskDir "CONCEPT_MAVERICK.md"
@@ -57,5 +54,14 @@ $task = [ordered]@{
         slug = $TaskSlug
     }
 }
-Add-AgentTask -NewTask $task
-Write-Host "[KERNEL] Tarefa de planejamento enfileirada: $taskId" -ForegroundColor Cyan
+
+# Usando o task_executor.py diretamente (SOTA Python DAL)
+$taskJson = $task | ConvertTo-Json -Depth 10 -Compress:$true
+$taskB64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($taskJson))
+
+$PyScript = Join-Path $ProjectRoot "task_executor.py"
+$PythonCmd = if (Test-Path "$ProjectRoot\.venv\Scripts\python.exe") { "$ProjectRoot\.venv\Scripts\python.exe" } else { "python" }
+
+$output = & $PythonCmd $PyScript db-add $taskB64
+if ($LASTEXITCODE -ne 0) { Write-Error "Falha ao enfileirar: $output" }
+else { Write-Host "[KERNEL] Tarefa enfileirada no SQLite via Python: $taskId" -ForegroundColor Cyan }

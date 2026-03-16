@@ -246,7 +246,7 @@ export default function LeituraICM() {
 
                 <hr style={{ border: 0, borderTop: '1px solid var(--border-color)', margin: '3rem 0' }} />
 
-                {/* ==================== MÓDULO 5 ==================== */}
+                {/* ==================== MÓDULO 4 ==================== */}
                 <h2>Módulo 4: Aplicação Prática</h2>
 
                 <h3>Os 10 Erros Mais Comuns</h3>

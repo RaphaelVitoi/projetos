@@ -31,17 +31,6 @@ function Invoke-WithMutex {
 }
 
 #-------------------------------------------------------------------
-# Payload Hash 
-#-------------------------------------------------------------------
-function Get-PayloadHash([string]$JsonString) {
-    $bytes = [System.Text.Encoding]::UTF8.GetBytes($JsonString)
-    $sha256 = [System.Security.Cryptography.SHA256]::Create()
-    $hashBytes = $sha256.ComputeHash($bytes)
-    $sha256.Dispose()
-    return [System.BitConverter]::ToString($hashBytes).Replace("-", "").ToLower()
-}
-
-#-------------------------------------------------------------------
 # Task Schema Validation (FSM)
 #-------------------------------------------------------------------
 function Test-TaskSchema {
@@ -49,26 +38,6 @@ function Test-TaskSchema {
     if (-not $TaskPayload.id -or -not $TaskPayload.description) { return $false }
     if ($TaskPayload.status -notmatch '^(pending|running|completed|failed)$') { return $false }
     return $true
-}
-
-#-------------------------------------------------------------------
-# Atomic Operations (Task Wrapper)
-#-------------------------------------------------------------------
-function New-AgentTaskWrapper {
-    param (
-        [Parameter(Mandatory = $true)]
-        [object]$Tasks
-    )
-
-    $tasksJson = $Tasks | ConvertTo-Json -Depth 10 -Compress:$true
-    $checksum = Get-PayloadHash $tasksJson
-
-    return [ordered]@{
-        version   = "4.0"
-        updatedAt = (Get-Date -Format "o")
-        checksum  = $checksum
-        tasks     = $Tasks
-    }
 }
 
 # -------------------------------------------------------------------
@@ -79,105 +48,37 @@ function Add-AgentTask {
 
     if (-not (Test-TaskSchema -TaskPayload $NewTask)) { throw "ABORT: Violacao de Schema." }
 
-    # Interceptador Pydantic (Honestidade Radical de Dados)
+    # Interceptador Python SQLite (Camada DAL - Estado da Arte)
     $pyScript = Join-Path $PSScriptRoot "task_executor.py"
     if (Test-Path $pyScript) {
+        if (-not $NewTask.priority) {
+            $NewTask | Add-Member -MemberType NoteProperty -Name "priority" -Value "normal" -Force
+        }
+
         $taskJson = $NewTask | ConvertTo-Json -Depth 10 -Compress:$true
         # Criptografia estrutural (Base64) para obliterar a entropia de aspas no Windows
         $taskB64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($taskJson))
         
-        $PythonCmd = "python"
+        $pythonCmd = "python"
         $VenvPython = Join-Path $PSScriptRoot ".venv\Scripts\python.exe"
-        if (Test-Path $VenvPython) { $PythonCmd = $VenvPython }
+        if (Test-Path $VenvPython) { $pythonCmd = $VenvPython }
         
-        $output = & $PythonCmd $pyScript add $taskB64
-        if ($LASTEXITCODE -ne 0) { throw "CRITICAL: Pydantic rejeitou o schema. Erro: $output" }
+        $output = & $pythonCmd $pyScript db-add $taskB64
+        if ($LASTEXITCODE -ne 0) { throw "CRITICAL: DAL SQLite rejeitou o schema. Erro: $output" }
         
         Invoke-WithMutex {
             $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
             try {
                 $logDir = Split-Path $Script:LogPath
                 if (-not (Test-Path $logDir)) { New-Item -ItemType Directory -Path $logDir -Force | Out-Null }
-                "[$timestamp][ENQUEUED] $($NewTask.id) - $($NewTask.status) (Pydantic Validated)" | Add-Content -Path $Script:LogPath -ErrorAction Stop
+                "[$timestamp][ENQUEUED] $($NewTask.id) - $($NewTask.status) (SQLite)" | Add-Content -Path $Script:LogPath -ErrorAction Stop
             }
             catch {}
         }
-        return # Sai da função, Python já cuidou do I/O
+        return
     }
 
-    Invoke-WithMutex {
-        $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-
-        try {
-            $logDir = Split-Path $Script:LogPath
-        }
-        catch {
-            Write-Warning "[AGENT-TASKMANAGER] Could not split path: $($_.Exception.Message)"
-        }
-        if (-not (Test-Path $logDir)) { New-Item -ItemType Directory -Path $logDir -Force | Out-Null }
-        try {
-            "[$timestamp][ENQUEUED] $($NewTask.id) - $($NewTask.status)" | Add-Content -Path $Script:LogPath -ErrorAction Stop
-        }
-        catch {}
-
-        $queue = @()
-        if (Test-Path $Script:QueuePath) {
-            try {
-                $raw = [System.IO.File]::ReadAllText($Script:QueuePath, [System.Text.Encoding]::UTF8)
-                if (-not [string]::IsNullOrWhiteSpace($raw)) {
-                    $payload = $raw | ConvertFrom-Json
-                    $queue = if ($null -ne $payload.tasks) { @($payload.tasks) } else { @($payload) }
-                }
-            }
-            catch {
-                # AUTOPOIESE: Deteccao de Entropia e Auto-Cura
-                $corruptFile = "$($Script:QueuePath).corrupt.$(Get-Date -Format 'yyyyMMddHHmmss')"
-                Move-Item -Path $Script:QueuePath -Destination $corruptFile -Force
-        
-                $msg = "[KERNEL][AUTO-HEALING] Corrupcao detectada. Entropia isolada. Sistema regenerado. Erro: $($_.Exception.Message) - $($_.Exception.StackTrace)"
-                try {
-                    $msg | Add-Content -Path $Script:LogPath -ErrorAction Stop
-                }
-                catch {}
-                $queue = @()
-            }
-        }
-
-        # Logica Upsert: Remove versao anterior da tarefa (se existir) para permitir atualizacao de status
-        $queue = @($queue | Where-Object { $_.id -ne $NewTask.id })
-        $queue += $NewTask
-
-        # AUTOPOIESE: Hard-limit de segurança proposto pelo Sentinela (@maverick) para mitigar degradação de I/O
-        $HardLimit = 500
-        if ($queue.Count -gt $HardLimit) {
-            $activeTasks = @($queue | Where-Object { $_.status -match '^(pending|running)$' })
-            # Ordena descrescente para manter as mais recentes
-            $inactiveTasks = @($queue | Where-Object { $_.status -match '^(completed|failed)$' }) | Sort-Object timestamp -Descending
-            
-            $availableSlots = $HardLimit - $activeTasks.Count
-            if ($availableSlots -gt 0) {
-                $queue = @($activeTasks + @($inactiveTasks | Select-Object -First $availableSlots))
-            }
-            else {
-                $queue = @($activeTasks | Select-Object -Last $HardLimit)
-            }
-            
-            $msgLimit = "[$((Get-Date).ToString('yyyy-MM-dd HH:mm:ss'))][KERNEL] Hard-limit atingido. Fila truncada para $HardLimit itens."
-            try { $msgLimit | Add-Content -Path $Script:LogPath } catch {}
-        }
-
-        # Atomic Replace
-        $wrapper = New-AgentTaskWrapper -Tasks $queue
-        $queueDir = Split-Path $Script:QueuePath
-        if (-not (Test-Path $queueDir)) { New-Item -ItemType Directory -Path $queueDir -Force | Out-Null }
-
-        $tempFile = "$($Script:QueuePath).tmp"
-        $finalJson = $wrapper | ConvertTo-Json -Depth 10 -Compress:$false
-
-        # Transacao Atomica
-        [System.IO.File]::WriteAllText($tempFile, $finalJson, [System.Text.Encoding]::UTF8)
-        Move-Item -Path $tempFile -Destination $Script:QueuePath -Force
-    }
+    throw "CRITICAL: task_executor.py nao encontrado. Impossivel utilizar o banco SQLite SOTA."
 }
 
 # -------------------------------------------------------------------
@@ -186,71 +87,13 @@ function Add-AgentTask {
 function Invoke-TaskCleanup {
     param([int]$DaysToKeep = 30, [int]$MaxActive = 50)
 
-    Invoke-WithMutex {
-        if (-not (Test-Path $Script:QueuePath)) { return }
+    $pyScript = Join-Path $PSScriptRoot "task_executor.py"
+    if (Test-Path $pyScript) {
+        $pythonCmd = "python"
+        $VenvPython = Join-Path $PSScriptRoot ".venv\Scripts\python.exe"
+        if (Test-Path $VenvPython) { $pythonCmd = $VenvPython }
         
-        $raw = ""
-        try { $raw = [System.IO.File]::ReadAllText($Script:QueuePath, [System.Text.Encoding]::UTF8) } catch { return }
-        
-        if ([string]::IsNullOrWhiteSpace($raw)) {
-            return 
-        }
-
-        $payload = $raw | ConvertFrom-Json
-        $queue = if ($null -ne $payload.tasks) { @($payload.tasks) } else { @($payload) }
-        $cutoff = (Get-Date).AddDays(-$DaysToKeep)
-
-        $toArchive = @($queue.Where({ $_.status -in @("completed", "failed") -and [datetime]$_.timestamp -lt $cutoff }))
-        $toKeep = @($queue.Where({ $toArchive.id -notcontains $_.id }))
-
-        # Priorizar a manutencao de tarefas de agentes criticos (ex: @maverick)
-        $maverickTasks = @($toKeep | Where-Object { $_.agent -eq "@maverick" })
-        $otherTasks = @($toKeep | Where-Object { $_.agent -ne "@maverick" })
-        if ($otherTasks.Count -gt $MaxActive) {
-            $overflow = $toKeep.Count - $MaxActive
-            $toArchive += $toKeep[0..($overflow - 1)]
-            $toKeep = $toKeep[$overflow..($toKeep.Count - 1)]
-        }
-
-        if ($toArchive.Count -gt 0) {
-            # Arquivo Morto
-            $archived = @()
-            if (Test-Path $Script:ArchivePath) { 
-                $archivedRaw = [System.IO.File]::ReadAllText($Script:ArchivePath, [System.Text.Encoding]::UTF8)
-                $archived = @(($archivedRaw | ConvertFrom-Json).tasks)
-            }
-    
-            $newArchiveQueue = $archived + $toArchive
-            $archiveWrapper = New-AgentTaskWrapper -Tasks $newArchiveQueue
-
-            $archiveDir = Split-Path $Script:ArchivePath
-            if (-not (Test-Path $archiveDir)) { New-Item -ItemType Directory -Path $archiveDir -Force | Out-Null }
-            $tempArchive = "$($Script:ArchivePath).tmp"
-            [System.IO.File]::WriteAllText($tempArchive, ($archiveWrapper | ConvertTo-Json -Depth 10), [System.Text.Encoding]::UTF8)
-            Move-Item -Path $tempArchive -Destination $Script:ArchivePath -Force
-
-            # Nova Fila Ativa
-            $queueWrapper = New-AgentTaskWrapper -Tasks $toKeep
-    
-            $tempQueue = "$($Script:QueuePath).tmp"
-            [System.IO.File]::WriteAllText($tempQueue, ($queueWrapper | ConvertTo-Json -Depth 10), [System.Text.Encoding]::UTF8)
-            Move-Item -Path $tempQueue -Destination $Script:QueuePath -Force
-    
-            # LOG
-            foreach ($task in $toArchive) {
-                $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-                $action = switch ($task.status) { 'completed' { '[COMPLETED]' } 'failed' { '[FAILED]' } default { '[ARCHIVED]' } }
-                try {
-                    "[$timestamp] $action $($task.id)" | Add-Content -Path $Script:LogPath -ErrorAction Stop
-                }
-                catch {}
-            }
-
-            try {
-                "[$((Get-Date).ToString('yyyy-MM-dd HH:mm:ss'))] [CLEANUP] Movidas $($toArchive.Count) tarefas. Assinaturas renovadas." | Add-Content -Path $Script:LogPath -ErrorAction Stop
-            }
-            catch {}
-        }
+        & $PythonCmd $pyScript db-cleanup $DaysToKeep | Out-Null
     }
 }
 
@@ -260,39 +103,30 @@ function Invoke-TaskCleanup {
 function Get-AgentTaskStatus {
     param([string]$Status)
 
-    Invoke-WithMutex {
-        if (-not (Test-Path $Script:QueuePath)) { return @() }
-
-        $raw = ""
-        try { $raw = [System.IO.File]::ReadAllText($Script:QueuePath, [System.Text.Encoding]::UTF8) } catch { return @() }
+    $pyScript = Join-Path $PSScriptRoot "task_executor.py"
+    if (Test-Path $pyScript) {
+        $pythonCmd = "python"
+        $VenvPython = Join-Path $PSScriptRoot ".venv\Scripts\python.exe"
+        if (Test-Path $VenvPython) { $pythonCmd = $VenvPython }
         
-        if ([string]::IsNullOrWhiteSpace($raw)) { return @() }
-
-        $payload = $raw | ConvertFrom-Json
-        $queue = if ($null -ne $payload.tasks) { @($payload.tasks) } else { @($payload) }
-
-        # Ordenar por prioridade (alta > normal > baixa)
-        $queue = $queue | Sort-Object { switch ($_.priority) { "high" { 1 }; "normal" { 2 }; "low" { 3 }; default { 2 } } }
-
-        # Log RUNNING
-        try {
-            foreach ($task in $queue | Where-Object { $_.status -eq "running" }) {
-                "[$((Get-Date).ToString('yyyy-MM-dd HH:mm:ss'))] [RUNNING] $($task.id)" | Add-Content -Path $Script:LogPath -ErrorAction Stop
+        $arg = if ([string]::IsNullOrEmpty($status)) { "all" } else { $status }
+        $jsonOutput = & $PythonCmd $pyScript db-get $arg
+        
+        if (-not [string]::IsNullOrWhiteSpace($jsonOutput)) {
+            try {
+                $queue = $jsonOutput | ConvertFrom-Json
+                return @($queue)
+            }
+            catch {
+                return @()
             }
         }
-        catch {
-            # Evita interrupção por concorrência de I/O em operação de leitura
-        }
-
-        if (-not [string]::IsNullOrEmpty($Status)) {
-            return @($queue | Where-Object { $_.status -eq $Status })
-        }
-        return @($queue)
     }
+    return @()
 }
 
 # -------------------------------------------------------------------
-# CURATOR VETO (Implementar lógica de veto do @curator)
+# CURATOR VETO (Implementar logica de veto do @curator)
 # -------------------------------------------------------------------
 function Test-CuratorVeto {
     param([Parameter(Mandatory = $true)][string]$TaskId)
@@ -327,7 +161,7 @@ function Add-CortexValidationLog {
 }
 
 # -------------------------------------------------------------------
-# LOG DE CORREÇÕES E AUDITORIA
+# LOG DE CORRECOES E AUDITORIA
 # -------------------------------------------------------------------
 function Add-CorrectionLog {
     param(

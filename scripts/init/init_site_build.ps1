@@ -4,8 +4,6 @@
 #>
 
 $ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
-$KernelPath = Join-Path $ProjectRoot "Agent-TaskManager.psm1"
-Import-Module $KernelPath -Force
 
 Write-Host "=== PROTOCOLO: MATERIALIZAÇÃO DO SITE (GREENFIELD) ===" -ForegroundColor Magenta
 
@@ -17,5 +15,13 @@ $task = [ordered]@{
     agent       = "@implementor"
 }
 
-Add-AgentTask -NewTask $task
-Write-Host "[NEXUS] Tarefa materializada e delegada ao @implementor." -ForegroundColor Green
+# SOTA Python DAL Injection
+$taskJson = $task | ConvertTo-Json -Depth 10 -Compress:$true
+$taskB64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($taskJson))
+
+$PyScript = Join-Path $ProjectRoot "task_executor.py"
+$PythonCmd = if (Test-Path "$ProjectRoot\.venv\Scripts\python.exe") { "$ProjectRoot\.venv\Scripts\python.exe" } else { "python" }
+
+$output = & $PythonCmd $PyScript db-add $taskB64
+if ($LASTEXITCODE -ne 0) { Write-Error "Falha ao enfileirar: $output" }
+else { Write-Host "[NEXUS] Tarefa materializada e delegada ao @implementor via SQLite." -ForegroundColor Green }

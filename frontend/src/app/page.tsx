@@ -7,6 +7,11 @@
 
 import Link from 'next/link';
 
+export const metadata = {
+  title: 'Poker Racional | Raphael Vitoi',
+  description: 'ICM Pos-Flop, Risk Premium e a Nova Fronteira do Edge no Poker. Masterclass, Simuladores e Teoria dos Jogos.',
+};
+
 export default function HomePage() {
   return (
     <main className="container mx-auto px-4">
@@ -119,9 +124,9 @@ export default function HomePage() {
             <p><em>&quot;Pois o que importa de verdade é pensar bem.&quot;</em></p>
 
             <div style={{ marginTop: '1.5rem', display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
-              <span style={{ background: 'rgba(99, 102, 241, 0.1)', color: 'var(--accent-primary)', padding: '0.2rem 0.8rem', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 700, border: '1px solid var(--accent-primary)' }}>Embaixador Deepsolver</span>
-              <span style={{ background: 'rgba(16, 185, 129, 0.1)', color: 'var(--accent-emerald)', padding: '0.2rem 0.8rem', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 700, border: '1px solid var(--accent-emerald)' }}>Afiliado GTO Wizard</span>
-              <span style={{ background: 'rgba(225, 29, 72, 0.1)', color: 'var(--accent-secondary)', padding: '0.2rem 0.8rem', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 700, border: '1px solid var(--accent-secondary)' }}>Criador trueICM.com</span>
+              <a href="https://deepsolver.com" target="_blank" rel="noopener" style={{ background: 'rgba(99, 102, 241, 0.1)', color: 'var(--accent-primary)', padding: '0.2rem 0.8rem', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 700, border: '1px solid var(--accent-primary)', transition: 'all 0.2s' }}>Embaixador Deepsolver</a>
+              <a href="https://gtowizard.com" target="_blank" rel="noopener" style={{ background: 'rgba(16, 185, 129, 0.1)', color: 'var(--accent-emerald)', padding: '0.2rem 0.8rem', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 700, border: '1px solid var(--accent-emerald)', transition: 'all 0.2s' }}>Afiliado GTO Wizard</a>
+              <a href="https://trueicm.com" target="_blank" rel="noopener" style={{ background: 'rgba(225, 29, 72, 0.1)', color: 'var(--accent-secondary)', padding: '0.2rem 0.8rem', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 700, border: '1px solid var(--accent-secondary)', transition: 'all 0.2s' }}>Criador trueICM.com</a>
             </div>
           </div>
         </div>
@@ -147,7 +152,7 @@ export default function HomePage() {
         <div className="hub-grid">
           <Link href="/aula-icm" className="hub-card">
             <span className="hub-icon">&#128202;</span>
-            <h3>ICM &amp; RP: A Aula</h3>
+            <h3>Geometria do Risco</h3>
             <p>Aula Magna: O Edge mudou de lugar. Entenda a geometria do risco pós-flop.</p>
             <span className="card-cta">Acessar &rarr;</span>
           </Link>
@@ -173,25 +178,11 @@ export default function HomePage() {
             <span className="card-cta">Ler &rarr;</span>
           </Link>
 
-          <Link href="/tools/icm" className="hub-card">
-            <span className="hub-icon">&#127918;</span>
-            <h3>Simulador ICM</h3>
-            <p>Calculadora Malmuth-Harville + Simulador de Cenários com Risk Premium.</p>
-            <span className="card-cta">Abrir Laboratório &rarr;</span>
-          </Link>
-
-          <Link href="/tools/masterclass" className="hub-card">
-            <span className="hub-icon">&#127891;</span>
-            <h3>Masterclass: Geometria do Risco</h3>
-            <p>6 cenários clínicos com NashSolver, quizzes interativos e diluição SPR.</p>
-            <span className="card-cta">Iniciar Masterclass &rarr;</span>
-          </Link>
-
-          <Link href="/tools/toy-games" className="hub-card">
-            <span className="hub-icon">&#127919;</span>
-            <h3>Toy Games: Predator Mode</h3>
-            <p>Cenários extremos de ICM. Sinta a impunidade de agredir quando o oponente está paralisado.</p>
-            <span className="card-cta">Entrar no Lab &rarr;</span>
+          <Link href="/tools/simulador" className="hub-card">
+            <span className="hub-icon">&#9889;</span>
+            <h3>Motor ICM</h3>
+            <p>9 cenários clínicos, calculadora Malmuth-Harville, NashSolver, quizzes, comparação e simulação por mão.</p>
+            <span className="card-cta">Abrir Motor &rarr;</span>
           </Link>
 
           <Link href="/psicologia-hs" className="hub-card">

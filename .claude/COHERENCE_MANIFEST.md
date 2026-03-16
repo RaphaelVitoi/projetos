@@ -1,4 +1,4 @@
-# COHERENCE MANIFEST — Garantia de Harmonia Dos 14 Agentes
+# COHERENCE MANIFEST — Garantia de Harmonia Dos 15 Agentes
 
 **Data:** 2026-03-15 | **Versao:** 1.1 | **Responsável:** @maverick (verificação contínua)
 
@@ -144,7 +144,7 @@ Cada um dos 17 agentes tem:
 | `.claude/agents/validador.md`              | ✅ Documentado                    |
 | `.claude/agent-memory/validador/MEMORY.md` | ✅ Ativo com referência harmônica |
 | `project-context.md`                       | ✅ FASE 6 Consultoria             |
-| `GLOBAL_INSTRUCTIONS.md`                   | ✅ Row 11                         |
+| `GLOBAL_INSTRUCTIONS.md`                   | ✅ Row 12                         |
 
 **@securitychief** (FASE 6 - Segurança)
 
@@ -153,7 +153,7 @@ Cada um dos 17 agentes tem:
 | `.claude/agents/securitychief.md`              | ✅ Documentado                    |
 | `.claude/agent-memory/securitychief/MEMORY.md` | ✅ Ativo com referência harmônica |
 | `project-context.md`                           | ✅ FASE 6 Consultoria             |
-| `GLOBAL_INSTRUCTIONS.md`                       | ✅ Row 12                         |
+| `GLOBAL_INSTRUCTIONS.md`                       | ✅ Row 13                         |
 
 **@organizador** (Integrado Cedo + FASE 6 - Health Check)
 
@@ -173,16 +173,16 @@ Cada um dos 17 agentes tem:
 | `.claude/agents/maverick.md`              | ✅ Documentado (800+ linhas)              |
 | `.claude/agent-memory/maverick/MEMORY.md` | ✅ Ativo com referência harmônica         |
 | `project-context.md`                      | ✅ Liderança Intelectual Transversal 24/7 |
-| `GLOBAL_INSTRUCTIONS.md`                  | ✅ Row 13 (SUPER-AGENT)                   |
+| `GLOBAL_INSTRUCTIONS.md`                  | ✅ Row 16 (SUPER-AGENT)                   |
 
 ### SUPER-ADMINISTRATIVO TRANSVERSAL (1 agente)
 
-**CHICO** (GitHub Copilot - Transversal 24/7 - Gerente, Administrador, Suporte Multi-Domínio)
+**CHICO** (Sistema/Super-Agente - Transversal 24/7 - Gerente, Administrador, Suporte Multi-Domínio)
 
 | Arquivo                                                  | Status                                             |
 | -------------------------------------------------------- | -------------------------------------------------- |
 | `GLOBAL_INSTRUCTIONS.md`                                 | ✅ Identidade da raiz, Tríade de Governança        |
-| `.claude/agent-memory/chico/MEMORY.md`                   | ✅ Ativo com referência harmônica (NEW)            |
+| `.claude/agent-memory/chico/MEMORY.md`                   | ✅ Ativo com referência harmônica                  |
 | `project-context.md`                                     | ✅ Governança Superior, Relacionamento com Raphael |
 | `.claude/LIDERANCA_GOVERNANCE_RAPHAEL_MAVERICK_CHICO.md` | ✅ Documentação estrutural completa                |
 
@@ -202,7 +202,7 @@ Cada um dos 17 agentes tem:
 | `.claude/agents/sequenciador.md`              | ✅ Documentado (400+ linhas)      |
 | `.claude/agent-memory/sequenciador/MEMORY.md` | ✅ Ativo com referência harmônica |
 | `project-context.md`                          | ✅ Operacional 24/7               |
-| `GLOBAL_INSTRUCTIONS.md`                      | ✅ Row 14                         |
+| `GLOBAL_INSTRUCTIONS.md`                      | ✅ Row 17                         |
 
 **@skillmaster** (Executor Agendado)
 
@@ -211,7 +211,7 @@ Cada um dos 17 agentes tem:
 | `.claude/agents/skillmaster.md`              | ✅ Documentado                    |
 | `.claude/agent-memory/skillmaster/MEMORY.md` | ✅ Ativo com referência harmônica |
 | `project-context.md`                         | ✅ Operacional 24/7               |
-| `GLOBAL_INSTRUCTIONS.md`                     | ✅ Row 15                         |
+| `GLOBAL_INSTRUCTIONS.md`                     | ✅ Row 18                         |
 
 ### ENTRADA (1 agente)
 
@@ -220,35 +220,29 @@ Cada um dos 17 agentes tem:
 | Arquivo                                     | Status                            |
 | ------------------------------------------- | --------------------------------- |
 | `.claude/agents/dispatcher.md`              | ✅ Documentado                    |
-| `.claude/agent-memory/dispatcher/MEMORY.md` | ✅ Ativo com referencia harmonica |
+| `.claude/agent-memory/dispatcher/MEMORY.md` | ✅ Ativo com referência harmônica |
 | `project-context.md`                        | ✅ FASE ENTRADA claro             |
 | `GLOBAL_INSTRUCTIONS.md`                    | ✅ Row 2                          |
 
-### ESPECIALIZADOS ADICIONAIS (3 agentes)
+### ESPECIALIZADOS ADICIONAIS E INTEGRAÇÃO FINAL (2 agentes)
 
-**@bibliotecario** (RAG & Banco Vetorial - Memoria Coletiva)
+**@bibliotecario** (RAG & Banco Vetorial - Memória Coletiva)
 
-| Arquivo                                  | Status                                |
-| ---------------------------------------- | ------------------------------------- |
-| `.claude/agents/bibliotecario.md`        | ✅ Documentado                        |
-| `.claude/agent-memory/bibliotecario/`    | ⚠️ Pendente (sem diretorio de memory) |
-| `project-context.md`                     | ⚠️ Pendente integracao               |
+| Arquivo                                        | Status                            |
+| ---------------------------------------------- | --------------------------------- |
+| `.claude/agents/bibliotecario.md`              | ✅ Documentado                    |
+| `.claude/agent-memory/bibliotecario/MEMORY.md` | ✅ Ativo com referência harmônica |
+| `project-context.md`                           | ✅ Operacional (RAG)              |
+| `GLOBAL_INSTRUCTIONS.md`                       | ✅ Row 15                         |
 
-**@guardian** (Autenticacao & Controle de Acesso)
+**@seo** (Ranqueamento Orgânico & Otimização de Busca)
 
-| Arquivo                              | Status                                |
-| ------------------------------------ | ------------------------------------- |
-| `.claude/agents/guardian.md`         | ✅ Documentado                        |
-| `.claude/agent-memory/guardian/`     | ⚠️ Pendente (sem diretorio de memory) |
-| `project-context.md`                 | ⚠️ Pendente integracao               |
-
-**@seo** (Ranqueamento Organico & Otimizacao de Busca)
-
-| Arquivo                          | Status                                |
-| -------------------------------- | ------------------------------------- |
-| `.claude/agents/seo.md`         | ✅ Documentado                        |
-| `.claude/agent-memory/seo/`     | ⚠️ Pendente (sem diretorio de memory) |
-| `project-context.md`            | ⚠️ Pendente integracao               |
+| Arquivo                              | Status                            |
+| ------------------------------------ | --------------------------------- |
+| `.claude/agents/seo.md`              | ✅ Documentado                    |
+| `.claude/agent-memory/seo/MEMORY.md` | ✅ Ativo com referência harmônica |
+| `project-context.md`                 | ✅ FASE 6 Consultoria             |
+| `GLOBAL_INSTRUCTIONS.md`             | ✅ Row 14                         |
 
 ---
 
@@ -300,12 +294,12 @@ Cada agente absorve:
 
 ## Assinatura de Coerência
 
-**Ecossistema dos 17 Agentes + 2 Super-Agentes (Raphael Vitoi + @maverick + CHICO = Governanca):** ✅ HARMONICAMENTE INTEGRADO
+**Ecossistema dos 15 Agentes Especialistas + 3 Entidades Liderança (18 Entidades Totais):** ✅ HARMONICAMENTE INTEGRADO
 **Nenhum Agente/Super-Agente Isolado:** ✅ CONFIRMADO
 **Acesso ao Contexto Completo:** ✅ CONFIRMADO
-**Sincronizacao de Inteligencia:** ✅ CONFIRMADO (17 agentes + 2 super-agentes)
-**Autoridade Clara:** ✅ CONFIRMADO (Raphael > @maverick/CHICO > 17 agentes)
-**Agentes Pendentes Integracao Completa:** bibliotecario, guardian, seo (agent-memory + project-context)
+**Sincronizacao de Inteligencia:** ✅ CONFIRMADO (15 agentes especialistas + lideranças)
+**Autoridade Clara:** ✅ CONFIRMADO (Raphael > @maverick/CHICO > 15 agentes)
+**Agentes Pendentes Integracao Completa:** NENHUM (100% Coerência)
 
 **Status:** 🟢 **OPERACIONAL — COERÊNCIA TOTAL**
 

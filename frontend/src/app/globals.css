@@ -216,36 +216,52 @@
     /* Logo */
     .logo {
         font-family: 'Montserrat', sans-serif;
-        font-weight: 800;
+        font-weight: 900;
         font-size: 1.5rem;
-        letter-spacing: -0.05em;
+        letter-spacing: -0.04em;
         text-transform: uppercase;
+        line-height: 1;
     }
 
     .logo a {
-        color: inherit;
+        color: #fff;
         text-decoration: none;
+        display: inline-flex;
+        align-items: baseline;
+        gap: 0;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.15));
+    }
+
+    .logo a:hover {
+        filter: drop-shadow(0 0 16px rgba(99, 102, 241, 0.35));
     }
 
     .logo .accent {
-        color: var(--accent-primary);
+        background: linear-gradient(135deg, #c7d2fe 0%, #818cf8 40%, #6366f1 70%, #4f46e5 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
         font-weight: 300;
+        letter-spacing: 0.02em;
+        font-style: italic;
     }
 
     /* === Hero Section (Legacy) === */
     #hero, #hero-aula {
-        padding: 8rem 0 6rem;
+        padding: 7rem 0 5rem;
         text-align: center;
         max-width: 800px;
         margin: 0 auto;
     }
 
     #hero h2, #hero-aula h2 {
-        font-size: 3.5rem;
+        font-size: clamp(2.2rem, 5vw, 3.5rem);
         margin-bottom: 1.5rem;
         background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
+        background-clip: text;
     }
 
     /* === O Vidro Perfeito (Glass Panel) === */
@@ -937,14 +953,17 @@
     /* === Textos de Assinatura e Gradients === */
     .signature-text {
         font-family: 'Great Vibes', cursive;
-        font-size: 3rem;
+        font-size: clamp(2.5rem, 5vw, 4rem);
         color: #a5b4fc;
-        background: linear-gradient(120deg, #e0e7ff 0%, #93c5fd 30%, #6366f1 70%, #4338ca 100%);
+        background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 20%, #a5b4fc 40%, #818cf8 60%, #6366f1 80%, #4338ca 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        transform: rotate(-3deg);
+        background-clip: text;
+        transform: rotate(-2deg);
         display: inline-block;
-        text-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+        filter: drop-shadow(0 4px 20px rgba(99, 102, 241, 0.35));
+        letter-spacing: 0.03em;
+        line-height: 1.2;
     }
 
     .gradient-text {
@@ -1017,6 +1036,19 @@
     .social-icon:hover:has(.fa-youtube) { border-color: #FF0000; color: #FF0000; }
 
     .social-icon:hover:has(.fa-instagram) { border-color: #E1306C; color: #E1306C; }
+
+    /* Badge Links (Embaixador, Afiliado, etc.) */
+    .author-section a[href],
+    article a[href^="https://deepsolver"],
+    article a[href^="https://gtowizard"],
+    article a[href^="https://trueicm"] {
+        transition: all 0.2s ease;
+    }
+
+    .author-section a[href]:hover {
+        transform: translateY(-1px);
+        filter: brightness(1.2);
+    }
 
     /* === Author Section (Landing Page) === */
     .author-section {
@@ -1464,6 +1496,10 @@
 
     .arsenal-grid {
         grid-template-columns: 1fr !important;
+    }
+
+    .arsenal-grid a {
+        width: 100%;
     }
 
     .confronto-grid {

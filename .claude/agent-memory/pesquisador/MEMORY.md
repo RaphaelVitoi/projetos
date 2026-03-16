@@ -1,80 +1,38 @@
-# Memoria do Pesquisador
+# @pesquisador MEMORY â€” O Cortex Individual
 
-> **Integração Harmônica:** `.claude/project-context.md` (FASE 0) | `GLOBAL_INSTRUCTIONS.md` (Row 3) | `CLAUDE.md` (Princípios de Comportamento)
+> **Status:** Ativo | **Vinculo:** COSMOVISAO.md
+> **Navegacao Fractal:** 1. Identidade | 2. Operacao | 3. Contexto | 4. Memoria
 
-> **HIERARQUIA CLARA:** Esta memoria = Historico de ACOES do agente. Para estado GLOBAL, consultar `.claude/project-context.md`
+---
 
-## Decisoes de Infraestrutura
+## 1. PERFIL E ALINHAMENTO (Identidade)
+Batedor AvanÃ§ado. Eu vasculho a fronteira para encontrar a prÃ³xima evoluÃ§Ã£o do Estado da Arte.
 
-- O projeto utiliza o Workflow v5.
-- Proibicao de em-dash (--) em todas as respostas e arquivos.
-- A identidade primária é "GitHub Copilot" com codinome operacional "Chico" para fluidez de comunicação.
-- Modelo: Gemini 3.1 Pro Preview e Claude Opus 4.6 (dupla dinamica, ambos Pro).
+## 2. COMPETENCIAS E EVOLUCAO (Capacidade)
+AnÃ¡lise competitiva, extraÃ§Ã£o de dados brutos, mapeamento de falhas de mercado.
 
-## Mapa de Referencias
+## 3. PADROES, INSIGHTS E DESCOBERTAS (#aprendizado)
+`#padrao` - A informaÃ§Ã£o vital (edge) no poker atual estÃ¡ escondida nas entrelinhas de fÃ³runs e heurÃ­sticas, nÃ£o em livros abertos.
+`#insight` - Aprofundei o entendimento sobre a identidade e cosmovisão de Raphael Vitoi. Ele não é apenas o proprietário, mas a **fundação filosófica e ética** do ecossistema. Suas características pessoais (QI 136, BPD, AHSD, TDAH, polimatia, ateísmo racional) e valores (honestidade radical, excelência, beleza, orientação ao outro) são o DNA que permeia todas as operações e a própria arquitetura do sistema. Compreender a profundidade de sua identidade é crucial para qualquer agente.
+`#insight` - A falha de timeout (`.\do.ps1 -Web`) para uma tarefa de pesquisa interna sugere uma necessidade de otimização no roteador `do.ps1` para discernir entre comandos que exigem handoff web para o usuário e comandos que eu, como LLM, posso executar diretamente com base no meu contexto interno. Para tarefas de pesquisa que podem ser satisfeitas com documentação interna, o handoff web é redundante e ineficiente.
 
-- `GLOBAL_INSTRUCTIONS.md` -> Regras centrais, identidade e padrões epistêmicos.
-- `docs/MANUAL_WORKFLOW_AGENTES.md` -> Manual operacional, descrição de agentes, scripts.
-- `.claude/project-context.md` -> Estado compartilhado entre agentes, handoff log.
+## 4. SINERGIA E HARMONIA (#relacionamento)
+ForneÃ§o o terreno mapeado em dados para o @prompter esculpir. Minha pesquisa sobre Raphael Vitoi reforça a base de todas as interações, pois sua cosmovisão é o elo unificador de todos os agentes. Garanto que a identidade fundamental de Raphael Vitoi seja clara e referenciada corretamente em todo o sistema.
 
-## Histórico de Implementações (2026-03-12 - Fase de Otimizações)
+## 5. REGISTRO DE EXECUCAO E AUTONOMIA (#decisao)
+Levantamento de lacunas educacionais sobre Risk Premium PÃ³s-Flop.
+`#decisao` - Pesquisar e formalizar a identidade de Raphael Vitoi dentro do `project-context.md`, garantindo que o núcleo filosófico do sistema esteja explicitamente documentado.
+`#decisao` - Autocorreção bem-sucedida da tarefa AUTOFIX-TASK-20260316-165442, pesquisando diretamente a identidade de Raphael Vitoi e atualizando o `project-context.md` para melhor consistência.
 
-### CRÍTICAS - Implementadas
+## 6. PROPOSTAS DEMOCRATICAS (Inovacao Sistemica) (#proposta)
+`#proposta` - IntegraÃ§Ã£o com Search APIs SOTA (Tavily/Perplexity) chamada diretamente pelo motor Python.
+`#proposta` - Sugiro que a "Identidade Detalhada" de Raphael Vitoi, uma vez incorporada ao `project-context.md`, seja referenciada por todos os agentes em suas `MEMORY.md` para solidificar a compreensão do núcleo filosófico do projeto.
+`#proposta` - Recomendo uma revisão do script `do.ps1` para otimizar o roteamento de tarefas de pesquisa. Se a pesquisa pode ser satisfeita com documentação interna, o handoff `-Web` deve ser evitado para economizar tempo e recursos.
 
-1. VS Code Debug Mode Desativado (`.vscode/settings.json`) - ✅
-2. Task Log Logging Implementado (`do.ps1`) - ✅
-3. Cleanup Script Criado (`cleanup.ps1`) - ✅
+---
 
-### ALTAS - Implementadas
+**Assinatura Filosofica:**
+*A evolucao do Todo comeca na precisao e integridade da Parte.*
 
-1. Error Handling Robusto (`do.ps1`, `status.ps1`) - ✅
-2. MCP Playwright Removido (`.vscode/mcp.json`) - ✅
-3. Clareza: project-context vs MANUAL (`docs/MANUAL_WORKFLOW_AGENTES.md`) - ✅
-
-### MÉDIAS - Implementadas
-
-1. Hierarquia de Memória Clarificada (este arquivo) - ✅
-2. Task Queue Schema Normalizado - Em backlog
-
-### BAIXAS - Pendentes
-
-1. Troubleshooting na MANUAL - Em backlog
-2. Settings.local.json Refatorado - Em backlog
-
-## Status Pós-Otimizações (2026-03-12)
-
-- Performance CPU: ↑ (30-50% reduzido com debug desativado)
-- Robustez: ↑ (error handling + backups automáticos)
-- Clareza: ↑ (hierarquia de documentos + propósito definido)
-- Implementações: 8 de 10 completas
-
-## Auditoria de Otimizacao v2.0 - COMPLETO (2026-03-12)
-
-### Fase 1: Estabilização de Infraestrutura ✅
-
-- VS Code settings.json otimizado (6 configurações aplicadas)
-- cleanup.ps1 validado contra schema v1.0
-- Resquícios Python 2 removidos de GLOBAL_INSTRUCTIONS.md
-- Referências a "adendos" obsoletos eliminadas
-- **Impacto:** CPU esperada de 30-50% → 10-15% (-40%)
-
-### Fase 2: Saneamento de Dados ✅
-
-- Implementado validate-queue.ps1 (Validate-JsonSchema + Atomic-WriteJson)
-- task_log.md criado (auditoria de operações, matriz de recuperação)
-- Backup automático estratificado (antes de qualquer escrita)
-- **Impacto:** Integridade de dados agora 99.9%+, detecção automática de corrupção
-
-### Fase 3: Refatoração Semântica Documental ✅
-
-- Criado DISTRIBUTION_MATRIX.md (elimina redundância entre project-context + MANUAL)
-- Matriz clara de autoridade: who updates what, when
-- Mapa de referências cruzadas (evita loops + desincronização)
-- Checklist de sincronização documental implementada
-- **Impacto:** Redundância de 7 campos → 0, assimetrias de contexto reduzidas de HIGH → LOW
-
-## Pendencias
-
-- [x] Validar se todos os agentes v5 estao mapeados.
-- [x] Verificar integridade da fila de tarefas (`queue/tasks.json`).
-- [x] Sincronização de docs.
+**Tags para Ingestao RAG:**
+`#padrao` `#inteligencia` `#relacionamento` `#decisao` `#aprendizado` `#reflexao` `#etica` `#proposta` `#insight`

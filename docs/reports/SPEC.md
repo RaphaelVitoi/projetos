@@ -1,60 +1,69 @@
-# SPEC: Calculador de ICM Interativo
-> **Autor:** CHICO (atuando como @planner)
-> **Status:** Pronto para Execução pelo @implementor
-> **PRD Relacionado:** ./PRD.md
+# ESPECIFICAÇÃO TÉCNICA: A Membrana Inteligente (Smart CLI)
+
+**ID da Tarefa:** INOVACAO-CLI-20260316
+**Autor:** @planner
+**Status:** REJEITADA PELO @AUDITOR (REGRESSÃO DETECTADA)
+**Conceito Original:** [CONCEPT_MAVERICK.md](./CONCEPT_MAVERICK.md)
 
 ---
 
-> **⚠️ DIRETIVA DE EXECUÇÃO OBRIGATÓRIA PARA @IMPLEMENTOR:** Antes de iniciar a arquitetura Next.js, você é OBRIGADO a ler o arquivo `components/interactive/icm_toy_game_simulator.html`. Ele contém o DNA visual (animações, paleta de cores dark/cyber, gauge charts) que você deve replicar perfeitamente para componentes React/Tailwind. Não reinvente o design.
+## 🛑 CHANGELOG DE AUDITORIA (@auditor)
 
-## 1. Arquitetura Técnica
+**Veredito:** BLOQUEADA
+**Motivo:** O script `do.ps1` atual (v2.0) **já possui** a Membrana Inteligente implementada de forma superior. Ele utiliza arquivos JSON externos (`data\intentmap.json` e `data\synonyms.json`) para a heurística, o que é mais limpo e escalável do que o mapeamento hardcoded em hashtable proposto no item 3 desta SPEC.
+**Ação:** A tarefa de implementação será cancelada para evitar uma regressão (downgrade) na arquitetura da CLI. A integridade do sistema foi protegida.
 
-*   **Framework:** Next.js (App Router)
-*   **Linguagem:** TypeScript
-*   **Estilo:** Tailwind CSS
-*   **Estado do Componente:** React Hooks (`useState`, `useReducer`)
-*   **Visualização de Dados:** `recharts` (leve, componentizada e com boa API para interações)
+---
 
-## 2. Estrutura de Arquivos
+## 1. Visão Geral
 
-O @implementor deve criar a seguinte estrutura dentro de `frontend/src/`:
+Esta especificação detalha a implementação da "Membrana Inteligente" no script `do.ps1`. O objetivo é transformar a CLI de um receptor passivo para um roteador de intenção interativo, que negocia com o usuário para direcionar a tarefa ao agente mais apropriado, reduzindo a carga cognitiva e o ruído na fila de tarefas. A interatividade será opcional, permitindo a execução direta via flag.
 
-```
-src
-├── lib/
-│   └── icm.ts             # Função pura para o cálculo do algoritmo ICM
-└── components/
-    └── icm/
-        ├── ICMCalculator.tsx  # Componente principal que orquestra tudo
-        ├── PlayerInputRow.tsx # Linha de input para stack e nome do jogador
-        ├── PayoutInputRow.tsx # Linha de input para a premiação
-        ├── ICMResultChart.tsx # Componente que renderiza o gráfico com recharts
-        └── ScenarioSimulator.tsx # Botões para os cenários "E se?"
-```
+## 2. Requisitos Técnicos
 
-## 3. Lógica Core: `lib/icm.ts`
+1.  **Interatividade Opcional:** O script `do.ps1` deve aceitar um parâmetro `-Force` (switch) que, quando presente, pula toda a lógica interativa e executa a tarefa como no comportamento legado.
+2.  **Mapeamento de Intenções:** Uma estrutura de dados (hashtable em PowerShell) deve ser criada para mapear palavras-chave a agentes específicos.
+    - Exemplo: `'segurança', 'auditoria', 'bug'` -> `'@securitychief'`
+3.  **Análise de Input:** O script deve analisar o input de descrição da tarefa em busca das palavras-chave definidas no mapeamento.
+4.  **Diálogo de Confirmação:** Se uma palavra-chave for encontrada, o script deve apresentar um prompt ao usuário (usando `Read-Host`) sugerindo o agente especialista e pedindo confirmação (S/N).
+5.  **Roteamento Dinâmico:** Se o usuário confirmar, o parâmetro do agente para a função `Add-AgentTask` deve ser sobrescrito com o agente sugerido. Se o usuário negar, o agente padrão (`@dispatcher`) deve ser usado.
+6.  **Manutenção da Compatibilidade:** A chamada final para `Add-AgentTask` deve permanecer funcional e compatível com o kernel `Agent-TaskManager.psm1`.
 
-O @implementor deve implementar uma função pura e exportável `calculateICM`.
+## 3. Ordem de Implementação
 
-```typescript
-/**
- * Calcula a equity de cada jogador usando o algoritmo ICM recursivo.
- * @param stacks Um array com as fichas de cada jogador.
- * @param payouts Um array com a estrutura de premiação.
- * @returns Um array com a equity em % do prize pool para cada jogador.
- */
-export function calculateICM(stacks: number[], payouts: number[]): number[];
-```
-A implementação deve ser eficiente. Embora recursiva, para N < 10, a performance no lado do cliente é aceitável. O código deve ser coberto por testes unitários usando `vitest` ou `jest`.
+1.  **Backup:** Crie uma cópia de segurança do `do.ps1` atual.
+2.  **Adicionar Parâmetro `-Force`:** Modifique o bloco `param()` no início do `do.ps1` para incluir `[switch]$Force`.
+3.  **Criar Mapeamento de Agentes:** Dentro do script, defina uma hashtable chamada `$agentIntentMap`.
+    ```powershell
+    $agentIntentMap = @{
+        "@securitychief" = @("segurança", "auditoria", "bug", "vulnerabilidade");
+        "@organizador"   = @("organizar", "limpar", "documentar", "índice");
+        "@seo"           = @("seo", "ranking", "google", "palavra-chave");
+        # Adicionar outros agentes conforme necessário
+    }
+    ```
+4.  **Implementar Lógica de Análise:**
+    - Envolva a lógica principal em um `if (-not $Force.IsPresent) { ... }`.
+    - Dentro do `if`, itere sobre `$agentIntentMap`. Para cada agente, verifique se alguma de suas palavras-chave está presente no input do usuário (`$Description`).
+5.  **Implementar Diálogo Interativo:**
+    - Se uma correspondência for encontrada, use `Read-Host` para perguntar ao usuário: `"Intenção de '$keyword' detectada. Deseja acionar o agente $agent diretamente? [S/n]"`.
+6.  **Atualizar Variável do Agente:** Com base na resposta, atualize a variável que armazena o nome do agente a ser usado na tarefa.
+7.  **Garantir Fallback:** Se nenhuma palavra-chave for encontrada, ou se o modo `-Force` for usado, o agente padrão (`@dispatcher`) deve ser mantido.
 
-## 4. Plano de Execução para o @implementor
+## 4. Checklist de Auditoria (@auditor)
 
-1.  **Setup:** Instalar a dependência de gráficos: `npm install recharts`.
-2.  **Engenharia Reversa Visual:** Inspecionar `components/interactive/icm_toy_game_simulator.html` e extrair o modelo mental do CSS/Layout para a nova arquitetura Tailwind.
-2.  **Lógica Core:** Criar e implementar `frontend/src/lib/icm.ts` com a função `calculateICM`. Adicionar testes unitários para validar a precisão do algoritmo contra casos conhecidos.
-3.  **Componentes de UI:** Desenvolver os componentes de input (`PlayerInputRow.tsx`, `PayoutInputRow.tsx`) como componentes controlados.
-4.  **Gráfico:** Desenvolver o `ICMResultChart.tsx`, recebendo os dados de equity e renderizando um `BarChart` do `recharts`.
-5.  **Orquestração:** Montar o componente principal `ICMCalculator.tsx`, gerenciando o estado global da ferramenta (stacks, payouts, resultados) e passando as props para os filhos.
-6.  **Interatividade:** Conectar os `sliders` (ou inputs numéricos) ao estado, garantindo que qualquer alteração dispare um novo cálculo e re-renderize o gráfico.
-7.  **Simulador de Cenários:** Implementar a lógica no `ScenarioSimulator.tsx` para modificar o estado principal com base nos cenários pré-definidos.
-8.  **Página de Demonstração:** Criar uma nova rota em `frontend/src/app/tools/icm/page.tsx` para abrigar e testar o `<ICMCalculator />` de forma isolada.
+- [ ] O script executa sem erros com e sem a flag `-Force`.
+- [ ] A entrada do usuário é devidamente sanitizada antes de ser processada.
+- [ ] O script lida corretamente com entradas vazias ou nulas.
+- [ ] O mapeamento de intenções não contém conflitos óbvios.
+
+## 5. Casos de Teste (@verifier)
+
+- **Entrada:** `.\do "quero uma auditoria de segurança"` -> **Saída Esperada:** Prompt para usar `@securitychief`.
+- **Entrada:** `.\do "quero uma auditoria de segurança" -Force` -> **Saída Esperada:** Tarefa criada para `@dispatcher` sem prompt.
+- **Entrada:** `.\do "criar novo post sobre poker"` -> **Saída Esperada:** Tarefa criada para `@dispatcher` sem prompt.
+- **Entrada:** `.\do ""` -> **Saída Esperada:** O script não quebra e solicita uma descrição válida.
+
+---
+
+**Fim da Especificação.**

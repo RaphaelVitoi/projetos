@@ -12,21 +12,21 @@
 
 ### Tier 1: DECISÕES ESTRUTURAIS (project-context.md)
 
-**Autoridade:** Único - apenas este documento
+**Autoridade:** Exclusiva do @organizador
 
-| Tópico                     | Localização          | Atualizado Por            | Frequência                            |
-| -------------------------- | -------------------- | ------------------------- | ------------------------------------- |
-| Domínio do Projeto         | `project-context.md` | @pesquisador              | Quando domínio muda                   |
-| Público-alvo               | `project-context.md` | @pesquisador              | Quando alvo muda                      |
-| Fontes Autorizadas         | `project-context.md` | @pesquisador              | Quando novas referências confirmadas  |
-| Terminologia Confirmada    | `project-context.md` | @pesquisador              | Quando termos adicionados/corrigidos  |
-| Decisões Tomadas           | `project-context.md` | Todos agentes             | Após cada decisão confirmada          |
-| Estado Atual da Codebase   | `project-context.md` | Último agente na pipeline | Ao final de cada executa              |
-| Contexto Comportamental    | `project-context.md` | @pesquisador              | Apenas quando mudam regras do usuario |
-| Agent-Memory System Status | `project-context.md` | @skillmaster              | Hourly (sync automático)              |
-| Handoff Log                | `project-context.md` | Todos agentes             | Após cada handoff                     |
+| Tópico                     | Localização          | Atualizado Por | Frequência                            |
+| -------------------------- | -------------------- | -------------- | ------------------------------------- |
+| Domínio do Projeto         | `project-context.md` | @organizador   | Quando domínio muda                   |
+| Público-alvo               | `project-context.md` | @organizador   | Quando alvo muda                      |
+| Fontes Autorizadas         | `project-context.md` | @organizador   | Quando novas referências confirmadas  |
+| Terminologia Confirmada    | `project-context.md` | @organizador   | Quando termos adicionados/corrigidos  |
+| Decisões Tomadas           | `project-context.md` | @organizador   | Através de rotinas de sincronia       |
+| Estado Atual da Codebase   | `project-context.md` | @organizador   | Através de rotinas de sincronia       |
+| Contexto Comportamental    | `project-context.md` | @organizador   | Apenas quando mudam regras do usuario |
+| Agent-Memory System Status | `project-context.md` | @organizador   | Sync consolidado                      |
+| Handoff Log                | `project-context.md` | @organizador   | Através de rotinas de sincronia       |
 
-**Regra:** Qualquer mudança nestes tópicos DEVE ser refletida APENAS aqui. Referências em outros docs apontam para este arquivo.
+**Regra:** Responsabilidade DIFUSA anula responsabilidade. A edição direta do `project-context.md` é VETADA a qualquer outro agente. Se outro agente precisar atualizar o contexto, DEVE delegar a informação ao `@organizador`.
 
 ---
 
@@ -34,8 +34,8 @@
 
 **Autoridade:** Único - apenas este documento
 
-| Tópico                 | Localização                  | Atualizado Por                    | Frequência                           |
-| ---------------------- | ---------------------------- | --------------------------------- | ------------------------------------ |
+| Tópico                 | Localização              | Atualizado Por                    | Frequência                           |
+| ---------------------- | ------------------------ | --------------------------------- | ------------------------------------ |
 | Descrição de Agentes   | `GLOBAL_INSTRUCTIONS.md` | @pesquisador (quando novo agente) | Quando arquitetura muda              |
 | Sequência de Pipeline  | `GLOBAL_INSTRUCTIONS.md` | @planner (quando fluxo muda)      | Quando workflow evolui               |
 | Sintaxe de Scripts     | `GLOBAL_INSTRUCTIONS.md` | @implementor (quando script muda) | Quando comando/opção adicionada      |
@@ -68,7 +68,7 @@
 
 ### Cenário 1: Novo Agente Adicionado
 
-1. **project-context.md:** Agente adicionado ao "Estado Atual" e "Handoff Log"
+1. **project-context.md:** @organizador é acionado para adicionar o agente ao "Estado Atual"
 2. **GLOBAL_INSTRUCTIONS.md:** Descrição do agente (o quê faz, quando acionado, output)
 3. **task_log.md:** Entrada criada (se agente tiver operações agendadas)
 4. `.claude/agents/<agente>.md`: Spec completa (se agente for novo)
@@ -79,7 +79,7 @@
 
 1. **GLOBAL_INSTRUCTIONS.md:** Sintaxe nova documentada (como estrutura muda)
 2. **task_log.md:** Migração registrada (antes/depois, data)
-3. **project-context.md:** Estado Atual atualizado (se afeta interpretação do projeto)
+3. **project-context.md:** @organizador atualiza o Estado Atual (se afeta arquitetura)
 4. **Agent-TaskManager.psm1:** Validacao de schema atualizada (Kernel v3.0)
 
 ---
@@ -89,13 +89,13 @@
 1. **task_log.md:** Incidente registrado (what, when, how detected)
 2. **MEMORY.md:** Agente afetado registra lição aprendida
 3. **GLOBAL_INSTRUCTIONS.md:** SE é padrão recorrente, adiciona à seção de troubleshooting
-4. **project-context.md:** Apenas se afeta decisão arquitetônica geral
+4. **project-context.md:** @organizador é acionado apenas se afeta decisão arquitetônica geral
 
 ---
 
 ### Cenário 4: Conclusão de Feature/Tarefa
 
-1. **project-context.md:** Handoff Log atualizado (quem fez, status, data)
+1. **project-context.md:** Delega-se a atualização de estado ao @organizador periodicamente
 2. **task_log.md:** Tarefa marcada como COMPLETE (com timestamp)
 3. **MEMORY.md:** Agente documenta ações e padrões observados
 4. **GLOBAL_INSTRUCTIONS.md:** Apenas se mudou como usar o sistema

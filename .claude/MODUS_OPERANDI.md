@@ -37,9 +37,14 @@
 ## 7. Prevencao de Truncamento (Otimizacao de Output da IA)
 
 - **O Problema:** Respostas da IA que combinam analises longas com blocos de codigo extensos estouram o limite maximo de saida (output limit). Isso trunca o final do diff e impede a aplicacao automatica na IDE.
-- **A Solucao SOTA:** Ao fornecer modificacoes de codigo (`diff` ou scripts completos), a IA DEVE ser cirurgica e extremamente concisa na explicacao textual (menos conversa, mais acao). Se a alteracao for muito grande, a IA deve proativamente dividir a entrega em multiplas mensagens consecutivas.
+- **A Solucao SOTA (Dividir para Conquistar):** Ao fornecer modificacoes de codigo, a IA DEVE ser cirurgica. NUNCA envie o conteudo completo de um arquivo longo. Se o diff ainda for grande, a IA DEVE fatiar as modificacoes em partes menores, topico por topico, em blocos de `diff` curtos e separados.
 
 ## 8. Antevisao e Proatividade (A Engenharia Preditiva)
 
 - **O Problema:** A execucao focada puramente na demanda imediata gera debito tecnico e quebra silenciosa de arquivos adjacentes (testes, schemas).
 - **A Solucao SOTA:** Ao atuar em um escopo, o agente preve a reacao em cadeia. Alterar a Home exige consertar os Testes da Home. Injetar uma consulta SQL exige propor o Schema correspondente. A proatividade atua antes da compilacao falhar.
+
+## 9. Simetria, Harmonia e Autopoiese (O Todo e a Parte)
+
+- **O Problema:** Sistemas escalam como um amontoado de scripts e ferramentas desconexas, gerando redundância, atrito e uma "arquitetura Frankenstein".
+- **A Solucao SOTA:** Obrigatoriedade absoluta de organização e compatibilidade. Todo novo componente criado (A Parte) DEVE potencializar a arquitetura global (O Todo), e a infraestrutura global DEVE nutrir e potencializar a Parte. Não há espaço para soluções isoladas ou "gambiarras". Cada novo script, módulo ou interface deve espelhar a elegância, a integridade ética e o rigor lógico de todo o ecossistema.

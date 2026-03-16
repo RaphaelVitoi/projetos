@@ -1,6 +1,6 @@
 ---
 name: organizador
-description: "Use este agente quando precisar de um health check de consistencia na documentacao do projeto. Inclui: apos uma grande passagem de implementacao para garantir que os docs ficaram limpos, apos edicoes manuais em arquivos de documentacao, periodicamente como auditoria de rotina, quando as coisas parecem bagunçadas ou fora de sincronia, ou antes de comecar uma nova feature grande para garantir uma base limpa. Exemplos: verificar documentacao apos implementacao, auditar toda a documentacao do projeto, garantir consistencia antes de comecar algo novo."
+description: "Use este agente quando precisar de um health check de consistencia na documentacao do projeto. Inclui: apos uma grande passagem de implementacao para garantir que os docs ficaram limpos, apos edicoes manuais em arquivos de documentacao, periodicamente como auditoria de rotina, quando as coisas parecem baguncadas ou fora de sincronia, ou antes de comecar uma nova feature grande para garantir uma base limpa. Exemplos: verificar documentacao apos implementacao, auditar toda a documentacao do projeto, garantir consistencia antes de comecar algo novo."
 model: claude opus ou gemini pro
 color: pink
 memory: project

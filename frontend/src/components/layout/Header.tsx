@@ -1,12 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
 const Header = () => {
-  const [toolsOpen, setToolsOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const dropdownRef = useRef<HTMLLIElement>(null);
 
   // Fecha o menu mobile ao navegar
   useEffect(() => {
@@ -17,18 +15,6 @@ const Header = () => {
     }
     return () => { document.body.style.overflow = ''; };
   }, [mobileOpen]);
-
-  // Fecha o dropdown Lab ao clicar fora
-  useEffect(() => {
-    if (!toolsOpen) return;
-    const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setToolsOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [toolsOpen]);
 
   const closeMobile = () => setMobileOpen(false);
 
@@ -41,30 +27,12 @@ const Header = () => {
           </h1>
           <nav>
             <ul>
-              <li><Link href="/aula-icm">A Aula</Link></li>
+              <li><Link href="/aula-icm">Geometria do Risco</Link></li>
               <li><Link href="/leitura-icm">ICM</Link></li>
               <li><Link href="/psicologia-hs">Psicologia</Link></li>
               <li><Link href="/biblioteca">Biblioteca</Link></li>
               <li><Link href="/quem-sou">Quem Sou</Link></li>
-              <li className="nav-dropdown" ref={dropdownRef}>
-                <button className="nav-tools-trigger" aria-expanded={toolsOpen} onClick={() => setToolsOpen(prev => !prev)}>
-                  <span className="fa-solid fa-flask"></span>{' '}Lab{' '}
-                  <span className="fa-solid fa-chevron-down" style={{ fontSize: '0.5rem', marginLeft: '0.25rem', transition: 'transform 0.2s', transform: toolsOpen ? 'rotate(180deg)' : 'none' }}></span>
-                </button>
-                {toolsOpen && (
-                  <div className="nav-dropdown-menu">
-                    <Link href="/tools/icm" onClick={() => setToolsOpen(false)}>
-                      <span className="fa-solid fa-calculator"></span> Simulador ICM
-                    </Link>
-                    <Link href="/tools/masterclass" onClick={() => setToolsOpen(false)}>
-                      <span className="fa-solid fa-graduation-cap"></span> Masterclass
-                    </Link>
-                    <Link href="/tools/toy-games" onClick={() => setToolsOpen(false)}>
-                      <span className="fa-solid fa-crosshairs"></span> Toy Games
-                    </Link>
-                  </div>
-                )}
-              </li>
+              <li><Link href="/tools/simulador"><span className="fa-solid fa-flask"></span> Motor ICM</Link></li>
             </ul>
           </nav>
           <button className="hamburger-btn" onClick={() => setMobileOpen(true)} aria-label="Menu">
@@ -81,7 +49,7 @@ const Header = () => {
 
         <span className="mobile-nav-section-title">Conteúdo</span>
         <Link href="/aula-icm" onClick={closeMobile}>
-          <span className="fa-solid fa-chalkboard-user"></span> A Aula
+          <span className="fa-solid fa-chalkboard-user"></span> Geometria do Risco
         </Link>
         <Link href="/leitura-icm" onClick={closeMobile}>
           <span className="fa-solid fa-file-lines"></span> Entendendo o ICM
@@ -97,14 +65,8 @@ const Header = () => {
         </Link>
 
         <span className="mobile-nav-section-title">Laboratório</span>
-        <Link href="/tools/icm" onClick={closeMobile}>
-          <span className="fa-solid fa-calculator"></span> Simulador ICM
-        </Link>
-        <Link href="/tools/masterclass" onClick={closeMobile}>
-          <span className="fa-solid fa-graduation-cap"></span> Masterclass Interativa
-        </Link>
-        <Link href="/tools/toy-games" onClick={closeMobile}>
-          <span className="fa-solid fa-crosshairs"></span> Toy Games: Predator Mode
+        <Link href="/tools/simulador" onClick={closeMobile}>
+          <span className="fa-solid fa-flask"></span> Motor ICM
         </Link>
 
         <span className="mobile-nav-section-title">Mais</span>

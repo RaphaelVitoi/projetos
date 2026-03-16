@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Injeta o Épico do Projeto Poker para o @dispatcher fatiar.
+Injeta o Epico do Projeto Poker para o @dispatcher fatiar.
 #>
 
 $ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
@@ -11,7 +11,7 @@ Write-Host "=== PROTOCOLO: EPIC POKER FRONT-END ===" -ForegroundColor Magenta
 
 $task = [ordered]@{
     id          = "EPIC-POKER-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
-    description = "Temos um épico: Reescrever o front-end do projeto Poker. Precisamos separar o layout em componentes reutilizáveis, criar uma nova interface imersiva para a aula de ICM e validar o aspecto responsivo. Analise este épico e enfileire as tarefas técnicas em ordem cronológica para os agentes apropriados (@planner, @implementor, etc)."
+    description = "Temos um epico: Reescrever o front-end do projeto Poker. Precisamos separar o layout em componentes reutilizaveis, criar uma nova interface imersiva para a aula de ICM e validar o aspecto responsivo. Analise este epico e enfileire as tarefas tecnicas em ordem cronologica para os agentes apropriados (@planner, @implementor, etc)."
     status      = "pending"
     timestamp   = (Get-Date -Format "o")
     agent       = "@dispatcher"
@@ -19,4 +19,4 @@ $task = [ordered]@{
 
 Add-AgentTask -NewTask $task
 
-Write-Host "[NEXUS] Épico injetado. O @dispatcher agora assumirá a triagem e delegação." -ForegroundColor Green
+Write-Host "[NEXUS] Epico injetado. O @dispatcher agora assumira a triagem e delegacao." -ForegroundColor Green

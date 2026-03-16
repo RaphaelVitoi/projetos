@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Protocolo de Analise Psicologica para Mesas Finais de Poker. Fenomenologia da incerteza, controle emocional e tomada de decisao sob pressao ICM.">
+    <title>Psicologia High Stakes | Raphael Vitoi</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="canonical" href="https://raphaelvitoi.github.io/psicologia-hs.html">
+    <link rel="stylesheet" href="style.css">
+    <script src="analytics.js" defer></script>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <h1><a href="index.html">Raphael Vitoi</a> <span style="font-weight: normal; opacity: 0.7; font-size: 0.9em;">/ Psicologia High Stakes</span></h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">← Voltar ao Hub</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="hero-aula">
+            <h2>Psicologia High Stakes</h2>
+            <p><strong>Analisando o Protocolo de Análise Textual de Poker Complexo.</strong></p>
+        </section>
+
+        <section>
+            <article>
+                <span style="display: block; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--accent-primary); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1rem;">Protocolo de Análise Textual Complexa</span>
+                <h2 style="text-align: center; font-size: 2rem; background: linear-gradient(to right, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 0;">A Fenomenologia da Incerteza e a Transubstanciação do Valor</h2>
+                <p style="text-align: center; font-style: italic; opacity: 0.8; margin-bottom: 3rem;">Uma Exegese Crítica das Heurísticas de ICM e da Arquitetura de Solvers em Ambientes de Informação Imperfeita</p>
+
+                <p>A ontogênese da estratégia contemporânea no âmbito dos torneios de poker multimesas (MTT) não pode ser dissociada de uma reavaliação radical da teleologia do risco, onde o valor nominal das fichas é subsumido por uma métrica de valor monetário extrínseco, definida pelo Independent Chip Model (ICM). Esta análise propõe uma investigação hermenêutica das estruturas de decisão pós-flop, contrastando as implementações algorítmicas do GTO Wizard e do Hold'em Resources Calculator (HRC), ao mesmo tempo em que integra as dimensões psicológicas e filosóficas da pedagogia de Raphael Vitoi, especificamente a sua obra "Homem Bomba".</p>
+
+                <h3>A Divergência Arquitetônica: GTO Wizard vs HRC</h3>
+                <p>A avaliação das árvores de decisão pós-flop revela uma dicotomia fundamental na forma como o GTO Wizard e o HRC processam os inputs de dados. Embora as estruturas pré-flop apresentem uma isomorfia superficial, a divergência operacional manifesta-se na gestão do <strong>"Bunching Effect"</strong>.</p>
+                
+                <p>O sistema HRC pós-flop executa uma análise recursiva que incorpora o impacto das cartas descartadas pelos jogadores que desistiram da mão pré-flop, reconhecendo que a ausência dessas mãos altera a densidade probabilística do baralho remanescente. Em contrapartida, o GTO Wizard restringe a sua análise apenas aos dois competidores envolvidos na ação.</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Variável Analítica</th>
+                            <th>GTO Wizard (Foco ChipEV)</th>
+                            <th>HRC (Foco ICMev)</th>
+                            <th>Implicação Estratégica</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Bunching Effect</strong></td>
+                            <td>Restrito aos ativos</td>
+                            <td>Inclui ranges foldados</td>
+                            <td>Recalibração da densidade de cartas.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Análise de Stacks</strong></td>
+                            <td>Foco na stack efetiva</td>
+                            <td>Global (ativos e inativos)</td>
+                            <td>Precisão na avaliação do prizepool.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Precisão (-Nash)</strong></td>
+                            <td>Distância variável</td>
+                            <td>Geralmente menor e mais preciso</td>
+                            <td>Maior confiabilidade operacional.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Heurística Pós-Flop</strong></td>
+                            <td>Equidade bruta</td>
+                            <td>Prêmio de risco (RP)</td>
+                            <td>Adaptação ao contexto de Mesa Final.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>A Ontologia do Risk Premium e o "Teto do RP"</h3>
+                <p>O Risk Premium (RP) funciona como uma taxa de câmbio entre fichas e dinheiro real. Raphael Vitoi postula que o entendimento do ICM pós-flop é a fronteira final da vantagem competitiva (Edge). O <strong>"Teto do RP"</strong> (RP Ceiling) define o limite superior de defesa onde, independentemente da frequência de blefes do agressor, o defensor é impedido de realizar sua equidade devido ao risco existencial que o confronto impõe.</p>
+
+                <div class="callout">
+                    <h4>Dialética dos Toy Games</h4>
+                    <p><strong>Toy Game 1 (ChipEV):</strong> O jogador OOP (KK) paga 50% das vezes para neutralizar os blefes.</p>
+                    <p><strong>Toy Game 3-5 (Desproporção de Risco):</strong> Conforme o RP do OOP escala até 24%, o IP pode chegar a ter mais combinações de blefe do que de valor (8 vs 6), e ainda assim o OOP é forçado a desistir, respeitando o teto imposto pelo ICM.</p>
+                </div>
+
+                <h3>Impacto da Inscrição Tardia (Late Reg)</h3>
+                <p>A questão da inscrição tardia transcende a conveniência logística. Segundo o modelo ICM, uma stack inicial adquire um valor monetário superior ao seu custo de entrada à medida que o torneio avança. Simulações de Monte Carlo demonstram essa correlação:</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Momento do Registro</th>
+                            <th>Stack Inicial</th>
+                            <th>Buy-in Efetivo</th>
+                            <th>Valor ICM</th>
+                            <th>Incremento (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Início do Torneio</td>
+                            <td>25,000</td>
+                            <td>$500</td>
+                            <td>$500.00</td>
+                            <td class="numeric">0.0%</td>
+                        </tr>
+                        <tr>
+                            <td>Fim do Registro (Online)</td>
+                            <td>25,000</td>
+                            <td>$500</td>
+                            <td>$581.00</td>
+                            <td class="numeric" style="color: var(--accent-emerald);">+16.2%</td>
+                        </tr>
+                        <tr>
+                            <td>Início do Dia 2 (Live)</td>
+                            <td>25,000</td>
+                            <td>$4,650</td>
+                            <td>$5,117.00</td>
+                            <td class="numeric" style="color: var(--accent-emerald);">+10.0%</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>A Pedagogia "Homem Bomba"</h3>
+                <p>A abordagem de Raphael Vitoi caracteriza-se por uma fusão disruptiva entre GTO e psicologia analítica. A obra "Homem Bomba" utiliza a metáfora da bomba para descrever o excesso de "gozo" (jouissance) lacaniano — uma energia psíquica que é simultaneamente fonte de prazer e de destruição.</p>
+                <p>A metodologia propõe a substituição da intuição cega pela <strong>"Antevisão"</strong>, uma preparação estratégica baseada em dados massivos (MDA). O poker é visto como um "Toy Game" para a vida, onde a racionalidade estrutura o caminho e a melancolia permite prever falhas.</p>
+
+                <h3>Redes Neurais vs. Árvores de Decisão</h3>
+                <p>No desenvolvimento de agentes competitivos, a escolha entre Redes Neurais (ANN) e Árvores de Decisão (DT) reflete a tensão entre eficácia bruta e interpretabilidade.</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Modelo</th>
+                            <th>Vantagem Técnica</th>
+                            <th>Desvantagem Técnica</th>
+                            <th>Precisão</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Árvores de Decisão</strong></td>
+                            <td>Treinamento rápido; Interpretabilidade</td>
+                            <td>Dificuldade com variáveis contínuas</td>
+                            <td>63.6% - 66.7%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Redes Neurais</strong></td>
+                            <td>Captura padrões não lineares</td>
+                            <td>"Caixa Preta"; Treino lento</td>
+                            <td>Superior</td>
+                        </tr>
+                        <tr>
+                            <td><strong>CFR (Auto-play)</strong></td>
+                            <td>Equilíbrio de Nash teórico</td>
+                            <td>Computacionalmente caro</td>
+                            <td>Máxima</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Heurísticas de Defesa: BTN vs BB em Mesas Finais</h3>
+                <p>Se o BTN é coberto pelo BB, ele deve reduzir significativamente sua frequência de C-bet. No entanto, se o BTN cobre o BB e existem stacks curtas na mesa, o BTN pode cbetar com frequências extremamente altas (até 70%), mesmo com equidade bruta inferior.</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Textura do Flop</th>
+                            <th>Freq. BTN (Cobrindo)</th>
+                            <th>Freq. BTN (Coberto)</th>
+                            <th>Sizing</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Broadway / Paired High</td>
+                            <td style="color: var(--accent-emerald);">Alta (~70%)</td>
+                            <td style="color: var(--accent-sky);">Moderada (~66%)</td>
+                            <td>Small</td>
+                        </tr>
+                        <tr>
+                            <td>Monotone / Low</td>
+                            <td style="color: var(--accent-rose);">Baixa</td>
+                            <td style="color: var(--accent-rose);">Baixa</td>
+                            <td>Small</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Síntese Final</h3>
+                <p>A maestria no jogo reside na harmonia entre a frieza do código binário dos solvers e a profundidade da reflexão humana sobre o risco, a perda e o valor. O ICM atua como a lei gravitacional que curva a trajetória das estratégias, forçando o abandono da agressão cega em favor de uma cautela calculada.</p>
+
+                <div style="margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border-color); font-size: 0.8rem; color: var(--text-muted);">
+                    <strong>Referências Citadas:</strong> Chen & Ankenman (The Mathematics of Poker), GTO Wizard Blog, HRC Simulations, Raphael Vitoi (Homem Bomba, Relações e Projetos).
+                </div>
+            </article>
+        </section>
+
+    </main>
+    
+    <script type="module" src="main.js"></script>
+</body>
+</html>

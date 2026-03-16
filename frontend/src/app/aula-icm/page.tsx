@@ -6,7 +6,6 @@
  */
 
 import Link from 'next/link';
-import SimuladorICM from '@/components/icm/SimuladorICM';
 
 export const metadata = {
   title: 'ICM Pós-Flop | Raphael Vitoi',
@@ -15,13 +14,13 @@ export const metadata = {
 
 export default function AulaICMPage() {
   return (
-    <main>
+    <main style={{ minHeight: '100vh' }}>
       {/* Hero */}
-      <header className="page-header" style={{ paddingTop: '5rem', paddingBottom: '3rem' }}>
+      <header className="page-header" style={{ paddingTop: '5rem', paddingBottom: '3rem', maxWidth: '900px' }}>
         <p className="page-label" style={{ color: 'var(--accent-secondary)' }}>
           <span className="fa-solid fa-bolt"></span> State of the Art
         </p>
-        <h1 style={{ background: 'linear-gradient(135deg, #fff 0%, #fca5a5 50%, #a5b4fc 100%)' }}>
+        <h1 style={{ background: 'linear-gradient(135deg, #fff 0%, #fca5a5 50%, #a5b4fc 100%)', backgroundClip: 'text', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', fontSize: 'clamp(2rem, 5vw, 3.2rem)' }}>
           O Edge Mudou de Lugar.
         </h1>
         <p className="page-subtitle" style={{ maxWidth: '700px', fontSize: '1.1rem' }}>
@@ -79,7 +78,7 @@ export default function AulaICMPage() {
         </article>
 
         {/* Cards dos Arquétipos */}
-        <div className="hub-grid" style={{ maxWidth: '900px', margin: '0 auto 3rem', gridTemplateColumns: 'repeat(2, 1fr)' }}>
+        <div className="hub-grid" style={{ maxWidth: '900px', margin: '0 auto 5rem', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
           <div className="hub-card" style={{ cursor: 'default', borderLeftColor: 'var(--accent-primary)', borderLeftWidth: '3px' }}>
             <span className="hub-icon"><span className="fa-solid fa-shield-halved" style={{ color: 'var(--accent-primary)' }}></span></span>
             <h3>O Pacto Silencioso</h3>
@@ -114,50 +113,55 @@ export default function AulaICMPage() {
           </p>
         </article>
 
-        {/* Arsenal Tático */}
+        {/* Arsenal Tatico */}
         <section style={{ maxWidth: '900px', margin: '0 auto 4rem' }}>
-          <h3 style={{ textAlign: 'center', marginBottom: '2rem' }}>O Arsenal Tático</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }} className="arsenal-grid">
-            <Link href="/leitura-icm" className="hub-card" style={{ flexDirection: 'row', alignItems: 'center', gap: '1rem', padding: '1.25rem' }}>
-              <span style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(99, 102, 241, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <span className="fa-solid fa-file-lines" style={{ color: 'var(--accent-primary)', fontSize: '1.1rem' }}></span>
+          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.15em', textAlign: 'center', marginBottom: '0.75rem' }}>
+            <span className="fa-solid fa-compass" style={{ marginRight: '0.5rem' }}></span> Navegacao
+          </p>
+          <h3 style={{ textAlign: 'center', marginBottom: '2rem', fontSize: '1.6rem' }}>O Arsenal Tatico</h3>
+          <div className="arsenal-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+            <Link href="/leitura-icm" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '1rem', padding: '1.25rem 1.5rem', background: 'var(--bg-card)', border: 'var(--glass-border)', borderRadius: 'var(--radius-lg)', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', overflow: 'hidden' }}>
+              <span style={{ width: '44px', height: '44px', borderRadius: '10px', background: 'rgba(99, 102, 241, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <span className="fa-solid fa-file-lines" style={{ color: 'var(--accent-primary)', fontSize: '1rem' }}></span>
               </span>
               <div>
-                <strong style={{ display: 'block', color: '#fff', fontSize: '0.9rem' }}>Ler Whitepaper</strong>
-                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Teoria Completa &rarr;</span>
+                <strong style={{ display: 'block', color: '#fff', fontSize: '0.9rem', lineHeight: 1.3 }}>Ler Whitepaper</strong>
+                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Teoria Completa &rarr;</span>
               </div>
             </Link>
-            <a href="#simulador-section" className="hub-card" style={{ flexDirection: 'row', alignItems: 'center', gap: '1rem', padding: '1.25rem', borderColor: 'rgba(16, 185, 129, 0.2)' }}>
-              <span style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <span className="fa-solid fa-gamepad" style={{ color: 'var(--accent-emerald)', fontSize: '1.1rem' }}></span>
+            <a href="#simulador-section" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '1rem', padding: '1.25rem 1.5rem', background: 'var(--bg-card)', border: '1px solid rgba(16, 185, 129, 0.15)', borderRadius: 'var(--radius-lg)', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', overflow: 'hidden' }}>
+              <span style={{ width: '44px', height: '44px', borderRadius: '10px', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <span className="fa-solid fa-gamepad" style={{ color: 'var(--accent-emerald)', fontSize: '1rem' }}></span>
               </span>
               <div>
-                <strong style={{ display: 'block', color: '#fff', fontSize: '0.9rem' }}>Usar Simulador</strong>
-                <span style={{ fontSize: '0.75rem', color: 'var(--accent-emerald)' }}>Laboratório Interativo &rarr;</span>
+                <strong style={{ display: 'block', color: '#fff', fontSize: '0.9rem', lineHeight: 1.3 }}>Usar Simulador</strong>
+                <span style={{ fontSize: '0.72rem', color: 'var(--accent-emerald)' }}>Laboratorio Interativo &rarr;</span>
               </div>
             </a>
-            <Link href="/aula-1-2" className="hub-card" style={{ flexDirection: 'row', alignItems: 'center', gap: '1rem', padding: '1.25rem' }}>
-              <span style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(14, 165, 233, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <span className="fa-solid fa-graduation-cap" style={{ color: 'var(--accent-sky)', fontSize: '1.1rem' }}></span>
+            <Link href="/aula-1-2" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '1rem', padding: '1.25rem 1.5rem', background: 'var(--bg-card)', border: 'var(--glass-border)', borderRadius: 'var(--radius-lg)', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', overflow: 'hidden' }}>
+              <span style={{ width: '44px', height: '44px', borderRadius: '10px', background: 'rgba(14, 165, 233, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <span className="fa-solid fa-graduation-cap" style={{ color: 'var(--accent-sky)', fontSize: '1rem' }}></span>
               </span>
               <div>
-                <strong style={{ display: 'block', color: '#fff', fontSize: '0.9rem' }}>Aula 1.2</strong>
-                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Material Complementar &rarr;</span>
+                <strong style={{ display: 'block', color: '#fff', fontSize: '0.9rem', lineHeight: 1.3 }}>Aula 1.2</strong>
+                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Material Complementar &rarr;</span>
               </div>
             </Link>
           </div>
         </section>
 
-        {/* Simulador Integrado */}
-        <section id="simulador-section" className="sim-section" style={{ scrollMarginTop: '6rem' }}>
-          <div className="sim-section-header">
-            <p className="page-label">
-              <span className="fa-solid fa-chart-area"></span> Geometria do Risco Engine
-            </p>
-            <h2>Simulador de Cenários</h2>
-            <p>Interaja com cenários reais de Mesa Final. Gauges de Risk Premium, modo comparação e exportação PDF.</p>
-          </div>
-          <SimuladorICM />
+        {/* Link para o Motor ICM */}
+        <section id="simulador-section" style={{ scrollMarginTop: '6rem', maxWidth: '900px', margin: '4rem auto 0', padding: '3rem 0 0', textAlign: 'center' }}>
+          <p className="page-label">
+            <span className="fa-solid fa-chart-area"></span> Geometria do Risco Engine
+          </p>
+          <h2>Motor ICM</h2>
+          <p style={{ color: '#94a3b8', marginBottom: '2rem' }}>
+            9 cenários clínicos, calculadora Malmuth-Harville, NashSolver, quizzes interativos, modo comparação e simulação por mão.
+          </p>
+          <Link href="/tools/simulador" className="btn-primary" style={{ padding: '1rem 2.5rem', fontSize: '0.95rem' }}>
+            Abrir Motor ICM &rarr;
+          </Link>
         </section>
 
         <nav className="article-nav" style={{ marginBottom: '4rem' }}>

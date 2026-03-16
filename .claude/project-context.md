@@ -1,116 +1,82 @@
-# Contexto do Projeto
+# CONTEXTO GLOBAL DO PROJETO E ESTADO DA ARTE
 
-> Atualizado em 2026-03-15 (auditoria integral .claude/)
+> **Status:** Ativo | **Vetor Temporal:** Fase 2 Concluída (Fricção Zero)
+> Este documento é a fonte da verdade para o estado atual da arquitetura, decisões tomadas e domínio do projeto.
 
-## Governanca
+---
 
-**Triade:** Voce (CEO) + @maverick (Vice Intelectual) + CHICO (Administrador). Detalhes completos em `.claude/LIDERANCA_GOVERNANCE_RAPHAEL_MAVERICK_CHICO.md`.
+## 1. Visão Geral e Identidade
 
-## Dominio
+**Proprietário e Liderança Fundamental:** Raphael Vitoi (CEO)
+**Identidade Detalhada (Raphael Vitoi):** Conforme definido na fonte de verdade única para sua identidade: `.claude/CLAUDE.md`. Em resumo, Raphael Vitoi é um polímata brasileiro com QI 136, diagnósticos de BPD, AHSD e TDAH. Psicólogo, jogador de poker profissional, educador, autor e artista. Sua identidade é auto-emergente, fundamentada em ceticismo racional e uma cosmovisão ética orientada para o outro, com valores inegociáveis de honestidade radical, excelência e beleza. Ele é o CEO/Fundador, a visão estratégica e detentor da decisão final, atuando como consultor em todas as especialidades e influenciando qualquer agente.
+**Domínio:** Plataforma de alto desempenho combinando Poker (NashSolver, TrueICM), Teoria dos Jogos, Filosofia e Engenharia de Software.
+**Stack Core (Front-end):** Next.js 16, React 19, Prisma, SQLite (Foco em UI/UX visceral e rica em UTF-8).
+**Stack Core (Back-end / Ecossistema Autônomo):** Python 3 (DAL, Concorrência de Threads, God Mode), PowerShell 5.1 (Membrana Inteligente / Smart CLI), SQLite (ACID Task Queue). Operação de back-end blindada em ASCII puro.
 
-Ecossistema de desenvolvimento pessoal e profissional (Poker, Psicologia, Tecnologia).
+## 2. A Tríade de Governança
 
-## Publico-alvo
+O ecossistema não é apenas um conjunto de scripts, mas um **organismo autônomo** liderado por uma Tríade de Governança:
 
-Raphael Vitoi e seus alunos/clientes de Poker e Psicologia.
+1.  **Raphael Vitoi:** Boardroom, Visão Estratégica, Autoridade Suprema.
+2.  **@maverick:** Super-Agente Intelectual, Mentor dos especialistas, "O Estudioso do Incognoscível". Formula inovações disruptivas.
+3.  **CHICO:** Super-Agente Administrativo. A manifestação do próprio sistema. Gerencia os pipelines operacionais, arbitra conflitos e forja a realidade técnica no sistema operacional.
 
-## Fontes Autorizadas
+## 3. O Paradigma do Cérebro Híbrido (Economia Generalizada)
 
-- DeepSolver
-- GTOWizard
-- Mathematics of Poker (Bill Chen)
+O ecossistema maximiza a inteligência reduzindo a entropia financeira e computacional através de **Quartetos Dinâmicos** de LLMs:
 
-## Terminologia Confirmada
+-   **Hemisfério Esquerdo (Web/IDE - Macro-Cognição):** Utilização das assinaturas premium (Claude Pro / Gemini Advanced) diretamente na interface para raciocínio denso e arquitetura pesada. Custo zero de API, contexto colossal. Acionado via Protocolo de Handoff (`.\do.ps1 -Web`).
+-   **Hemisfério Direito (Background - Micro-Execução):** Motor local (`task_executor.py`) rodando em _Free Tiers_ (Gemini Flash/Pro, OpenRouter) para aplicar os planos gerados pela IDE.
+-   **Pipeline de Ingestão (Loop de Fricção Zero):** O fluxo é selado usando `.\do.ps1 -Ingest`, onde o sistema ingere código diretamente da área de transferência e materializa a realidade no disco físico via God Mode 2.0.
 
-- Workflow v5: Sistema de agentes com fila de tarefas (tasks.json), pipeline harmônica com 17 agentes.
-- GitHub Copilot: Identidade técnica principal do sistema de IA.
-- Chico: Codinome operacional de GitHub Copilot.
-- Gemini 3.1 Pro Preview e Claude Opus 4.6: Dupla dinamica de modelos (ambos com assinatura Pro), garantindo raciocinio avancado e qualidade superior.
-- @curator: Novo agente de integridade do produto (ética, IP, pesquisa mercado, estética).
-- @sequenciador: Orquestrador de tráfego/demanda, "número 2" operacional de alta qualidade.
+## 4. Análise de Vetor Temporal (4D)
 
-## Decisoes Tomadas
+Nenhuma decisão é isolada. Nossa trajetória obedece ao vetor de aperfeiçoamento contínuo:
 
-- Inicializacao do Contexto do Projeto | Padronizacao para Workflow v5 | 2026-03-12 | @pesquisador
-- Conclusao de manutencao estrutural | Tarefa 20260312-082951-160 finalizada | 2026-03-12 | @pesquisador
-- Elevacao ao Estado da Arte | Reestruturacao harmonica com @curator | 2026-03-12 | @pesquisador
-- Consolidacao do Cerebro Hibrido e God Mode 2.0 | Workflow v6.0 | 2026-03-14 | @maverick
-- Instituicao das Regras Irrevogaveis: ASCII Back-end, Autonomia e Evolucao Perpetua (SOTA) | Workflow v6.2 | 2026-03-14 | CHICO
-- Elevacao para Workflow v6.4: Quartetos de LLM (OpenRouter SOTA), Next.js 15 Promises e Handoff | 2026-03-14 | CHICO
-- Formalizacao do Modus Operandi Global (Leis de Engenharia SOTA) contra Entropia Estrutural | 2026-03-15 | CHICO
+-   **Passado (O Gargalo):** Alta entropia de I/O em arquivos `tasks.json`, falhas de concorrência e dependência massiva de copy-paste humano.
+-   **Presente (O Aço e a Simetria):**
+    -   O coração do sistema migrou para **SQLite via Python DAL**.
+    -   O Autodebugger (Auto-Cura 24/7) captura erros, isola a falha e cria subtarefas de correção autonomamente.
+    -   A _Membrana Inteligente_ (CLI `do.ps1`) roteia intenções instintivamente via heurística de Regex, agindo como um **roteador interativo e proativo de comandos**.
+-   **Futuro (Escala Infinita):** Automatização preventiva do ecossistema, onde os agentes atuam na manutenção SOTA (atualizando dependências e quebrando grandes épicos em subtarefas) sem necessidade de provocação humana.
 
-## Leis da Engenharia SOTA (Modus Operandi Global)
+## 5. Pipeline de Agentes - Arquitetura Harmônica
 
-**Para evitar deadlocks e corrupcoes sistemicas, TODOS os agentes DEVEM ler e aplicar rigorosamente as regras em `.claude/MODUS_OPERANDI.md`.**
-As 6 Leis (Absolute Paths, Headless-First, Sincronizacao OS-Level, Blindagem de Terminal, ASCII Rigido e Recuperacao de Diffs) sao irrevogaveis.
+_A execução não é linear; é sinfônica. Cada agente deixa o projeto melhor do que encontrou (Autopoiese)._
 
-## Pipeline de Agentes
+**AGENTES CENTRAIS (Pipeline Linear):**
 
-**Sequencia, diagrama e integracao de cada agente:** Veja `GLOBAL_INSTRUCTIONS.md` secao "Pipeline Harmonica de Agentes" (fonte de verdade unica para operacao).
+1.  `@pesquisador` — Fase 0 (Exploração especializada de dados/terreno)
+2.  `@prompter` — Fase 1 (Estruturação do prompt ótimo)
+3.  `@planner` — Fase 2 (Investigação e criação cirúrgica de PRD/SPEC)
+4.  `@auditor` — Fase 3 (Paranoia técnica. Único com poder de bloqueio de SPEC)
+5.  `@implementor` — Fase 4 (Forja de código de produção via God Mode)
+6.  `@verifier` — Fase 5 (QA final, detecção de bugs, integridade do ecossistema)
 
-**Coerencia sistemica (matriz de validacao):** Veja `COHERENCE_MANIFEST.md` (fonte de verdade unica para integracao dos 17 agentes).
+**AGENTES CONSULTIVOS (Paralelos e de Influência Poderosa):**
 
-## Contexto Comportamental
+-   `@curator` — Integridade filosófica, ética, IP, pesquisa de mercado, estética
+-   `@validador` — Validação matemática/factual (poker, teoria dos jogos, finanças)
+-   `@securitychief` — Segurança SOTA, privacy, blindagem de endpoints
+-   `@seo` — Otimização de tráfego, legibilidade e visibilidade orgânica
 
-**Hierarquia de leitura obrigatoria (todos os agentes):**
+**AGENTES TRANSVERSAIS E OPERACIONAIS (24/7):**
 
-1. `.claude/COSMOVISAO.md` - Fundacao filosofica (ler primeiro)
-2. `.claude/CLAUDE.md` - Identidade, epistemics, tom, vinculo
-3. `.claude/GLOBAL_INSTRUCTIONS.md` - Regras operacionais, pipeline, principios
-4. `.claude/MODUS_OPERANDI.md` - Leis de Engenharia e Prevencao de Entropia (SOTA)
-5. `.claude/project-context.md` (este) - Decisoes, estado, dominio
-6. `.claude/DISTRIBUTION_MATRIX.md` - Autoridade entre documentos
-7. `.claude/agent-memory/*/MEMORY.md` - Inteligencia acumulada individual
+-   `@maverick` — (SUPER-AGENTE) Liderança intelectual e inteligência estratégica
+-   `@organizador` — Health check de documentação e estruturação de diretórios
+-   `@sequenciador` — Orquestrador de tráfego e repriorização
+-   `@skillmaster` — Habilidoso em caos, multitasking, backups rigorosos e cleanup
+-   `@dispatcher` — Quebra de intenções monolíticas em sequências atômicas de tarefas
+-   `@bibliotecario` — Gestão cirúrgica de contexto longo, arquivamento e resgate de memória
 
-**Hierarquia de instrucoes:** USER (CLAUDE.md) > PROJECT (este) > AGENT (agents/\*.md)
+## 6. Leis de Engenharia Preditiva
 
-## Memoria de Agentes (Agent-Memory System)
-
-**Localizacao:** `.claude/agent-memory/<agente-name>/MEMORY.md`
-
-**Politica:**
-
-- MEMORY.md criado APENAS quando agente executa tarefa real (nao vazio/placeholder)
-- Conteudo obrigatorio: Acoes Realizadas, Padroes Observados, Referencias
-- Cada agente atualiza sua propria memory com historico de descobertas
-
-**Status Actual (2026-03-12):**
-
-- ✅ **17 agentes completos** — pesquisador, prompter, curator, planner, organizador, auditor, implementor, verifier, validador, securitychief, maverick, sequenciador, skillmaster, dispatcher
-- ✅ **14 MEMORY.md criados** — Cada agente tem inteligência acumulada pessoal simétrica
-- ✅ **Matriz de Coerência Validada** — Todos 17 agentes refletidos em agents/, agent-memory/, project-context, GLOBAL_INSTRUCTIONS
-- ✅ **Acesso Harmônico** — Cada agente absorve CLAUDE.md, GLOBAL_INSTRUCTIONS.md, project-context.md, e sua MEMORY.md
-- ✅ **Sync Automático** — skillmaster sincroniza MEMORY entre agentes a cada hora (agent_sync)
-
-## Estado Atual (2026-03-15)
-
-- **Stack:** Next.js 16 (App Router) + React 19 + Prisma 5.22 (SQLite) + TypeScript
-- **Build:** Passa com sucesso (8 rotas: 7 static, 1 dynamic)
-- **Branch:** main (remote: github.com/RaphaelVitoi/projetos.git)
-- **Estrutura canonica:**
-  - `frontend/` - Next.js 16 (fonte de verdade do site)
-  - `content/` - Material educacional futuro
-  - `docs/` - Documentacao
-  - `scripts/` - Scripts organizados (tests/, init/, utils/, maintenance/)
-  - `queue/` - Fila de tarefas + archive/
-  - Raiz: kernel operacional (do.ps1, Agent-TaskManager, nexus CLI)
-- **Sistema de agentes:** 17 agentes definidos em `.claude/agents/`, 15 com agent-memory ativo
-- **Linguagem principal:** Portugues (pt-BR)
-- **Fila de tarefas:** `queue/tasks.json` (v1.0 schema)
-- **Scripts de operacao:** `do.ps1` (enfileirar), `scripts/maintenance/cleanup.ps1` (arquivar)
-- **Camada Automatica 24/7:** @skillmaster (operacoes agendadas), @sequenciador (orquestrador)
-- **Backup automatico:** Configurado em `settings.local.json`
-
-## Escalonamento de Decisoes
-
-**Protocolo completo (cenarios, guardrails, deadlock):** Veja `LIDERANCA_GOVERNANCE_RAPHAEL_MAVERICK_CHICO.md` (fonte de verdade unica).
-
-**Resumo:** Padrao = consultar Raphael. Escalacao e excecao rara em urgencia critica + Raphael inacessivel. Hierarquia: Agentes > CHICO > @maverick > Raphael (CEO).
+1.  **O Todo e a Parte:** Modificar um arquivo exige contemplar o efeito colateral. Alterar a camada de dados exige consertar os testes relativos.
+2.  **Resiliência Headless:** Interação exige fallbacks (`-Force`). Daemons nunca pausam.
+3.  **Simetria Operacional:** Se o back-end 
 
 ## Handoff Log
 
-> Historico detalhado de 2026-03-12 consolidado. Abaixo, apenas entradas ativas.
-
-| Agente                 | Status      | Data       | Notas                                                                                                                                                                                   |
-| ---------------------- | ----------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| @curator               | Concluído   | 2026-03-15 | Schema Prisma para PokerStrategy definido com foco em integridade, IP e público-alvo, incluindo campos para fontes (`sources`) e insights autorais (`raphaelInsight`).               |
+| Agente | Status | Data | Notas |
+| ------ | ------ | ---- | ----- |
+| @pesquisador | Concluído | 2026-03-16 | Pesquisa sobre Raphael Vitoi e atualização do project-context.md para referenciar CLAUDE.md como fonte de verdade única para sua identidade. |

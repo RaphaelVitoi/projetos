@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Quem é Raphael Vitoi - O Manifesto">
+    <title>Quem é Raphael Vitoi | Manifesto</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="canonical" href="https://raphaelvitoi.github.io/quem-sou.html">
+    <link rel="stylesheet" href="style.css">
+    <script src="analytics.js" defer></script>
+    <style>
+        /* Estilo Exclusivo do Player - Dark Cinema */
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto 3rem;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #000;
+        }
+        
+        /* Aspect Ratio 16:9 */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; 
+            height: 0;
+        }
+        
+        .video-container video, .video-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <div class="container">
+            <h1><a href="index.html">Raphael Vitoi</a> <span style="font-weight: normal; opacity: 0.7; font-size: 0.9em;">/ Manifesto</span></h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">← Voltar ao Hub</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="hero-aula">
+            <h2>Sobre o Autor</h2>
+            <p><strong>Educador, Estrategista e Especialista em Sistemas Complexos.</strong></p>
+        </section>
+
+        <!-- VIDEO PLAYER COMPONENT -->
+        <section>
+            <div class="video-wrapper">
+                <div class="video-container">
+                    <video controls autoplay muted playsinline preload="metadata">
+                        <source src="0309.mp4" type="video/mp4">
+                        Seu navegador não suporta a tag de vídeo.
+                    </video>
+                </div>
+            </div>
+        </section>
+
+        <section id="manifesto">
+            <article style="text-align: center; max-width: 800px;">
+                <h3>Sobre o Autor</h3>
+                <p>Educador e Profissional de Poker há mais de dez anos, Raphael Vitoi é um especialista em <strong>Sistemas Complexos, ICM, Multiway Spots e Teoria dos Jogos</strong>. Sua abordagem transita entre a <strong>Análise Bayesiana, Preditiva e Recursiva</strong>, focando na adaptação estratégica e análise comportamental (GTO e desvio).</p>
+                <p>Além das mesas, mergulha na <strong>Psicologia do Poker</strong>, dissecando os vieses cognitivos que custam dinheiro.</p>
+                
+                <div class="callout" style="text-align: left; margin-top: 2rem;">
+                    <p><strong>Polímata e Estrategista:</strong> Raphael não ensina apenas "cartas"; ele ensina arquitetura de decisão. Como <strong>Embaixador Deepsolver</strong>, <strong>Afiliado GTO Wizard</strong> e criador do <strong>trueICM</strong>, ele decodifica a complexidade dos sistemas para jogadores que buscam o topo da cadeia alimentar.</p>
+                </div>
+
+                <p><em>"O poker não é sobre sorte. É sobre a gestão elegante da incerteza."</em></p>
+
+                <div style="margin-top: 2rem;">
+                    <a href="index.html#metodo" class="card-cta" style="font-size: 1rem;">Conhecer o Método Poker Racional →</a>
+                </div>
+            </article>
+        </section>
+    </main>
+    
+    <script type="module" src="main.js"></script>
+</body>
+</html>

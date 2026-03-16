@@ -20,7 +20,7 @@ export default function PsicologiaHSPage() {
           <span className="fa-solid fa-brain"></span> Protocolo de Análise Textual Complexa
         </p>
         <h1>Psicologia High Stakes</h1>
-        <p className="page-subtitle">Analisando o Protocolo de Análise Textual de Poker Complexo.</p>
+        <p className="page-subtitle">Fenomenologia da Incerteza e Tomada de Decisão sob Pressão ICM.</p>
       </header>
 
       <section>
