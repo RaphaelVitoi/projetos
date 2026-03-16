@@ -88,20 +88,20 @@ export default function ToyGamesPage() {
     const colors = COLOR_MAP[active.color];
 
     return (
-        <main style={{ minHeight: '100vh', padding: '2rem 1.5rem' }}>
-            <header style={{ maxWidth: '1200px', margin: '0 auto 2rem', textAlign: 'center' }}>
-                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--accent-secondary)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '0.5rem' }}>
-                    <span className="fa-solid fa-crosshairs" style={{ marginRight: '0.5rem' }}></span> Laboratório Interativo
+        <main style={{ minHeight: '100vh' }}>
+            <header className="page-header">
+                <p className="page-label" style={{ color: 'var(--accent-secondary)' }}>
+                    <span className="fa-solid fa-crosshairs"></span> Laboratório Interativo
                 </p>
-                <h1 style={{ fontSize: 'clamp(1.8rem, 4vw, 2.8rem)', fontWeight: 900, color: '#fff', marginBottom: '0.5rem' }}>
-                    Toy Games: <span style={{ background: 'linear-gradient(135deg, #ef4444, #f97316)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Predator Mode</span>
+                <h1 style={{ background: 'linear-gradient(135deg, #fff 0%, #fca5a5 100%)', backgroundClip: 'text', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                    Toy Games: Predator Mode
                 </h1>
-                <p style={{ color: 'var(--text-muted)', maxWidth: '600px', margin: '0 auto', fontStyle: 'italic', fontSize: '0.9rem' }}>
+                <p className="page-subtitle" style={{ fontStyle: 'italic' }}>
                     Isolando a mecânica do Risk Premium. Sinta a impunidade de agredir quando o oponente está paralisado.
                 </p>
             </header>
 
-            <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+            <div className="sim-container">
                 {/* Seleção de cenários */}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '0.75rem', marginBottom: '2rem' }}>
                     {SCENARIOS.map(sc => {
@@ -109,20 +109,12 @@ export default function ToyGamesPage() {
                         const c = COLOR_MAP[sc.color];
                         return (
                             <button key={sc.id} onClick={() => setActiveId(sc.id)}
-                                style={{
-                                    padding: '1rem 1.25rem', borderRadius: '12px', cursor: 'pointer', textAlign: 'left',
-                                    background: isActive ? c.bg : 'rgba(15, 23, 42, 0.5)',
-                                    border: `1px solid ${isActive ? c.border : 'rgba(255,255,255,0.06)'}`,
-                                    transition: 'all 0.3s', color: isActive ? '#fff' : 'var(--text-muted)',
-                                    transform: isActive ? 'translateY(-2px)' : 'none',
-                                    boxShadow: isActive ? `0 8px 24px rgba(0,0,0,0.3)` : 'none',
-                                }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                    <span className={`fa-solid ${sc.icon}`} style={{ fontSize: '1rem', color: isActive ? c.accent : 'var(--text-muted)' }}></span>
-                                    <div>
-                                        <span style={{ display: 'block', fontWeight: 700, fontSize: '0.9rem' }}>{sc.label}</span>
-                                        <span style={{ fontSize: '0.7rem', opacity: 0.7 }}>{sc.subtitle}</span>
-                                    </div>
+                                className={`toy-scenario-btn ${isActive ? 'active' : ''}`}
+                                style={isActive ? { background: c.bg, borderColor: c.border } : undefined}>
+                                <span className={`fa-solid ${sc.icon} toy-icon`} style={{ color: isActive ? c.accent : undefined }}></span>
+                                <div>
+                                    <span className="toy-label">{sc.label}</span>
+                                    <span className="toy-subtitle">{sc.subtitle}</span>
                                 </div>
                             </button>
                         );
@@ -130,14 +122,14 @@ export default function ToyGamesPage() {
                 </div>
 
                 {/* Palco do cenário ativo */}
-                <div style={{ background: 'rgba(15, 23, 42, 0.6)', border: `1px solid ${colors.border}`, borderRadius: '16px', padding: 'clamp(1.5rem, 3vw, 2.5rem)', backdropFilter: 'blur(12px)' }}>
+                <div className="glass-panel" style={{ borderColor: colors.border, padding: 'clamp(1.5rem, 3vw, 2.5rem)', borderRadius: '16px' }}>
                     {/* Confronto IP vs OOP */}
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', gap: '1.5rem', alignItems: 'center', marginBottom: '2.5rem' }}>
+                    <div className="confronto-grid">
                         {/* IP */}
-                        <div style={{ textAlign: 'center' }}>
-                            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--accent-emerald)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '0.5rem' }}>Agressor (IP)</p>
+                        <div className="confronto-card">
+                            <p className="page-label" style={{ color: 'var(--accent-emerald)', marginBottom: '0.5rem', justifyContent: 'center' }}>Agressor (IP)</p>
                             <h3 style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>{active.ip.pos}</h3>
-                            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--text-muted)', background: 'rgba(15,23,42,0.8)', padding: '0.2rem 0.6rem', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.06)' }}>{active.ip.stack}</span>
+                            <span className="stack-badge">{active.ip.stack}</span>
                             <div style={{ marginTop: '1.25rem' }}>
                                 <RpGauge value={active.ip.rp} label={active.ip.role} color="var(--accent-sky)" />
                             </div>
@@ -145,16 +137,16 @@ export default function ToyGamesPage() {
                         </div>
 
                         {/* VS */}
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'rgba(15,23,42,0.9)', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, color: 'var(--text-muted)', fontStyle: 'italic', fontSize: '1rem' }}>VS</div>
-                            <div style={{ width: '1px', height: '80px', background: 'linear-gradient(to bottom, rgba(255,255,255,0.1), transparent)', marginTop: '0.5rem' }}></div>
+                        <div className="confronto-vs">
+                            <div className="confronto-vs-badge">VS</div>
+                            <div className="confronto-vs-line"></div>
                         </div>
 
                         {/* OOP */}
-                        <div style={{ textAlign: 'center' }}>
-                            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', color: 'var(--accent-secondary)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '0.5rem' }}>Defensor (OOP)</p>
+                        <div className="confronto-card">
+                            <p className="page-label" style={{ color: 'var(--accent-secondary)', marginBottom: '0.5rem', justifyContent: 'center' }}>Defensor (OOP)</p>
                             <h3 style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>{active.oop.pos}</h3>
-                            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--text-muted)', background: 'rgba(15,23,42,0.8)', padding: '0.2rem 0.6rem', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.06)' }}>{active.oop.stack}</span>
+                            <span className="stack-badge">{active.oop.stack}</span>
                             <div style={{ marginTop: '1.25rem' }}>
                                 <RpGauge value={active.oop.rp} label={active.oop.role} color="var(--accent-secondary)" />
                             </div>

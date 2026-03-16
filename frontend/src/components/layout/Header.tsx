@@ -1,11 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const Header = () => {
   const [toolsOpen, setToolsOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const dropdownRef = useRef<HTMLLIElement>(null);
 
   // Fecha o menu mobile ao navegar
   useEffect(() => {
@@ -16,6 +17,18 @@ const Header = () => {
     }
     return () => { document.body.style.overflow = ''; };
   }, [mobileOpen]);
+
+  // Fecha o dropdown Lab ao clicar fora
+  useEffect(() => {
+    if (!toolsOpen) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setToolsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [toolsOpen]);
 
   const closeMobile = () => setMobileOpen(false);
 
@@ -33,8 +46,8 @@ const Header = () => {
               <li><Link href="/psicologia-hs">Psicologia</Link></li>
               <li><Link href="/biblioteca">Biblioteca</Link></li>
               <li><Link href="/quem-sou">Quem Sou</Link></li>
-              <li className="nav-dropdown" onMouseEnter={() => setToolsOpen(true)} onMouseLeave={() => setToolsOpen(false)}>
-                <button className="nav-tools-trigger" aria-expanded={toolsOpen}>
+              <li className="nav-dropdown" ref={dropdownRef}>
+                <button className="nav-tools-trigger" aria-expanded={toolsOpen} onClick={() => setToolsOpen(prev => !prev)}>
                   <span className="fa-solid fa-flask"></span>{' '}Lab{' '}
                   <span className="fa-solid fa-chevron-down" style={{ fontSize: '0.5rem', marginLeft: '0.25rem', transition: 'transform 0.2s', transform: toolsOpen ? 'rotate(180deg)' : 'none' }}></span>
                 </button>
