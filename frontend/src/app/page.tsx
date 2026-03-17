@@ -6,6 +6,7 @@
  */
 
 import Link from 'next/link';
+import SimuladorICM from '@/components/SimuladorICM';
 
 export const metadata = {
   title: 'Poker Racional | Raphael Vitoi',
@@ -14,23 +15,23 @@ export const metadata = {
 
 export default function HomePage() {
   return (
-    <main className="container mx-auto px-4" style={{ paddingTop: '4rem' }}>
+    <main className="container" style={{ paddingTop: '4rem' }}>
 
       {/* Hero Section */}
-      <section id="hero" className="animate-fade-up">
-        <p style={{ textTransform: 'uppercase', letterSpacing: '0.2em', fontSize: '0.9rem', color: 'var(--accent-primary)', marginBottom: '1rem', fontWeight: 700 }}>
+      <section id="hero" className="animate-fade-up" style={{ textAlign: 'center', maxWidth: '900px', margin: '0 auto' }}>
+        <p className="page-label" style={{ color: 'var(--accent-primary)', marginBottom: '1.5rem' }}>
           ICM e Risk Premium Pós-Flop
         </p>
-        <h2>
-          O Edge Mudou de Lugar.{' '}
+        <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', lineHeight: 1.2 }}>
+          O Edge Mudou de Lugar
           <span style={{ display: 'block', fontWeight: 300, color: '#fff', marginTop: '0.5rem' }}>
             Você Ainda Está Jogando o Jogo de 2020?
           </span>
         </h2>
-        <p style={{ fontSize: '1.3rem', maxWidth: '800px', margin: '0 auto 2.5rem', color: '#94a3b8', fontWeight: 400 }}>
+        <p className="page-subtitle" style={{ fontSize: '1.25rem', margin: '0 auto 2.5rem' }}>
           Descubra por que jogar ChipEV em mesas finais está custando, em média,{' '}
           <strong>mais de 10% do seu ROI</strong> e como a elite do poker usa o
-          &quot;Downward Drift&quot; para dominar o pós-flop em 2026.
+          &quot;Downward Drift&quot; para dominar o pós-flop em 2026
         </p>
 
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '2rem', flexWrap: 'wrap' }}>
@@ -47,7 +48,7 @@ export default function HomePage() {
 
       {/* O Método (Sales Copy) */}
       <section id="metodo">
-        <article className="sales-article" style={{ background: 'transparent', border: 'none', backdropFilter: 'none' }}>
+        <article className="sales-article" style={{ background: 'transparent', border: 'none', backdropFilter: 'none', boxShadow: 'none' }}>
           <h3>A &quot;Mentira&quot; do ICM</h3>
           <p>Se você é como a maioria dos regulares de MTT, você aprendeu que o ICM é um interruptor que &quot;liga&quot; na bolha ou na mesa final.</p>
           <p>Você estudou tabelas de Push/Fold. Você domina o HRC e o ICMIZER. Você acha que seu jogo de ICM está em dia.</p>
@@ -56,7 +57,7 @@ export default function HomePage() {
           <p style={{ fontSize: '1.4rem', color: '#fff', textAlign: 'center', margin: '2rem 0' }}><strong>O ICM Pós-Flop.</strong></p>
 
           <div className="callout callout-secondary">
-            <h4 style={{ marginTop: 0, color: 'var(--accent-secondary)' }}>O Custo Invisível</h4>
+            <h4 style={{ color: 'var(--accent-secondary)', marginTop: 0 }}>O Custo Invisível</h4>
             <p>Dados recentes do GTO Wizard (2025/2026) revelam uma verdade brutal:</p>
             <blockquote style={{ border: 'none', padding: 0, margin: '1rem 0', fontSize: '1.1rem', color: '#fff' }}>
               Jogar uma estratégia padrão de ChipEV (focada em acumular fichas) em spots de mesa final custa, em média, <strong>10% a 12% de todo o buy-in do torneio em $EV</strong>.
@@ -107,9 +108,9 @@ export default function HomePage() {
               </ul>
             </div>
 
-            <div style={{ background: 'var(--bg-card)', borderRadius: 'var(--radius-md)', padding: '1.5rem', border: 'var(--glass-border)' }}>
+            <div className="hub-card" style={{ background: 'var(--bg-card)', padding: '1.5rem' }}>
               <strong style={{ color: '#fff', fontSize: '1rem' }}>Módulo 3: ICM Pós-Flop — A Fronteira</strong>
-              <ul style={{ marginTop: '0.75rem', marginBottom: 0, paddingLeft: '1.25rem', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+              <ul style={{ marginTop: '0.75rem', paddingLeft: '1.25rem', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
                 <li>Por que o edge real está no pós-flop (não mais no pré-flop)</li>
                 <li>Downward Drift: como ICM transforma sizings e ações ao longo das streets</li>
                 <li>SPR e distribuição do RP por street — custo por street calculado</li>
@@ -192,7 +193,7 @@ export default function HomePage() {
         <h2 style={{ fontSize: '2.5rem' }}>Recupere seu ROI. Domine a fronteira final.</h2>
 
         <div style={{ marginTop: '3rem' }}>
-          <Link href="/aula-icm" className="btn-primary" style={{ padding: '1.2rem 4rem', fontSize: '1.1rem', boxShadow: '0 0 30px var(--accent-glow)' }}>
+          <Link href="/aula-icm" className="btn-primary pulse-glow" style={{ padding: '1.2rem 4rem', fontSize: '1.1rem' }}>
             ACESSAR AULA MAGNA AGORA
           </Link>
         </div>
@@ -201,6 +202,7 @@ export default function HomePage() {
       {/* Hub de Conteúdo */}
       <section id="biblioteca">
         <h2 style={{ textAlign: 'center', marginBottom: '3rem' }}>Biblioteca de Conhecimento</h2>
+
         <div className="hub-grid">
           <Link href="/aula-icm" className="hub-card">
             <span className="hub-icon">&#128202;</span>
@@ -264,8 +266,13 @@ export default function HomePage() {
             <p>O Manifesto. Educador, Estrategista e Especialista em Sistemas Complexos.</p>
             <span className="card-cta">Conhecer &rarr;</span>
           </Link>
+          <div className="hub-card">
+            <SimuladorICM />
+          </div>
+
         </div>
       </section>
     </main>
+
   );
 }
