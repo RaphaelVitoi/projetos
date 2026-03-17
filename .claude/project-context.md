@@ -1,7 +1,7 @@
 # CONTEXTO GLOBAL DO PROJETO E ESTADO DA ARTE
 
 > **Status:** Ativo | **Vetor Temporal:** Fase 2 Concluída (Fricção Zero)
-> Este documento é a fonte da verdade para o estado atual da arquitetura, decisões tomadas e domínio do projeto.
+> **Marco Atual:** Preparação para implementação do MasterSimulator (Motor ICM).
 
 ---
 
@@ -25,20 +25,20 @@ O ecossistema não é apenas um conjunto de scripts, mas um **organismo autônom
 
 O ecossistema maximiza a inteligência reduzindo a entropia financeira e computacional através de **Quartetos Dinâmicos** de LLMs:
 
--   **Hemisfério Esquerdo (Web/IDE - Macro-Cognição):** Utilização das assinaturas premium (Claude Pro / Gemini Advanced) diretamente na interface para raciocínio denso e arquitetura pesada. Custo zero de API, contexto colossal. Acionado via Protocolo de Handoff (`.\do.ps1 -Web`).
--   **Hemisfério Direito (Background - Micro-Execução):** Motor local (`task_executor.py`) rodando em _Free Tiers_ (Gemini Flash/Pro, OpenRouter) para aplicar os planos gerados pela IDE.
--   **Pipeline de Ingestão (Loop de Fricção Zero):** O fluxo é selado usando `.\do.ps1 -Ingest`, onde o sistema ingere código diretamente da área de transferência e materializa a realidade no disco físico via God Mode 2.0.
+- **Hemisfério Esquerdo (Web/IDE - Macro-Cognição):** Utilização das assinaturas premium (Claude Pro / Gemini Advanced) diretamente na interface para raciocínio denso e arquitetura pesada. Custo zero de API, contexto colossal. Acionado via Protocolo de Handoff (`.\do.ps1 -Web`).
+- **Hemisfério Direito (Background - Micro-Execução):** Motor local (`task_executor.py`) rodando em _Free Tiers_ (Gemini Flash/Pro, OpenRouter) para aplicar os planos gerados pela IDE.
+- **Pipeline de Ingestão (Loop de Fricção Zero):** O fluxo é selado usando `.\do.ps1 -Ingest`, onde o sistema ingere código diretamente da área de transferência e materializa a realidade no disco físico via God Mode 2.0.
 
 ## 4. Análise de Vetor Temporal (4D)
 
 Nenhuma decisão é isolada. Nossa trajetória obedece ao vetor de aperfeiçoamento contínuo:
 
--   **Passado (O Gargalo):** Alta entropia de I/O em arquivos `tasks.json`, falhas de concorrência e dependência massiva de copy-paste humano.
--   **Presente (O Aço e a Simetria):**
-    -   O coração do sistema migrou para **SQLite via Python DAL**.
-    -   O Autodebugger (Auto-Cura 24/7) captura erros, isola a falha e cria subtarefas de correção autonomamente.
-    -   A _Membrana Inteligente_ (CLI `do.ps1`) roteia intenções instintivamente via heurística de Regex, agindo como um **roteador interativo e proativo de comandos**.
--   **Futuro (Escala Infinita):** Automatização preventiva do ecossistema, onde os agentes atuam na manutenção SOTA (atualizando dependências e quebrando grandes épicos em subtarefas) sem necessidade de provocação humana.
+- **Passado (O Gargalo):** Alta entropia de I/O em arquivos `tasks.json`, falhas de concorrência e dependência massiva de copy-paste humano.
+- **Presente (O Aço e a Simetria):**
+  - O coração do sistema migrou para **SQLite via Python DAL**.
+  - O Autodebugger (Auto-Cura 24/7) captura erros, isola a falha e cria subtarefas de correção autonomamente.
+  - A _Membrana Inteligente_ (CLI `do.ps1`) roteia intenções instintivamente via heurística de Regex, agindo como um **roteador interativo e proativo de comandos**.
+- **Futuro (Escala Infinita):** Automatização preventiva do ecossistema, onde os agentes atuam na manutenção SOTA (atualizando dependências e quebrando grandes épicos em subtarefas) sem necessidade de provocação humana.
 
 ## 5. Pipeline de Agentes - Arquitetura Harmônica
 
@@ -46,37 +46,42 @@ _A execução não é linear; é sinfônica. Cada agente deixa o projeto melhor 
 
 **AGENTES CENTRAIS (Pipeline Linear):**
 
-1.  `@pesquisador` — Fase 0 (Exploração especializada de dados/terreno)
-2.  `@prompter` — Fase 1 (Estruturação do prompt ótimo)
-3.  `@planner` — Fase 2 (Investigação e criação cirúrgica de PRD/SPEC)
-4.  `@auditor` — Fase 3 (Paranoia técnica. Único com poder de bloqueio de SPEC)
-5.  `@implementor` — Fase 4 (Forja de código de produção via God Mode)
-6.  `@verifier` — Fase 5 (QA final, detecção de bugs, integridade do ecossistema)
+1.  `@dispatcher` — Fase ENTRADA (Triagem de Backlog)
+2.  `@architect` — Fase 0.5 (Visão Arquitetural de Alto Nível)
+3.  `@pesquisador` — Fase 1 (Exploração especializada de dados/terreno)
+4.  `@prompter` — Fase 2 (Estruturação do prompt ótimo)
+5.  `@planner` — Fase 3 (Investigação e criação cirúrgica de PRD/SPEC)
+6.  `@auditor` — Fase 4 (Paranoia técnica. Único com poder de bloqueio de SPEC)
+7.  `@implementor` — Fase 5 (Forja de código de produção via God Mode)
+8.  `@verifier` — Fase 6 (QA final, detecção de bugs, integridade do ecossistema)
 
 **AGENTES CONSULTIVOS (Paralelos e de Influência Poderosa):**
 
--   `@curator` — Integridade filosófica, ética, IP, pesquisa de mercado, estética
--   `@validador` — Validação matemática/factual (poker, teoria dos jogos, finanças)
--   `@securitychief` — Segurança SOTA, privacy, blindagem de endpoints
--   `@seo` — Otimização de tráfego, legibilidade e visibilidade orgânica
+- `@curator` — Integridade filosófica, ética, IP, pesquisa de mercado, estética
+- `@validador` — Validação matemática/factual (poker, teoria dos jogos, finanças)
+- `@securitychief` — Segurança SOTA, privacy, blindagem de endpoints
+- `@seo` — Otimização de tráfego, legibilidade e visibilidade orgânica
 
 **AGENTES TRANSVERSAIS E OPERACIONAIS (24/7):**
 
--   `@maverick` — (SUPER-AGENTE) Liderança intelectual e inteligência estratégica
--   `@organizador` — Health check de documentação e estruturação de diretórios
--   `@sequenciador` — Orquestrador de tráfego e repriorização
--   `@skillmaster` — Habilidoso em caos, multitasking, backups rigorosos e cleanup
--   `@dispatcher` — Quebra de intenções monolíticas em sequências atômicas de tarefas
--   `@bibliotecario` — Gestão cirúrgica de contexto longo, arquivamento e resgate de memória
+- `@maverick` — (SUPER-AGENTE) Liderança intelectual e inteligência estratégica
+- `@organizador` — Health check de documentação e estruturação de diretórios
+- `@sequenciador` — Orquestrador de tráfego e repriorização
+- `@skillmaster` — Habilidoso em caos, multitasking, backups rigorosos e cleanup
+- `@bibliotecario` — Gestão cirúrgica de contexto longo, arquivamento e resgate de memória
 
 ## 6. Leis de Engenharia Preditiva
 
 1.  **O Todo e a Parte:** Modificar um arquivo exige contemplar o efeito colateral. Alterar a camada de dados exige consertar os testes relativos.
 2.  **Resiliência Headless:** Interação exige fallbacks (`-Force`). Daemons nunca pausam.
-3.  **Simetria Operacional:** Se o back-end 
+3.  **Simetria Operacional:** Se o back-end usa SQLite com Mutex, o front-end usa estado local com Zustand. A consistência arquitetural não é estética — é semântica. Inconsistência de camada é débito técnico.
+4.  **ASCII no Backend:** Scripts `.ps1` e `.py` operam em ASCII puro. Acentuação no backend corrompe silenciosamente em Windows (encoding ANSI). Estética UTF-8 é reservada para frontend.
+5.  **God Mode com Auditoria:** Toda materialização de arquivo ou execução de comando deve ser registrada em `god_mode_audit`. Poder sem rastreabilidade é entropia.
+6.  **Fractalidade:** Cada alteração atualiza seu DNA — MEMORY.md do agente, Handoff Log, cabeçalho IDENTITY do arquivo alterado.
 
 ## Handoff Log
 
-| Agente | Status | Data | Notas |
-| ------ | ------ | ---- | ----- |
+| Agente       | Status    | Data       | Notas                                                                                                                                        |
+| ------------ | --------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
 | @pesquisador | Concluído | 2026-03-16 | Pesquisa sobre Raphael Vitoi e atualização do project-context.md para referenciar CLAUDE.md como fonte de verdade única para sua identidade. |
+| @planner     | Iniciado  | 2026-03-17 | Elaboração do PRD para o MasterSimulator (Motor ICM). Sincronização de infraestrutura concluída.                                             |

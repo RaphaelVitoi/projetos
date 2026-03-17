@@ -276,6 +276,7 @@ class QueueManager:
 AGENT_ROUTING = {
     # Deep Thinking: Prioriza Pro Free Tier, Flash backup, DeepSeek R1 (OpenRouter Free) como 3ª via, Claude 3.7 (Pago) como 4ª via
     "@maverick":      ("gemini-2.5-pro", "gemini-2.5-flash", "deepseek/deepseek-r1:free", "claude-3-7-sonnet-20250219"),
+    "@architect":     ("gemini-2.5-pro", "gemini-2.5-flash", "deepseek/deepseek-r1:free", "claude-3-7-sonnet-20250219"),
     "@planner":       ("gemini-2.5-pro", "gemini-2.5-flash", "deepseek/deepseek-r1:free", "claude-3-7-sonnet-20250219"),
     "@auditor":       ("gemini-2.5-pro", "gemini-2.5-flash", "deepseek/deepseek-r1:free", "claude-3-7-sonnet-20250219"),
     "@implementor":   ("gemini-2.5-pro", "gemini-2.5-flash", "deepseek/deepseek-r1:free", "claude-3-7-sonnet-20250219"),
@@ -297,6 +298,7 @@ AGENT_ROUTING = {
 }
 
 FALLBACK_MODEL = "gemini-2.5-flash"
+
 
 def get_agent_system_prompt(agent_name: str) -> str:
     """
@@ -879,6 +881,13 @@ if __name__ == "__main__":
             if status == "all": status = None
             tasks = manager.get_tasks(status)
             print(json.dumps([t.model_dump() for t in tasks]))
+        elif cmd == "get":
+            task_id = sys.argv[2]
+            task = manager.get_task(task_id)
+            if task:
+                print(json.dumps(task.model_dump(), indent=2))
+            else:
+                print(f"ERROR: Task {task_id} not found.")
         elif cmd == "db-cleanup":
             days = int(sys.argv[2]) if len(sys.argv) > 2 else 30
             manager.cleanup(days)

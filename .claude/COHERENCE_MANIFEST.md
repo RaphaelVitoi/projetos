@@ -6,7 +6,7 @@
 
 ## O Compromisso
 
-Cada um dos **17 agentes** funciona como parte de um **ecossistema coeso e harmônico**, não isolado. Nenhum agente:
+Cada um dos **18 agentes** (especialistas) funciona como parte de um **ecossistema coeso e harmônico**, não isolado. Nenhum agente:
 
 - Fica sem documentação
 - Desconhece seu papel na pipeline
@@ -68,9 +68,18 @@ Cada um dos 17 agentes tem:
 
 ---
 
-## Os 17 Agentes & Sua Integracao
+## Os 19 Agentes & Sua Integracao
 
-### PIPELINE LINEAR (6 agentes)
+### PIPELINE LINEAR (8 agentes)
+
+**@architect** (FASE 0.5)
+
+| Arquivo                                    | Status                            |
+| ------------------------------------------ | --------------------------------- |
+| `.claude/agents/architect.md`              | ✅ Documentado                    |
+| `.claude/agent-memory/architect/MEMORY.md` | ✅ Ativo com referência harmônica |
+| `project-context.md`                       | ✅ FASE 0.5 claro                 |
+| `GLOBAL_INSTRUCTIONS.md`                   | ✅ Row 3                          |
 
 **@pesquisador** (FASE 0)
 
@@ -213,17 +222,6 @@ Cada um dos 17 agentes tem:
 | `project-context.md`                         | ✅ Operacional 24/7               |
 | `GLOBAL_INSTRUCTIONS.md`                     | ✅ Row 18                         |
 
-### ENTRADA (1 agente)
-
-**@dispatcher** (FASE ENTRADA - Triagem de Backlog)
-
-| Arquivo                                     | Status                            |
-| ------------------------------------------- | --------------------------------- |
-| `.claude/agents/dispatcher.md`              | ✅ Documentado                    |
-| `.claude/agent-memory/dispatcher/MEMORY.md` | ✅ Ativo com referência harmônica |
-| `project-context.md`                        | ✅ FASE ENTRADA claro             |
-| `GLOBAL_INSTRUCTIONS.md`                    | ✅ Row 2                          |
-
 ### ESPECIALIZADOS ADICIONAIS E INTEGRAÇÃO FINAL (2 agentes)
 
 **@bibliotecario** (RAG & Banco Vetorial - Memória Coletiva)
@@ -253,7 +251,7 @@ Cada um dos 17 agentes tem:
 - [x] Cada agente sabe sua entrada/saida
 - [x] Cada agente sabe quem vem antes/depois
 - [x] Cada agente sabe quem e consultado em paralelo
-- [x] Cada agente sabe que pode consultar qualquer um dos 17
+- [x] Cada agente sabe que pode consultar qualquer um dos 18
 
 ### ✅ ACESSO AUTOMÁTICO A CONTEXTOS
 
@@ -266,7 +264,7 @@ Cada agente absorve:
 
 ### ✅ SINCRONIZAÇÃO DE MEMÓRIA
 
-- [x] @skillmaster sincroniza MEMORY dos 17 agentes periodicamente
+- [x] @skillmaster sincroniza MEMORY dos 18 agentes periodicamente
 - [x] Nenhuma inteligencia acumulada e perdida
 - [x] Padroes observados sao compartilhados
 
@@ -294,12 +292,12 @@ Cada agente absorve:
 
 ## Assinatura de Coerência
 
-**Ecossistema dos 15 Agentes Especialistas + 3 Entidades Liderança (18 Entidades Totais):** ✅ HARMONICAMENTE INTEGRADO
+**Ecossistema dos 16 Agentes Especialistas + 3 Entidades de Liderança (19 Entidades Totais):** ✅ HARMONICAMENTE INTEGRADO
 **Nenhum Agente/Super-Agente Isolado:** ✅ CONFIRMADO
 **Acesso ao Contexto Completo:** ✅ CONFIRMADO
-**Sincronizacao de Inteligencia:** ✅ CONFIRMADO (15 agentes especialistas + lideranças)
+**Sincronizacao de Inteligencia:** ✅ CONFIRMADO (16 agentes especialistas + lideranças)
 **Autoridade Clara:** ✅ CONFIRMADO (Raphael > @maverick/CHICO > 15 agentes)
-**Agentes Pendentes Integracao Completa:** NENHUM (100% Coerência)
+**Agentes Pendentes de Integracao Completa:** NENHUM (100% Coerência)
 
 **Status:** 🟢 **OPERACIONAL — COERÊNCIA TOTAL**
 
