@@ -27,11 +27,11 @@ const CATEGORY_META: Record<string, { label: string; order: number }> = {
   toyGame: { label: 'Toy Games (Predator Mode)', order: 2 },
 };
 
-// Mapa de ícones de categoria
+// Ícones de categoria como Unicode direto (evita dangerouslySetInnerHTML)
 const CATEGORY_ICONS: Record<string, string> = {
-  clinical: '&#x1F9EA;',
-  baseline: '&#x2699;',
-  toyGame: '&#x1F3AF;',
+  clinical: '\u{1F9EA}',   // 🧪
+  baseline: '\u2699',      // ⚙
+  toyGame:  '\u{1F3AF}',   // 🎯
 };
 
 export default function ScenarioSelector({
@@ -69,11 +69,7 @@ export default function ScenarioSelector({
         {groups.map(([category, items]) => (
           <div key={category} className={styles.selectorGroup}>
             <h3 className={styles.selectorGroupLabel}>
-              <span
-                dangerouslySetInnerHTML={{
-                  __html: CATEGORY_ICONS[category] ?? '',
-                }}
-              />
+              <span aria-hidden="true">{CATEGORY_ICONS[category] ?? ''}</span>
               {' '}
               {CATEGORY_META[category]?.label ?? category}
             </h3>

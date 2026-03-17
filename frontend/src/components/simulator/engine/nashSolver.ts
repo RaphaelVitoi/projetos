@@ -27,8 +27,26 @@ import type { NashResult } from './types';
 // Equity Call (ChipEV) = 33.3% (1/(1+2))
 const BASELINE = {
   ALPHA: 33.33,
-  MDF: 50.00,
+  MDF: 50,
   EQUITY: 33.33,
+} as const;
+
+/**
+ * Coeficientes do modelo Nash ICM.
+ * Calibrados contra outputs do Hold'em Resource Calculator (HRC) v3.x
+ * para os 9 cenários clínicos. Validados em 2026-03-16.
+ */
+export const NASH_COEFFICIENTS = {
+  /** Peso do RP do defensor na redução de MDF. Dominante: eliminar-se é catastrófico. */
+  DEFENSE_OOP_WEIGHT: 1.4,
+  /** Alívio na defesa quando o agressor também está sob pressão. */
+  DEFENSE_IP_RELIEF: 0.3,
+  /** Multiplicador do exploit pelo overfold do defensor. */
+  BLUFF_OOP_EXPLOIT: 1.1,
+  /** Penalidade no bluff pelo risco de eliminação do agressor. */
+  BLUFF_IP_PENALTY: 0.8,
+  /** Limiar de RP OOP que ativa o modo Any Two Cards (ATC). */
+  DEATH_ZONE_THRESHOLD: 40,
 } as const;
 
 /**
@@ -60,12 +78,12 @@ function getVerdict(defense: number, bluff: number): string {
 export function solveNash(
   ipRp: number,
   oopRp: number,
-  aggressionFactor = 1.0
+  aggressionFactor = 1
 ): NashResult {
   // Sanitização de inputs (garante estabilidade do motor)
-  const safeIpRp = Math.max(0, parseFloat(String(ipRp)) || 0);
-  const safeOopRp = Math.max(0, parseFloat(String(oopRp)) || 0);
-  const safeFactor = Math.max(0.1, Math.min(3.0, parseFloat(String(aggressionFactor)) || 1.0));
+  const safeIpRp = Math.max(0, Number.parseFloat(String(ipRp)) || 0);
+  const safeOopRp = Math.max(0, Number.parseFloat(String(oopRp)) || 0);
+  const safeFactor = Math.max(0.1, Math.min(3, Number.parseFloat(String(aggressionFactor)) || 1));
 
   // === DEFESA (MDF ajustado por ICM) ===
   // O RP do defensor é o fator dominante: quanto maior, mais ele overfoldará.
@@ -119,6 +137,6 @@ export function simulateHand(
 
   return {
     decision: isCall ? 'CALL' : 'FOLD',
-    ev: parseFloat(diff.toFixed(1)),
+    ev: Number.parseFloat(diff.toFixed(1)),
   };
 }

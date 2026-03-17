@@ -1,7 +1,7 @@
 /**
  * IDENTITY: Tipos do Simulador Mestre ICM
  * PATH: src/components/simulator/engine/types.ts
- * ROLE: Interfaces TypeScript para todo o ecossistema do simulador.
+ * ROLE: Interfaces TypeScript para o ecossistema completo do simulador.
  */
 
 // Estágio do pipeline SPR (Stack-to-Pot Ratio)
@@ -24,18 +24,22 @@ export interface Quiz {
   explanation: string;
 }
 
+// Tipos literais para segurança em tempo de compilação
+export type ScenarioColor = 'indigo' | 'rose' | 'emerald' | 'sky' | 'amber' | 'fuchsia' | 'slate';
+export type ScenarioCategory = 'clinical' | 'baseline' | 'toyGame';
+
 // Cenário completo do simulador
 export interface Scenario {
   id: string;
   name: string;
-  category: 'clinical' | 'baseline' | 'toyGame';
+  category: ScenarioCategory;
   stacks: number[];
   ipRp: number;
   oopRp: number;
   narrativeTitle: string;
   narrativeSubtitle: string;
   icon: string;
-  color: string;
+  color: ScenarioColor;
   theory: string;
   exploit: string[];
   sprData: SprStage[];

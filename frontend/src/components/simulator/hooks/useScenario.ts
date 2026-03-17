@@ -9,6 +9,8 @@ import { useState, useCallback } from 'react';
 import { SCENARIOS } from '../engine/scenarios';
 import type { Scenario } from '../engine/types';
 
+const STORAGE_KEY = 'icm_simulator_scenario';
+
 interface UseScenarioReturn {
   scenario: Scenario;
   setScenario: (id: string) => void;
@@ -17,18 +19,27 @@ interface UseScenarioReturn {
 
 /**
  * Gerencia o cenário ativo do simulador.
- * Permite trocar por ID e fornece a lista completa para navegação.
+ * Persiste a seleção em localStorage para manter contexto entre sessões.
  */
 export function useScenario(): UseScenarioReturn {
-  const [activeId, setActiveId] = useState<string>(SCENARIOS[0].id);
+  const [activeId, setActiveId] = useState<string>(() => {
+    // Recupera último cenário visitado (SSR-safe)
+    if (globalThis.window !== undefined) {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved && SCENARIOS.some(s => s.id === saved)) return saved;
+    }
+    return SCENARIOS[0].id;
+  });
 
   const scenario = SCENARIOS.find(s => s.id === activeId) ?? SCENARIOS[0];
 
   const setScenario = useCallback((id: string) => {
-    // Valida que o cenário existe antes de mudar
     const exists = SCENARIOS.some(s => s.id === id);
     if (exists) {
       setActiveId(id);
+      if (globalThis.window !== undefined) {
+        localStorage.setItem(STORAGE_KEY, id);
+      }
     }
   }, []);
 

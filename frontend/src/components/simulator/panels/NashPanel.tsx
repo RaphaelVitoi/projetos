@@ -7,8 +7,9 @@
  * BINDING: [hooks/useNashSolver.ts, ui/AnimatedNumber.tsx, simulator.module.css]
  */
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import type { NashResult } from '../engine/types';
+import { solveNash } from '../engine/nashSolver';
 import AnimatedNumber from '../ui/AnimatedNumber';
 import styles from '../simulator.module.css';
 
@@ -18,11 +19,28 @@ interface NashPanelProps {
   onAggressionChange: (value: number) => void;
 }
 
+// Delta formatado com sinal (+/-)
+function formatDelta(delta: number): string {
+  const fixed = delta.toFixed(1);
+  return delta >= 0 ? `+${fixed}%` : `${fixed}%`;
+}
+
 export default function NashPanel({
   nash,
   aggressionFactor,
   onAggressionChange,
 }: Readonly<NashPanelProps>) {
+  // Análise de sensibilidade: como os resultados mudariam com +10% em cada RP
+  const sensitivity = useMemo(() => {
+    const { ipRp, oopRp } = nash.rawData;
+    const withOopPlus = solveNash(ipRp, oopRp + 10, aggressionFactor);
+    const withIpPlus  = solveNash(ipRp + 10, oopRp, aggressionFactor);
+    return {
+      oopPlus:  { bluff: withOopPlus.bluffFreq - nash.bluffFreq, defense: withOopPlus.defenseFreq - nash.defenseFreq },
+      ipPlus:   { bluff: withIpPlus.bluffFreq  - nash.bluffFreq, defense: withIpPlus.defenseFreq  - nash.defenseFreq },
+    };
+  }, [nash, aggressionFactor]);
+
   return (
     <div className={styles.glassPanel} style={{ padding: '1.5rem' }}>
       {/* Header */}
@@ -93,8 +111,43 @@ export default function NashPanel({
             />
           </div>
           <p style={{ fontSize: '0.55rem', color: '#475569', margin: '0.3rem 0 0', fontStyle: 'italic' }}>
-            Baseline: 50.0% (PSB)
+            Baseline: 50% (PSB)
           </p>
+        </div>
+      </div>
+
+      {/* Análise de Sensibilidade — inovação pedagógica */}
+      <div style={{
+        background: 'rgba(15, 23, 42, 0.5)',
+        border: '1px solid rgba(255, 255, 255, 0.05)',
+        borderRadius: '12px',
+        padding: '0.9rem 1.1rem',
+        marginBottom: '1rem',
+      }}>
+        <p style={{ margin: '0 0 0.6rem', fontSize: '0.55rem', fontWeight: 800, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
+          Sensibilidade (+10% RP)
+        </p>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+          {/* Se RP OOP subir 10% */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+            <span style={{ fontSize: '0.5rem', color: '#64748b', textTransform: 'uppercase' }}>RP OOP +10%</span>
+            <span style={{ fontSize: '0.65rem', fontWeight: 700, color: sensitivity.oopPlus.bluff >= 0 ? '#818cf8' : '#f43f5e', fontFamily: "'JetBrains Mono', monospace" }}>
+              Alpha: {formatDelta(sensitivity.oopPlus.bluff)}
+            </span>
+            <span style={{ fontSize: '0.65rem', fontWeight: 700, color: sensitivity.oopPlus.defense <= 0 ? '#f43f5e' : '#10b981', fontFamily: "'JetBrains Mono', monospace" }}>
+              MDF: {formatDelta(sensitivity.oopPlus.defense)}
+            </span>
+          </div>
+          {/* Se RP IP subir 10% */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+            <span style={{ fontSize: '0.5rem', color: '#64748b', textTransform: 'uppercase' }}>RP IP +10%</span>
+            <span style={{ fontSize: '0.65rem', fontWeight: 700, color: sensitivity.ipPlus.bluff >= 0 ? '#818cf8' : '#f43f5e', fontFamily: "'JetBrains Mono', monospace" }}>
+              Alpha: {formatDelta(sensitivity.ipPlus.bluff)}
+            </span>
+            <span style={{ fontSize: '0.65rem', fontWeight: 700, color: sensitivity.ipPlus.defense >= 0 ? '#10b981' : '#f43f5e', fontFamily: "'JetBrains Mono', monospace" }}>
+              MDF: {formatDelta(sensitivity.ipPlus.defense)}
+            </span>
+          </div>
         </div>
       </div>
 
