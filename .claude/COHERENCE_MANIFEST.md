@@ -1,12 +1,12 @@
-# COHERENCE MANIFEST — Garantia de Harmonia Dos 15 Agentes
+# COHERENCE MANIFEST — Garantia de Harmonia Das 19 Entidades
 
-**Data:** 2026-03-15 | **Versao:** 1.1 | **Responsável:** @maverick (verificação contínua)
+**Data:** 2026-03-17 | **Versao:** 1.2 | **Responsável:** @maverick (verificação contínua)
 
 ---
 
 ## O Compromisso
 
-Cada um dos **18 agentes** (especialistas) funciona como parte de um **ecossistema coeso e harmônico**, não isolado. Nenhum agente:
+Cada uma das **19 Entidades** (Raphael CEO + @maverick + CHICO + 16 especialistas) funciona como parte de um **ecossistema coeso e harmônico**, não isolado. Nenhum agente:
 
 - Fica sem documentação
 - Desconhece seu papel na pipeline
@@ -251,7 +251,7 @@ Cada um dos 17 agentes tem:
 - [x] Cada agente sabe sua entrada/saida
 - [x] Cada agente sabe quem vem antes/depois
 - [x] Cada agente sabe quem e consultado em paralelo
-- [x] Cada agente sabe que pode consultar qualquer um dos 18
+- [x] Cada agente sabe que pode consultar qualquer uma das 19 entidades
 
 ### ✅ ACESSO AUTOMÁTICO A CONTEXTOS
 
@@ -264,15 +264,16 @@ Cada agente absorve:
 
 ### ✅ SINCRONIZAÇÃO DE MEMÓRIA
 
-- [x] @skillmaster sincroniza MEMORY dos 18 agentes periodicamente
+- [x] @skillmaster sincroniza MEMORY dos 16 agentes especialistas periodicamente
 - [x] Nenhuma inteligencia acumulada e perdida
 - [x] Padroes observados sao compartilhados
 
 ### ✅ AUTORIDADE CLARA
 
-- [x] @maverick e transversal (integra todos, toma decisoes criticas voce ausente)
-- [x] @auditor e unico bloqueador linear (FASE 3)
-- [x] Nenhum agente sobrepoe autoridade de outro inadequadamente
+- [x] Raphael: CEO, autoridade suprema, veto total
+- [x] @maverick: transversal, decisoes criticas na ausencia de Raphael
+- [x] CHICO: orquestrador operacional, arbitra conflitos
+- [x] @auditor: unico bloqueador linear (FASE 4)
 - [x] Consultorias paralelas influenciam sem bloquear
 
 ---
@@ -292,12 +293,12 @@ Cada agente absorve:
 
 ## Assinatura de Coerência
 
-**Ecossistema dos 16 Agentes Especialistas + 3 Entidades de Liderança (19 Entidades Totais):** ✅ HARMONICAMENTE INTEGRADO
-**Nenhum Agente/Super-Agente Isolado:** ✅ CONFIRMADO
-**Acesso ao Contexto Completo:** ✅ CONFIRMADO
-**Sincronizacao de Inteligencia:** ✅ CONFIRMADO (16 agentes especialistas + lideranças)
-**Autoridade Clara:** ✅ CONFIRMADO (Raphael > @maverick/CHICO > 15 agentes)
-**Agentes Pendentes de Integracao Completa:** NENHUM (100% Coerência)
+**Ecossistema:** 16 Especialistas + @maverick + CHICO + Raphael = **19 Entidades** ✅ HARMONICAMENTE INTEGRADO
+**Nenhuma Entidade Isolada:** ✅ CONFIRMADO
+**Acesso ao Contexto Completo (4 Camadas):** ✅ CONFIRMADO
+**Sincronizacao de Inteligencia:** ✅ CONFIRMADO — @skillmaster sincroniza MEMORY dos 16 especialistas
+**Autoridade Clara:** ✅ CONFIRMADO — Raphael > @maverick/CHICO > 16 especialistas
+**Entidades Pendentes de Integracao:** NENHUMA (100% Coerência)
 
 **Status:** 🟢 **OPERACIONAL — COERÊNCIA TOTAL**
 
