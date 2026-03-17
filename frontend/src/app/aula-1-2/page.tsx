@@ -12,6 +12,33 @@ export const metadata = {
   description: 'Aprofundamento ICM Pós-Flop: Risk Premium, Downward Drift e as decisões que separam jogadores medianos de profissionais de elite.',
 };
 
+const NODELOCKS = [
+  {
+    id: 12,
+    title: 'Cenário 12',
+    subtitle: 'Nodelock: IP Action após BB Check',
+    description: 'A frequência mínima de c-bets elevada pode estar sendo influenciada por variáveis externas. Estratégias mixadas indicam indiferença de EV — ChipEV e ICMev convergem nesse nó.'
+  },
+  {
+    id: 19,
+    title: 'Cenário 19',
+    subtitle: 'Nodelock: Obrigando o IP a cbetar sizing baixa',
+    description: 'Revela como o OOP reage quando forçado a defender range contra sizing pequeno — expõe o custo do ICM em ranges que ChipEV equilibraria facilmente.'
+  },
+  {
+    id: 27,
+    title: 'Cenário 27',
+    subtitle: 'Nodelock: somente sizing de 50%',
+    description: 'Isola o Downward Drift: forçar sizing médio impede que o solver encontre a polarização extrema (B20 ou all-in) que é a resposta ótima de ICM — tornando a estratégia mais custosa.'
+  },
+  {
+    id: 54,
+    title: 'Cenário 54',
+    subtitle: 'Obrigando o IP a ter somente B20',
+    description: 'Comprova que no ICMev o solver prefere B20 naturalmente. Ao forçá-lo, a reação do BB muda: o defensor consegue realizar mais equidade com menos risco — reduzindo o Risk Premium efetivo do BB.'
+  }
+];
+
 export default function Aula12Page() {
   return (
     <main className="container">
@@ -220,26 +247,13 @@ export default function Aula12Page() {
 
           <h3>Nodelocks Críticos e Seus Achados</h3>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
-            <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '8px', borderLeft: '3px solid var(--accent-primary)' }}>
-              <strong style={{ color: 'var(--accent-primary)' }}>Cenário 12</strong>
-              <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem' }}>Nodelock: IP Action após BB Check</p>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: 0 }}>A frequência mínima de c-bets elevada pode estar sendo influenciada por variáveis externas. Estratégias mixadas indicam indiferença de EV — ChipEV e ICMev convergem nesse nó.</p>
-            </div>
-            <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '8px', borderLeft: '3px solid var(--accent-primary)' }}>
-              <strong style={{ color: 'var(--accent-primary)' }}>Cenário 19</strong>
-              <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem' }}>Nodelock: Obrigando o IP a cbetar sizing baixa</p>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: 0 }}>Revela como o OOP reage quando forçado a defender range contra sizing pequeno — expõe o custo do ICM em ranges que ChipEV equilibraria facilmente.</p>
-            </div>
-            <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '8px', borderLeft: '3px solid var(--accent-primary)' }}>
-              <strong style={{ color: 'var(--accent-primary)' }}>Cenário 27</strong>
-              <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem' }}>Nodelock: somente sizing de 50%</p>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: 0 }}>Isola o Downward Drift: forçar sizing médio impede que o solver encontre a polarização extrema (B20 ou all-in) que é a resposta ótima de ICM — tornando a estratégia mais custosa.</p>
-            </div>
-            <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '8px', borderLeft: '3px solid var(--accent-primary)' }}>
-              <strong style={{ color: 'var(--accent-primary)' }}>Cenário 54</strong>
-              <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem' }}>Obrigando o IP a ter somente B20</p>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: 0 }}>Comprova que no ICMev o solver prefere B20 naturalmennte. Ao forcê-lo, a reação do BB muda: o defensor consegue realizar mais equidade com menos risco — reduzindo o Risk Premium efetivo do BB.</p>
-            </div>
+            {NODELOCKS.map((node) => (
+              <div key={node.id} style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '8px', borderLeft: '3px solid var(--accent-primary)' }}>
+                <strong style={{ color: 'var(--accent-primary)' }}>{node.title}</strong>
+                <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem' }}>{node.subtitle}</p>
+                <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: 0 }}>{node.description}</p>
+              </div>
+            ))}
           </div>
 
           <div className="callout callout-secondary" style={{ marginTop: '2rem' }}>
@@ -252,7 +266,7 @@ export default function Aula12Page() {
             </p>
             <p style={{ marginBottom: 0 }}>
               O fenômeno mais robusto é a <strong>migração quase total das apostas grandes para sizings
-              pequenos</strong> (B20/B33). No ChipEV, sizings médios e grandes coexistem. No ICMev, o
+                pequenos</strong> (B20/B33). No ChipEV, sizings médios e grandes coexistem. No ICMev, o
               Downward Drift comprime a ação: o que era B75 vira B33, o que era B33 vira check. A única
               exceção são as polarizações extremas (all-in com nuts ou blefe puro), que sobrevivem intactas.
             </p>
