@@ -1,28 +1,28 @@
-<#
-.SYNOPSIS
-    Injeta a tarefa de planejamento para a feature interativa do Simulador ICM (Next.js).
-#>
+# Script de Inicialização de Feature - Simulador ICM
+# Objetivo: Recuperar a intenção de adicionar controles de cenário de fundador e enfileirar para planejamento.
 
 $ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+$KernelPath = Join-Path $ProjectRoot "Agent-TaskManager.psm1"
+Import-Module $KernelPath -Force
 
-Write-Host '=== PROTOCOLO: FEATURE ICM FOUNDER (NEXT.JS) ===' -ForegroundColor Magenta
+Write-Host "=== INICIANDO PROTOCOLO DE RECUPERAÇÃO DE INTENÇÃO (CHICO) ===" -ForegroundColor Magenta
 
-$taskId = "FEATURE-ICM-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
-$description = "A Calculadora/Simulador de ICM (Poker) ja esta construida, isolada e em fase de finalizacao (Motor Vanilla JS/HTML existente). " +
-"Sua missao e analisar a logica de calculo de Risk Premium ja consolidada no projeto e planejar a migracao/integracao impecavel desse motor para a nova estrutura de componentes React (Next.js). " +
-"Gere uma SPEC orientando o @implementor sobre como encapsular o 'main.js' e a interface atual no padrao App Router do Next.js sem perder dados ou quebrar as formulas validadas."
+# A sessão anterior foi interrompida. Esta tarefa formaliza a intenção para garantir a execução resiliente.
+$taskId = "ICM-FEAT-FOUNDERS-$(Get-Date -Format 'yyyyMMddHHmm')"
+$taskDescription = "Planejar a adição de botões/controles na UI do Simulador ICM para permitir a troca dinâmica de cenários de fundadores (ex: Fundador A vs. Fundador B). A especificação (SPEC) deve detalhar: 1) As mudanças no estado do componente React. 2) A lógica para atualizar o IcmCapTable e IcmCharts. 3) O design e posicionamento dos novos botões. 4) Como o estado será gerenciado (local ou global)."
 
 $task = [ordered]@{
-    "id"          = $taskId
-    "description" = $description
-    "status"      = "pending"
-    "timestamp"   = (Get-Date -Format "o")
-    "agent"       = "@planner"
+    id          = $taskId
+    description = $taskDescription
+    status      = "pending"
+    timestamp   = (Get-Date -Format "o")
+    agent       = "@planner"
+    metadata    = @{
+        origin  = "Recuperação de sessão por @chico"
+        feature = "ICM Founder Scenarios"
+    }
 }
 
-$taskJson = $task | ConvertTo-Json -Depth 10 -Compress:$true
-$taskB64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($taskJson))
-$PythonCmd = if (Test-Path "$ProjectRoot\.venv\Scripts\python.exe") { "$ProjectRoot\.venv\Scripts\python.exe" } else { "python" }
-
-& $PythonCmd (Join-Path $ProjectRoot "task_executor.py") db-add $taskB64 | Out-Null
-Write-Host '[NEXUS] Tarefa materializada e delegada ao @planner via SQLite.' -ForegroundColor Green
+Add-AgentTask -NewTask $task
+Write-Host "[CHICO] Intenção recuperada e formalizada. Tarefa de planejamento ($taskId) enfileirada para o @planner." -ForegroundColor Cyan
+Write-Host "[CHICO] O @planner irá agora realizar a análise forense e criar o PRD/SPEC. A partir daí, o processo seguirá o fluxo padrão, garantindo a integridade do sistema."

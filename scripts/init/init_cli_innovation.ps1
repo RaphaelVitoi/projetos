@@ -1,9 +1,8 @@
 # Script de Inicialização de Inovação - Maverick -> Planner
 # Objetivo: Materializar o conceito da CLI Inteligente e enfileirar para planejamento técnico.
 
-$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 $TaskSlug = "cli-interativa"
-$TaskDir = Join-Path $ProjectRoot "docs\tasks\$TaskSlug"
+$TaskDir = Join-Path $PSScriptRoot "docs\tasks\$TaskSlug"
 $ConceptFile = Join-Path $TaskDir "CONCEPT_MAVERICK.md"
 
 Write-Host "=== INICIANDO PROTOCOLO DE INOVAÇÃO (MAVERICK) ===" -ForegroundColor Magenta
@@ -59,8 +58,8 @@ $task = [ordered]@{
 $taskJson = $task | ConvertTo-Json -Depth 10 -Compress:$true
 $taskB64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($taskJson))
 
-$PyScript = Join-Path $ProjectRoot "task_executor.py"
-$PythonCmd = if (Test-Path "$ProjectRoot\.venv\Scripts\python.exe") { "$ProjectRoot\.venv\Scripts\python.exe" } else { "python" }
+$PyScript = Join-Path $PSScriptRoot "task_executor.py"
+$PythonCmd = if (Test-Path "$PSScriptRoot\.venv\Scripts\python.exe") { "$PSScriptRoot\.venv\Scripts\python.exe" } else { "python" }
 
 $output = & $PythonCmd $PyScript db-add $taskB64
 if ($LASTEXITCODE -ne 0) { Write-Error "Falha ao enfileirar: $output" }

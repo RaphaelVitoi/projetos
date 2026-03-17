@@ -3,19 +3,12 @@
     NEXUS DASHBOARD: Monitoramento em Tempo Real da Fila de Tarefas
 #>
 
-$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
-$QueuePath = Join-Path $ProjectRoot "queue\tasks.json"
-$ArchivePath = Join-Path $ProjectRoot "logs\tasks_archived.json"
+$QueuePath = Join-Path $PSScriptRoot "queue\tasks.json"
 
 while ($true) {
-    try {
-        [console]::Clear()
-    }
-    catch {
-        Clear-Host
-    }
+    Clear-Host
     Write-Host '==========================================================================' -ForegroundColor Cyan
-    Write-Host " [DASHBOARD] NEXUS :: Visao Global do Fluxo de Trabalho | $(Get-Date -Format 'HH:mm:ss')" -ForegroundColor Yellow
+    Write-Host ' [DASHBOARD] NEXUS :: Visao Global do Fluxo de Trabalho' -ForegroundColor Yellow
     Write-Host '==========================================================================' -ForegroundColor Cyan
     Write-Host ''
 
@@ -28,31 +21,16 @@ while ($true) {
             $payload = $raw | ConvertFrom-Json
             $tasks = if ($null -ne $payload.tasks) { @($payload.tasks) } else { @() }
 
-            $archivedCount = 0
-            if (Test-Path $ArchivePath) {
-                $archivedRaw = Get-Content $ArchivePath -Raw -Encoding UTF8
-                $archivedPayload = $archivedRaw | ConvertFrom-Json
-                $archivedTasks = if ($null -ne $archivedPayload.tasks) { @($archivedPayload.tasks) } else { @() }
-                $archivedCount = $archivedTasks.Count
-            }
-
             $pending = @($tasks | Where-Object { $_.status -eq 'pending' })
             $running = @($tasks | Where-Object { $_.status -eq 'running' })
             $completed = @($tasks | Where-Object { $_.status -eq 'completed' })
             $failed = @($tasks | Where-Object { $_.status -eq 'failed' })
 
-            $totalTasks = $tasks.Count
-            $limit = 500
-            $utilization = [math]::Round((($totalTasks / $limit) * 100), 1)
-            $capColor = if ($utilization -ge 90) { 'Red' } elseif ($utilization -ge 75) { 'Yellow' } else { 'DarkCyan' }
-
             Write-Host ' [ CONCENTRACAO DE ENTROPIA ]' -ForegroundColor White
-            Write-Host " [CAP] Ocupacao Fila: $totalTasks / $limit ($utilization%)" -ForegroundColor $capColor
             Write-Host " [...] Pendentes : $($pending.Count)" -ForegroundColor Gray
             Write-Host " [>>>] Rodando   : $($running.Count)" -ForegroundColor Magenta
             Write-Host " [OK]  Concluidas: $($completed.Count)" -ForegroundColor Green
             Write-Host " [ERR] Falhas    : $($failed.Count)" -ForegroundColor Red
-            Write-Host " [MEM] Arquivadas: $archivedCount" -ForegroundColor DarkCyan
             Write-Host ''
 
             Write-Host ' [ SINAPSES ATIVAS ]' -ForegroundColor White

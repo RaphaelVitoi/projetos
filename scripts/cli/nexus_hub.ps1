@@ -3,9 +3,8 @@
     NEXUS HUB: Central de Comando Unificada e Visual.
 #>
 
-$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
-$QueuePath = Join-Path $ProjectRoot "queue\tasks.json"
-$AutonomyPath = Join-Path $ProjectRoot ".claude\autonomy.json"
+$QueuePath = Join-Path $PSScriptRoot "queue\tasks.json"
+$AutonomyPath = Join-Path $PSScriptRoot ".claude\autonomy.json"
 
 Clear-Host
 Write-Host "==========================================================================" -ForegroundColor Cyan

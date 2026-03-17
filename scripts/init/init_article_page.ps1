@@ -3,8 +3,7 @@
     Injeta a tarefa de implementação da Página de Artigo Individual para o @implementor.
 #>
 
-$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
-$KernelPath = Join-Path $ProjectRoot "Agent-TaskManager.psm1"
+$KernelPath = Join-Path $PSScriptRoot "Agent-TaskManager.psm1"
 Import-Module $KernelPath -Force
 
 Write-Host "=== PROTOCOLO: MATERIALIZAÇÃO DA PÁGINA DE ARTIGO ===" -ForegroundColor Magenta

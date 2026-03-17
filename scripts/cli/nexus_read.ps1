@@ -4,14 +4,12 @@
 #>
 param([string]$TaskId)
 
-$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
-
 if (-not $TaskId) {
     Write-Host '=== [READ] NEXUS READER ===' -ForegroundColor Cyan
     $TaskId = Read-Host 'Digite o ID da tarefa (exemplo: TASK-2026)'
 }
 
-$ResultsDir = Join-Path $ProjectRoot '.claude\task_results'
+$ResultsDir = Join-Path $PSScriptRoot '.claude\task_results'
 $TargetFile = Get-ChildItem -Path $ResultsDir -Filter ('*{0}*.md' -f $TaskId) -ErrorAction SilentlyContinue | Select-Object -First 1
 
 if ($null -ne $TargetFile -and $TargetFile.FullName) {

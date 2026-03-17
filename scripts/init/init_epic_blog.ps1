@@ -3,8 +3,7 @@
     Injeta o Épico do Sistema de Blog para o @dispatcher orquestrar.
 #>
 
-$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
-$KernelPath = Join-Path $ProjectRoot "Agent-TaskManager.psm1"
+$KernelPath = Join-Path $PSScriptRoot "Agent-TaskManager.psm1"
 Import-Module $KernelPath -Force
 
 Write-Host "=== PROTOCOLO: EPIC BLOG SYSTEM ===" -ForegroundColor Magenta

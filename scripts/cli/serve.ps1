@@ -1,8 +1,6 @@
 # Serve Project on Port 5500
 # Tries Python 3, Python 2, Node (npx), or generic message.
 
-$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
-
 Write-Host "=== SERVING PROJECT ON PORT 5500 ===" -ForegroundColor Cyan
 
 if (Get-Command python -ErrorAction SilentlyContinue) {
@@ -37,14 +35,14 @@ else {
             $res = $context.Response
             
             $path = if ($req.Url.LocalPath -eq "/") { "index.html" } else { $req.Url.LocalPath.TrimStart('/') }
-            $filePath = Join-Path $ProjectRoot $path
+            $filePath = Join-Path $PSScriptRoot $path
             
             # BLINDAGEM DE SEGURANÇA: Path Traversal Check
             # Resolve o caminho absoluto e verifica se ainda está dentro da raiz
             $fullPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($filePath)
-            $rootPath = $ProjectRoot + [System.IO.Path]::DirectorySeparatorChar
+            $rootPath = $PSScriptRoot + [System.IO.Path]::DirectorySeparatorChar
             
-            if (-not ($fullPath.StartsWith($rootPath) -or $fullPath -eq $ProjectRoot)) {
+            if (-not ($fullPath.StartsWith($rootPath) -or $fullPath -eq $PSScriptRoot)) {
                 $res.StatusCode = 403 # Forbidden
             }
             elseif (Test-Path $fullPath -PathType Leaf) {

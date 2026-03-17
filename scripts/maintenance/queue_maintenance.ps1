@@ -1,8 +1,7 @@
 # Script de Ciclo de Manutenção - Médio Prazo
 # Operacionaliza as tarefas de documentação e health check do Relatório Sentinela 2026-03-12
 
-$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
-$KernelPath = Join-Path $ProjectRoot "Agent-TaskManager.psm1"
+$KernelPath = Join-Path $PSScriptRoot "Agent-TaskManager.psm1"
 Import-Module $KernelPath -Force
 
 Write-Host "=== INICIANDO CICLO DE MANUTENÇÃO (MÉDIO PRAZO) ===" -ForegroundColor Cyan

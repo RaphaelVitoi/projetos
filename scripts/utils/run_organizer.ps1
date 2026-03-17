@@ -1,13 +1,12 @@
 # Simulação de Execução de Agente: @organizador
 # Tarefa: 20260312-124500-777 (Validar MEMORY.md - Regra 4)
 
-$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
-$KernelPath = Join-Path $ProjectRoot "Agent-TaskManager.psm1"
+$KernelPath = Join-Path $PSScriptRoot "Agent-TaskManager.psm1"
 Import-Module $KernelPath -Force
 
 $TaskId = "20260312-124500-777"
 $Agents = @("dispatcher", "pesquisador", "prompter", "planner", "auditor", "implementor", "verifier", "validador", "organizador", "securitychief", "skillmaster", "sequenciador")
-$MemoryBase = Join-Path $ProjectRoot ".claude\agent-memory"
+$MemoryBase = Join-Path $PSScriptRoot ".claude\agent-memory"
 
 Write-Host "=== AGENTE @ORGANIZADOR INICIADO ===" -ForegroundColor Magenta
 

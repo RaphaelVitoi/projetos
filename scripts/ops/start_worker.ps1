@@ -1,24 +1,14 @@
 <#
 .SYNOPSIS
-    Inicia o Motor de Fila Pydantic (Python) silenciosamente em background.
+    Inicia o Orquestrador Python SOTA garantindo a injecao das variaveis de ambiente (API Keys).
 #>
 
-$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
-$WorkerScript = Join-Path $ProjectRoot "task_executor.py"
+$EnvPath = Join-Path $PSScriptRoot "_env.ps1"
+if (Test-Path $EnvPath) { . $EnvPath }
 
-Write-Host "=== IGNIFICANDO WORKER PYDANTIC ===" -ForegroundColor Cyan
+Write-Host "=== INICIANDO WORKER (COM CHAVES DE API INJETADAS) ===" -ForegroundColor Cyan
 
-try {
-    $PythonCmd = "python"
-    $VenvPython = Join-Path $ProjectRoot ".venv\Scripts\python.exe"
-    if (Test-Path $VenvPython) { $PythonCmd = $VenvPython }
+$PyScript = Join-Path $PSScriptRoot "task_executor.py"
+$PythonCmd = if (Test-Path "$PSScriptRoot\.venv\Scripts\python.exe") { "$PSScriptRoot\.venv\Scripts\python.exe" } else { "python" }
 
-    # Injeta a memória do ambiente (_env.ps1) no processo oculto para garantir o acesso às chaves de API
-    $EnvScript = Join-Path $ProjectRoot "_env.ps1"
-    $RunCommand = "if (Test-Path '$EnvScript') { . '$EnvScript' }; & `"$PythonCmd`" `"$WorkerScript`" worker"
-    Start-Process -FilePath "powershell.exe" -ArgumentList "-NoProfile", "-WindowStyle", "Hidden", "-Command", $RunCommand -WindowStyle Hidden
-    Write-Host "[PULSO] Orquestrador Python iniciado nas sombras. [CORE]" -ForegroundColor Green
-}
-catch {
-    Write-Host "[CRÍTICO] Falha ao iniciar Worker: $_" -ForegroundColor Red
-}
+& $PythonCmd $PyScript worker

@@ -3,8 +3,7 @@
     Exibe as tarefas concluídas nos últimos 7 dias.
 #>
 
-$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
-$QueuePath = Join-Path $ProjectRoot "queue\tasks.json"
+$QueuePath = Join-Path $PSScriptRoot "queue\tasks.json"
 $CutoffDate = (Get-Date).AddDays(-7)
 
 Clear-Host

@@ -4,6 +4,7 @@ import sys
 import os
 import base64
 import re
+import subprocess
 import urllib.request
 import urllib.error
 import logging
@@ -427,7 +428,7 @@ def call_openrouter(model: str, system_prompt: str, user_prompt: str, api_key: s
         error_body = e.read().decode('utf-8')
         raise RuntimeError(f"HTTP {e.code}: {e.reason} - {error_body}")
 
-def _try_gemini(model: str, system_prompt: str, user_prompt: str, keys: List[str], agent_name: str) -> Optional[str]:
+def _try_gemini(model: str, system_prompt: str, user_prompt: str, keys: List[str], agent_name: str, manager: QueueManager) -> Optional[str]:
     """Tenta chamar a API da Gemini com uma lista de chaves, com retentativas."""
     if not keys:
         return None
@@ -442,7 +443,7 @@ def _try_gemini(model: str, system_prompt: str, user_prompt: str, keys: List[str
                 logging.info(f"[{agent_name}] {log_msg}")
 
                 response = call_gemini(model, system_prompt, user_prompt, key)
-                update_cache(model, user_prompt, response)
+                manager.update_llm_cache(model, user_prompt, response)
                 return response
             except Exception as e:
                 error_msg = str(e)
@@ -454,7 +455,7 @@ def _try_gemini(model: str, system_prompt: str, user_prompt: str, keys: List[str
                 break  # Pula para a proxima chave se esta falhou
     return None
 
-def _try_openrouter(model: str, system_prompt: str, user_prompt: str, key: str, agent_name: str) -> Optional[str]:
+def _try_openrouter(model: str, system_prompt: str, user_prompt: str, key: str, agent_name: str, manager: QueueManager) -> Optional[str]:
     """Tenta chamar a API da OpenRouter com retentativas."""
     if not key:
         return None
@@ -464,7 +465,7 @@ def _try_openrouter(model: str, system_prompt: str, user_prompt: str, key: str, 
         try:
             logging.info(f"[{agent_name}] Acionando terceira via SOTA ({model} via OpenRouter)...")
             response = call_openrouter(model, system_prompt, user_prompt, key)
-            update_cache(model, user_prompt, response)
+            manager.update_llm_cache(model, user_prompt, response)
             return response
         except Exception as e:
             error_msg = str(e)
@@ -476,7 +477,7 @@ def _try_openrouter(model: str, system_prompt: str, user_prompt: str, key: str, 
             break
     return None
 
-def _try_anthropic(model: str, system_prompt: str, user_prompt: str, key: str, agent_name: str) -> Optional[str]:
+def _try_anthropic(model: str, system_prompt: str, user_prompt: str, key: str, agent_name: str, manager: QueueManager) -> Optional[str]:
     """Tenta chamar a API da Anthropic com retentativas."""
     if not key:
         return None
@@ -486,7 +487,7 @@ def _try_anthropic(model: str, system_prompt: str, user_prompt: str, key: str, a
         try:
             logging.info(f"[{agent_name}] Acionando ultima linha de defesa PAGA ({model})...")
             response = call_anthropic(model, system_prompt, user_prompt, key)
-            update_cache(model, user_prompt, response)
+            manager.update_llm_cache(model, user_prompt, response)
             return response
         except Exception as e:
             error_msg = str(e)
@@ -499,7 +500,7 @@ def _try_anthropic(model: str, system_prompt: str, user_prompt: str, key: str, a
     return None
 
 """Função para chamar a API da LLM, tratando diferentes modelos e chaves de API."""
-def call_llm_api(agent_name: str, system_prompt: str, user_prompt: str) -> str:
+def call_llm_api(agent_name: str, system_prompt: str, user_prompt: str, manager: QueueManager) -> str:
     quartet = AGENT_ROUTING.get(agent_name, (FALLBACK_MODEL, "gemini-2.5-pro", "deepseek/deepseek-r1:free", "claude-3-5-haiku-20241022"))
     models_to_try = list(quartet)
     
@@ -516,11 +517,11 @@ def call_llm_api(agent_name: str, system_prompt: str, user_prompt: str) -> str:
     for model in models_to_try:
         response = None
         if "gemini" in model:
-            response = _try_gemini(model, system_prompt, user_prompt, gemini_keys, agent_name)
+            response = _try_gemini(model, system_prompt, user_prompt, gemini_keys, agent_name, manager)
         elif "deepseek" in model or "llama" in model:
-            response = _try_openrouter(model, system_prompt, user_prompt, openrouter_key, agent_name)
+            response = _try_openrouter(model, system_prompt, user_prompt, openrouter_key, agent_name, manager)
         elif "claude" in model:
-            response = _try_anthropic(model, system_prompt, user_prompt, anthropic_key, agent_name)
+            response = _try_anthropic(model, system_prompt, user_prompt, anthropic_key, agent_name, manager)
 
         if response:
             return response
@@ -528,13 +529,6 @@ def call_llm_api(agent_name: str, system_prompt: str, user_prompt: str) -> str:
     logging.warning(f"[{agent_name}] Multiplas falhas ou chaves ausentes. Modo Simulacao Ativado.")
     time.sleep(2)
     return '[\n  {"description": "Sub-tarefa gerada via simulacao de contingencia.", "agent": "@planner"}\n]'
-
-def update_cache(model: str, user_prompt: str, response: str):
-    """Atualiza o cache da LLM."""
-    global llm_cache
-    if model not in llm_cache:
-        llm_cache[model] = {}
-    llm_cache[model][user_prompt] = response
 
 def get_autonomy_mode() -> str:
     config_path = Path(".claude/autonomy.json")
@@ -571,7 +565,6 @@ def apply_god_mode(text: str):
     # 2. Execucao de Comandos de Terminal
     #Regex para encontrar comandos de terminal
     cmd_pattern = r"(?:Comando|Command|Executar|Execute):\s*(?:```(?:[a-zA-Z]*)\n(.*?)\n```|`([^`]+)`)"
-    import subprocess
     forbidden_commands = ["rm -rf", "del /s", "diskpart", "format ", "mkfs", "rmdir /s /q c:\\"]
     state_changing_commands = ["npm install", "npm i", "pip install", "git reset", "git push", "git clone", "del ", "rm ", "yarn add", "pnpm add", "git clean"]
     
@@ -693,7 +686,7 @@ def process_agent_task(task: Task, manager: QueueManager):
         logging.info(f"[{task.agent}] Cache miss para a prompt. Chamando API LLM.")
     
     # Call LLM API
-    response_text = call_llm_api(task.agent, system_prompt, user_prompt)
+    response_text = call_llm_api(task.agent, system_prompt, user_prompt, manager)
     
     result_dir = Path(".claude/task_results")
     result_dir.mkdir(parents=True, exist_ok=True)
@@ -787,7 +780,7 @@ def execute_task_workflow(task: Task, manager: QueueManager):
         # NÚCLEO DE AUTODEBUGGING (Auto-Cura 24/7)
         # ==========================================
         if not task.id.startswith("AUTOFIX-"):
-           try:
+            try:
                 fix_id = f"AUTOFIX-{task.id}"
                 if not manager.get_task(fix_id):
                     fix_task = Task(

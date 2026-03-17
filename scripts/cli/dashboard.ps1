@@ -1,6 +1,5 @@
 param([Parameter()][switch]$Live = $false, [int]$RefreshSeconds = 5)
-$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
-$queuePath = Join-Path $ProjectRoot "queue\tasks.json"
+$queuePath = Join-Path $PSScriptRoot "queue\tasks.json"
 function Show-Dashboard {
     if (-not (Test-Path $queuePath)) { return }
     $obj = Get-Content $queuePath -Raw | ConvertFrom-Json

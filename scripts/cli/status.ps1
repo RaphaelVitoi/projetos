@@ -3,14 +3,12 @@ param(
     [string]$TaskId
 )
 
-$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
-
 # Carregar Ambiente Global
-$EnvPath = Join-Path $ProjectRoot "_env.ps1"
+$EnvPath = Join-Path $PSScriptRoot "_env.ps1"
 if (Test-Path $EnvPath) { . $EnvPath }
 
 # Caminho para a fila de tarefas (Usa Env ou Fallback)
-$queuePath = if ($Global:AgentPaths) { $Global:AgentPaths.Queue } else { Join-Path $ProjectRoot "queue\tasks.json" }
+$queuePath = if ($Global:AgentPaths) { $Global:AgentPaths.Queue } else { Join-Path $PSScriptRoot "queue\tasks.json" }
 
 try {
     # Ler a fila de tarefas

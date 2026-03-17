@@ -2,8 +2,7 @@
 # Objetivo: Transformar recomendações de curto prazo em tarefas executáveis na fila do sistema.
 # Autor: Gemini Code Assist (via CHICO)
 
-$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
-$KernelPath = Join-Path $ProjectRoot "Agent-TaskManager.psm1"
+$KernelPath = Join-Path $PSScriptRoot "Agent-TaskManager.psm1"
 Import-Module $KernelPath -Force
 
 Write-Host "=== OPERACIONALIZANDO ESTRATÉGIA SENTINELA (BOOT 2026-03-12) ===" -ForegroundColor Cyan

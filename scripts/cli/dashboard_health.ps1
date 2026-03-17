@@ -5,11 +5,9 @@
     Analisa a estrutura .claude/agent-memory/ e exibe a saúde, engajamento e as tags aprendidas.
 #>
 
-$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
-
 Write-Host "=== [SENTINELA] DASHBOARD DE SAÚDE DOS AGENTES ===" -ForegroundColor Cyan
 
-$MemoryDir = Join-Path $ProjectRoot ".claude\agent-memory"
+$MemoryDir = Join-Path $PSScriptRoot ".claude\agent-memory"
 
 if (-not (Test-Path $MemoryDir)) {
     Write-Host "[ERROR] Diretório de memória não encontrado." -ForegroundColor Red

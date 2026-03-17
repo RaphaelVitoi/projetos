@@ -10,8 +10,7 @@ param(
     [string]$Priority = "medium"
 )
 
-$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
-$KernelPath = Join-Path $ProjectRoot "Agent-TaskManager.psm1"
+$KernelPath = Join-Path $PSScriptRoot "Agent-TaskManager.psm1"
 Import-Module $KernelPath -Force
 
 $taskId = "IDEA-$(Get-Date -Format 'yyyyMMdd-HHmmss')"

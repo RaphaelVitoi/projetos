@@ -3,8 +3,7 @@
     Aciona o @maverick para um Relatório Sentinela sobre Aprendizado Generativo no Poker.
 #>
 
-$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
-$KernelPath = Join-Path $ProjectRoot "Agent-TaskManager.psm1"
+$KernelPath = Join-Path $PSScriptRoot "Agent-TaskManager.psm1"
 Import-Module $KernelPath -Force
 
 Write-Host "=== PROTOCOLO: SENTINELA PEDAGÓGICO (@MAVERICK) ===" -ForegroundColor Magenta

@@ -3,8 +3,7 @@
     Cria um atalho no diretório 'Startup' do Windows para inicializar o Worker Pydantic automaticamente.
 #>
 
-$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
-$TargetScript = Join-Path $ProjectRoot "scripts\ops\start_worker.ps1"
+$TargetScript = Join-Path $PSScriptRoot "start_worker.ps1"
 $StartupFolder = [Environment]::GetFolderPath('Startup')
 $ShortcutPath = Join-Path $StartupFolder "NexusWorker.lnk"
 
@@ -13,7 +12,7 @@ $Shortcut = $WshShell.CreateShortcut($ShortcutPath)
 
 $Shortcut.TargetPath = "powershell.exe"
 $Shortcut.Arguments = "-WindowStyle Hidden -ExecutionPolicy Bypass -File `"$TargetScript`""
-$Shortcut.WorkingDirectory = $ProjectRoot
+$Shortcut.WorkingDirectory = $PSScriptRoot
 $Shortcut.Description = "Orquestrador Pydantic Background (Nexus)"
 $Shortcut.Save()
 

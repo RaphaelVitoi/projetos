@@ -1,15 +1,14 @@
 <#
 .SYNOPSIS
-    NEXUS BACKUP: Cria um backup instantaneo do projeto ignorando pastas pesadas.
+    NEXUS BACKUP: Cria um backup instantâneo do projeto ignorando pastas pesadas.
 #>
 
-$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
-$Source = $ProjectRoot
-$Dest = Join-Path $ProjectRoot ".backups\backup_$(Get-Date -Format 'yyyyMMdd_HHmmss')"
+$Source = $PSScriptRoot
+$Dest = Join-Path $PSScriptRoot ".backups\backup_$(Get-Date -Format 'yyyyMMdd_HHmmss')"
 $ExcludeDirs = @(".git", "node_modules", ".venv", ".backups", "__pycache__")
 
 Write-Host "=== [BACKUP] NEXUS BACKUP ===" -ForegroundColor Cyan
-Write-Host "Iniciando varredura e copia para $Dest..." -ForegroundColor DarkGray
+Write-Host "Iniciando varredura e cópia para $Dest..." -ForegroundColor DarkGray
 
 robocopy $Source $Dest /MIR /XD $ExcludeDirs /XF "*.log" "*.tmp" /NFL /NDL /NJH /NJS /nc /ns /np
-Write-Host "[OK] Backup concluido e isolado com sucesso!" -ForegroundColor Green
+Write-Host "[OK] Backup concluído e isolado com sucesso!" -ForegroundColor Green

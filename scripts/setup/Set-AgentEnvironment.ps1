@@ -6,8 +6,7 @@
 #Requires -Version 5.1
 
 function Set-AgentEnvironment {
-    $ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
-    $vscodeDir = Join-Path $ProjectRoot ".vscode"
+    $vscodeDir = Join-Path $PSScriptRoot ".vscode"
     $settingsPath = Join-Path $vscodeDir "settings.json"
 
     if (-not (Test-Path $vscodeDir)) { New-Item -ItemType Directory -Path $vscodeDir -Force | Out-Null }
