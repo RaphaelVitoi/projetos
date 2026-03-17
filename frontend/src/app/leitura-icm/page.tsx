@@ -58,7 +58,7 @@ export default function LeituraICM() {
                 <p>Isso nos leva ao princípio mais famoso do ICM: <strong>Fichas ganhas valem menos do que fichas perdidas.</strong></p>
                 <p>Embora haja uma desproporção no valor das fichas que ganhamos em detrimento das que perdemos, acumular fichas continua sendo benéfico. Se interpretarmos essa frase ao pé da letra, um CL disparado numa FT apenas se sentaria em sua pilha de fichas e não jogaria mais nenhuma mão, o que sabemos que não é prático. O CL não só tem interesse em aumentar sua perspectiva de ganhos, mas também tem a responsabilidade de <strong>dificultar que jogadores que possam rivalizar com ele acumulem fichas dos outros jogadores</strong>.</p>
 
-                <hr style={{ border: 0, borderTop: '1px solid var(--border-color)', margin: '3rem 0' }} />
+                <hr className="section-divider" />
 
                 {/* ==================== MÓDULO 2 ==================== */}
                 <h2>Módulo 2: Toy-Games como Laboratório</h2>
@@ -91,7 +91,7 @@ export default function LeituraICM() {
                 <h3>Toy Game 5 (RP: IP 3% | OOP 24%)</h3>
                 <p>Quanto maior for a discrepância entre os RPs e mais alto o RP do jogador pressionado, mais agressivamente atacamos como IP. E, mantendo a mesma lógica, o KK continua seguindo a mesma regra: pagando no limite superior do RP.</p>
 
-                <div className="callout" style={{ borderLeftColor: 'var(--accent-secondary)', background: 'rgba(225, 29, 72, 0.08)' }}>
+                <div className="callout callout-secondary">
                     <h4 style={{ color: 'var(--accent-secondary)', marginTop: 0 }}>O Teto do RP</h4>
                     <p>Assim como não podemos pagar com 100% dos bluffcatchers quando o líder de fichas faz um shove com quase todo o seu range, isso não implica que devemos sempre evitar dar call com uma frequência razoável de bluffcatchers nesse cenário de alta pressão de RP. <strong>As respostas adequadas da Teoria do Jogo em ambientes de ICM raramente são extremas.</strong></p>
                     <p style={{ marginBottom: 0 }}>Cuidado com suposições que se desviam da teoria estabelecida! Frases como &quot;Está shovando tudo, vou pagar com qualquer bluffcatcher!&quot; podem ser perigosas. Variáveis mecânicas do ICM restringem a possibilidade de fazer ajustes estratégicos que são tanto arriscados quanto extremos.</p>
@@ -152,7 +152,7 @@ export default function LeituraICM() {
                     </Link>
                 </div>
 
-                <hr style={{ border: 0, borderTop: '1px solid var(--border-color)', margin: '3rem 0' }} />
+                <hr className="section-divider" />
 
                 {/* ==================== PARTE II ==================== */}
                 <h2>Parte II: Invertendo o RP</h2>
@@ -168,7 +168,7 @@ export default function LeituraICM() {
                 <h3>Inversão 3 (RP: IP 21% | OOP 3%)</h3>
                 <p>Exatamente o mesmo range de shove do IP, levemente inclinado ao bluff. E o OOP, com baixíssimo RP e risco, <strong>já está alcançando quase 80% de fold!</strong></p>
 
-                <div className="callout" style={{ borderLeftColor: 'var(--accent-emerald)', background: 'rgba(16, 185, 129, 0.08)' }}>
+                <div className="callout callout-emerald">
                     <h4 style={{ color: 'var(--accent-emerald)', marginTop: 0 }}>Por que o OOP folda tanto?</h4>
                     <p>Os 20bb são idênticos, seja contribuindo para o líder de fichas (CL) ou para um jogador com 20bbs. No entanto, a avaliação do valor entre as stacks difere significativamente. Temos pouco incentivo para jogar como &quot;bluffcatcher&quot; contra stacks médias e curtas, já que <strong>perder fichas tem um impacto mais significativo do que ganhá-las</strong>.</p>
                     <p>Para o CL, mesmo que o range polarizado esteja levemente inclinado ao bluff, geralmente não há recompensa suficiente para justificar o uso de um bluffcatcher. Dobrar e aumentar a valuation para o oponente reduz a pressão do ICM sobre TODA A MESA.</p>
@@ -210,7 +210,7 @@ export default function LeituraICM() {
                     </tbody>
                 </table>
 
-                <hr style={{ border: 0, borderTop: '1px solid var(--border-color)', margin: '3rem 0' }} />
+                <hr className="section-divider" />
 
                 {/* ==================== MÓDULO 3 ==================== */}
                 <h2>Módulo 3: ICM Pós-Flop e a Dinâmica do Chip Leader</h2>
@@ -244,7 +244,7 @@ export default function LeituraICM() {
                     <li>À medida que a stack diminui, o RP aumenta gradualmente até o &quot;Teto do RP&quot; intransponível</li>
                 </ul>
 
-                <hr style={{ border: 0, borderTop: '1px solid var(--border-color)', margin: '3rem 0' }} />
+                <hr className="section-divider" />
 
                 {/* ==================== MÓDULO 4 ==================== */}
                 <h2>Módulo 4: Aplicação Prática</h2>
@@ -293,7 +293,7 @@ export default function LeituraICM() {
                     </tbody>
                 </table>
 
-                <div className="callout" style={{ borderLeftColor: 'var(--accent-emerald)', background: 'rgba(16, 185, 129, 0.1)' }}>
+                <div className="callout callout-emerald">
                     <h4 style={{ color: 'var(--accent-emerald)', marginTop: 0 }}>Checklist de Decisão (Tempo Real)</h4>
                     <ol style={{ marginTop: '1rem', marginLeft: '1.5rem', listStyleType: 'decimal', color: '#cbd5e1' }}>
                         <li><strong>Quem Cobre Quem?</strong> (Define a Vantagem de Risco)</li>
@@ -305,7 +305,7 @@ export default function LeituraICM() {
                     </ol>
                 </div>
 
-                <div style={{ marginTop: '3rem', padding: '2rem', background: 'rgba(99, 102, 241, 0.08)', borderRadius: '8px', border: '1px solid rgba(99, 102, 241, 0.2)', textAlign: 'center' }}>
+                <div className="verdict-box">
                     <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--accent-primary)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '0.5rem' }}>Princípio Final</p>
                     <p style={{ fontSize: '1.1rem', fontStyle: 'italic', marginBottom: 0 }}>&quot;Qual é a sua perspectiva nesta mesa final? Qual é a sua esperança matemática? Colocar-se nesta situação de alto risco realmente vale a pena?&quot;</p>
                 </div>

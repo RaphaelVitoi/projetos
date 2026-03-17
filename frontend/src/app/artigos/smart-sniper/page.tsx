@@ -37,7 +37,7 @@ export default function SmartSniperPage() {
                     </ol>
                 </div>
 
-                <hr style={{ border: 0, borderTop: '1px solid var(--border-color)', margin: '3rem 0' }} />
+                <hr className="section-divider" />
 
                 {/* ==================== ROTINA SEMANAL ==================== */}
                 <h2>2. A Rotina Semanal: A Estratégia &quot;Sniper&quot;</h2>
@@ -86,13 +86,13 @@ export default function SmartSniperPage() {
                 <h3>2.3 A &quot;Zona de Domínio&quot; (O Pulo do Gato)</h3>
                 <p>Nós <strong>NÃO</strong> registramos no Nível 1 (Deep Stack 100bb+) de torneios regulares.</p>
 
-                <div className="callout" style={{ borderLeftColor: 'var(--accent-emerald)', background: 'rgba(16, 185, 129, 0.08)' }}>
+                <div className="callout callout-emerald">
                     <h4 style={{ color: 'var(--accent-emerald)', marginTop: 0 }}>Entrada Cirúrgica</h4>
                     <p>Registramos quando a stack efetiva está entre <strong>30bb e 50bb</strong> (próximo ao fim do registro tardio ou quando a média é o dobro da inicial).</p>
                     <p style={{ marginBottom: 0 }}><strong>Benefício:</strong> Entramos na fase onde o ICM começa a pressionar os stacks médios. Com 30-50bb, temos manobrabilidade total para exercer edge, mas sem a &quot;gordura&quot; inútil do early game.</p>
                 </div>
 
-                <hr style={{ border: 0, borderTop: '1px solid var(--border-color)', margin: '3rem 0' }} />
+                <hr className="section-divider" />
 
                 {/* ==================== DOMINGO ==================== */}
                 <h2>3. O Domingo: Risco Assimétrico</h2>
@@ -124,7 +124,7 @@ export default function SmartSniperPage() {
                     </tbody>
                 </table>
 
-                <hr style={{ border: 0, borderTop: '1px solid var(--border-color)', margin: '3rem 0' }} />
+                <hr className="section-divider" />
 
                 {/* ==================== EVOLUCAO ==================== */}
                 <h2>4. A Evolução Técnica: O Modelo &quot;Scaffolding&quot;</h2>
@@ -153,12 +153,12 @@ export default function SmartSniperPage() {
                     </tbody>
                 </table>
 
-                <div className="callout" style={{ borderLeftColor: 'var(--accent-secondary)', background: 'rgba(225, 29, 72, 0.08)' }}>
+                <div className="callout callout-secondary">
                     <h4 style={{ color: 'var(--accent-secondary)', marginTop: 0 }}>Regra de Ouro</h4>
                     <p style={{ marginBottom: 0 }}>Só jogamos onde somos favoritos. Se você não domina 100bb deep em PKO, jogar lá é <strong>doar dinheiro para os profissionais</strong>.</p>
                 </div>
 
-                <hr style={{ border: 0, borderTop: '1px solid var(--border-color)', margin: '3rem 0' }} />
+                <hr className="section-divider" />
 
                 {/* ==================== VALIDACAO ==================== */}
                 <h2>5. Validação Científica</h2>
@@ -197,13 +197,13 @@ export default function SmartSniperPage() {
                     </tbody>
                 </table>
 
-                <hr style={{ border: 0, borderTop: '1px solid var(--border-color)', margin: '3rem 0' }} />
+                <hr className="section-divider" />
 
                 {/* ==================== CHECKLIST ==================== */}
                 <h2>6. Checklist Diário do Aluno</h2>
                 <p>Antes de registrar, faça a auditoria:</p>
 
-                <div className="callout" style={{ borderLeftColor: 'var(--accent-emerald)', background: 'rgba(16, 185, 129, 0.1)' }}>
+                <div className="callout callout-emerald">
                     <ol style={{ marginLeft: '1.5rem', listStyleType: 'decimal', color: '#cbd5e1', lineHeight: 2 }}>
                         <li><strong>Estou descansado?</strong> (Se não, não jogue. O A-Game é obrigatório).</li>
                         <li><strong>Estou respeitando o limite de telas?</strong> (Max 8 na semana, Max 4 no domingo).</li>
@@ -213,7 +213,7 @@ export default function SmartSniperPage() {
                     </ol>
                 </div>
 
-                <div style={{ marginTop: '3rem', padding: '2rem', background: 'rgba(16, 185, 129, 0.08)', borderRadius: '8px', border: '1px solid rgba(16, 185, 129, 0.2)', textAlign: 'center' }}>
+                <div className="verdict-box-emerald">
                     <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--accent-emerald)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '0.5rem' }}>Conclusão</p>
                     <p style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Você não é um &quot;clicador de botões&quot;. Você é um <strong>Gestor de Ativos</strong>.</p>
                     <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', marginBottom: 0 }}>Seu tempo, sua atenção e seu bankroll são seus ativos. Não os desperdice em loterias. Invista-os onde a matemática garante que você é o predador, não a presa.</p>

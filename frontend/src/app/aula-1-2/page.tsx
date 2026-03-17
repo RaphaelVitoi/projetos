@@ -34,7 +34,7 @@ export default function Aula12Page() {
             sistemas tratam os dados pós-flop.
           </p>
 
-          <div className="callout" style={{ borderLeftColor: 'var(--accent-sky)' }}>
+          <div className="callout callout-sky">
             <h4>Bunching Effect &amp; Contexto de Stacks</h4>
             <ul>
               <li>
@@ -57,7 +57,7 @@ export default function Aula12Page() {
             devido a uma maior distância para o Nash Equilibrium (e-Nash) nas simulações.
           </p>
 
-          <hr style={{ border: 0, borderTop: '1px solid var(--border-color)', margin: '3rem 0' }} />
+          <hr className="section-divider" />
 
           <h3>Setup do Experimento</h3>
 

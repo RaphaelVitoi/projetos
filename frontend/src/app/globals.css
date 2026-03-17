@@ -301,8 +301,8 @@
     .hub-card:hover {
         transform: translateY(-4px);
         background: var(--bg-card-hover);
-        border-color: var(--accent-primary);
-        box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+        border-color: rgba(99, 102, 241, 0.25);
+        box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(99, 102, 241, 0.1);
     }
 
     .hub-icon {
@@ -346,6 +346,124 @@
     .hub-card:hover .card-cta {
         color: #fff;
         transform: translateX(5px);
+    }
+
+    /* === Page Layout === */
+    .page-label {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        margin-bottom: 1rem;
+        display: block;
+    }
+
+    .page-subtitle {
+        font-size: 1.1rem;
+        color: var(--text-muted);
+        max-width: 700px;
+        line-height: 1.7;
+        margin-top: 0.75rem;
+    }
+
+    /* === Section Divider === */
+    .section-divider {
+        border: 0;
+        border-top: 1px solid var(--border-color);
+        margin: 3rem 0;
+    }
+
+    /* === Callout Variants === */
+    .callout-secondary {
+        border-left-color: var(--accent-secondary);
+        background: rgba(225, 29, 72, 0.07);
+    }
+
+    .callout-emerald {
+        border-left-color: var(--accent-emerald);
+        background: rgba(16, 185, 129, 0.07);
+    }
+
+    .callout-amber {
+        border-left-color: var(--accent-amber);
+        background: rgba(245, 158, 11, 0.07);
+    }
+
+    .callout-sky {
+        border-left-color: var(--accent-sky);
+        background: rgba(14, 165, 233, 0.07);
+    }
+
+    /* === Verdict / Principle Box === */
+    .verdict-box {
+        background: rgba(99, 102, 241, 0.07);
+        border: 1px solid rgba(99, 102, 241, 0.18);
+        border-radius: var(--radius-lg);
+        padding: 2rem 2.5rem;
+        text-align: center;
+        margin: 2rem 0;
+    }
+
+    .verdict-box-emerald {
+        background: rgba(16, 185, 129, 0.07);
+        border: 1px solid rgba(16, 185, 129, 0.18);
+        border-radius: var(--radius-lg);
+        padding: 2rem 2.5rem;
+        text-align: center;
+        margin: 2rem 0;
+    }
+
+    /* === Article Tag === */
+    .article-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.2rem 0.55rem;
+        border-radius: 4px;
+        font-size: 0.65rem;
+        font-weight: 700;
+        font-family: var(--font-mono);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        color: var(--text-muted);
+    }
+
+    /* === Nav Card (Arsenal Tático e similares) === */
+    .nav-card {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
+        padding: 1.25rem 1.5rem;
+        background: var(--bg-card);
+        border: var(--glass-border);
+        border-radius: var(--radius-lg);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .nav-card:hover {
+        background: var(--bg-card-hover);
+        border-color: rgba(99, 102, 241, 0.25);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.4);
+    }
+
+    .nav-card-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-size: 1rem;
     }
 
     /* Botao primario (CTA de alta conversao) */

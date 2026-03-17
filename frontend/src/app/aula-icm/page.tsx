@@ -78,31 +78,37 @@ export default function AulaICMPage() {
         </article>
 
         {/* Cards dos Arquétipos */}
-        <div className="hub-grid" style={{ maxWidth: '900px', margin: '0 auto 5rem', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
-          <div className="hub-card" style={{ cursor: 'default', borderLeftColor: 'var(--accent-primary)', borderLeftWidth: '3px' }}>
-            <span className="hub-icon"><span className="fa-solid fa-shield-halved" style={{ color: 'var(--accent-primary)' }}></span></span>
-            <h3>O Pacto Silencioso</h3>
-            <p>Chip Leader vs Vice CL. O RP de ambos ultrapassa 20%. A Resolução de Nash cria um
-            &quot;Pacto Silencioso&quot; de evitação de ruína mútua.</p>
-          </div>
-          <div className="hub-card" style={{ cursor: 'default', borderLeftColor: 'var(--accent-secondary)', borderLeftWidth: '3px' }}>
-            <span className="hub-icon"><span className="fa-solid fa-scale-unbalanced" style={{ color: 'var(--accent-secondary)' }}></span></span>
-            <h3>Paradoxo do Valuation</h3>
-            <p>Mid Stack (IP) vs Big Blind (OOP). O Mid acha que pode pressionar, mas o BB
-            sobrevive à colisão enquanto o Mid vira pó.</p>
-          </div>
-          <div className="hub-card" style={{ cursor: 'default', borderLeftColor: 'var(--accent-emerald)', borderLeftWidth: '3px' }}>
-            <span className="hub-icon"><span className="fa-solid fa-skull" style={{ color: 'var(--accent-emerald)' }}></span></span>
-            <h3>A Guerra na Lama</h3>
-            <p>Dois shorts. Quem entra em overfold massivo rezando pelo ICM acaba morrendo para os
-            blinds e sangrando EV.</p>
-          </div>
-          <div className="hub-card" style={{ cursor: 'default', borderLeftColor: 'var(--accent-amber)', borderLeftWidth: '3px' }}>
-            <span className="hub-icon"><span className="fa-solid fa-crown" style={{ color: 'var(--accent-amber)' }}></span></span>
-            <h3>A Ameaça Orgânica</h3>
-            <p>Chip Leader ataca Vice. Se o CL perder, ele cria um monstro. O solver protege o seu
-            &quot;God Mode&quot; limitando manobras arriscadas.</p>
-          </div>
+        <div style={{ maxWidth: '900px', margin: '0 auto 5rem', display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.25rem' }}>
+          {[
+            { n: '01', icon: 'fa-shield-halved', color: 'var(--accent-primary)', rgb: '99,102,241', title: 'O Pacto Silencioso', text: 'Chip Leader vs Vice CL. O RP de ambos ultrapassa 20%. A Resolução de Nash cria um \u201cPacto Silencioso\u201d de evitação de ruína mútua.' },
+            { n: '02', icon: 'fa-scale-unbalanced', color: 'var(--accent-secondary)', rgb: '225,29,72', title: 'Paradoxo do Valuation', text: 'Mid Stack (IP) vs Big Blind (OOP). O Mid acha que pode pressionar, mas o BB sobrevive à colisão enquanto o Mid vira pó.' },
+            { n: '03', icon: 'fa-skull', color: 'var(--accent-emerald)', rgb: '16,185,129', title: 'A Guerra na Lama', text: 'Dois shorts. Quem entra em overfold massivo rezando pelo ICM acaba morrendo para os blinds e sangrando EV.' },
+            { n: '04', icon: 'fa-crown', color: 'var(--accent-amber)', rgb: '245,158,11', title: 'A Ameaça Orgânica', text: 'Chip Leader ataca Vice. Se o CL perder, ele cria um monstro. O solver protege o seu \u201cGod Mode\u201d limitando manobras arriscadas.' },
+          ].map(({ n, icon, color, rgb, title, text }) => (
+            <div key={n} style={{
+              background: `linear-gradient(150deg, rgba(${rgb},0.07) 0%, var(--bg-card) 60%)`,
+              backdropFilter: 'blur(12px)',
+              border: 'var(--glass-border)',
+              borderTop: `3px solid ${color}`,
+              borderRadius: 'var(--radius-lg)',
+              padding: '1.75rem',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1.25rem',
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span style={{ width: '44px', height: '44px', borderRadius: '10px', background: `rgba(${rgb},0.15)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <span className={`fa-solid ${icon}`} style={{ color, fontSize: '1rem' }}></span>
+                </span>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', fontWeight: 800, color: `rgba(${rgb},0.3)`, letterSpacing: '0.1em' }}>{n}</span>
+              </div>
+              <div>
+                <h3 style={{ margin: '0 0 0.5rem', fontFamily: 'var(--font-heading)', fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-main)', lineHeight: 1.2, letterSpacing: '-0.02em' }}>{title}</h3>
+                <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>{text}</p>
+              </div>
+            </div>
+          ))}
         </div>
 
         <article style={{ maxWidth: '840px', margin: '0 auto 4rem' }}>
@@ -119,32 +125,32 @@ export default function AulaICMPage() {
             <span className="fa-solid fa-compass" style={{ marginRight: '0.5rem' }}></span> Navegacao
           </p>
           <h3 style={{ textAlign: 'center', marginBottom: '2rem', fontSize: '1.6rem' }}>O Arsenal Tatico</h3>
-          <div className="arsenal-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
-            <Link href="/leitura-icm" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '1rem', padding: '1.25rem 1.5rem', background: 'var(--bg-card)', border: 'var(--glass-border)', borderRadius: 'var(--radius-lg)', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', overflow: 'hidden' }}>
-              <span style={{ width: '44px', height: '44px', borderRadius: '10px', background: 'rgba(99, 102, 241, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <span className="fa-solid fa-file-lines" style={{ color: 'var(--accent-primary)', fontSize: '1rem' }}></span>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+            <Link href="/leitura-icm" className="nav-card">
+              <span className="nav-card-icon" style={{ background: 'rgba(99, 102, 241, 0.12)' }}>
+                <span className="fa-solid fa-file-lines" style={{ color: 'var(--accent-primary)' }}></span>
               </span>
               <div>
-                <strong style={{ display: 'block', color: '#fff', fontSize: '0.9rem', lineHeight: 1.3 }}>Ler Whitepaper</strong>
-                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Teoria Completa &rarr;</span>
+                <strong>Ler Whitepaper</strong>
+                <span>Teoria Completa &rarr;</span>
               </div>
             </Link>
-            <a href="#simulador-section" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '1rem', padding: '1.25rem 1.5rem', background: 'var(--bg-card)', border: '1px solid rgba(16, 185, 129, 0.15)', borderRadius: 'var(--radius-lg)', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', overflow: 'hidden' }}>
-              <span style={{ width: '44px', height: '44px', borderRadius: '10px', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <span className="fa-solid fa-gamepad" style={{ color: 'var(--accent-emerald)', fontSize: '1rem' }}></span>
+            <a href="#simulador-section" className="nav-card" style={{ borderColor: 'rgba(16, 185, 129, 0.2)' }}>
+              <span className="nav-card-icon" style={{ background: 'rgba(16, 185, 129, 0.12)' }}>
+                <span className="fa-solid fa-gamepad" style={{ color: 'var(--accent-emerald)' }}></span>
               </span>
               <div>
-                <strong style={{ display: 'block', color: '#fff', fontSize: '0.9rem', lineHeight: 1.3 }}>Usar Simulador</strong>
-                <span style={{ fontSize: '0.72rem', color: 'var(--accent-emerald)' }}>Laboratorio Interativo &rarr;</span>
+                <strong>Usar Simulador</strong>
+                <span style={{ color: 'var(--accent-emerald)' }}>Laboratório Interativo &rarr;</span>
               </div>
             </a>
-            <Link href="/aula-1-2" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '1rem', padding: '1.25rem 1.5rem', background: 'var(--bg-card)', border: 'var(--glass-border)', borderRadius: 'var(--radius-lg)', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', overflow: 'hidden' }}>
-              <span style={{ width: '44px', height: '44px', borderRadius: '10px', background: 'rgba(14, 165, 233, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <span className="fa-solid fa-graduation-cap" style={{ color: 'var(--accent-sky)', fontSize: '1rem' }}></span>
+            <Link href="/aula-1-2" className="nav-card">
+              <span className="nav-card-icon" style={{ background: 'rgba(14, 165, 233, 0.12)' }}>
+                <span className="fa-solid fa-graduation-cap" style={{ color: 'var(--accent-sky)' }}></span>
               </span>
               <div>
-                <strong style={{ display: 'block', color: '#fff', fontSize: '0.9rem', lineHeight: 1.3 }}>Aula 1.2</strong>
-                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>Material Complementar &rarr;</span>
+                <strong>Aula 1.2</strong>
+                <span>Material Complementar &rarr;</span>
               </div>
             </Link>
           </div>
