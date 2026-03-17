@@ -21,7 +21,7 @@ catch {
     exit 1
 }
 
-$Agents = @("pesquisador", "prompter", "curator", "planner", "organizador", "auditor", "implementor", "verifier", "validador", "securitychief", "seo", "bibliotecario", "maverick", "sequenciador", "skillmaster", "dispatcher", "architect")
+$Agents = @("pesquisador", "prompter", "curator", "planner", "organizador", "auditor", "implementor", "verifier", "validador", "securitychief", "seo", "bibliotecario", "maverick", "sequenciador", "skillmaster", "dispatcher", "architect", "chico")
 
 Write-Host "=== INICIANDO DESPERTAR COGNITIVO EM MASSA (AUTOPOIESE) ===" -ForegroundColor Cyan
 
