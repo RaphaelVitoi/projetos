@@ -73,26 +73,46 @@ export default function ComparisonRadar({ scenarios, currentId }: Readonly<Compa
         <label style={{ fontSize: '0.6rem', color: '#64748b', display: 'block', marginBottom: '0.3rem' }}>
           Comparar com:
         </label>
-        <select
-          value={compareId}
-          onChange={(e) => setCompareId(e.target.value)}
-          style={{
-            width: '100%',
-            background: '#0a0f1c',
-            border: '1px solid #334155',
-            borderRadius: '8px',
-            color: '#e2e8f0',
-            padding: '0.5rem',
-            fontSize: '0.7rem',
-          }}
-        >
-          <option value="">Selecione um cenário</option>
-          {scenarios
-            .filter(s => s.id !== currentId)
-            .map(s => (
-              <option key={s.id} value={s.id}>{s.name}</option>
-            ))}
-        </select>
+        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+          <select
+            value={compareId}
+            onChange={(e) => setCompareId(e.target.value)}
+            style={{
+              flex: 1,
+              background: '#0a0f1c',
+              border: '1px solid #334155',
+              borderRadius: '8px',
+              color: '#e2e8f0',
+              padding: '0.5rem',
+              fontSize: '0.7rem',
+            }}
+          >
+            <option value="">Selecione um cenário</option>
+            {scenarios
+              .filter(s => s.id !== currentId)
+              .map(s => (
+                <option key={s.id} value={s.id}>{s.name}</option>
+              ))}
+          </select>
+          {compareId && (
+            <button
+              onClick={() => setCompareId('')}
+              style={{
+                padding: '0.4rem 0.7rem',
+                borderRadius: '8px',
+                background: 'rgba(225, 29, 72, 0.1)',
+                border: '1px solid rgba(225, 29, 72, 0.3)',
+                color: '#f43f5e',
+                fontSize: '0.6rem',
+                fontWeight: 700,
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              Limpar
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Radar Chart */}

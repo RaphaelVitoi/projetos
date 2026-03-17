@@ -6,6 +6,24 @@
  */
 
 /* ==============================================
+   VARIAVEIS GLOBAIS
+   ============================================== */
+
+:root {
+  --sim-color-indigo: #6366f1;
+  --sim-color-indigo-light: #818cf8;
+  --sim-color-rose: #e11d48;
+  --sim-color-rose-light: #f43f5e;
+  --sim-color-emerald: #10b981;
+  --sim-color-amber: #f59e0b;
+  --sim-bg-dark: #020617;
+  --sim-bg-panel: rgba(15, 23, 42, 0.75);
+  --sim-border: rgba(255, 255, 255, 0.06);
+  --sim-radius-lg: 24px;
+  --sim-radius-md: 12px;
+}
+
+/* ==============================================
    ANIMACOES GLOBAIS
    ============================================== */
 
@@ -592,4 +610,20 @@
 
 .stageContextBadge {
   display: inline-block;
+}
+
+/* ==============================================
+   ACESSIBILIDADE — MOVIMENTO REDUZIDO
+   ============================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .tickerTrack { animation: none; }
+  .gaugeDeathPulse { animation: none; }
+  .gaugeHighRisk { animation: none; }
+  .animateFadeUp { animation: none; opacity: 1; transform: none; }
+}
+
+/* Pausa no hover — acessibilidade e leitura */
+.tickerWrap:hover .tickerTrack {
+  animation-play-state: paused;
 }

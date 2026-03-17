@@ -118,10 +118,18 @@ export default function MasterSimulator() {
               </span>
               <span style={{
                 fontSize: '0.55rem',
+                color: '#94a3b8',
+                fontWeight: 700,
+                fontFamily: "'JetBrains Mono', monospace",
+              }}>
+                {scenario.name}
+              </span>
+              <span style={{
+                fontSize: '0.55rem',
                 color: '#475569',
                 fontWeight: 600,
               }}>
-                {scenarios.length} cenários | Malmuth-Harville | Nash ICM
+                IP: {scenario.ipRp.toFixed(1)}% | OOP: {scenario.oopRp.toFixed(1)}%
               </span>
             </div>
           </div>

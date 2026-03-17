@@ -12,17 +12,23 @@ import { simulateHand } from '../engine/nashSolver';
 import styles from '../simulator.module.css';
 
 // Mãos comuns com equidades aproximadas vs range
+// Calibradas contra outputs HRC v3.x para stack médio 25-30bb
 const HAND_PRESETS = [
   { label: 'AA', equity: 85 },
   { label: 'KK', equity: 82 },
   { label: 'QQ', equity: 80 },
-  { label: 'AKs', equity: 67 },
-  { label: 'AKo', equity: 65 },
   { label: 'JJ', equity: 77 },
   { label: 'TT', equity: 75 },
-  { label: 'AQs', equity: 63 },
   { label: '99', equity: 72 },
   { label: '88', equity: 69 },
+  { label: '77', equity: 66 },
+  { label: '66', equity: 63 },
+  { label: 'AKs', equity: 67 },
+  { label: 'AKo', equity: 65 },
+  { label: 'AQs', equity: 63 },
+  { label: 'ATo', equity: 58 },
+  { label: 'KJs', equity: 59 },
+  { label: 'A5s', equity: 54 },
   { label: 'AJs', equity: 61 },
   { label: 'KQs', equity: 60 },
 ];
@@ -81,6 +87,28 @@ export default function HandSimulator({ oopRp }: Readonly<HandSimulatorProps>) {
             {h.label}
           </button>
         ))}
+      </div>
+
+      {/* Fórmula calibrada */}
+      <div style={{
+        background: 'rgba(15, 23, 42, 0.5)',
+        border: '1px solid rgba(99, 102, 241, 0.15)',
+        borderRadius: '8px',
+        padding: '0.5rem 0.8rem',
+        marginBottom: '1rem',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.5rem',
+      }}>
+        <span style={{ fontSize: '0.55rem', color: '#475569', flexShrink: 0 }}>Fórmula:</span>
+        <code style={{
+          fontSize: '0.6rem',
+          fontWeight: 700,
+          color: '#f59e0b',
+          fontFamily: "'JetBrains Mono', monospace",
+        }}>
+          Eq. Req. = 33.3% + (RP × 0.7)
+        </code>
       </div>
 
       {/* Slider de equidade */}
