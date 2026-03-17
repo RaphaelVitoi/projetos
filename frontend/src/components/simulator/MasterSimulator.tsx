@@ -177,37 +177,38 @@ export default function MasterSimulator() {
           overflowX: 'auto',
           paddingBottom: '4px',
         }}>
-          {TOOL_BUTTONS.map((tool) => (
-            <button
-              key={tool.id}
-              onClick={() => setActiveTool(tool.id)}
-              style={{
-                padding: '0.5rem 0.8rem',
-                borderRadius: '10px',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: '0.6rem',
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                letterSpacing: '0.08em',
-                whiteSpace: 'nowrap',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                transition: 'all 0.3s ease',
-                background: activeTool === tool.id
-                  ? 'linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(99, 102, 241, 0.1))'
-                  : 'rgba(30, 41, 59, 0.4)',
-                color: activeTool === tool.id ? '#fff' : '#64748b',
-                boxShadow: activeTool === tool.id
-                  ? '0 2px 12px rgba(99, 102, 241, 0.2)'
-                  : 'none',
-              }}
-            >
-              <i className={`fa-solid ${tool.icon}`} style={{ fontSize: '0.55rem' }} />
-              {tool.label}
-            </button>
-          ))}
+          {TOOL_BUTTONS.map((tool) => {
+            const isActive = activeTool === tool.id;
+            return (
+              <button
+                key={tool.id}
+                onClick={() => setActiveTool(tool.id)}
+                style={{
+                  padding: '0.45rem 1rem',
+                  borderRadius: '8px',
+                  border: isActive
+                    ? '1px solid rgba(99, 102, 241, 0.4)'
+                    : '1px solid rgba(255, 255, 255, 0.05)',
+                  cursor: 'pointer',
+                  fontSize: '0.7rem',
+                  fontWeight: 600,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.06em',
+                  whiteSpace: 'nowrap',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '5px',
+                  transition: 'all 0.25s ease',
+                  background: isActive ? '#1e2245' : 'rgba(15, 23, 42, 0.5)',
+                  color: isActive ? '#c7d2fe' : '#475569',
+                  boxShadow: isActive ? '0 2px 10px rgba(99, 102, 241, 0.15)' : 'none',
+                }}
+              >
+                <i className={`fa-solid ${tool.icon}`} style={{ fontSize: '0.65rem' }} />
+                {tool.label}
+              </button>
+            );
+          })}
         </div>
       </div>
 

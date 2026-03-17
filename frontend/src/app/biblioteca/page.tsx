@@ -1,5 +1,11 @@
+/**
+ * IDENTITY: Biblioteca Epistêmica
+ * PATH: src/app/biblioteca/page.tsx
+ * ROLE: Acervo de artigos. Hub teórico.
+ * BINDING: [layout.tsx, globals.css]
+ */
+
 import Link from 'next/link';
-import CodeBlock from '@/components/content/CodeBlock';
 
 export const metadata = {
   title: 'Biblioteca Epistêmica | Raphael Vitoi',
@@ -10,106 +16,137 @@ interface MockArticle {
   readonly id: string;
   readonly title: string;
   readonly excerpt: string;
-  readonly slug: string;
   readonly readTime: string;
   readonly tags: string[];
+  readonly icon: string;
+  readonly status: 'em-breve' | 'disponivel';
+  readonly href?: string;
 }
 
 const MOCK_ARTICLES: MockArticle[] = [
   {
     id: '1',
+    icon: '⚖️',
     title: 'O Paradoxo do Valuation no ICM',
     excerpt: 'Por que acumular fichas pode diminuir sua esperança matemática em spots específicos da reta final.',
-    slug: 'paradoxo-valuation-icm',
-    readTime: '12 MIN',
-    tags: ['Teoria', 'ICM', 'Matemática']
+    readTime: '12 min',
+    tags: ['Teoria', 'ICM', 'Matemática'],
+    status: 'em-breve',
   },
   {
     id: '2',
+    icon: '🧠',
     title: 'Hermenêutica do Blefe',
     excerpt: 'Lendo as intenções do oponente através da lente do excesso de gozo e da psicanálise lacaniana.',
-    slug: 'hermeneutica-do-blefe',
-    readTime: '15 MIN',
-    tags: ['Psicologia', 'Comportamento']
+    readTime: '15 min',
+    tags: ['Psicologia', 'Comportamento'],
+    status: 'em-breve',
   },
   {
     id: '3',
+    icon: '📉',
     title: 'O Motor de Diluição',
     excerpt: 'Como o Risk Premium afeta os ranges de call de forma não-linear.',
-    slug: 'motor-de-diluicao',
-    readTime: '8 MIN',
-    tags: ['ICM', 'Estratégia']
-  }
+    readTime: '8 min',
+    tags: ['ICM', 'Estratégia'],
+    status: 'em-breve',
+  },
 ];
 
 export default function BibliotecaPage() {
   return (
-    <main className="container" style={{ maxWidth: '1100px', margin: '0 auto', padding: '4rem 1.5rem' }}>
+    <main className="container" style={{ maxWidth: '1000px', margin: '0 auto', padding: '4rem 1.5rem' }}>
 
       {/* Hero */}
-      <header className="page-header animate-fade-up" style={{ padding: '2rem 0 1rem' }}>
+      <header className="page-header" style={{ paddingBottom: '1rem' }}>
         <p className="page-label">
           <span className="fa-solid fa-book-journal-whills"></span> Domínio Teórico
         </p>
         <h1>Biblioteca Epistêmica</h1>
-        <p className="page-subtitle" style={{ maxWidth: '700px' }}>
+        <p className="page-subtitle" style={{ maxWidth: '660px' }}>
           Acervo SOTA de Teoria dos Jogos, Psicologia e Existencialismo. A fundação teórica para suportar a variância implacável e transcender o solver.
         </p>
       </header>
 
       {/* Grade de Artigos */}
-      <div className="hub-grid animate-fade-up" style={{ animationDelay: '0.1s' }}>
+      <div className="hub-grid" style={{ alignItems: 'start', marginTop: '2rem' }}>
         {MOCK_ARTICLES.map((article) => (
           <div key={article.id} className="hub-card" style={{ cursor: 'default' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '1rem' }}>
-              <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-                {article.tags.map((tag) => (
-                  <span key={tag} style={{ fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-muted)', background: 'rgba(30, 41, 59, 0.8)', padding: '0.15rem 0.5rem', borderRadius: '3px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                    {tag}
-                  </span>
-                ))}
-              </div>
-              <span style={{ fontSize: '0.7rem', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '1rem' }}>
+              <span className="hub-icon" style={{ marginBottom: 0 }}>{article.icon}</span>
+              <span style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.65rem',
+                fontWeight: 700,
+                color: 'var(--text-muted)',
+                letterSpacing: '0.05em',
+              }}>
                 {article.readTime}
               </span>
             </div>
-            <h3 style={{ fontSize: '1.3rem', marginBottom: '0.75rem' }}>{article.title}</h3>
-            <p style={{ flexGrow: 1 }}>{article.excerpt}</p>
-            <span className="card-cta">Em breve &rarr;</span>
+            <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap', marginBottom: '0.85rem' }}>
+              {article.tags.map((tag) => (
+                <span key={tag} className="article-tag">{tag}</span>
+              ))}
+            </div>
+            <h3>{article.title}</h3>
+            <p>{article.excerpt}</p>
+            <span className="card-cta" style={{ opacity: 0.4, cursor: 'default' }}>
+              Em breve &rarr;
+            </span>
           </div>
         ))}
       </div>
 
-      {/* Secao CodeBlock */}
-      <section className="animate-fade-up" style={{ marginTop: '5rem', paddingTop: '3rem', borderTop: '1px solid var(--border-color)', animationDelay: '0.2s' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2rem', alignItems: 'center' }}>
-          <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
-            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.15em', marginBottom: '0.5rem' }}>
-              <span className="fa-solid fa-microchip" style={{ marginRight: '0.5rem' }}></span> Integração Sistêmica
-            </p>
-            <h3 style={{ fontSize: '1.8rem', marginBottom: '1rem' }}>Fragmentos Executáveis</h3>
-            <p style={{ maxWidth: '600px', margin: '0 auto 2rem' }}>
-              A biblioteca não é apenas texto. É código, heurística e motores matemáticos.
-            </p>
-          </div>
-          <div>
-            <CodeBlock
-              language="typescript"
-              code={`export function calculateICM(stacks: number[], payouts: number[]): number[] {
-  // Lógica recursiva de Estado da Arte para cálculo ICM
-  // Reflete a assimetria do risco nos torneios
-  return stacks.map(() => 0);
-}`}
-            />
-          </div>
+      {/* Em Desenvolvimento */}
+      <section style={{ marginTop: '5rem', paddingTop: '3rem', borderTop: '1px solid var(--border-color)' }}>
+        <p className="page-label" style={{ textAlign: 'center', marginBottom: '0.75rem' }}>
+          <span className="fa-solid fa-flask"></span> Em Construção
+        </p>
+        <h3 style={{ textAlign: 'center', fontSize: '1.6rem', marginBottom: '2.5rem' }}>
+          Próximas Adições
+        </h3>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1rem' }}>
+          {[
+            { icon: 'fa-brain', color: 'var(--accent-primary)', title: 'Prospect Theory no Poker', desc: 'Kahneman e Tversky encontram o Risk Premium: como a assimetria da dor distorce decisões de FT.' },
+            { icon: 'fa-atom', color: 'var(--accent-emerald)', title: 'Teoria dos Jogos Aplicada', desc: 'Do dilema do prisioneiro ao equilíbrio de Nash em mesas multiway com ICM assimétrico.' },
+            { icon: 'fa-infinity', color: 'var(--accent-amber)', title: 'Existencialismo e Variância', desc: 'Sartre, Camus e a construção de sentido no longo prazo implacável do poker profissional.' },
+          ].map(({ icon, color, title, desc }) => (
+            <div key={title} style={{
+              background: 'var(--bg-card)',
+              backdropFilter: 'blur(12px)',
+              border: 'var(--glass-border)',
+              borderRadius: 'var(--radius-lg)',
+              padding: '1.5rem',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.75rem',
+            }}>
+              <span className={`fa-solid ${icon}`} style={{ color, fontSize: '1.1rem' }}></span>
+              <strong style={{ fontSize: '0.95rem', color: 'var(--text-main)', lineHeight: 1.3 }}>{title}</strong>
+              <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.65 }}>{desc}</p>
+            </div>
+          ))}
         </div>
       </section>
 
-      <div style={{ marginTop: '4rem', textAlign: 'center' }}>
-        <Link href="/" style={{ color: 'var(--text-muted)', textDecoration: 'underline', fontSize: '0.9rem' }}>
-          &larr; Retornar ao Hub Central
-        </Link>
+      {/* CTA para conteudo existente */}
+      <div className="callout" style={{ marginTop: '3rem', textAlign: 'center' }}>
+        <p style={{ marginBottom: '1rem', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+          Enquanto o acervo cresce, explore o conteúdo já publicado:
+        </p>
+        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <Link href="/leitura-icm" className="card-cta" style={{ fontSize: '0.85rem' }}>Whitepaper ICM &rarr;</Link>
+          <Link href="/artigos/estado-da-arte" className="card-cta" style={{ fontSize: '0.85rem' }}>Estado da Arte 2025 &rarr;</Link>
+          <Link href="/artigos/smart-sniper" className="card-cta" style={{ fontSize: '0.85rem' }}>Protocolo Smart Sniper &rarr;</Link>
+        </div>
       </div>
+
+      <nav className="article-nav" style={{ marginTop: '4rem' }}>
+        <Link href="/">&larr; Hub Central</Link>
+        <Link href="/aula-icm">Aula ICM &rarr;</Link>
+      </nav>
     </main>
   );
 }

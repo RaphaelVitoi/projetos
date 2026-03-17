@@ -5,7 +5,7 @@
  * BINDING: [engine/scenarios.ts, engine/types.ts]
  */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { SCENARIOS } from '../engine/scenarios';
 import type { Scenario } from '../engine/types';
 
@@ -20,16 +20,19 @@ interface UseScenarioReturn {
 /**
  * Gerencia o cenário ativo do simulador.
  * Persiste a seleção em localStorage para manter contexto entre sessões.
+ * SSR-safe: servidor e cliente inicializam com SCENARIOS[0]; localStorage
+ * é aplicado via useEffect após hidratação, evitando mismatch.
  */
 export function useScenario(): UseScenarioReturn {
-  const [activeId, setActiveId] = useState<string>(() => {
-    // Recupera último cenário visitado (SSR-safe)
-    if (globalThis.window !== undefined) {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved && SCENARIOS.some(s => s.id === saved)) return saved;
+  const [activeId, setActiveId] = useState<string>(SCENARIOS[0].id);
+
+  // Recupera último cenário após mount (pós-hidratação)
+  useEffect(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved && SCENARIOS.some(s => s.id === saved)) {
+      setActiveId(saved);
     }
-    return SCENARIOS[0].id;
-  });
+  }, []);
 
   const scenario = SCENARIOS.find(s => s.id === activeId) ?? SCENARIOS[0];
 
@@ -37,9 +40,7 @@ export function useScenario(): UseScenarioReturn {
     const exists = SCENARIOS.some(s => s.id === id);
     if (exists) {
       setActiveId(id);
-      if (globalThis.window !== undefined) {
-        localStorage.setItem(STORAGE_KEY, id);
-      }
+      localStorage.setItem(STORAGE_KEY, id);
     }
   }, []);
 

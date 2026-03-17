@@ -7,9 +7,9 @@
 
 ## 📖 Qual Documento Usar?
 
-| Documento | Propósito | Público | Quando Ler |
-|-----------|-----------|---------|-----------|
-| **`.claude/project-context.md`** | Contexto de DECISÃO global (domínio, público-alvo, decisões tomadas, estado atual) | Agentes durante execução | Antes de tomar decisões ou criar features |
+| Documento                                               | Propósito                                                                                         | Público                     | Quando Ler                                               |
+| ------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ---------------------------- | -------------------------------------------------------- |
+| **`.claude/project-context.md`**                | Contexto de DECISÃO global (domínio, público-alvo, decisões tomadas, estado atual)             | Agentes durante execução   | Antes de tomar decisões ou criar features               |
 | **`MANUAL_WORKFLOW_AGENTES.md`** (este arquivo) | Manual de OPERAÇÃO e referência técnica (como usar o sistema, descrição de agentes, scripts) | Desenvolvedores e operadores | Para entender como rodar o workflow e scripts do sistema |
 
 **Resumo:**
@@ -23,9 +23,9 @@
 
 **Auditado por @auditor** | **Data: 2026-03-12**
 
-| # | Severidade | Localizacao | Problema Encontrado | Correcao Aplicada |
-|---|-----------|-------------|--------------------|--------------------|
-| 1 | CRITICO | `GLOBAL_INSTRUCTIONS.md`, `MANUAL_WORKFLOW_AGENTES.md` | Inconsistência na identidade do agente ("Chico" vs "GitHub Copilot") e versão do modelo | Atualizados `GLOBAL_INSTRUCTIONS.md` e `MANUAL_WORKFLOW_AGENTES.md` para "GitHub Copilot" e "Gemini 3 Pro Preview" (modelo prioritário). |
+| # | Severidade | Localizacao                                                | Problema Encontrado                                                                       | Correcao Aplicada                                                                                                                             |
+| - | ---------- | ---------------------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1 | CRITICO    | `GLOBAL_INSTRUCTIONS.md`, `MANUAL_WORKFLOW_AGENTES.md` | Inconsistência na identidade do agente ("Chico" vs "GitHub Copilot") e versão do modelo | Atualizados `GLOBAL_INSTRUCTIONS.md` e `MANUAL_WORKFLOW_AGENTES.md` para "GitHub Copilot" e "Gemini 3 Pro Preview" (modelo prioritário). |
 
 **Total: 1 problema (1 crítico, 0 altos, 0 médios, 0 baixos, 0 info)**
 **Todos os problemas resolvidos.**
@@ -328,6 +328,7 @@ Ao encontrar erros, o @auditor não deve apenas corrigi-los, mas classificar a o
 - Background: "Relatório Sentinela" (diagnóstico sistêmico e antevisão).
 
 **Exemplo de uso:**
+
 > "Maverick, analise este PRD da aula de poker. Está muito padrão. Como aplicariamos conceitos de BDSM e Negociação de Reféns para tornar isso inesquecível?"
 > "Maverick, assuma o posto de sentinela e avalie a saúde atual do nosso workflow."
 
@@ -387,10 +388,10 @@ Estes dois agentes rodam **sempre ativos**, sem necessidade de intervenção hum
 
 **Operações Monitoras:**
 
-| Operação | Schedule | Descrição |
-|----------|----------|-----------|
-| `agent_sync` | Hourly | Sincroniza MEMORY.md entre agentes |
-| `backup_queue` | 2 AM daily | Cria snapshot de `queue/tasks.json` |
+| Operação          | Schedule     | Descrição                           |
+| ------------------- | ------------ | ------------------------------------- |
+| `agent_sync`      | Hourly       | Sincroniza MEMORY.md entre agentes    |
+| `backup_queue`    | 2 AM daily   | Cria snapshot de `queue/tasks.json` |
 | `cleanup_archive` | Sundays 3 AM | Arquiva tarefas completadas > 30 dias |
 
 **Como Funciona:**
@@ -669,13 +670,11 @@ Status de todas as tarefas na fila (0 tarefas):
    ```powershell
    Get-Acl "queue" | Format-List | Find "Allow"
    ```
-
 2. Verificar se `queue/tasks.json` foi criado:
 
    ```powershell
    Test-Path "queue\tasks.json"
    ```
-
 3. Verificar conteudo do arquivo criado:
 
    ```powershell
@@ -716,13 +715,11 @@ Get-Content "logs\tasks_archived.json" | Measure-Object -Line
    ```powershell
    .\status.ps1 "SEU_TASK_ID"
    ```
-
 2. Atualizar status se necessário (editar manualmente):
 
    ```
    No arquivo queue/tasks.json, mudar "status": "running" para "status": "pending"
    ```
-
 3. A tarefa será reprocessada no próximo ciclo
 
 #### "Preciso pausar/cancelar uma tarefa pendente"
@@ -943,4 +940,5 @@ Uma proposta de arquitetura v5 original descrevia orquestração assíncrona. Es
 Para histórico arquitetônico, consulte `.backups/2026-03-12_auditoria_sistema/MANUAL_WORKFLOW_AGENTES.md` seção§9.
 
 ---
+
 ---

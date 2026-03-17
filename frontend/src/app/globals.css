@@ -432,6 +432,18 @@
         color: var(--text-muted);
     }
 
+    /* === Biblioteca Code Grid === */
+    .biblioteca-code-grid {
+        grid-template-columns: 1fr 2fr !important;
+    }
+
+    @media (max-width: 768px) {
+        .biblioteca-code-grid {
+            grid-template-columns: 1fr !important;
+            gap: 2rem !important;
+        }
+    }
+
     /* === Nav Card (Arsenal Tático e similares) === */
     .nav-card {
         display: flex;

@@ -87,9 +87,9 @@
 .gaugeWrap {
   position: relative;
   width: 100%;
-  max-width: 140px;
+  max-width: 130px;
   aspect-ratio: 1;
-  margin: 0 auto 0.75rem auto;
+  margin: 0 auto 0.5rem auto;
 }
 
 .gaugeSvg {
@@ -122,10 +122,11 @@
 
 .gaugeValue {
   font-family: 'JetBrains Mono', monospace;
-  font-size: clamp(1.4rem, 12vw, 1.8rem);
+  font-size: 1.2rem;
   font-weight: 700;
   color: white;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.04em;
+  line-height: 1;
 }
 
 .gaugeIcon {
@@ -135,19 +136,20 @@
 }
 
 .gaugeLabel {
-  font-size: 9px;
+  font-size: 0.55rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-top: 4px;
+  letter-spacing: 0.08em;
+  margin-top: 3px;
+  line-height: 1.2;
 }
 
 .gaugeMeta {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  color: #94a3b8;
+  font-size: 0.6rem;
+  color: #64748b;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   margin: 0;
   text-align: center;
 }
@@ -217,33 +219,39 @@
 }
 
 .selectorGroupLabel {
-  font-size: 0.6rem;
+  font-size: 0.58rem;
   font-weight: 800;
   color: #64748b;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.1em;
   margin: 0 0 0.5rem 0;
   padding-left: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Botao de cenario */
 .scenarioBtn {
   width: 100%;
   text-align: left;
-  padding: 12px 14px;
-  border-radius: 12px;
+  padding: 11px 12px;
+  border-radius: 10px;
   background: rgba(30, 41, 59, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.03);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   cursor: pointer;
   color: #94a3b8;
   font-weight: 600;
   position: relative;
   overflow: hidden;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.35rem;
 }
 
 .scenarioBtn:hover {
@@ -253,7 +261,8 @@
 }
 
 .scenarioBtnActive {
-  background: linear-gradient(90deg, rgba(99, 102, 241, 0.2), rgba(99, 102, 241, 0.05));
+  /* Equivalentes opacos de rgba(indigo,0.20/0.05) sobre #0f172a — mantém visual, permite verificação de contraste */
+  background: linear-gradient(90deg, #1e2245, #111827);
   border-left: 3px solid #818cf8;
   border-top: 1px solid rgba(99, 102, 241, 0.2);
   border-bottom: 1px solid rgba(99, 102, 241, 0.2);
@@ -263,24 +272,25 @@
 }
 
 .scenarioIconBox {
-  width: 34px;
-  height: 34px;
-  border-radius: 8px;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: rgba(15, 23, 42, 0.6);
-  font-size: 14px;
+  font-size: 12px;
   border: 1px solid rgba(255, 255, 255, 0.05);
   transition: all 0.3s ease;
   flex-shrink: 0;
 }
 
 .scenarioIconBoxActive {
-  background: #6366f1;
-  color: white;
-  border-color: #818cf8;
-  box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+  /* #4338ca (indigo-700) sobre white = 5.5:1 — passa WCAG AA */
+  background: #4338ca;
+  color: #fff;
+  border-color: #6366f1;
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
 }
 
 .scenarioBtnText {
@@ -290,31 +300,41 @@
 }
 
 .scenarioBtnSub {
-  font-size: 0.55rem;
-  font-weight: 700;
+  font-size: 0.58rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  opacity: 0.6;
-  margin-bottom: 1px;
+  letter-spacing: 0.05em;
+  color: #64748b;
+  margin-bottom: 5px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 1;
 }
 
 .scenarioBtnName {
-  font-size: 0.75rem;
+  font-size: 0.82rem;
   font-weight: 700;
-  color: #fff;
-  letter-spacing: 0.02em;
+  color: #e2e8f0;
+  letter-spacing: -0.015em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.scenarioBtnActive .scenarioBtnSub {
+  color: #818cf8;
+}
+
+.scenarioBtnActive .scenarioBtnName {
+  color: #fff;
 }
 
 .scenarioChevron {
   margin-left: auto;
   color: #475569;
-  font-size: 1.2rem;
+  font-size: 0.7rem;
   opacity: 0.5;
   flex-shrink: 0;
 }

@@ -46,17 +46,17 @@ export default function ScenarioStage({
   }, [scenario.id, scenario.ipRp, scenario.oopRp, playDeathZone, playPredatorZone]);
 
   return (
-    <div className={`${styles.glassPanel} ${styles.animateFadeUp}`} style={{ padding: '2rem' }}>
+    <div className={`${styles.glassPanel} ${styles.animateFadeUp}`} style={{ padding: '1.75rem' }}>
       {/* Narrativa */}
-      <div style={{ marginBottom: '1.5rem' }}>
+      <div style={{ marginBottom: '1.25rem' }}>
         <h2
           className={styles.gradientText}
           style={{
-            fontSize: 'clamp(1.4rem, 3vw, 1.8rem)',
-            fontWeight: 900,
+            fontSize: 'clamp(1rem, 2vw, 1.3rem)',
+            fontWeight: 700,
             letterSpacing: '-0.02em',
             margin: 0,
-            lineHeight: 1.2,
+            lineHeight: 1.3,
           }}
         >
           {scenario.narrativeTitle}
@@ -70,13 +70,13 @@ export default function ScenarioStage({
               display: 'inline-flex',
               alignItems: 'center',
               gap: '6px',
-              padding: '0.3rem 0.75rem',
-              borderRadius: '8px',
-              background: 'rgba(30, 41, 59, 0.6)',
-              border: '1px solid rgba(255, 255, 255, 0.06)',
-              fontSize: '0.65rem',
+              padding: '0.2rem 0.6rem',
+              borderRadius: '6px',
+              background: 'rgba(30, 41, 59, 0.5)',
+              border: '1px solid rgba(255, 255, 255, 0.05)',
+              fontSize: '0.58rem',
               fontWeight: 700,
-              color: '#94a3b8',
+              color: '#64748b',
               textTransform: 'uppercase',
               letterSpacing: '0.1em',
             }}
@@ -91,8 +91,8 @@ export default function ScenarioStage({
         style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
-          gap: '2rem',
-          marginBottom: '1.5rem',
+          gap: '1.5rem',
+          marginBottom: '1.25rem',
         }}
       >
         {/* Gauge IP (Agressor) */}
