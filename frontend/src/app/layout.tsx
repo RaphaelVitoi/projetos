@@ -20,13 +20,12 @@ export const metadata = {
     siteName: 'PokerRacional',
     title: 'Raphael Vitoi | Masterclass de ICM e Teoria dos Jogos',
     description: 'A Geometria do Risco: ICM Pós-Flop, Risk Premium e a Nova Fronteira do Edge no Poker.',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'PokerRacional — Raphael Vitoi' }],
+    // opengraph-image.tsx gera automaticamente a imagem OG
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Raphael Vitoi | Masterclass de ICM e Teoria dos Jogos',
     description: 'A Geometria do Risco: ICM Pós-Flop, Risk Premium e a Nova Fronteira do Edge no Poker.',
-    images: ['/og-image.png'],
     creator: '@raphaelvitoi',
   },
 };
