@@ -2,10 +2,9 @@
 # Alinhado com a Pipeline Harmonica e o Manifesto de Coerencia
 
 $Agents = @(
-    "pesquisador", "prompter", "curator", "planner", "organizador", 
-    "auditor", "implementor", "verifier", "validador", "securitychief", 
-    "seo", "bibliotecario", "maverick", "sequenciador", "skillmaster", 
-    "dispatcher", "chico"
+    "pesquisador", "prompter", "curator", "planner", "organizador",
+    "auditor", "implementor", "verifier", "validador", "securitychief",
+    "seo", "bibliotecario", "maverick", "sequenciador", "skillmaster", "dispatcher", "chico", "architect"
 )
 
 $ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path

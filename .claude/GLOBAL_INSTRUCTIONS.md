@@ -121,25 +121,26 @@ AGENTES OPERACIONAIS (24/7):
 
 ### Integração de Cada Agente (Resumido)
 
-| Agente                          | Entrada                            | Saída                                                    | Consultivo? | Bloqueador?                             |
-| ------------------------------- | ---------------------------------- | --------------------------------------------------------- | ----------- | --------------------------------------- |
-| **@dispatcher**           | Backlog múltiplas ideias          | Pipelines priorizadas                                     | Sim         | Não                                    |
-| @pesquisador                    | Ideia vaga (ou @dispatcher output) | Research + recomendações                                | Sim         | Não                                    |
-| @prompter                       | Research                           | Prompt estruturado                                        | Sim         | Não                                    |
-| **@curator**              | Research + Prompt                  | Validação integridade                                   | Sim ⚠️    | Consultivo                              |
-| @planner                        | Prompt + Curator insights          | PRD + SPEC                                                | Sim         | Não                                    |
-| **@organizador**          | PRD + SPEC                         | Health check docs                                         | Sim ⚠️    | Consultivo                              |
-| @auditor                        | PRD + SPEC                         | SPEC aprovada ou corrigida                                | Sim         | **SIM** (bloqueia com correção) |
-| @implementor                    | SPEC                               | Código + docs                                            | Sim         | Não                                    |
-| @verifier                       | Código                            | Feature pronto ou relata bugs                             | Sim         | Não (corrige direto)                   |
-| @curator                        | Feature ready                      | Estética + ética final                                  | Sim ⚠️    | Consultivo                              |
-| **@validador**            | Feature ready                      | Validação de conteúdo                                  | Sim ⚠️    | Consultivo                              |
-| **@securitychief**        | Feature ready                      | Segurança + privacy check                                | Sim ⚠️    | Consultivo                              |
-| **@seo**                  | Feature ready                      | Otimização para motores de busca                        | Sim ⚠️    | Consultivo                              |
-| **@bibliotecario**        | Necessidade de contexto longo      | Contexto histórico recuperado e sintetizado              | Operacional | Não                                    |
-| **@maverick (SENTINELA)** | Toda a pipeline                    | Mentoria, decisões críticas, inteligência estratégica | Transversal | Executivo (Raphael ausente)             |
-| **@sequenciador**         | Tráfego/demanda                   | Orquestração + suporte                                  | Operacional | Não                                    |
-| **@skillmaster**          | Agenda (24/7)                      | Backups/sync/cleanup                                      | Operacional | Não                                    |
+| Agente                    | Entrada                            | Saída                                                 | Consultivo? | Bloqueador?                     |
+| ------------------------- | ---------------------------------- | ----------------------------------------------------- | ----------- | ------------------------------- |
+| @architect                | Tarefa do @dispatcher              | Visão Arquitetural                                    | Não         | Não                             |
+| **@dispatcher**           | Backlog múltiplas ideias           | Pipelines priorizadas                                 | Sim         | Não                             |
+| @pesquisador              | Ideia vaga (ou @dispatcher output) | Research + recomendações                              | Sim         | Não                             |
+| @prompter                 | Research                           | Prompt estruturado                                    | Sim         | Não                             |
+| **@curator**              | Research + Prompt                  | Validação integridade                                 | Sim ⚠️      | Consultivo                      |
+| @planner                  | Prompt + Curator insights          | PRD + SPEC                                            | Sim         | Não                             |
+| **@organizador**          | PRD + SPEC                         | Health check docs                                     | Sim ⚠️      | Consultivo                      |
+| @auditor                  | PRD + SPEC                         | SPEC aprovada ou corrigida                            | Sim         | **SIM** (bloqueia com correção) |
+| @implementor              | SPEC                               | Código + docs                                         | Sim         | Não                             |
+| @verifier                 | Código                             | Feature pronto ou relata bugs                         | Sim         | Não (corrige direto)            |
+| @curator                  | Feature ready                      | Estética + ética final                                | Sim ⚠️      | Consultivo                      |
+| **@validador**            | Feature ready                      | Validação de conteúdo                                 | Sim ⚠️      | Consultivo                      |
+| **@securitychief**        | Feature ready                      | Segurança + privacy check                             | Sim ⚠️      | Consultivo                      |
+| **@seo**                  | Feature ready                      | Otimização para motores de busca                      | Sim ⚠️      | Consultivo                      |
+| **@bibliotecario**        | Necessidade de contexto longo      | Contexto histórico recuperado e sintetizado           | Operacional | Não                             |
+| **@maverick (SENTINELA)** | Toda a pipeline                    | Mentoria, decisões críticas, inteligência estratégica | Transversal | Executivo (Raphael ausente)     |
+| **@sequenciador**         | Tráfego/demanda                    | Orquestração + suporte                                | Operacional | Não                             |
+| **@skillmaster**          | Agenda (24/7)                      | Backups/sync/cleanup                                  | Operacional | Não                             |
 
 ### Filosofia Operacional
 
@@ -256,12 +257,12 @@ Nível 4 (CEO/Fundamental): VOCÊ (Raphael Vitoi)
 
 ### Integração com 4 Camadas de Coerência
 
-| Camada                     | Arquivo                      | Conteúdo CHICO                                                                       |
-| -------------------------- | ---------------------------- | ------------------------------------------------------------------------------------- |
-| **1: Identity**      | CLAUDE.md                    | identidade de Raphael e perfil do sistema; Epistemics; Valores                        |
+| Camada               | Arquivo                      | Conteúdo CHICO                                                                     |
+| -------------------- | ---------------------------- | ---------------------------------------------------------------------------------- |
+| **1: Identity**      | CLAUDE.md                    | identidade de Raphael e perfil do sistema; Epistemics; Valores                     |
 | **2: Comportamento** | GLOBAL_INSTRUCTIONS.md       | CHICO como super-agente administrativo; Tríade governança; Expertise multi-domínio |
 | **3: Contexto**      | project-context.md           | CHICO no topo (com você + @maverick); Fluxos de escalação; Relacionamentos com 15  |
-| **4: Memória**      | agent-memory/chico/MEMORY.md | Perfil, competências, padrões, relacionamentos com as 18 entidades do sistema       |
+| **4: Memória**       | agent-memory/chico/MEMORY.md | Perfil, competências, padrões, relacionamentos com as 18 entidades do sistema      |
 
 ---
 

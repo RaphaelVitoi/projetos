@@ -2,7 +2,7 @@
 
 **Responsável:** @maverick (análise estratégica e de qualidade)  
 **Data:** 2026-03-12  
-**Escopo:** 16 agentes (15 especialistas + 1 sentinela), 4 camadas de integração, workflow harmônico
+**Escopo:** 18 agentes (16 especialistas + 2 super-agentes), 4 camadas de integração, workflow harmônico
 
 ---
 
@@ -43,6 +43,18 @@ ESTRATO 4: INTELECTUAL TRANSVERSAL (1 agente)
 - A separação clara entre linear, consultivo, operacional e intelectual é estruturalmente sólida
 - Nenhum estrato sobrepõe função do outro
 - Autoridade bem-definida em cada nível
+- Criar diagramas de arquitetura que ilustrem o fluxo de dados e as interações entre os diferentes componentes.
+- Exemplo de diagrama:
+  ```mermaid
+  graph LR
+      A[User Input] --> B(Smart CLI: do.ps1)
+      B --> C{Intent Resolution}
+      C -- Identified Agent --> D[Agent Task Execution]
+      C -- No Match --> E[Default Agent]
+      D & E --> F(Task Management: task_executor.py)
+  ```
+- Manter documentação detalhada e atualizada sobre a função de cada módulo e componente.
+- Utilizar padrões de projeto para abstrair a complexidade e fornecer interfaces mais simples.
 
 ---
 
@@ -50,11 +62,11 @@ ESTRATO 4: INTELECTUAL TRANSVERSAL (1 agente)
 
 | Tipo                              | Count  | %        | Função                      |
 | --------------------------------- | ------ | -------- | --------------------------- |
-| Linear (séquencial, sem escolha)  | 6      | 37.5%    | Fluxo crítico direto        |
-| Consultivo (paralelo, influencia) | 5      | 31.25%   | Qualidade multi-dimensional |
-| Operacional (contínuo)            | 4      | 25%      | Suporte & orquestração      |
-| Intelectual (transversal)         | 1      | 6.25%    | Liderança & síntese         |
-| **TOTAL**                         | **16** | **100%** | —                           |
+| Linear (séquencial, sem escolha)  | 7      | 41.17%   | Fluxo crítico direto        |
+| Consultivo (paralelo, influencia) | 5      | 29.41%   | Qualidade multi-dimensional |
+| Operacional (contínuo)            | 4      | 23.53%   | Suporte & orquestração      |
+| Intelectual (transversal)         | 1      | 5.88%    | Liderança & síntese         |
+| **TOTAL**                         | **17** | **100%** | —                           |
 
 **Avaliação:** ✅ **Proporcionalmente Adequado**
 
@@ -89,6 +101,7 @@ ESTRATO 4: INTELECTUAL TRANSVERSAL (1 agente)
 | @bibliotecario | ✅                   | ✅                | ✅                 | ✅                |
 | @skillmaster   | ✅                   | ✅                | ✅                 | ✅                |
 | @dispatcher    | ✅                   | ✅                | ✅                 | ✅                |
+| @architect     | ✅                   | ✅                | ✅                 | ✅                |
 
 **Avaliação:** ✅ **100% COMPLETO**
 

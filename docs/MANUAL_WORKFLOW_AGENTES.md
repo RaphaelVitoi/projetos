@@ -4,7 +4,7 @@
 > **Status:** Operacional, Autopoiético, Simétrico e Supremo
 > **Fundação:** Orquestrador Python SOTA + DAL SQLite
 
-Este documento dita a realidade mecânica e filosófica de como as **18 Entidades** (Usuário, CHICO, @maverick e 15 Especialistas) interagem para transformar pensamento em matéria no ecossistema local.
+Este documento dita a realidade mecânica e filosófica de como as **19 Entidades** (Usuário, CHICO, @maverick e 16 Especialistas) interagem para transformar pensamento em matéria no ecossistema local.
 
 ---
 
@@ -91,6 +91,11 @@ O pipeline linear atua como uma linha de montagem de excelência. Agentes consul
 
 - **Acionado quando:** O usuário tem uma ideia colossal, um épico ou múltiplas frentes simultâneas.
 - **O que faz:** Quebra monolitos em arrays JSON de tarefas atômicas e delegáveis. Identifica dependências.
+
+### 🔹 FASE 0.5: O Arquiteto (@architect)
+
+- **Acionado quando:** Após o `@dispatcher`, antes do `@pesquisador`.
+- **O que faz:** Recebe a intenção e define a visão arquitetural de alto nível. Responde "O que estamos construindo e por quê?".
 
 ### 🔹 FASE 1: O Batedor Avançado (@pesquisador)
 

@@ -38,18 +38,18 @@ Você vai aprender a **Antevisão**: a habilidade de olhar para uma mesa e ver o
 
 ### O Que Você Vai Dominar:
 
-* **O "Downward Drift":** A heurística simples que ajusta automaticamente seus sizings e frequências para a realidade do ICM (e por que seus sizings de cash game estão queimando dinheiro).
-* **Toy-Games de Laboratório:** Vamos dissecar 8 cenários puros para provar matematicamente conceitos contra-intuitivos — como o fato de que, às vezes, **quem tem menos risco deve foldar MAIS** (O Paradoxo da Pressão Invertida).
-* **O Teto do Risk Premium:** Por que overbluffar o Chip Leader é suicídio, e onde está o limite matemático da agressão.
-* **A Mesa como Organismo:** Como um all-in entre dois oponentes muda instantaneamente o valor das SUAS fichas e como explorar isso.
+- **O "Downward Drift":** A heurística simples que ajusta automaticamente seus sizings e frequências para a realidade do ICM (e por que seus sizings de cash game estão queimando dinheiro).
+- **Toy-Games de Laboratório:** Vamos dissecar 8 cenários puros para provar matematicamente conceitos contra-intuitivos — como o fato de que, às vezes, **quem tem menos risco deve foldar MAIS** (O Paradoxo da Pressão Invertida).
+- **O Teto do Risk Premium:** Por que overbluffar o Chip Leader é suicídio, e onde está o limite matemático da agressão.
+- **A Mesa como Organismo:** Como um all-in entre dois oponentes muda instantaneamente o valor das SUAS fichas e como explorar isso.
 
 ## Para Quem É Isso?
 
-Este material não é para iniciantes. É para jogadores profissionais e semi-profissionais (AVG $109-$530) que:
+Este material é para quem:
 
-1. Já entendem o básico de ICM pré-flop.
-2. Estão cansados de "sentir" que estão cometendo erros em FTs, mas não sabem onde.
-3. Querem uma vantagem técnica real que o field ainda não estuda.
+1. Já entende o básico de ICM pré-flop.
+2. Está cansado de "sentir" que está cometendo erros em FTs, mas não sabe onde.
+3. Quer uma vantagem técnica real que o field ainda não estuda.
 
 ## O Que Está Incluso?
 
@@ -60,7 +60,7 @@ Este material não é para iniciantes. É para jogadores profissionais e semi-pr
 - RP vs Bubble Factor: relacao entre as duas metricas
 - Visualizacao concreta: calculadora ICM mostrando valuations de stacks em FT tipica
 
-### Modulo 2: Toy-Games como Laboratorio 
+### Modulo 2: Toy-Games como Laboratorio
 
 - Justificativa metodologica: por que toy-games sao a ferramenta certa para isolar variaveis
 - Parte I: 5 toy-games com RP progressivo no OOP (RP 0 -> 24)
@@ -104,23 +104,23 @@ Este material não é para iniciantes. É para jogadores profissionais e semi-pr
 
 **Checklist de Bolso "Antevisão":** Um guia passo-a-passo para calibrar sua mente antes de cada mão em uma FT. Nunca mais entre em um spot sem saber quem cobre quem e qual é o Risk Premium da mesa.
 
-## ELEMENTOS DIFERENCIADORES 
+## ELEMENTOS DIFERENCIADORES
 
-1. *Metodologia de toy-games*: isolamento de variaveis para construir intuicao antes de aplicar a situacoes reais -- diferencial metodologico de Raphael
-2. *Conceitos proprios nomeados*: Teto do RP, RP de ida vs volta -- nomenclatura clara e propria que o mercado nao usa
-3. *ICM pos-flop como tese central*: a maioria do conteudo existente trata ICM como fenomeno pre-flop. Esta aula trata ICM pos-flop como o edge inexplorado real
-4. *Critica fundamentada aos solvers*: solvers como mapa, nao como territorio -- posicao que diferencia o conteudo de tutoriais de ferramentas
-5. *Conexoes interdisciplinares reais*: Prospect Theory, Teoria de Sistemas e Teoria dos Jogos usadas como lentes interpretativas, nao como ornamento
+1. _Metodologia de toy-games_: isolamento de variaveis para construir intuicao antes de aplicar a situacoes reais -- diferencial metodologico de Raphael
+2. _Conceitos proprios nomeados_: Teto do RP, RP de ida vs volta -- nomenclatura clara e propria que o mercado nao usa
+3. _ICM pos-flop como tese central_: a maioria do conteudo existente trata ICM como fenomeno pre-flop. Esta aula trata ICM pos-flop como o edge inexplorado real
+4. _Critica fundamentada aos solvers_: solvers como mapa, nao como territorio -- posicao que diferencia o conteudo de tutoriais de ferramentas
+5. _Conexoes interdisciplinares reais_: Prospect Theory, Teoria de Sistemas e Teoria dos Jogos usadas como lentes interpretativas, nao como ornamento
 
 ---
 
 **Autor:** Raphael Vitoi
-*Educador, Profissional de Poker há mais de dez anos, Especialista em Sistemas Complexos, ICM, Multiway Spots, Teoria dos Jogos, Análise Bayesiana, Preditiva e Recursiva, Adaptação Estratégica, Análise Comportamental, GTO e desvio, Psicologia do Poker
+_Educador, Profissional de Poker há mais de dez anos, Especialista em Sistemas Complexos, ICM, Multiway Spots, Teoria dos Jogos, Análise Bayesiana, Preditiva e Recursiva, Adaptação Estratégica, Análise Comportamental, GTO e desvio, Psicologia do Poker
 &
 é claro
 em Poker Racional!
-(pois o que importa de verdade é pensar bem)*
+(pois o que importa de verdade é pensar bem)_
 
-> *"O edge não está mais nas cartas que você recebe, mas na precisão com que você avalia o risco de jogá-las."*
+> _"O edge não está mais nas cartas que você recebe, mas na precisão com que você avalia o risco de jogá-las."_
 
 **Recupere seu ROI. Domine a fronteira final.**
