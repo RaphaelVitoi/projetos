@@ -4,7 +4,8 @@
     Lê e formata esteticamente os pensamentos e ações do Worker Pydantic.
 #>
 
-$LogPath = Join-Path $PSScriptRoot ".claude\logs\task_executor.log"
+$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+$LogPath = Join-Path $ProjectRoot ".claude\logs\task_executor.log"
 Clear-Host
 
 Write-Host "==========================================================================" -ForegroundColor Cyan

@@ -14,7 +14,7 @@ export const metadata = {
 
 export default function HomePage() {
   return (
-    <main className="container mx-auto px-4">
+    <main className="container mx-auto px-4" style={{ paddingTop: '4rem' }}>
 
       {/* Hero Section */}
       <section id="hero" className="animate-fade-up">
@@ -55,7 +55,7 @@ export default function HomePage() {
           <p>Mas existe uma <strong>Nova Fronteira</strong>. Um lugar onde o dinheiro real está sendo ganho e perdido silenciosamente, longe dos olhos dos solvers básicos.</p>
           <p style={{ fontSize: '1.4rem', color: '#fff', textAlign: 'center', margin: '2rem 0' }}><strong>O ICM Pós-Flop.</strong></p>
 
-          <div className="callout" style={{ borderLeftColor: 'var(--accent-secondary)' }}>
+          <div className="callout callout-secondary">
             <h4 style={{ marginTop: 0, color: 'var(--accent-secondary)' }}>O Custo Invisível</h4>
             <p>Dados recentes do GTO Wizard (2025/2026) revelam uma verdade brutal:</p>
             <blockquote style={{ border: 'none', padding: 0, margin: '1rem 0', fontSize: '1.1rem', color: '#fff' }}>
@@ -85,24 +85,76 @@ export default function HomePage() {
           </ol>
 
           <h3>O Que Está Incluso</h3>
-          <div style={{ background: 'var(--bg-card)', borderRadius: 'var(--radius-md)', padding: '2rem', margin: '2rem 0', border: 'var(--glass-border)' }}>
-            <ul style={{ paddingLeft: 0, listStyle: 'none' }}>
-              <li style={{ marginBottom: '1rem' }}><strong>Módulo 1: O Problema e o Mapa</strong><br /><span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Risk Premium, Bubble Factor, Valuations de Stack.</span></li>
-              <li style={{ marginBottom: '1rem' }}><strong>Módulo 2: Toy-Games como Laboratório</strong><br /><span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>8 cenários progressivos (RP 0 -&gt; 24), Pacto Silencioso, Nash sob ICM.</span></li>
-              <li style={{ marginBottom: '1rem' }}><strong>Módulo 3: ICM Pós-Flop: A Fronteira</strong><br /><span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Downward Drift, Covering Advantage, Check-Backs de Premium Hands.</span></li>
-              <li style={{ marginBottom: '1rem' }}><strong>Módulo 4: Variáveis Contextuais</strong><br /><span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Payout Structures, FGS, KO/Bounty, Dinâmica de CL.</span></li>
-              <li style={{ marginBottom: '1rem' }}><strong>Módulo 5: Aplicação Prática e Erros Comuns</strong><br /><span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Os 10 erros mais comuns e heurísticas de mesa.</span></li>
-              <li style={{ marginTop: '1.5rem', color: 'var(--accent-primary)', borderTop: '1px solid var(--border-color)', paddingTop: '1rem' }}><strong>+ Bônus Exclusivo:</strong> Checklist de Bolso &quot;Antevisão&quot;.</li>
-            </ul>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', margin: '2rem 0' }}>
+
+            <div style={{ background: 'var(--bg-card)', borderRadius: 'var(--radius-md)', padding: '1.5rem', border: 'var(--glass-border)' }}>
+              <strong style={{ color: '#fff', fontSize: '1rem' }}>Módulo 1: O Problema e o Mapa</strong>
+              <ul style={{ marginTop: '0.75rem', marginBottom: 0, paddingLeft: '1.25rem', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+                <li>Por que ICM importa desde a mão 1 (não só na bubble)</li>
+                <li>O que é Risk Premium: definição precisa, cálculo, intuição</li>
+                <li>RP vs Bubble Factor: relação entre as duas métricas</li>
+                <li>Visualização concreta: calculadora ICM com valuations de stacks em FT típica</li>
+              </ul>
+            </div>
+
+            <div style={{ background: 'var(--bg-card)', borderRadius: 'var(--radius-md)', padding: '1.5rem', border: 'var(--glass-border)' }}>
+              <strong style={{ color: '#fff', fontSize: '1rem' }}>Módulo 2: Toy-Games como Laboratório</strong>
+              <ul style={{ marginTop: '0.75rem', marginBottom: 0, paddingLeft: '1.25rem', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+                <li>Justificativa metodológica: por que toy-games isolam variáveis com precisão</li>
+                <li>Parte I: 5 toy-games com RP progressivo no OOP (RP 0 → 24), defesa de bluffcatchers a cada incremento</li>
+                <li>Parte II: 3 toy-games com RP invertido no IP — o Paradoxo da Pressão Invertida</li>
+                <li>Conceitos emergentes: Teto do RP, Vantagem/Desvantagem de Risco, Pacto Silencioso, Nash sob ICM</li>
+              </ul>
+            </div>
+
+            <div style={{ background: 'var(--bg-card)', borderRadius: 'var(--radius-md)', padding: '1.5rem', border: 'var(--glass-border)' }}>
+              <strong style={{ color: '#fff', fontSize: '1rem' }}>Módulo 3: ICM Pós-Flop — A Fronteira</strong>
+              <ul style={{ marginTop: '0.75rem', marginBottom: 0, paddingLeft: '1.25rem', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+                <li>Por que o edge real está no pós-flop (não mais no pré-flop)</li>
+                <li>Downward Drift: como ICM transforma sizings e ações ao longo das streets</li>
+                <li>SPR e distribuição do RP por street — custo por street calculado</li>
+                <li>Covering advantage e seu efeito compounding</li>
+                <li>Premium hands check-back: quando checar AA inteiro é correto</li>
+                <li>Custo quantificado de jogar ChipEV em spots ICM (&gt;10% buy-in, &gt;30% em 3-bet pots)</li>
+                <li>Exercício guiado: como comparar ChipEV vs ICM side-by-side no GTO Wizard/DeepSolver</li>
+              </ul>
+            </div>
+
+            <div style={{ background: 'var(--bg-card)', borderRadius: 'var(--radius-md)', padding: '1.5rem', border: 'var(--glass-border)' }}>
+              <strong style={{ color: '#fff', fontSize: '1rem' }}>Módulo 4: Variáveis Contextuais</strong>
+              <ul style={{ marginTop: '0.75rem', marginBottom: 0, paddingLeft: '1.25rem', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+                <li>Payout structures: flat vs top-heavy e impacto mensurável no RP (diferença de 5.7% no RP médio)</li>
+                <li>FGS vs ICM clássico: quando o modelo padrão falha e o que usar</li>
+                <li>KO/Bounty tournaments: RP positivo + equity drop negativo (como os dois interagem)</li>
+                <li>CL dynamics: responsabilidade de pressionar vs risco de perder leverage futura</li>
+              </ul>
+            </div>
+
+            <div style={{ background: 'var(--bg-card)', borderRadius: 'var(--radius-md)', padding: '1.5rem', border: 'var(--glass-border)' }}>
+              <strong style={{ color: '#fff', fontSize: '1rem' }}>Módulo 5: Aplicação Prática e Erros Comuns</strong>
+              <ul style={{ marginTop: '0.75rem', marginBottom: 0, paddingLeft: '1.25rem', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+                <li>Os 10 erros mais comuns do jogador AVG $109-$530 com correções concretas</li>
+                <li>Heurísticas de mesa: checklist de decisão ICM pós-flop em tempo real</li>
+                <li>Como estruturar sessões de estudo solo com solvers para treinar ICM pós-flop</li>
+                <li>Conexões interdisciplinares como lente interpretativa: Prospect Theory, Teoria de Sistemas, Teoria dos Jogos</li>
+              </ul>
+            </div>
+
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontStyle: 'italic', margin: 0 }}>+ incontáveis outros módulos e sub-módulos.</p>
+          </div>
+
+          <div className="callout callout-emerald" style={{ margin: '2rem 0' }}>
+            <h4 style={{ marginTop: 0, color: 'var(--accent-emerald)' }}>Bônus Exclusivo</h4>
+            <p style={{ marginBottom: 0 }}><strong>Checklist de Bolso &quot;Antevisão&quot;:</strong> Um guia passo-a-passo para calibrar sua mente antes de cada mão em uma FT. Nunca mais entre em um spot sem saber quem cobre quem e qual é o Risk Premium da mesa.</p>
           </div>
 
           <h3>Elementos Diferenciadores</h3>
           <ul style={{ listStyle: 'none', padding: 0 }}>
-            <li style={{ marginBottom: '0.8rem' }}><strong>1. Metodologia de toy-games:</strong> isolamento de variáveis para construir intuição antes de aplicar a situações reais.</li>
-            <li style={{ marginBottom: '0.8rem' }}><strong>2. Conceitos próprios nomeados:</strong> Teto do RP, RP de ida vs volta: nomenclatura clara e própria que o mercado não usa.</li>
+            <li style={{ marginBottom: '0.8rem' }}><strong>1. Metodologia de toy-games:</strong> isolamento de variáveis para construir intuição antes de aplicar a situações reais — diferencial metodológico de Raphael.</li>
+            <li style={{ marginBottom: '0.8rem' }}><strong>2. Conceitos próprios nomeados:</strong> Teto do RP, RP de ida vs volta — nomenclatura clara e própria que o mercado não usa.</li>
             <li style={{ marginBottom: '0.8rem' }}><strong>3. ICM pós-flop como tese central:</strong> a maioria do conteúdo existente trata ICM como fenômeno pré-flop. Esta aula trata ICM pós-flop como o edge inexplorado real.</li>
-            <li style={{ marginBottom: '0.8rem' }}><strong>4. Crítica fundamentada aos solvers:</strong> solvers como mapa, não como território.</li>
-            <li style={{ marginBottom: '0.8rem' }}><strong>5. Conexões interdisciplinares reais:</strong> Prospect Theory, Teoria de Sistemas e Teoria dos Jogos usadas como lentes interpretativas.</li>
+            <li style={{ marginBottom: '0.8rem' }}><strong>4. Crítica fundamentada aos solvers:</strong> solvers como mapa, não como território — posição que diferencia o conteúdo de tutoriais de ferramentas.</li>
+            <li style={{ marginBottom: '0.8rem' }}><strong>5. Conexões interdisciplinares reais:</strong> Prospect Theory, Teoria de Sistemas e Teoria dos Jogos usadas como lentes interpretativas, não como ornamento.</li>
           </ul>
         </article>
       </section>
@@ -124,9 +176,9 @@ export default function HomePage() {
             <p><em>&quot;Pois o que importa de verdade é pensar bem.&quot;</em></p>
 
             <div style={{ marginTop: '1.5rem', display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
-              <a href="https://deepsolver.com" target="_blank" rel="noopener" style={{ background: 'rgba(99, 102, 241, 0.1)', color: 'var(--accent-primary)', padding: '0.2rem 0.8rem', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 700, border: '1px solid var(--accent-primary)', transition: 'all 0.2s' }}>Embaixador Deepsolver</a>
-              <a href="https://gtowizard.com" target="_blank" rel="noopener" style={{ background: 'rgba(16, 185, 129, 0.1)', color: 'var(--accent-emerald)', padding: '0.2rem 0.8rem', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 700, border: '1px solid var(--accent-emerald)', transition: 'all 0.2s' }}>Afiliado GTO Wizard</a>
-              <a href="https://trueicm.com" target="_blank" rel="noopener" style={{ background: 'rgba(225, 29, 72, 0.1)', color: 'var(--accent-secondary)', padding: '0.2rem 0.8rem', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 700, border: '1px solid var(--accent-secondary)', transition: 'all 0.2s' }}>Criador trueICM.com</a>
+              <a href="https://deepsolver.com" target="_blank" rel="noopener" className="badge-link badge-link-primary">Embaixador Deepsolver</a>
+              <a href="https://gtowizard.com" target="_blank" rel="noopener" className="badge-link badge-link-emerald">Afiliado GTO Wizard</a>
+              <a href="https://trueicm.com" target="_blank" rel="noopener" className="badge-link badge-link-secondary">Criador trueICM.com</a>
             </div>
           </div>
         </div>
@@ -176,6 +228,13 @@ export default function HomePage() {
             <h3>Protocolo Smart Sniper</h3>
             <p>Gestão de carreira, rotina semanal, estratégia de domingo e validação Monte Carlo.</p>
             <span className="card-cta">Ler &rarr;</span>
+          </Link>
+
+          <Link href="/artigos/validacao-smart-sniper" className="hub-card">
+            <span className="hub-icon">&#128200;</span>
+            <h3>Validação Científica</h3>
+            <p>Monte Carlo, Índice de Sharpe, Barbell Strategy e modelagem cognitiva (Yerkes-Dodson). Q.E.D.</p>
+            <span className="card-cta">Ler Artigo &rarr;</span>
           </Link>
 
           <Link href="/tools/simulador" className="hub-card">

@@ -4,11 +4,11 @@
  * ROLE: Interfaces TypeScript para o ecossistema completo do simulador.
  */
 
-// Estágio do pipeline SPR (Stack-to-Pot Ratio)
+// Estágio do pipeline de dissipação de Risk Premium por street
 export interface SprStage {
   name: string;
   potSize: number;
-  sprValue: number;
+  rpValue: number;  // RP residual nesta street (% do oopRp inicial)
 }
 
 // Opção individual de quiz
@@ -36,6 +36,16 @@ export interface Scenario {
   stacks: number[];
   ipRp: number;
   oopRp: number;
+  /** Posição do jogador IP (ex: "BTN", "SB (CL)") */
+  ipPos: string;
+  /** Arquétipo de range do IP (ex: "Inelástico (Valor Estrito)") */
+  ipMorph: string;
+  /** Posição do jogador OOP (ex: "BB (CL)", "Vice") */
+  oopPos: string;
+  /** Arquétipo de range do OOP (ex: "Defensivo Condensado") */
+  oopMorph: string;
+  /** Rótulo narrativo do confronto (ex: "Agressão Estrangulada") */
+  verdict: string;
   narrativeTitle: string;
   narrativeSubtitle: string;
   icon: string;

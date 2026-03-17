@@ -91,6 +91,44 @@ export default function Aula12Page() {
 
           <p><strong>Cenário:</strong> BTN opens min-raise, SB folds, BB calls. Pot: 5.63bbs.</p>
 
+          <h3>Settings da Árvore Pós-Flop</h3>
+          <table>
+            <thead>
+              <tr><th>Parâmetro</th><th>Configuração</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Sizings gerais</strong></td><td>Seleção livre para ambos os players; River herda da street anterior</td></tr>
+              <tr><td><strong>SPR ≤ 2.5</strong></td><td>Duas sizings: 20% e 50% do pote; raise geométrico (2e)</td></tr>
+              <tr><td><strong>Leads OOP</strong></td><td>25% do pote permitidos em todas as streets e linhas</td></tr>
+              <tr><td><strong>All-In como sizing</strong></td><td>Disponível a partir de SPR ≥ 5</td></tr>
+            </tbody>
+          </table>
+
+          <h3>Ranges Pré-Flop (Dados Solver)</h3>
+          <table>
+            <thead>
+              <tr><th>Ação</th><th>Frequência</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>BTN RFI</strong></td><td>33.6%</td></tr>
+              <tr><td>BB Fold vs RFI</td><td>17.1%</td></tr>
+              <tr><td>BB Call</td><td style={{ color: 'var(--accent-emerald)' }}>64.4%</td></tr>
+              <tr><td>BB 3-bet small</td><td>3.7%</td></tr>
+              <tr><td>BB 3-bet polar</td><td>6.5%</td></tr>
+              <tr><td>BB Shove</td><td>8.4%</td></tr>
+            </tbody>
+          </table>
+
+          <div className="callout">
+            <h4 style={{ marginTop: 0 }}>Vantagem de Risco</h4>
+            <p style={{ marginBottom: 0 }}>
+              O RP do BTN (21.4%) é 8.5pp maior que o do BB (12.9%). Essa diferença — o{' '}
+              <strong>Risk Advantage</strong> — mede proporcionalmente quanto o BTN pode ser agressivo
+              em relação ao BB. Não é uma métrica absoluta de agressão; é relativa ao adversário específico.
+              A mesma stack em outra cadeira teria um Risk Advantage diferente.
+            </p>
+          </div>
+
           <h3>Análise Comparativa: ChipEV vs. ICMev</h3>
 
           <h4>1. Defendendo do BB</h4>
@@ -180,24 +218,44 @@ export default function Aula12Page() {
             jogo.&quot;
           </blockquote>
 
-          <h3>Glossário de Cenários Analisados</h3>
+          <h3>Nodelocks Críticos e Seus Achados</h3>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginTop: '1rem' }}>
-            <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '8px' }}>
+            <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '8px', borderLeft: '3px solid var(--accent-primary)' }}>
               <strong style={{ color: 'var(--accent-primary)' }}>Cenário 12</strong>
-              <p style={{ fontSize: '0.9rem', marginBottom: 0 }}>Nodelock: IP Action após BB Check</p>
+              <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem' }}>Nodelock: IP Action após BB Check</p>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: 0 }}>A frequência mínima de c-bets elevada pode estar sendo influenciada por variáveis externas. Estratégias mixadas indicam indiferença de EV — ChipEV e ICMev convergem nesse nó.</p>
             </div>
-            <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '8px' }}>
+            <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '8px', borderLeft: '3px solid var(--accent-primary)' }}>
               <strong style={{ color: 'var(--accent-primary)' }}>Cenário 19</strong>
-              <p style={{ fontSize: '0.9rem', marginBottom: 0 }}>Nodelock: Obrigando o IP a cbetar sizing baixa</p>
+              <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem' }}>Nodelock: Obrigando o IP a cbetar sizing baixa</p>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: 0 }}>Revela como o OOP reage quando forçado a defender range contra sizing pequeno — expõe o custo do ICM em ranges que ChipEV equilibraria facilmente.</p>
             </div>
-            <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '8px' }}>
+            <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '8px', borderLeft: '3px solid var(--accent-primary)' }}>
               <strong style={{ color: 'var(--accent-primary)' }}>Cenário 27</strong>
-              <p style={{ fontSize: '0.9rem', marginBottom: 0 }}>Nodelock permitindo somente sizing de 50%</p>
+              <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem' }}>Nodelock: somente sizing de 50%</p>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: 0 }}>Isola o Downward Drift: forçar sizing médio impede que o solver encontre a polarização extrema (B20 ou all-in) que é a resposta ótima de ICM — tornando a estratégia mais custosa.</p>
             </div>
-            <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '8px' }}>
+            <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '8px', borderLeft: '3px solid var(--accent-primary)' }}>
               <strong style={{ color: 'var(--accent-primary)' }}>Cenário 54</strong>
-              <p style={{ fontSize: '0.9rem', marginBottom: 0 }}>Obrigando o IP a ter somente B20</p>
+              <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem' }}>Obrigando o IP a ter somente B20</p>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: 0 }}>Comprova que no ICMev o solver prefere B20 naturalmennte. Ao forcê-lo, a reação do BB muda: o defensor consegue realizar mais equidade com menos risco — reduzindo o Risk Premium efetivo do BB.</p>
             </div>
+          </div>
+
+          <div className="callout callout-secondary" style={{ marginTop: '2rem' }}>
+            <h4 style={{ marginTop: 0, color: 'var(--accent-secondary)' }}>Achado Principal (ICMev vs ChipEV)</h4>
+            <p>
+              No ICMev, o solver exibe{' '}
+              <strong>7% de lead do BB</strong> — ausente no ChipEV. Pode ser ruído da distância
+              e-Nash ou um sinal genuíno do ICM favorecendo o BB em spots específicos de lead.
+              Requer análise mais apurada no solver com configuração mais apertada.
+            </p>
+            <p style={{ marginBottom: 0 }}>
+              O fenômeno mais robusto é a <strong>migração quase total das apostas grandes para sizings
+              pequenos</strong> (B20/B33). No ChipEV, sizings médios e grandes coexistem. No ICMev, o
+              Downward Drift comprime a ação: o que era B75 vira B33, o que era B33 vira check. A única
+              exceção são as polarizações extremas (all-in com nuts ou blefe puro), que sobrevivem intactas.
+            </p>
           </div>
 
           <div style={{ marginTop: '2rem', textAlign: 'center' }}>

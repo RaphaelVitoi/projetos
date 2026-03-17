@@ -2,7 +2,7 @@
  * IDENTITY: Base de Dados dos Cenários Clínicos de ICM
  * PATH: src/components/simulator/engine/scenarios.ts
  * ROLE: Fonte de verdade para todos os 9 cenários do Simulador Mestre.
- *       Dados extraídos de RiskGeometryMasterclass.tsx (7), scenarios_toygame.js (2).
+ *       rpValue por street = oopRp × (SPR × potSize) / eff_stack
  * BINDING: [engine/types.ts]
  */
 
@@ -19,6 +19,11 @@ export const SCENARIOS: Scenario[] = [
     stacks: [40, 55],
     ipRp: 21.4,
     oopRp: 12.9,
+    ipPos: 'BTN',
+    ipMorph: 'Inelástico (Valor Estrito)',
+    oopPos: 'BB (CL)',
+    oopMorph: 'Defensivo Condensado',
+    verdict: 'Agressão Estrangulada',
     narrativeTitle: 'O Instinto Traído pela Matemática',
     narrativeSubtitle: 'Estrutura Padrão (Mid vs Big)',
     icon: 'fa-scale-unbalanced',
@@ -31,11 +36,13 @@ export const SCENARIOS: Scenario[] = [
     exploit: [
       'Puxar o Freio de Mão: Contraia severamente os seus bluffs. Aceite que a equidade natural exigida para engajar num pote deste calibre é altíssima.',
     ],
+    // RP residual por street: oopRp × (remaining_stack / eff_stack)
+    // eff=40; remaining = SPR × pot; PRE=12.9×40/40=12.9, FLOP=12.9×32.25/40=10.4, TURN=12.9×18/40=5.8, RIVER=12.9×8/40=2.6
     sprData: [
-      { name: 'PRE', potSize: 2.5, sprValue: 16.0 },
-      { name: 'FLOP', potSize: 7.5, sprValue: 4.3 },
-      { name: 'TURN', potSize: 22.5, sprValue: 0.8 },
-      { name: 'RIVER', potSize: 40.0, sprValue: 0.0 },
+      { name: 'PRE',   potSize: 2.5,  rpValue: 12.9 },
+      { name: 'FLOP',  potSize: 7.5,  rpValue: 10.4 },
+      { name: 'TURN',  potSize: 22.5, rpValue: 5.8 },
+      { name: 'RIVER', potSize: 40,   rpValue: 2.6 },
     ],
     quiz: {
       question: 'Por que o BTN (40bb), tendo uma stack gigante, sofre uma punição utilitária (RP) muito maior que o BB (55bb)?',
@@ -54,6 +61,11 @@ export const SCENARIOS: Scenario[] = [
     stacks: [65, 70],
     ipRp: 24.5,
     oopRp: 23.5,
+    ipPos: 'Vice CL',
+    ipMorph: 'Linear Especulativo',
+    oopPos: 'CL',
+    oopMorph: 'Flat Call Massivo',
+    verdict: 'Evitação de Ruína',
     narrativeTitle: 'A Mútua Destruição Assegurada',
     narrativeSubtitle: 'Colisão de Gigantes',
     icon: 'fa-handshake',
@@ -66,11 +78,12 @@ export const SCENARIOS: Scenario[] = [
     exploit: [
       'Negação de Ação Barata: Jogue impiedosamente polarizado. Negue a ele o showdown pacífico pós-agressão. Se for para o chão, vá com o topo.',
     ],
+    // RP residual: eff=65; PRE=23.5, FLOP=23.5×60.8/65=22.0, TURN=23.5×40.8/65=14.7, RIVER=23.5×32.5/65=11.8
     sprData: [
-      { name: 'PRE', potSize: 2.5, sprValue: 26.0 },
-      { name: 'FLOP', potSize: 8.0, sprValue: 7.6 },
-      { name: 'TURN', potSize: 24.0, sprValue: 1.7 },
-      { name: 'RIVER', potSize: 65.0, sprValue: 0.0 },
+      { name: 'PRE',   potSize: 2.5,  rpValue: 23.5 },
+      { name: 'FLOP',  potSize: 8,    rpValue: 22 },
+      { name: 'TURN',  potSize: 24,   rpValue: 14.7 },
+      { name: 'RIVER', potSize: 65,   rpValue: 11.8 },
     ],
     quiz: {
       question: 'Como as frequências reconfiguram o jogo pré-flop num "Pacto Silencioso"?',
@@ -87,8 +100,13 @@ export const SCENARIOS: Scenario[] = [
     name: 'O Efeito Batata Quente',
     category: 'clinical',
     stacks: [25, 20],
-    ipRp: 15.0,
+    ipRp: 15,
     oopRp: 19.5,
+    ipPos: 'UTG (Shove)',
+    ipMorph: 'Polar Máximo',
+    oopPos: 'BB (Call)',
+    oopMorph: 'Bluffcatcher Rígido',
+    verdict: 'Transferência de Fardo',
     narrativeTitle: 'O Peso de Agir Primeiro',
     narrativeSubtitle: 'A Dinâmica do Shove',
     icon: 'fa-fire-flame-curved',
@@ -101,11 +119,12 @@ export const SCENARIOS: Scenario[] = [
     exploit: [
       'Expandir Zonas de Shove: Contra adversários aterrorizados pela bolha, alargue os shoves (aumente o Alpha) nos spots onde a transferência da pressão é letal para eles.',
     ],
+    // RP residual: eff=20; PRE=19.5, FLOP=19.5×13.3/20=13.0, TURN=19.5×5.6/20=5.5, RIVER=19.5×2/20=1.9
     sprData: [
-      { name: 'PRE', potSize: 2.5, sprValue: 8.0 },
-      { name: 'FLOP', potSize: 7.0, sprValue: 1.9 },
-      { name: 'TURN', potSize: 14.0, sprValue: 0.4 },
-      { name: 'RIVER', potSize: 20.0, sprValue: 0.0 },
+      { name: 'PRE',   potSize: 2.5,  rpValue: 19.5 },
+      { name: 'FLOP',  potSize: 7,    rpValue: 13 },
+      { name: 'TURN',  potSize: 14,   rpValue: 5.5 },
+      { name: 'RIVER', potSize: 20,   rpValue: 1.9 },
     ],
     quiz: {
       question: 'O que caracteriza o "Efeito Batata Quente" na aplicação de um shove em ICM?',
@@ -123,7 +142,12 @@ export const SCENARIOS: Scenario[] = [
     category: 'clinical',
     stacks: [80, 30],
     ipRp: 4.5,
-    oopRp: 22.0,
+    oopRp: 22,
+    ipPos: 'CL (Pot Bet)',
+    ipMorph: 'Polar Extremado',
+    oopPos: 'Mid (Call)',
+    oopMorph: 'Condensado Sangrante',
+    verdict: 'MDF Quebrado',
     narrativeTitle: 'O Colapso do MDF',
     narrativeSubtitle: 'Teto do MDF (Condensado vs Polar)',
     icon: 'fa-heart-crack',
@@ -136,11 +160,12 @@ export const SCENARIOS: Scenario[] = [
     exploit: [
       'Overbluff Sistemático: Sabendo que o bluffcatcher não suporta o peso financeiro da eliminação contínua nas streets, expanda os bluffs e aplique triple barrels levianos.',
     ],
+    // RP residual: eff=30; PRE=22.0, FLOP=22×22.4/30=16.4, TURN=22×7.2/30=5.3, RIVER=22×3/30=2.2
     sprData: [
-      { name: 'PRE', potSize: 2.5, sprValue: 12.0 },
-      { name: 'FLOP', potSize: 8.0, sprValue: 2.8 },
-      { name: 'TURN', potSize: 24.0, sprValue: 0.3 },
-      { name: 'RIVER', potSize: 30.0, sprValue: 0.0 },
+      { name: 'PRE',   potSize: 2.5,  rpValue: 22 },
+      { name: 'FLOP',  potSize: 8,    rpValue: 16.4 },
+      { name: 'TURN',  potSize: 24,   rpValue: 5.3 },
+      { name: 'RIVER', potSize: 30,   rpValue: 2.2 },
     ],
     quiz: {
       question: 'Por que o jogador com alto RP não consegue defender a sua porção de MDF teórica num post-flop contra o CL?',
@@ -159,6 +184,11 @@ export const SCENARIOS: Scenario[] = [
     stacks: [12, 10],
     ipRp: 8.5,
     oopRp: 7.5,
+    ipPos: 'Micro',
+    ipMorph: 'Push Estendido',
+    oopPos: 'Micro',
+    oopMorph: 'Call Seletivo',
+    verdict: 'Fome de Laddering',
     narrativeTitle: 'O Minitorneio de Sobrevivência',
     narrativeSubtitle: 'Micro vs Micro (Escada)',
     icon: 'fa-person-falling-burst',
@@ -171,11 +201,12 @@ export const SCENARIOS: Scenario[] = [
     exploit: [
       'Aumente a Variância: Se o vilão sofre de aversão cega ao risco para garantir um payjump (overfold), a matemática exige que você roube os blinds para construir uma base para o pódio real.',
     ],
+    // RP residual: eff=10; PRE=7.5, FLOP=7.5×6/10=4.5, TURN=7.5×2/10=1.5, RIVER=7.5×1.2/10=0.9
     sprData: [
-      { name: 'PRE', potSize: 2.5, sprValue: 3.8 },
-      { name: 'FLOP', potSize: 6.0, sprValue: 1.0 },
-      { name: 'TURN', potSize: 10.0, sprValue: 0.2 },
-      { name: 'RIVER', potSize: 12.0, sprValue: 0.0 },
+      { name: 'PRE',   potSize: 2.5,  rpValue: 7.5 },
+      { name: 'FLOP',  potSize: 6,    rpValue: 4.5 },
+      { name: 'TURN',  potSize: 10,   rpValue: 1.5 },
+      { name: 'RIVER', potSize: 12,   rpValue: 0.9 },
     ],
     quiz: {
       question: 'Por que o Risk Premium entre dois micro-stacks não desce para o zero absoluto (ChipEV)?',
@@ -196,8 +227,13 @@ export const SCENARIOS: Scenario[] = [
     name: 'O Vácuo Matemático',
     category: 'baseline',
     stacks: [100, 100],
-    ipRp: 0.0,
-    oopRp: 0.0,
+    ipRp: 0,
+    oopRp: 0,
+    ipPos: 'Qualquer IP',
+    ipMorph: 'Polar Perfeito',
+    oopPos: 'Qualquer OOP',
+    oopMorph: 'Defesa Base',
+    verdict: 'MDF Perfeito',
     narrativeTitle: 'O Equilíbrio Linear',
     narrativeSubtitle: 'Sem Payjumps (ChipEV Puro)',
     icon: 'fa-gear',
@@ -210,11 +246,12 @@ export const SCENARIOS: Scenario[] = [
     exploit: [
       'Punição Imediata: Se o oponente folda acima dos 50%, overbluff imprime dinheiro. Se ele paga mais do que deve, limite os bluffs a 0 e expanda as apostas de valor thin. A punição é direta.',
     ],
+    // Sem ICM: RP = 0 em todas as streets
     sprData: [
-      { name: 'PRE', potSize: 2.5, sprValue: 40.0 },
-      { name: 'FLOP', potSize: 7.5, sprValue: 12.3 },
-      { name: 'TURN', potSize: 22.5, sprValue: 3.4 },
-      { name: 'RIVER', potSize: 67.5, sprValue: 0.5 },
+      { name: 'PRE',   potSize: 2.5,  rpValue: 0 },
+      { name: 'FLOP',  potSize: 7.5,  rpValue: 0 },
+      { name: 'TURN',  potSize: 22.5, rpValue: 0 },
+      { name: 'RIVER', potSize: 67.5, rpValue: 0 },
     ],
     quiz: {
       question: 'Por que num vácuo matemático (ChipEV) o desvio da frequência de bluff (Alpha) é punido imediatamente por um GTO perfeito?',
@@ -235,8 +272,13 @@ export const SCENARIOS: Scenario[] = [
     name: 'O Franco-Atirador',
     category: 'toyGame',
     stacks: [50, 12, 8, 9],
-    ipRp: 12.0,
-    oopRp: 45.0,
+    ipRp: 12,
+    oopRp: 45,
+    ipPos: 'SB (CL)',
+    ipMorph: 'Predator Mode',
+    oopPos: 'BB',
+    oopMorph: 'Death Zone Paralisado',
+    verdict: 'Paralisia Extrema',
     narrativeTitle: 'Licença para Matar',
     narrativeSubtitle: 'Blind War: SB (Hero) vs BB',
     icon: 'fa-crosshairs',
@@ -250,11 +292,12 @@ export const SCENARIOS: Scenario[] = [
       'Shove Any Two Cards (ATC): O RP do vilão é tão alto que qualquer agressão é lucrativa. O defensor está matematicamente paralisado.',
       'Isole o alvo: Foque a pressão no jogador com maior RP. Os stacks de 8bb e 9bb são seus aliados involuntários.',
     ],
+    // RP residual: eff=12; PRE=45, FLOP=45×8/12=30, TURN=45×4/12=15, RIVER=45×2.4/12=9
     sprData: [
-      { name: 'PRE', potSize: 1.5, sprValue: 7.0 },
-      { name: 'FLOP', potSize: 4.0, sprValue: 2.0 },
-      { name: 'TURN', potSize: 8.0, sprValue: 0.5 },
-      { name: 'RIVER', potSize: 12.0, sprValue: 0.0 },
+      { name: 'PRE',   potSize: 1.5,  rpValue: 45 },
+      { name: 'FLOP',  potSize: 4,    rpValue: 30 },
+      { name: 'TURN',  potSize: 8,    rpValue: 15 },
+      { name: 'RIVER', potSize: 12,   rpValue: 9 },
     ],
     quiz: {
       question: 'Por que o SB (Chipleader) pode shovar 100% das mãos contra o BB com 12bb nesta configuração?',
@@ -271,8 +314,13 @@ export const SCENARIOS: Scenario[] = [
     name: 'O Bully do Botão',
     category: 'toyGame',
     stacks: [80, 20, 18],
-    ipRp: 5.0,
-    oopRp: 42.0,
+    ipRp: 5,
+    oopRp: 42,
+    ipPos: 'BTN (CL)',
+    ipMorph: 'Predator Mode',
+    oopPos: 'Blinds',
+    oopMorph: 'Death Zone Paralisado',
+    verdict: 'Agressão Impune',
     narrativeTitle: 'Agressão Impune',
     narrativeSubtitle: 'Bolha do ITM: BTN vs Blinds',
     icon: 'fa-skull-crossbones',
@@ -286,11 +334,12 @@ export const SCENARIOS: Scenario[] = [
       'Oprima sem piedade: Com RP de 5%, o custo de perder um all-in é mínimo para você. Para eles, é catastrófico.',
       'Alterne sizes: Varie entre min-raise e shove para maximizar a desorientação do defensor paralisado.',
     ],
+    // RP residual: eff=20; PRE=42, FLOP=42×15/20=31.5, TURN=42×4.5/20=9.5, RIVER=42×2/20=4.2
     sprData: [
-      { name: 'PRE', potSize: 1.5, sprValue: 12.0 },
-      { name: 'FLOP', potSize: 5.0, sprValue: 3.0 },
-      { name: 'TURN', potSize: 15.0, sprValue: 0.3 },
-      { name: 'RIVER', potSize: 20.0, sprValue: 0.0 },
+      { name: 'PRE',   potSize: 1.5,  rpValue: 42 },
+      { name: 'FLOP',  potSize: 5,    rpValue: 31.5 },
+      { name: 'TURN',  potSize: 15,   rpValue: 9.5 },
+      { name: 'RIVER', potSize: 20,   rpValue: 4.2 },
     ],
     quiz: {
       question: 'Na bolha do ITM, por que o BTN com 80bb pode agredir desproporcional contra os blinds de 20bb?',
@@ -311,8 +360,13 @@ export const SCENARIOS: Scenario[] = [
     name: 'A Ameaça Orgânica',
     category: 'clinical',
     stacks: [90, 25],
-    ipRp: 12.0,
-    oopRp: 21.0,
+    ipRp: 12,
+    oopRp: 21,
+    ipPos: 'God Mode (CL)',
+    ipMorph: 'Polar Controlado',
+    oopPos: 'Vice',
+    oopMorph: 'Inelástico Defensivo',
+    verdict: 'Criação de Monstros',
     narrativeTitle: 'O Limite do God Mode',
     narrativeSubtitle: 'Dominância Absoluta (God Mode)',
     icon: 'fa-crown',
@@ -325,11 +379,12 @@ export const SCENARIOS: Scenario[] = [
     exploit: [
       'Morte da Fold Equity: Expurgue os overbluffs. A fold equity não atua sobre quem joga puramente pelas cartas ignorando a morte. Mude a marcha inteiramente para Thin Value.',
     ],
+    // RP residual: eff=25; PRE=21, FLOP=21×17.25/25=14.5, TURN=21×2.25/25=1.9, RIVER=21×2.5/25=2.1
     sprData: [
-      { name: 'PRE', potSize: 2.5, sprValue: 10.0 },
-      { name: 'FLOP', potSize: 7.5, sprValue: 2.3 },
-      { name: 'TURN', potSize: 22.5, sprValue: 0.1 },
-      { name: 'RIVER', potSize: 25.0, sprValue: 0.0 },
+      { name: 'PRE',   potSize: 2.5,  rpValue: 21 },
+      { name: 'FLOP',  potSize: 7.5,  rpValue: 14.5 },
+      { name: 'TURN',  potSize: 22.5, rpValue: 1.9 },
+      { name: 'RIVER', potSize: 25,   rpValue: 2.1 },
     ],
     quiz: {
       question: 'Sendo imune à eliminação direta, por que o Chip Leader colossal sofre uma punição utilitária considerável contra o 2o classificado?',

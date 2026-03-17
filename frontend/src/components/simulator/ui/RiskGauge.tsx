@@ -111,7 +111,7 @@ export default function RiskGauge({ value, label, color }: Readonly<RiskGaugePro
                 className={styles.gaugeLabel}
                 style={{ color: resolvedColor }}
               >
-                R. Premium
+                RP Colisão
               </span>
             </>
           )}

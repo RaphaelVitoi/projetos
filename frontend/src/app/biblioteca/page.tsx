@@ -31,7 +31,8 @@ const MOCK_ARTICLES: MockArticle[] = [
     excerpt: 'Por que acumular fichas pode diminuir sua esperança matemática em spots específicos da reta final.',
     readTime: '12 min',
     tags: ['Teoria', 'ICM', 'Matemática'],
-    status: 'em-breve',
+    status: 'disponivel',
+    href: '/biblioteca/paradoxo-valuation',
   },
   {
     id: '2',
@@ -40,7 +41,8 @@ const MOCK_ARTICLES: MockArticle[] = [
     excerpt: 'Lendo as intenções do oponente através da lente do excesso de gozo e da psicanálise lacaniana.',
     readTime: '15 min',
     tags: ['Psicologia', 'Comportamento'],
-    status: 'em-breve',
+    status: 'disponivel',
+    href: '/biblioteca/hermeneutica-blefe',
   },
   {
     id: '3',
@@ -49,7 +51,8 @@ const MOCK_ARTICLES: MockArticle[] = [
     excerpt: 'Como o Risk Premium afeta os ranges de call de forma não-linear.',
     readTime: '8 min',
     tags: ['ICM', 'Estratégia'],
-    status: 'em-breve',
+    status: 'disponivel',
+    href: '/biblioteca/motor-diluicao',
   },
 ];
 
@@ -70,32 +73,33 @@ export default function BibliotecaPage() {
 
       {/* Grade de Artigos */}
       <div className="hub-grid" style={{ alignItems: 'start', marginTop: '2rem' }}>
-        {MOCK_ARTICLES.map((article) => (
-          <div key={article.id} className="hub-card" style={{ cursor: 'default' }}>
-            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '1rem' }}>
-              <span className="hub-icon" style={{ marginBottom: 0 }}>{article.icon}</span>
-              <span style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.65rem',
-                fontWeight: 700,
-                color: 'var(--text-muted)',
-                letterSpacing: '0.05em',
-              }}>
-                {article.readTime}
+        {MOCK_ARTICLES.map((article) => {
+          const inner = (
+            <>
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                <span className="hub-icon" style={{ marginBottom: 0 }}>{article.icon}</span>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.05em' }}>
+                  {article.readTime}
+                </span>
+              </div>
+              <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap', marginBottom: '0.85rem' }}>
+                {article.tags.map((tag) => (
+                  <span key={tag} className="article-tag">{tag}</span>
+                ))}
+              </div>
+              <h3>{article.title}</h3>
+              <p>{article.excerpt}</p>
+              <span className="card-cta" style={article.status === 'em-breve' ? { opacity: 0.4, cursor: 'default' } : {}}>
+                {article.status === 'disponivel' ? 'Ler Artigo →' : 'Em breve →'}
               </span>
-            </div>
-            <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap', marginBottom: '0.85rem' }}>
-              {article.tags.map((tag) => (
-                <span key={tag} className="article-tag">{tag}</span>
-              ))}
-            </div>
-            <h3>{article.title}</h3>
-            <p>{article.excerpt}</p>
-            <span className="card-cta" style={{ opacity: 0.4, cursor: 'default' }}>
-              Em breve &rarr;
-            </span>
-          </div>
-        ))}
+            </>
+          );
+          return article.status === 'disponivel' && article.href ? (
+            <Link key={article.id} href={article.href} className="hub-card">{inner}</Link>
+          ) : (
+            <div key={article.id} className="hub-card" style={{ cursor: 'default' }}>{inner}</div>
+          );
+        })}
       </div>
 
       {/* Em Desenvolvimento */}

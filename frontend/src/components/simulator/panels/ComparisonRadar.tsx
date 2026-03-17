@@ -35,7 +35,7 @@ function buildRadarData(scenario: Scenario) {
     bluff: nash.bluffFreq,
     defense: nash.defenseFreq,
     sprDecay: scenario.sprData.length > 0
-      ? ((scenario.sprData[0].sprValue - scenario.sprData[scenario.sprData.length - 1].sprValue) / Math.max(1, scenario.sprData[0].sprValue)) * 100
+      ? ((scenario.sprData[0].rpValue - (scenario.sprData.at(-1)?.rpValue ?? 0)) / Math.max(1, scenario.sprData[0].rpValue)) * 100
       : 0,
   };
 }

@@ -45,25 +45,51 @@ export default function ScenarioStage({
     }
   }, [scenario.id, scenario.ipRp, scenario.oopRp, playDeathZone, playPredatorZone]);
 
+  // Bubble Factor: BF = 100 / (100 - rp). Mede o quanto ICM inflaciona o custo relativo de uma decisão.
+  const calcBF = (rp: number): string => {
+    if (rp >= 100) return '∞';
+    if (rp === 0) return '1.00';
+    return (100 / (100 - rp)).toFixed(2);
+  };
+
   return (
     <div className={`${styles.glassPanel} ${styles.animateFadeUp}`} style={{ padding: '1.75rem' }}>
-      {/* Narrativa */}
+      {/* Narrativa + Verdict */}
       <div style={{ marginBottom: '1.25rem' }}>
-        <h2
-          className={styles.gradientText}
-          style={{
-            fontSize: 'clamp(1rem, 2vw, 1.3rem)',
-            fontWeight: 700,
-            letterSpacing: '-0.02em',
-            margin: 0,
-            lineHeight: 1.3,
-          }}
-        >
-          {scenario.narrativeTitle}
-        </h2>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
+          <h2
+            className={styles.gradientText}
+            style={{
+              fontSize: 'clamp(1rem, 2vw, 1.3rem)',
+              fontWeight: 700,
+              letterSpacing: '-0.02em',
+              margin: 0,
+              lineHeight: 1.3,
+            }}
+          >
+            {scenario.narrativeTitle}
+          </h2>
+          {/* Verdict badge */}
+          <span style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            padding: '0.25rem 0.7rem',
+            borderRadius: '8px',
+            background: 'rgba(15, 23, 42, 0.8)',
+            border: '1px solid rgba(225, 29, 72, 0.3)',
+            fontSize: '0.58rem',
+            fontWeight: 900,
+            color: '#f43f5e',
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+            whiteSpace: 'nowrap',
+          }}>
+            {scenario.verdict}
+          </span>
+        </div>
         <div
           className={styles.stageContextBadge}
-          style={{ marginTop: '0.75rem' }}
+          style={{ marginTop: '0.6rem' }}
         >
           <span
             style={{
@@ -92,7 +118,7 @@ export default function ScenarioStage({
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
           gap: '1.5rem',
-          marginBottom: '1.25rem',
+          marginBottom: '0.5rem',
         }}
       >
         {/* Gauge IP (Agressor) */}
@@ -102,15 +128,17 @@ export default function ScenarioStage({
             label="Agressor (IP)"
             color="indigo"
           />
-          <p
-            className={styles.dataMono}
-            style={{
-              fontSize: '0.7rem',
-              color: '#64748b',
-              marginTop: '0.5rem',
-            }}
-          >
-            Stack: {scenario.stacks[0]}bb
+          {/* Pos + Stack */}
+          <p className={styles.dataMono} style={{ fontSize: '0.72rem', color: '#818cf8', marginTop: '0.4rem', fontWeight: 700 }}>
+            {scenario.ipPos} · {scenario.stacks[0]}bb
+          </p>
+          {/* Morph */}
+          <p style={{ fontSize: '0.6rem', color: '#64748b', margin: '0.15rem 0 0', fontStyle: 'italic' }}>
+            {scenario.ipMorph}
+          </p>
+          {/* Bubble Factor */}
+          <p className={styles.dataMono} style={{ fontSize: '0.6rem', color: '#475569', margin: '0.2rem 0 0' }}>
+            BF = {calcBF(scenario.ipRp)}×
           </p>
         </div>
 
@@ -121,15 +149,17 @@ export default function ScenarioStage({
             label="Defensor (OOP)"
             color="rose"
           />
-          <p
-            className={styles.dataMono}
-            style={{
-              fontSize: '0.7rem',
-              color: '#64748b',
-              marginTop: '0.5rem',
-            }}
-          >
-            Stack: {scenario.stacks[1]}bb
+          {/* Pos + Stack */}
+          <p className={styles.dataMono} style={{ fontSize: '0.72rem', color: '#f43f5e', marginTop: '0.4rem', fontWeight: 700 }}>
+            {scenario.oopPos} · {scenario.stacks[1]}bb
+          </p>
+          {/* Morph */}
+          <p style={{ fontSize: '0.6rem', color: '#64748b', margin: '0.15rem 0 0', fontStyle: 'italic' }}>
+            {scenario.oopMorph}
+          </p>
+          {/* Bubble Factor */}
+          <p className={styles.dataMono} style={{ fontSize: '0.6rem', color: '#475569', margin: '0.2rem 0 0' }}>
+            BF = {calcBF(scenario.oopRp)}×
           </p>
         </div>
       </div>

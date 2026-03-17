@@ -15,15 +15,80 @@ export const metadata = {
 export default function LeituraICM() {
     return (
         <main className="container" style={{ maxWidth: '800px', margin: '0 auto', padding: '4rem 1.5rem' }}>
-            <div className="article-header">
-                <span className="article-tag">Documento Técnico &bull; Versão 1.0</span>
-                <h1>Entendendo o ICM e suas Heurísticas</h1>
-                <p className="article-subtitle">Decisões Pós-Flop em Final Tables e a Nova Fronteira do Edge.</p>
-            </div>
+            <header className="page-header" style={{ paddingBottom: '1rem' }}>
+                <p className="page-label">Documento Técnico &bull; Versão 1.0</p>
+                <h1 style={{ background: 'linear-gradient(135deg, #fff 0%, #6366f1 50%, #38bdf8 100%)', backgroundClip: 'text', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', fontSize: 'clamp(1.8rem, 4vw, 2.6rem)', fontWeight: 800, lineHeight: 1.2, marginTop: 0 }}>Entendendo o ICM e suas Heurísticas</h1>
+                <p className="page-subtitle">Decisões Pós-Flop em Final Tables e a Nova Fronteira do Edge.</p>
+                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '0.75rem' }}>Autor: Raphael Vitoi &bull; 2025</p>
+            </header>
+
+            {/* Índice de Navegação */}
+            <section style={{ marginBottom: '4rem' }}>
+                {/* Eyebrow */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+                    <span style={{ flex: 1, height: '1px', background: 'linear-gradient(to right, transparent, rgba(99,102,241,0.2))' }} />
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', fontWeight: 800, color: '#334155', textTransform: 'uppercase', letterSpacing: '0.24em' }}>
+                        Índice
+                    </span>
+                    <span style={{ flex: 1, height: '1px', background: 'linear-gradient(to left, transparent, rgba(99,102,241,0.2))' }} />
+                </div>
+
+                {/* Linha superior */}
+                <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)', marginBottom: '0.25rem' }} />
+
+                {/* Linhas editoriais */}
+                {([
+                    { num: '01', id: 'modulo-1', label: 'Fundamento',  title: 'O Problema e o Mapa',    desc: 'ChipEV vs ICM, Risk Premium, Antevisão e Valuations de Stack.' },
+                    { num: '02', id: 'modulo-2', label: 'Laboratório', title: 'Toy-Games',               desc: '5 cenários progressivos de RP 0→24%, do ChipEV puro ao Teto do RP.' },
+                    { num: '03', id: 'parte-ii', label: 'Paradoxo',    title: 'Invertendo o RP',         desc: 'O que acontece quando o IP carrega RP maior que o OOP.' },
+                    { num: '04', id: 'modulo-3', label: 'Fronteira',   title: 'ICM Pós-Flop',            desc: 'Downward Drift, Dissipação de RP por street e dinâmica do Chip Leader.' },
+                    { num: '05', id: 'modulo-4', label: 'Aplicação',   title: 'Aplicação Prática',       desc: '10 erros mais comuns e Checklist de decisão em tempo real.' },
+                ] as const).map(({ num, id, label, title, desc }) => (
+                    <a key={id} href={`#${id}`} className="toc-row">
+                        {/* Número */}
+                        <span style={{
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '1.1rem',
+                            fontWeight: 900,
+                            color: 'rgba(99,102,241,0.35)',
+                            lineHeight: 1,
+                        }}>{num}</span>
+
+                        {/* Conteúdo */}
+                        <div>
+                            <strong style={{
+                                fontFamily: 'var(--font-body)',
+                                fontSize: '0.9rem',
+                                fontWeight: 600,
+                                color: '#e2e8f0',
+                                display: 'block',
+                                marginBottom: '0.2rem',
+                            }}>{title}</strong>
+                            <span style={{
+                                fontFamily: 'var(--font-body)',
+                                fontSize: '0.78rem',
+                                color: '#475569',
+                                lineHeight: 1.45,
+                            }}>{desc}</span>
+                        </div>
+
+                        {/* Label */}
+                        <span style={{
+                            fontFamily: 'var(--font-mono)',
+                            fontSize: '0.55rem',
+                            fontWeight: 700,
+                            color: 'rgba(99,102,241,0.45)',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.12em',
+                            whiteSpace: 'nowrap',
+                        }}>{label} &rarr;</span>
+                    </a>
+                ))}
+            </section>
 
             <article>
                 {/* ==================== MÓDULO 1 ==================== */}
-                <h2>Módulo 1: O Problema e o Mapa</h2>
+                <h2 id="modulo-1" style={{ scrollMarginTop: '5rem' }}>Módulo 1: O Problema e o Mapa</h2>
 
                 <h3>1.1 Por que ICM importa desde a mão 1</h3>
                 <p>A tese central desta aula é direta: o edge em ICM (Independent Chip Model) migrou do pré-flop para o pós-flop. O jogo pré-flop, com suas decisões de push/fold, já foi extensivamente mapeado por solvers. O gap de skill real, a fronteira onde o dinheiro é ganho ou perdido em 2026, está nas decisões tomadas após o flop sob a pressão do ICM.</p>
@@ -31,6 +96,9 @@ export default function LeituraICM() {
 
                 <div className="callout">
                     <p><strong>Definição:</strong> Risk Premium é a equity adicional, acima do pot odds, que um jogador precisa ter para justificar um call de all-in sob a pressão do ICM. Ele mede o &quot;custo do risco&quot; que o modelo de torneio impõe a uma jogada.</p>
+                    <p style={{ marginBottom: 0, borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '0.75rem', marginTop: '0.75rem', fontSize: '0.9rem', color: '#94a3b8' }}>
+                        <strong>Nota temporal:</strong> O RP aqui definido é o valor <strong>pré-flop</strong> — com a stack total em risco potencial. Post-flop, conforme fichas entram no pote e a stack restante diminui, o RP residual de cada decisão subsequente decresce proporcionalmente. No river de uma mão bem jogada, o RP pode ter dissipado mais de 70% do valor original.
+                    </p>
                 </div>
 
                 <h3>1.2 A Antevisão</h3>
@@ -61,7 +129,7 @@ export default function LeituraICM() {
                 <hr className="section-divider" />
 
                 {/* ==================== MÓDULO 2 ==================== */}
-                <h2>Módulo 2: Toy-Games como Laboratório</h2>
+                <h2 id="modulo-2" style={{ scrollMarginTop: '5rem' }}>Módulo 2: Toy-Games como Laboratório</h2>
                 <p>Para entender o ICM em sua forma mais pura, usamos <strong>Toy-Games</strong>: cenários de laboratório ultra-simplificados. São ferramentas educativas projetadas para descomplicar o universo complexo do poker, reduzindo as variáveis do jogo real para facilitar o entendimento de conceitos como Equilíbrio de Nash, MDF e ICM.</p>
 
                 <div className="callout">
@@ -146,8 +214,12 @@ export default function LeituraICM() {
                     </tbody>
                 </table>
 
+                <p style={{ fontSize: '0.85rem', color: '#64748b', fontStyle: 'italic', margin: '0.5rem 0 2rem' }}>
+                    Nota: Os RPs acima são pré-flop (all-in imediato). Em Toy Games não há streets pós-flop, logo não há dissipação. Em cenários reais de Mesa Final, cada call ou aposta post-flop reduz o RP residual — veja o tab Dissipação RP no simulador.
+                </p>
+
                 <div style={{ textAlign: 'center', margin: '3rem 0' }}>
-                    <Link href="/tools/icm" className="btn-primary">
+                    <Link href="/tools/simulador" className="btn-primary">
                         &#127918; Abrir Simulador Interativo
                     </Link>
                 </div>
@@ -155,7 +227,7 @@ export default function LeituraICM() {
                 <hr className="section-divider" />
 
                 {/* ==================== PARTE II ==================== */}
-                <h2>Parte II: Invertendo o RP</h2>
+                <h2 id="parte-ii" style={{ scrollMarginTop: '5rem' }}>Parte II: Invertendo o RP</h2>
                 <p>O que acontece quando o IP possui RP maior que o OOP? Os resultados são surpreendentes.</p>
 
                 <h3>Inversão 1 (RP: IP 9% | OOP 3%)</h3>
@@ -213,7 +285,7 @@ export default function LeituraICM() {
                 <hr className="section-divider" />
 
                 {/* ==================== MÓDULO 3 ==================== */}
-                <h2>Módulo 3: ICM Pós-Flop e a Dinâmica do Chip Leader</h2>
+                <h2 id="modulo-3" style={{ scrollMarginTop: '5rem' }}>Módulo 3: ICM Pós-Flop e a Dinâmica do Chip Leader</h2>
 
                 <h3>3.1 A Mesa Final como Organismo</h3>
                 <p>Quando existem jogadores prestes a serem eliminados, o RP médio na mesa aumenta. O jogador capaz de eliminar outros sem prejudicar muito sua própria stack possui uma <strong>vantagem estratégica considerável</strong> e deve intensificar a pressão sobre a mesa.</p>
@@ -221,8 +293,40 @@ export default function LeituraICM() {
 
                 <h3>3.2 Downward Drift: A Gravidade do ICM</h3>
                 <blockquote>
-                    Downward Drift é a heurística de que, sob pressão ICM, as ações &quot;descem um degrau&quot; na escala de agressividade. Apostas grandes viram apostas pequenas; apostas pequenas viram checks; e checks viram folds.
+                    Downward Drift é a heurística de que, sob pressão ICM, as ações &quot;descem um degrau&quot; na escala de agressividade. Apostas grandes viram apostas pequenas; apostas pequenas viram checks; e checks viram folds. (Dara O&apos;Kearney)
                 </blockquote>
+                <p>
+                    O Drift não é constante durante a mão. Sua intensidade é proporcional ao RP no
+                    momento da decisão. Pré-flop, com o RP máximo (toda a stack em risco potencial),
+                    o Drift é mais severo: ranges de 3-bet colapsam, calls inflam. Mas conforme a
+                    mão progride e fichas entram no pote, o RP residual para a próxima decisão
+                    diminui — e o Drift enfraquece junto.
+                </p>
+                <p>
+                    A exceção que O&apos;Kearney identifica é reveladora: quando há vantagem clara, o
+                    solver não aposta em tamanho médio. Ele ou <strong>aposta mínimo</strong> (risco
+                    controlado) ou <strong>vai all-in</strong> (pressão máxima). O meio-termo cria
+                    decisões difíceis e caras para ambos os lados.
+                </p>
+
+                <div className="callout callout-emerald">
+                    <h4 style={{ color: 'var(--accent-emerald)', marginTop: 0 }}>Dissipação do RP por Street</h4>
+                    <p>
+                        Os Toy Games medem o RP num ponto fixo: a colisão total (all-in). Na prática
+                        pós-flop, o RP se disipa a cada street. Ao pagar o flop, parte do risco foi
+                        assumida; ao pagar o turn, mais risco foi absorvido.
+                    </p>
+                    <p>
+                        No river, o defensor chegou com RP residual significativamente menor do que
+                        o RP de colisão pré-flop. Isso significa que ele <strong>precisa chamar mais</strong>
+                        do que no começo da mão — a matemática do MDF se aproxima do ChipEV.
+                    </p>
+                    <p style={{ marginBottom: 0 }}>
+                        Jogar o river como se o RP pré-flop ainda valesse integralmente é o erro
+                        de calibração mais frequente em ICM pós-flop. O Drift já dissipou. Reconhecer
+                        esse momento é o edge.
+                    </p>
+                </div>
 
                 <h3>3.3 O Impacto das Configurações de Mesa</h3>
                 <p>As configurações da mesa geram diversos RPs e a estrutura de payjumps influencia diretamente esses valores:</p>
@@ -247,7 +351,7 @@ export default function LeituraICM() {
                 <hr className="section-divider" />
 
                 {/* ==================== MÓDULO 4 ==================== */}
-                <h2>Módulo 4: Aplicação Prática</h2>
+                <h2 id="modulo-4" style={{ scrollMarginTop: '5rem' }}>Módulo 4: Aplicação Prática</h2>
 
                 <h3>Os 10 Erros Mais Comuns</h3>
                 <table>

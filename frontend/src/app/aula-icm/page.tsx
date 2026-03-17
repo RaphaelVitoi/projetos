@@ -80,10 +80,10 @@ export default function AulaICMPage() {
         {/* Cards dos Arquétipos */}
         <div style={{ maxWidth: '900px', margin: '0 auto 5rem', display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.25rem' }}>
           {[
-            { n: '01', icon: 'fa-shield-halved', color: 'var(--accent-primary)', rgb: '99,102,241', title: 'O Pacto Silencioso', text: 'Chip Leader vs Vice CL. O RP de ambos ultrapassa 20%. A Resolução de Nash cria um \u201cPacto Silencioso\u201d de evitação de ruína mútua.' },
-            { n: '02', icon: 'fa-scale-unbalanced', color: 'var(--accent-secondary)', rgb: '225,29,72', title: 'Paradoxo do Valuation', text: 'Mid Stack (IP) vs Big Blind (OOP). O Mid acha que pode pressionar, mas o BB sobrevive à colisão enquanto o Mid vira pó.' },
-            { n: '03', icon: 'fa-skull', color: 'var(--accent-emerald)', rgb: '16,185,129', title: 'A Guerra na Lama', text: 'Dois shorts. Quem entra em overfold massivo rezando pelo ICM acaba morrendo para os blinds e sangrando EV.' },
-            { n: '04', icon: 'fa-crown', color: 'var(--accent-amber)', rgb: '245,158,11', title: 'A Ameaça Orgânica', text: 'Chip Leader ataca Vice. Se o CL perder, ele cria um monstro. O solver protege o seu \u201cGod Mode\u201d limitando manobras arriscadas.' },
+            { n: '01', icon: 'fa-shield-halved', color: 'var(--accent-primary)', rgb: '99,102,241', title: 'O Pacto Silencioso', text: 'Chip Leader (70bb) vs Vice CL (65bb) com mesa cheia de micro-stacks. O RP de ambos ultrapassa 20%. A 3-bet linear desaparece, ranges de flat call inflam massivamente, e o foco vira caçar cooler absoluto pós-flop investindo o mínimo pré-flop. Traps e slowplays tornam-se armas de defesa.' },
+            { n: '02', icon: 'fa-scale-unbalanced', color: 'var(--accent-secondary)', rgb: '225,29,72', title: 'Paradoxo do Valuation', text: 'BTN (40bb) abre, BB (54bb) defende. O Mid acha que pode imprimir overbluffs — mas o RP do BTN (~21%) é quase o dobro do BB (~12%). Se o BTN errar um hero-bluff e tomar call, derrete de 40bb para o pó absoluto. A agressão é estrangulada. A matemática corta brutalmente a frequência de blefe do IP.' },
+            { n: '03', icon: 'fa-skull', color: 'var(--accent-emerald)', rgb: '16,185,129', title: 'A Guerra na Lama', text: 'Dois shorts (~10bb) numa mesa dominada por gigantes (80bb+). Parece que deveriam jogar sem restrições (RP 0%). Falso: a abundância de outros shorts eleva o EV do fold (laddering). O RP ancora entre 7% e 10%. Quem entra em overfold rezando pelo ICM sangra equity. Quem ignora o RP e jamba tudo perde payjumps passivos.' },
+            { n: '04', icon: 'fa-crown', color: 'var(--accent-amber)', rgb: '245,158,11', title: 'A Ameaça Orgânica', text: 'Chip Leader (90bb) ataca Vice (25bb). O CL parece invulnerável — RP de 0%, blefaria 100%? Não. O HRC impõe RP substancial (~12%) ao CL: se o Vice dobrar após um shove descuidado, salta para 50bb e torna-se o único rival capaz de usurpar a coroa. O solver protege o God Mode exigindo seleção de mãos.' },
           ].map(({ n, icon, color, rgb, title, text }) => (
             <div key={n} style={{
               background: `linear-gradient(150deg, rgba(${rgb},0.07) 0%, var(--bg-card) 60%)`,
@@ -112,17 +112,99 @@ export default function AulaICMPage() {
         </div>
 
         <article style={{ maxWidth: '840px', margin: '0 auto 4rem' }}>
+          <h2>4. A Falsa Equivalência do MDF</h2>
+          <p>
+            O clássico MDF dita que, contra uma aposta do tamanho do pote, o defensor deve pagar 50% das
+            vezes para tornar os blefes do agressor indiferentes. Essa matemática é válida em ChipEV.
+            No ICM, ela quebra.
+          </p>
+
+          <div className="callout callout-secondary">
+            <h4 style={{ marginTop: 0, color: 'var(--accent-secondary)' }}>A Equação do Desespero</h4>
+            <p>Quando o OOP enfrenta uma aposta de um pote inteiro em Mesa Final, dois mecanismos operam simultaneamente:</p>
+            <ul>
+              <li>
+                <strong>O OOP Atinge o Teto de Dor:</strong> Um range condensado (cheio de bluffcatchers)
+                não suporta um RP alto. A realização de equidade despenca porque o agressor pode colocar o
+                OOP em all-in no turn ou river. A defesa quebra de 50% para a faixa de{' '}
+                <strong>30% a 38%</strong> — um overfold matemático forçado pela estrutura do ICM, não por
+                fraqueza do jogador.
+              </li>
+              <li style={{ marginTop: '0.75rem' }}>
+                <strong>O IP Oprime (Se Puder):</strong> Se o IP tiver RP baixo (Vantagem de Risco), seu
+                Alpha de blefes aumenta para explorar o overfold do adversário. A agressão se torna
+                matematicamente justificada.
+              </li>
+            </ul>
+          </div>
+
+          <div className="callout" style={{ marginTop: '1.5rem' }}>
+            <h4 style={{ marginTop: 0 }}>O Freio Bayesiano</h4>
+            <p style={{ marginBottom: 0 }}>
+              Se o IP também tiver RP alto — o Paradoxo do Valuation — ele <em>não pode</em> explorar
+              o overfold do vilão. Seu range de agressão condensa-se e a frequência de blefe cai abaixo dos
+              33.3%. O solver simultaneamente força o defensor a foldar mais <em>e</em> proíbe o agressor
+              de blefar mais. Ambos ficam presos num equilíbrio de alta pressão, baixa ação — o Pacto
+              Silencioso em miniatura.
+            </p>
+          </div>
+
+          <blockquote>
+            &ldquo;Frases feitas como &apos;ele está shovando tudo, vou pagar light&apos; destroem
+            profissionais em retas finais. A matemática exige extração cirúrgica de EV. Numa mesa final,
+            a responsabilidade de cada jogador é realizar o EV monetário daquela stack específica, não
+            provar coragem.&rdquo;
+          </blockquote>
+        </article>
+
+        <article style={{ maxWidth: '840px', margin: '0 auto 4rem' }}>
           <h2>Conclusão: A Arte da Adaptação</h2>
           <p>
             Os Solvers são bússolas, não destinos. A vantagem competitiva moderna não está em
             decorar tabelas pré-flop. Está em compreender a Elasticidade do Risk Premium no pós-flop.
           </p>
+
+          <div className="callout callout-secondary">
+            <h4 style={{ marginTop: 0, color: 'var(--accent-secondary)' }}>O Downward Drift</h4>
+            <p>
+              Conceito formalizado por Dara O&apos;Kearney: o ICM força os solvers a comprimirem as
+              ações. Bets grandes viram bets pequenos. Bets pequenos viram checks ou calls. Raises
+              viram calls. <strong>A ação &ldquo;deriva para baixo&rdquo; em variância</strong> para
+              proteger o valor financeiro da stack.
+            </p>
+            <p style={{ marginBottom: 0 }}>
+              A exceção crítica: quando há vantagem clara, o solver não aposta médio — ele ou
+              min-bets ou vai all-in. O meio-termo cria decisões difíceis e caras. O Drift convive
+              com polarização extrema.
+            </p>
+          </div>
+
+          <div className="callout callout-emerald" style={{ marginTop: '1.5rem' }}>
+            <h4 style={{ marginTop: 0, color: 'var(--accent-emerald)' }}>Dissipação do RP por Street</h4>
+            <p>
+              O Drift não é constante ao longo da mão. Ele é proporcional ao RP residual: quanto
+              maior o RP naquele momento, mais forte o Drift. Conforme fichas entram no pote e a
+              stack restante diminui, o RP dissipa — e o Drift enfraquece.
+            </p>
+            <p>
+              <strong>Pré-flop:</strong> RP no máximo → Drift máximo (evitar all-in, comprimir ação).
+              <br />
+              <strong>Flop/Turn:</strong> RP residual moderado → Drift moderado.
+              <br />
+              <strong>River:</strong> RP residual baixo → Drift enfraquece → o jogo se aproxima do
+              ChipEV. O defensor <em>precisa</em> pagar mais do que intuitivamente esperaria.
+            </p>
+            <p style={{ marginBottom: 0 }}>
+              Jogar o river como se o RP pré-flop ainda estivesse ativo é o erro mais comum e
+              custoso no pós-flop de ICM. A stack já comprometeu o risco nas streets anteriores.
+            </p>
+          </div>
         </article>
 
         {/* Arsenal Tatico */}
         <section style={{ maxWidth: '900px', margin: '0 auto 4rem' }}>
           <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.15em', textAlign: 'center', marginBottom: '0.75rem' }}>
-            <span className="fa-solid fa-compass" style={{ marginRight: '0.5rem' }}></span> Navegacao
+            <span className="fa-solid fa-compass" style={{ marginRight: '0.5rem' }}></span> Navegação
           </p>
           <h3 style={{ textAlign: 'center', marginBottom: '2rem', fontSize: '1.6rem' }}>O Arsenal Tatico</h3>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>

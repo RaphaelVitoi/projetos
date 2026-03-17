@@ -131,7 +131,7 @@ export default function NashPanel({
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
           {/* Se RP OOP subir 10% */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            <span style={{ fontSize: '0.55rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 700 }}>RP OOP +10%</span>
+            <span style={{ fontSize: '0.55rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 700 }}>RP Colisão OOP +10%</span>
             <span style={{ fontSize: '0.7rem', fontWeight: 700, color: sensitivity.oopPlus.bluff >= 0 ? '#818cf8' : '#f43f5e', fontFamily: "'JetBrains Mono', monospace" }}>
               Alpha: {formatDelta(sensitivity.oopPlus.bluff)}
             </span>
@@ -141,7 +141,7 @@ export default function NashPanel({
           </div>
           {/* Se RP IP subir 10% */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            <span style={{ fontSize: '0.55rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 700 }}>RP IP +10%</span>
+            <span style={{ fontSize: '0.55rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 700 }}>RP Colisão IP +10%</span>
             <span style={{ fontSize: '0.7rem', fontWeight: 700, color: sensitivity.ipPlus.bluff >= 0 ? '#818cf8' : '#f43f5e', fontFamily: "'JetBrains Mono', monospace" }}>
               Alpha: {formatDelta(sensitivity.ipPlus.bluff)}
             </span>
@@ -151,6 +151,11 @@ export default function NashPanel({
           </div>
         </div>
       </div>
+
+      {/* Contexto do RP */}
+      <p style={{ fontSize: '0.55rem', color: '#334155', fontStyle: 'italic', margin: '0 0 1rem', textAlign: 'center', letterSpacing: '0.02em' }}>
+        Frequências baseadas no RP de colisão (stack total em risco). Post-flop, o RP residual decresce por street — tab Dissipação RP.
+      </p>
 
       {/* Slider de agressividade */}
       <div style={{

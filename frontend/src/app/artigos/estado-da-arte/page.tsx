@@ -15,12 +15,12 @@ export const metadata = {
 export default function EstadoDaArtePage() {
     return (
         <main className="container" style={{ maxWidth: '800px', margin: '0 auto', padding: '4rem 1.5rem' }}>
-            <div className="article-header">
-                <span className="article-tag">Whitepaper &bull; Nível Avançado</span>
-                <h1>O Estado da Arte do ICM 2025</h1>
-                <p className="article-subtitle">Novas Fronteiras, Tendências High Stakes e Ferramentas de Elite.</p>
-                <p className="article-meta">Autor: Raphael Vitoi &bull; Novembro de 2025</p>
-            </div>
+            <header className="page-header" style={{ paddingBottom: '1rem' }}>
+                <p className="page-label">Whitepaper &bull; Nível Avançado</p>
+                <h1 style={{ background: 'linear-gradient(135deg, #fff 0%, #6366f1 50%, #38bdf8 100%)', backgroundClip: 'text', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', fontSize: 'clamp(1.8rem, 4vw, 2.6rem)', fontWeight: 800, lineHeight: 1.2, marginTop: 0 }}>O Estado da Arte do ICM 2025</h1>
+                <p className="page-subtitle">Novas Fronteiras, Tendências High Stakes e Ferramentas de Elite.</p>
+                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '0.75rem' }}>Autor: Raphael Vitoi &bull; Novembro de 2025</p>
+            </header>
 
             <article>
                 <h2>1. Introdução: A Evolução do Organismo</h2>

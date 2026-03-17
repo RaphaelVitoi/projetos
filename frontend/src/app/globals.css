@@ -4,7 +4,7 @@
 
 @layer base {
     @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css');
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700;800&family=Montserrat:wght@700;800;900&family=Playfair+Display:ital,wght@0,700;1,700&family=Great+Vibes&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700;800&family=Montserrat:wght@700;800;900&display=swap');
 
     :root {
         /* === Paleta de Cores (Sincronizada com Legacy style.css) === */
@@ -39,7 +39,6 @@
 
         /* Fontes */
         --font-heading: 'Montserrat', sans-serif;
-        --font-editorial: 'Playfair Display', serif;
         --font-body: 'Inter', sans-serif;
         --font-mono: 'JetBrains Mono', monospace;
     }
@@ -288,14 +287,14 @@
         background: var(--bg-card);
         backdrop-filter: blur(12px);
         border: var(--glass-border);
-        padding: 2.5rem;
+        padding: 2rem;
         border-radius: var(--radius-lg);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
         overflow: hidden;
         display: flex;
         flex-direction: column;
-        height: 100%;
+        gap: 0.6rem;
     }
 
     .hub-card:hover {
@@ -306,22 +305,23 @@
     }
 
     .hub-icon {
-        font-size: 2rem;
-        margin-bottom: 1rem;
+        font-size: 1.75rem;
+        margin-bottom: 0.5rem;
         display: block;
         line-height: 1;
     }
 
     .hub-card h3 {
         color: var(--text-main);
-        font-size: 1.15rem;
-        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+        margin: 0;
     }
 
     .hub-card p {
-        flex-grow: 1;
-        font-size: 0.9rem;
+        font-size: 0.875rem;
         line-height: 1.6;
+        color: var(--text-muted);
+        margin: 0;
     }
 
     .locked {
@@ -330,22 +330,28 @@
         border-style: dashed;
     }
 
-    /* CTA Button (State of the Art) */
+    /* CTA Button (hub cards) */
     .card-cta {
-        display: inline-block;
-        margin-top: 1.5rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        margin-top: auto;
+        padding-top: 1.25rem;
         font-family: var(--font-mono);
-        font-size: 0.75rem;
+        font-size: 0.7rem;
         font-weight: 700;
         color: var(--accent-primary);
         text-transform: uppercase;
-        letter-spacing: 0.12em;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        letter-spacing: 0.1em;
+        border-top: 1px solid rgba(99, 102, 241, 0.12);
+        width: 100%;
+        transition: all 0.25s ease;
     }
 
     .hub-card:hover .card-cta {
         color: #fff;
-        transform: translateX(5px);
+        border-top-color: rgba(99, 102, 241, 0.35);
+        padding-left: 0.25rem;
     }
 
     /* === Page Layout === */
@@ -478,6 +484,28 @@
         font-size: 1rem;
     }
 
+    .nav-card > div {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+        min-width: 0;
+    }
+
+    .nav-card > div > strong {
+        display: block;
+        font-size: 0.92rem;
+        font-weight: 700;
+        color: var(--text-main);
+        line-height: 1.2;
+    }
+
+    .nav-card > div > span {
+        display: block;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        line-height: 1.3;
+    }
+
     /* Botao primario (CTA de alta conversao) */
     .btn-primary {
         display: inline-flex;
@@ -492,7 +520,7 @@
         text-transform: uppercase;
         letter-spacing: 0.08em;
         border: none;
-        border-radius: var(--radius-md);
+        border-radius: 10px;
         cursor: pointer;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         box-shadow: 0 4px 14px rgba(99, 102, 241, 0.25);
@@ -518,7 +546,7 @@
         text-transform: uppercase;
         letter-spacing: 0.08em;
         border: 1px solid var(--accent-primary);
-        border-radius: var(--radius-md);
+        border-radius: 10px;
         cursor: pointer;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -774,11 +802,11 @@
     }
 
     tbody tr:nth-child(even) {
-        background: rgba(255, 255, 255, 0.015);
+        background: rgba(255, 255, 255, 0.03);
     }
 
     tbody tr:hover {
-        background: rgba(99, 102, 241, 0.04);
+        background: rgba(99, 102, 241, 0.07);
     }
 
     td.numeric {
@@ -1080,21 +1108,6 @@
         box-shadow: none;
     }
 
-    /* === Textos de Assinatura e Gradients === */
-    .signature-text {
-        font-family: 'Great Vibes', cursive;
-        font-size: clamp(2.5rem, 5vw, 4rem);
-        color: #a5b4fc;
-        background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 20%, #a5b4fc 40%, #818cf8 60%, #6366f1 80%, #4338ca 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        transform: rotate(-2deg);
-        display: inline-block;
-        filter: drop-shadow(0 4px 20px rgba(99, 102, 241, 0.35));
-        letter-spacing: 0.03em;
-        line-height: 1.2;
-    }
 
     .gradient-text {
         background: linear-gradient(to right, #fff, #94a3b8);
@@ -1328,9 +1341,6 @@
         font-family: 'Inter', sans-serif;
     }
 
-    .font-editorial {
-        font-family: var(--font-editorial);
-    }
 
     .data-mono {
         font-family: 'JetBrains Mono', monospace;
@@ -1559,7 +1569,101 @@
     border-color: var(--accent-secondary);
 }
 
+/* === Badge Links Afiliação === */
+.badge-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border-width: 1px;
+    border-style: solid;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.badge-link:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.2);
+}
+
+.badge-link-primary {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--accent-primary);
+    border-color: var(--accent-primary);
+}
+
+.badge-link-emerald {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--accent-emerald);
+    border-color: var(--accent-emerald);
+}
+
+.badge-link-secondary {
+    background: rgba(225, 29, 72, 0.1);
+    color: var(--accent-secondary);
+    border-color: var(--accent-secondary);
+}
+
+/* === Article References === */
+.article-references {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* === TOC Row (Índice Editorial) === */
+.toc-row {
+    display: grid;
+    grid-template-columns: 3rem 1fr auto;
+    gap: 0 1.5rem;
+    align-items: center;
+    padding: 1.1rem 0.75rem;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 6px;
+    margin: 0 -0.75rem;
+    transition: background 0.2s ease, padding-left 0.2s ease;
+}
+
+.toc-row:hover {
+    background: rgba(99, 102, 241, 0.04);
+    padding-left: 1.25rem;
+}
+
+.toc-row:last-of-type {
+    border-bottom: none;
+}
+
+/* === Article Title com Gradient === */
+/* Gradiente padrão indigo→sky. Para gradiente customizado, usar style={{ background, backgroundClip,
+   WebkitBackgroundClip, WebkitTextFillColor }} puro no elemento, SEM misturar com esta classe. */
+.article-title {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 800;
+    background: linear-gradient(135deg, #fff 0%, #6366f1 50%, #38bdf8 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-top: 0;
+    line-height: 1.2;
+}
+
 /* === Responsive === */
+@media (max-width: 640px) {
+    .toc-row {
+        grid-template-columns: 2.25rem 1fr;
+        row-gap: 0.25rem;
+    }
+
+    .toc-row > span:last-child {
+        grid-column: 2;
+    }
+}
+
 @media (max-width: 768px) {
     #hero h2, #hero-aula h2 {
         font-size: 2.25rem;
@@ -1652,6 +1756,7 @@
     .page-header {
         padding: 3rem 1.5rem 1.5rem;
     }
+
 }
 
 @media (max-width: 480px) {

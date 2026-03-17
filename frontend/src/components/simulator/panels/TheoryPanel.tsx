@@ -21,7 +21,7 @@ type TabId = 'theory' | 'spr' | 'exploit' | 'quiz';
 
 const TABS: { id: TabId; label: string; icon: string }[] = [
   { id: 'theory', label: 'Fundamento', icon: 'fa-brain' },
-  { id: 'spr', label: 'Diluição SPR', icon: 'fa-arrow-trend-down' },
+  { id: 'spr', label: 'Dissipação RP', icon: 'fa-arrow-trend-down' },
   { id: 'exploit', label: 'Exploit', icon: 'fa-crosshairs' },
   { id: 'quiz', label: 'Quiz', icon: 'fa-circle-question' },
 ];

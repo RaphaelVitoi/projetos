@@ -1,0 +1,23 @@
+import { MetadataRoute } from 'next';
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  const base = 'https://pokerracional.com';
+  const now = new Date();
+
+  return [
+    { url: base, lastModified: now, changeFrequency: 'weekly', priority: 1.0 },
+    { url: `${base}/quem-sou`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${base}/biblioteca`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
+    { url: `${base}/biblioteca/paradoxo-valuation`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${base}/biblioteca/hermeneutica-blefe`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${base}/biblioteca/motor-diluicao`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${base}/leitura-icm`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${base}/aula-icm`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${base}/aula-1-2`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${base}/artigos/smart-sniper`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${base}/artigos/validacao-smart-sniper`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${base}/artigos/estado-da-arte`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${base}/psicologia-hs`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${base}/tools/simulador`, lastModified: now, changeFrequency: 'monthly', priority: 0.9 },
+  ];
+}

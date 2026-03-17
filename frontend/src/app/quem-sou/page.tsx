@@ -14,7 +14,7 @@ export const metadata = {
 
 export default function QuemSouPage() {
   return (
-    <main className="container" style={{ maxWidth: '900px', margin: '0 auto', padding: '0 1.5rem' }}>
+    <main className="container" style={{ maxWidth: '900px', margin: '0 auto', padding: '4rem 1.5rem' }}>
 
       <header className="page-header" style={{ paddingBottom: '1rem' }}>
         <p className="page-label">
@@ -49,9 +49,9 @@ export default function QuemSouPage() {
           <p><em>&quot;O poker não é sobre sorte. É sobre a gestão elegante da incerteza.&quot;</em></p>
 
           <div style={{ marginTop: '1.5rem', display: 'flex', flexWrap: 'wrap', gap: '1rem', justifyContent: 'center' }}>
-            <a href="https://deepsolver.com" target="_blank" rel="noopener" style={{ background: 'rgba(99, 102, 241, 0.1)', color: 'var(--accent-primary)', padding: '0.3rem 1rem', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 700, border: '1px solid var(--accent-primary)', transition: 'all 0.2s' }}>Embaixador Deepsolver</a>
-            <a href="https://gtowizard.com" target="_blank" rel="noopener" style={{ background: 'rgba(16, 185, 129, 0.1)', color: 'var(--accent-emerald)', padding: '0.3rem 1rem', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 700, border: '1px solid var(--accent-emerald)', transition: 'all 0.2s' }}>Afiliado GTO Wizard</a>
-            <a href="https://trueicm.com" target="_blank" rel="noopener" style={{ background: 'rgba(225, 29, 72, 0.1)', color: 'var(--accent-secondary)', padding: '0.3rem 1rem', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 700, border: '1px solid var(--accent-secondary)', transition: 'all 0.2s' }}>Criador trueICM.com</a>
+            <a href="https://deepsolver.com" target="_blank" rel="noopener" className="badge-link badge-link-primary">Embaixador Deepsolver</a>
+            <a href="https://gtowizard.com" target="_blank" rel="noopener" className="badge-link badge-link-emerald">Afiliado GTO Wizard</a>
+            <a href="https://trueicm.com" target="_blank" rel="noopener" className="badge-link badge-link-secondary">Criador trueICM.com</a>
           </div>
 
           <div style={{ marginTop: '2.5rem' }}>

@@ -6,13 +6,14 @@ param(
     [string]$TaskId
 )
 
-$AutopoiesisPath = Join-Path $PSScriptRoot "Agent-Autopoiesis.psm1"
+$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+$AutopoiesisPath = Join-Path $ProjectRoot "Agent-Autopoiesis.psm1"
 
 # A variável CurrentTaskID é usada pelo restante do script original.
 $CurrentTaskID = $TaskId
-$BaseDir = Join-Path $PSScriptRoot ".claude"
+$BaseDir = Join-Path $ProjectRoot ".claude"
 $MemoryDir = Join-Path $BaseDir "agent-memory"
-$ReportPath = Join-Path $PSScriptRoot "docs\reports\RELATORIO_SENTINELA_$(Get-Date -Format 'yyyy-MM-dd').md"
+$ReportPath = Join-Path $ProjectRoot "docs\reports\RELATORIO_SENTINELA_$(Get-Date -Format 'yyyy-MM-dd').md"
 $DocsDir = Split-Path $ReportPath
 
 Write-Host "=== [MAVERICK] SENTINELA INICIADO ===" -ForegroundColor Magenta
@@ -21,8 +22,8 @@ function Invoke-PythonDal {
     param([object]$TaskPayload)
     $taskJson = $TaskPayload | ConvertTo-Json -Depth 10 -Compress:$true
     $taskB64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($taskJson))
-    $PythonCmd = if (Test-Path "$PSScriptRoot\.venv\Scripts\python.exe") { "$PSScriptRoot\.venv\Scripts\python.exe" } else { "python" }
-    & $PythonCmd (Join-Path $PSScriptRoot "task_executor.py") db-add $taskB64 | Out-Null
+    $PythonCmd = if (Test-Path "$ProjectRoot\.venv\Scripts\python.exe") { "$ProjectRoot\.venv\Scripts\python.exe" } else { "python" }
+    & $PythonCmd (Join-Path $ProjectRoot "task_executor.py") db-add $taskB64 | Out-Null
 }
 
 # 1. Marcar tarefa atual como RUNNING

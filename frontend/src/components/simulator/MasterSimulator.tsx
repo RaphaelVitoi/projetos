@@ -24,15 +24,17 @@ const EquityCalculator = lazy(() => import('./panels/EquityCalculator'));
 const HandSimulator = lazy(() => import('./panels/HandSimulator'));
 const ComparisonRadar = lazy(() => import('./panels/ComparisonRadar'));
 const PayoutsPanel = lazy(() => import('./panels/PayoutsPanel'));
+const MatchupSelector = lazy(() => import('./panels/MatchupSelector'));
 
-type ActiveTool = 'scenario' | 'calculator' | 'comparison' | 'handSim' | 'payouts';
+type ActiveTool = 'scenario' | 'calculator' | 'comparison' | 'handSim' | 'payouts' | 'matchup';
 
 const TOOL_BUTTONS: { id: ActiveTool; label: string; icon: string }[] = [
-  { id: 'scenario', label: 'Cenário', icon: 'fa-microscope' },
+  { id: 'scenario',   label: 'Cenário',    icon: 'fa-microscope' },
   { id: 'calculator', label: 'Calculadora', icon: 'fa-calculator' },
-  { id: 'comparison', label: 'Comparação', icon: 'fa-chart-radar' },
-  { id: 'handSim', label: 'Mão', icon: 'fa-hand' },
-  { id: 'payouts', label: 'Payouts', icon: 'fa-trophy' },
+  { id: 'matchup',    label: 'Matchup FT',  icon: 'fa-users' },
+  { id: 'comparison', label: 'Comparação',  icon: 'fa-chart-radar' },
+  { id: 'handSim',    label: 'Mão',         icon: 'fa-hand' },
+  { id: 'payouts',    label: 'Payouts',     icon: 'fa-trophy' },
 ];
 
 function LoadingFallback() {
@@ -268,6 +270,12 @@ export default function MasterSimulator() {
           {activeTool === 'payouts' && (
             <Suspense fallback={<LoadingFallback />}>
               <PayoutsPanel />
+            </Suspense>
+          )}
+
+          {activeTool === 'matchup' && (
+            <Suspense fallback={<LoadingFallback />}>
+              <MatchupSelector />
             </Suspense>
           )}
         </main>

@@ -8,7 +8,8 @@ if (Test-Path $EnvPath) { . $EnvPath }
 
 Write-Host "=== INICIANDO WORKER (COM CHAVES DE API INJETADAS) ===" -ForegroundColor Cyan
 
-$PyScript = Join-Path $PSScriptRoot "task_executor.py"
-$PythonCmd = if (Test-Path "$PSScriptRoot\.venv\Scripts\python.exe") { "$PSScriptRoot\.venv\Scripts\python.exe" } else { "python" }
+$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
+$PyScript = Join-Path $ProjectRoot "task_executor.py"
+$PythonCmd = if (Test-Path "$ProjectRoot\.venv\Scripts\python.exe") { "$ProjectRoot\.venv\Scripts\python.exe" } else { "python" }
 
 & $PythonCmd $PyScript worker
