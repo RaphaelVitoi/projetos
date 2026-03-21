@@ -12,7 +12,7 @@ O Ecossistema funciona em perfeita simbiose dentro do VS Code. O chat da extensa
 - **Plataformas:** Chat do VS Code (Gemini Code Assist / Claude).
 - **Roteamento Cognitivo e Anti-Exclusividade (Quartetos Dinamicos - Web Premium):**
   Nao existe exclusividade absoluta. Embora existam modelos "ideais" para certas tarefas, **qualquer modelo Premium pode executar qualquer tarefa** dependendo da escolha, disponibilidade ou estrategia momentanea do usuario. Claude e Gemini operam com Consciencia Mutua Plena (um sabe o que o outro fez, le seus artefatos e continua o trabalho sem refazer do zero).
-  - **Trilha "O Cirurgiao" (Logica/Arquitetura Estrita - @planner, @auditor, @implementor):**
+  - **Trilha "O Cirurgiao" (Logica/Arquitetura Estrita - @architect, @auditor, @implementor):**
     - _Ideal (Tier 1):_ **Claude Pro (Opus/Sonnet)** na IDE (pela precisao sintatica e raciocinio logico).
     - _Alternativa Premium (Tier 2):_ **Gemini Advanced (1.5 Pro)** na IDE (plenamente capaz de assumir e continuar com excelencia).
     - _Terceira & Quarta Vias (APIs):_ **Gemini 2.5 Pro / Flash e OpenRouter Free Tiers** via terminal `nexus` (para automacao material sem custo financeiro). API do Claude atua como ultima linha (4a opcao) paga.

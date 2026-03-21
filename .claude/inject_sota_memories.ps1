@@ -3,7 +3,7 @@
     Injecao de Memoria SOTA (Estado da Arte) - Execucao Direta pelo CHICO.
 .DESCRIPTION
     Este script contem a producao intelectual elaborada pelo proprio Cerebro Hibrido.
-    Ele sobrescreve os arquivos MEMORY.md dos 17 agentes com conteudo profundo, 
+    Ele sobrescreve os arquivos MEMORY.md dos 15 agentes com conteudo profundo, 
     filosofico e atrelado as recentes evolucoes (SQLite, RAG, God Mode 2.0),
     e em seguida roda a indexacao no ChromaDB.
 #>

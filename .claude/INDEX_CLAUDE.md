@@ -153,20 +153,20 @@
 
 ### Camada 5: Documentos Operacionais
 
-- **COHERENCE_MANIFEST.md** - Matriz de coerencia; integracao dos 17 agentes (7 linear + 4 consultivo + 2 super + 3 operacional + 1 entrada) nas 4 camadas
+- **COHERENCE_MANIFEST.md** - Matriz de coerencia; integracao dos 15 agentes (6 linear + 4 consultivo + 2 super + 2 operacional + 1 entrada) nas 4 camadas
 - **DISTRIBUTION_MATRIX.md** - Mapa de autoridade documental; quem decide o que
 - **ESTADO_ARTE_APRENDIZADO_GENERATIVO.md** - Templo do Aprendizado Generativo (7 modos, metacognicao)
 - **ETHICAL_PLAYBOOKS.md** - Checklists eticos por dominio
 - **HYBRID_BRAIN_ARCHITECTURE.md** - Arquitetura IDE vs Background
 - **HOLOGRAPHIC_ROUTING_PROTOCOL.md** - Protocolo de auto-consciencia de arquivos
 - **VALIDATION_FRAMEWORKS.md** - Frameworks de validacao (ICM, Psicologia, Codigo)
-- **LOAD_PREDICTION_MODEL.md** - Modelo de priorizacao do @sequenciador
+- **LOAD_PREDICTION_MODEL.md** - Modelo de priorizacao do task_executor.py (orquestrador)
 - **DECISION_AUDIT_TRAIL.md** - Registro de decisoes tomadas
 
 ### Camada 6: Especializacao de Agentes
 
-- **agents/** - 17 definicoes de agentes (architect, pesquisador, prompter, planner, auditor, implementor, verifier, curator, validador, securitychief, bibliotecario, maverick, chico, organizador, skillmaster, sequenciador, dispatcher)
-- **agent-memory/*/MEMORY.md** - Inteligencia acumulada individual (17 diretorios ativos)
+- **agents/** - 15 definicoes de agentes (architect, pesquisador, prompter, auditor, implementor, verifier, curator, validador, securitychief, bibliotecario, maverick, chico, organizador, skillmaster, dispatcher)
+- **agent-memory/*/MEMORY.md** - Inteligencia acumulada individual (15 diretorios ativos)
 
 ---
 

@@ -32,7 +32,7 @@ Confirmo a ativacao das chaves API, validando a infraestrutura para operacoes ex
 
 ## 6. PROPOSTAS DEMOCRATICAS (Inovacao Sistemica) (#proposta)
 `#proposta` - Executar um simulado de 'Chaos Engineering' mensal: forcar a queda de um agente e avaliar o Autodebugger.
-`#proposta` - Dada a plena conectividade, propor um novo modulo de monitoramento proativo de endpoints de API para os modelos de Tier 3 e 4, reportando latencia e falhas de forma automatica ao @sequenciador para realocar prioridades.
+`#proposta` - Dada a plena conectividade, propor um novo modulo de monitoramento proativo de endpoints de API para os modelos de Tier 3 e 4, reportando latencia e falhas de forma automatica ao task_executor.py para realocar prioridades.
 `#proposta` - Desenvolver uma integração mais profunda de `@bibliotecario` com `do.ps1`, permitindo que o `do.ps1` solicite automaticamente sumarizações de documentos secundários antes de incluí-los no prompt final, se o volume de contexto exceder um limiar. Isso elevaria a "Economia Generalizada" a um novo patamar, complementando a solução `Invoke-ContextAssembler`.
 `#proposta` - Desenvolver um script `Test-ExternalTimeout.ps1` para que Raphael possa testar e identificar o processo ou configuração que está impondo o limite de 300 segundos no `do.ps1 -Web`, fornecendo uma solução para o aspecto externo do problema.
 `#proposta_seguranca` - Propor ao `@securitychief` a criação de um módulo de auditoria contínua de segurança de comandos de shell gerados pelos agentes, utilizando um banco de dados de padrões proibidos atualizável.

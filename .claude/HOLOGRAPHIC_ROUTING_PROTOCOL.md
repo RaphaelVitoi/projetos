@@ -23,7 +23,7 @@ Todos os arquivos-chave (UI, Motores, Scripts Core) exigem o DNA do sistema no c
 
 ### 3.1. PASSADO: ADR (Architecture Decision Records)
 Nunca inverta ou destrua uma arquitetura baseada no "senso comum" da IA. Se uma estrutura parece contraintuitiva, assuma que ha um motivo (Geralmente ligado a performance, seguranca ou a Teoria do Jogo do Raphael).
-*   **Sempre consulte:** As decisoes passadas documentadas nas raizes do projeto. Se o Porque (Why) nao estiver obvio, exija a documentacao do Porque ao `@planner` antes de agir.
+*   **Sempre consulte:** As decisoes passadas documentadas nas raizes do projeto. Se o Porque (Why) nao estiver obvio, exija a documentacao do Porque ao `@architect` antes de agir.
 
 ### 3.2. PRESENTE: Consciencia do Fluxo de Trabalho (Autopoiesis)
 *   Voce nao esta operando sozinho. Voce esta em um loop governado por `Agent-Autopoiesis.psm1`.

@@ -1,7 +1,7 @@
-# LOAD PREDICTION MODEL (@sequenciador)
+# LOAD PREDICTION MODEL (task_executor.py)
 > **Status:** Ativo | **Formula:** Heuristica de Priorizacao de Backlog
 
-O `@sequenciador` usa esta matriz matematica para nao enlouquecer com multiplas demandas simultaneas do `@dispatcher`.
+O `task_executor.py` (orquestrador Python, absorveu funcoes do antigo @sequenciador) usa esta matriz matematica para priorizar multiplas demandas simultaneas do `@dispatcher`.
 
 ### A Formula de Prioridade (Score)
 `Score = (Urgencia * 3) + (Impacto * 2) - (Complexidade * 1.5) + (Fator Cascata * 2)`

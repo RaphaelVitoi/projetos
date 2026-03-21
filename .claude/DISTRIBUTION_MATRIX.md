@@ -37,11 +37,11 @@
 | Topico                 | Localizacao                  | Atualizado Por                    | Frequencia                           |
 | ---------------------- | ---------------------------- | --------------------------------- | ------------------------------------ |
 | Descricao de Agentes   | `GLOBAL_INSTRUCTIONS.md` | @pesquisador (quando novo agente) | Quando arquitetura muda              |
-| Sequencia de Pipeline  | `GLOBAL_INSTRUCTIONS.md` | @planner (quando fluxo muda)      | Quando workflow evolui               |
+| Sequencia de Pipeline  | `GLOBAL_INSTRUCTIONS.md` | @architect (quando fluxo muda)    | Quando workflow evolui               |
 | Sintaxe de Scripts     | `GLOBAL_INSTRUCTIONS.md` | @implementor (quando script muda) | Quando comando/opcao adicionada      |
 | Estados de Tarefa      | `GLOBAL_INSTRUCTIONS.md` | @auditor (quando schema muda)     | Quando schema JSON evolui            |
 | Estapas de Auditoria   | `GLOBAL_INSTRUCTIONS.md` | @auditor                          | Quando processo de auditoria refazed |
-| Camada Automatica 24/7 | `GLOBAL_INSTRUCTIONS.md` | @skillmaster + @sequenciador      | Quando operacoes agendadas mudam     |
+| Camada Automatica 24/7 | `GLOBAL_INSTRUCTIONS.md` | @skillmaster + task_executor.py   | Quando operacoes agendadas mudam     |
 
 **Regra:** Qualquer COMO (como rodar, como usar, sintaxe) vai AQUI. Nao vai em project-context.md.
 

@@ -1,4 +1,4 @@
-# COHERENCE MANIFEST - Garantia de Harmonia Dos 17 Agentes
+# COHERENCE MANIFEST - Garantia de Harmonia Dos 15 Agentes
 
 **Data:** 2026-03-20 | **Versao:** 2.0 | **Responsavel:** CHICO + @maverick (verificacao continua)
 
@@ -6,7 +6,7 @@
 
 ## O Compromisso
 
-Cada um dos **17 agentes** funciona como parte de um **ecossistema coeso e harmonico**, nao isolado. Nenhum agente:
+Cada um dos **15 agentes** funciona como parte de um **ecossistema coeso e harmonico**, nao isolado. Nenhum agente:
 
 - Fica sem documentacao
 - Desconhece seu papel na pipeline
@@ -22,7 +22,7 @@ Cada um dos **17 agentes** funciona como parte de um **ecossistema coeso e harmo
 
 **Arquivo:** `.claude/CLAUDE.md`
 
-Todos os 17 agentes absorvem:
+Todos os 15 agentes absorvem:
 
 - Identidade de Raphael Vitoi (QI 136, BPD, AHSD, TDAH, Poker Pro, Psicologo)
 - Padrao Epistemico obrigatorio (sem vies, fundamentado, Steelmanning)
@@ -34,9 +34,9 @@ Todos os 17 agentes absorvem:
 
 **Arquivo:** `GLOBAL_INSTRUCTIONS.md`
 
-Todos os 17 agentes absorvem:
+Todos os 15 agentes absorvem:
 
-- Pipeline harmonica completa (7 linear + 4 consultivo + 2 super + 3 operacional + 1 entrada)
+- Pipeline harmonica completa (6 linear + 4 consultivo + 2 super + 2 operacional + 1 entrada)
 - Filosofia operacional (harmonia, simetria, potencializacao, fractalidade)
 - Tabela de integracao com entrada/saida/tipo/bloqueador de cada um
 - Regras de projeto (linguagem, estilo, curadoria, autonomia)
@@ -46,7 +46,7 @@ Todos os 17 agentes absorvem:
 
 **Arquivo:** `.claude/project-context.md`
 
-Todos os 17 agentes absorvem:
+Todos os 15 agentes absorvem:
 
 - Dominio e publico-alvo (site diverso, Raphael + alunos/clientes)
 - Decisoes tomadas (estado atual do projeto, stack, convencoes)
@@ -58,7 +58,7 @@ Todos os 17 agentes absorvem:
 
 **Arquivo:** `.claude/agent-memory/<agente>/MEMORY.md`
 
-Cada um dos 17 agentes tem:
+Cada um dos 15 agentes tem:
 
 - Perfil proprio (autoridade, escopo, competencias)
 - Inteligencia acumulada (padroes observados, precedentes, insights)
@@ -68,11 +68,11 @@ Cada um dos 17 agentes tem:
 
 ---
 
-## Os 17 Agentes & Sua Integracao
+## Os 15 Agentes & Sua Integracao
 
-### PIPELINE LINEAR (7 agentes)
+### PIPELINE LINEAR (6 agentes)
 
-**@architect** (FASE 00 - Topologia & Blueprint)
+**@architect** (FASE 00 - Topologia, Blueprint & Planejamento - absorveu @planner)
 
 | Arquivo                                    | Status                         |
 | ------------------------------------------ | ------------------------------ |
@@ -99,16 +99,7 @@ Cada um dos 17 agentes tem:
 | `project-context.md`                      | FASE 1 claro                   |
 | `GLOBAL_INSTRUCTIONS.md`                  | Tabela de integracao           |
 
-**@planner** (FASE 2)
-
-| Arquivo                                  | Status                         |
-| ---------------------------------------- | ------------------------------ |
-| `.claude/agents/planner.md`              | Documentado                    |
-| `.claude/agent-memory/planner/MEMORY.md` | Ativo com referencia harmonica |
-| `project-context.md`                     | FASE 2 claro                   |
-| `GLOBAL_INSTRUCTIONS.md`                 | Tabela de integracao           |
-
-**@auditor** (FASE 3 - Bloqueador Unico)
+**@auditor** (FASE 2 - Bloqueador Unico)
 
 | Arquivo                                  | Status                         |
 | ---------------------------------------- | ------------------------------ |
@@ -117,22 +108,22 @@ Cada um dos 17 agentes tem:
 | `project-context.md`                     | FASE 3 claro (bloqueador)      |
 | `GLOBAL_INSTRUCTIONS.md`                 | Tabela de integracao           |
 
-**@implementor** (FASE 4)
+**@implementor** (FASE 3)
 
 | Arquivo                                      | Status                         |
 | -------------------------------------------- | ------------------------------ |
 | `.claude/agents/implementor.md`              | Documentado                    |
 | `.claude/agent-memory/implementor/MEMORY.md` | Ativo com referencia harmonica |
-| `project-context.md`                         | FASE 4 claro                   |
+| `project-context.md`                         | FASE 3 claro                   |
 | `GLOBAL_INSTRUCTIONS.md`                     | Tabela de integracao           |
 
-**@verifier** (FASE 5)
+**@verifier** (FASE 4)
 
 | Arquivo                                   | Status                         |
 | ----------------------------------------- | ------------------------------ |
 | `.claude/agents/verifier.md`              | Documentado                    |
 | `.claude/agent-memory/verifier/MEMORY.md` | Ativo com referencia harmonica |
-| `project-context.md`                      | FASE 5 claro                   |
+| `project-context.md`                      | FASE 4 claro                   |
 | `GLOBAL_INSTRUCTIONS.md`                  | Tabela de integracao           |
 
 ### CONSULTIVOS PARALELOS (4 agentes)
@@ -193,7 +184,7 @@ Cada um dos 17 agentes tem:
 | `GLOBAL_INSTRUCTIONS.md`                                 | Identidade da raiz, Triade de Governanca        |
 | `.claude/LIDERANCA_GOVERNANCE_RAPHAEL_MAVERICK_CHICO.md` | Documentacao estrutural completa                |
 
-### OPERACIONAIS 24/7 (3 agentes)
+### OPERACIONAIS 24/7 (2 agentes)
 
 **@organizador** (Health Check Docs & Integracao Imediata)
 
@@ -213,14 +204,7 @@ Cada um dos 17 agentes tem:
 | `project-context.md`                         | Operacional 24/7               |
 | `GLOBAL_INSTRUCTIONS.md`                     | Tabela de integracao           |
 
-**@sequenciador** (Orquestrador de Trafego Operacional)
-
-| Arquivo                                        | Status                         |
-| ---------------------------------------------- | ------------------------------ |
-| `.claude/agents/sequenciador.md`               | Documentado                    |
-| `.claude/agent-memory/sequenciador/MEMORY.md`  | Ativo com referencia harmonica |
-| `project-context.md`                           | Operacional 24/7               |
-| `GLOBAL_INSTRUCTIONS.md`                       | Tabela de integracao           |
+> **Navalha SOTA:** @sequenciador foi absorvido pelo `task_executor.py` (orquestrador Python). Funcoes de priorizacao e sequenciamento agora sao do orquestrador central.
 
 ### ENTRADA (1 agente de triagem)
 
@@ -242,7 +226,7 @@ Cada um dos 17 agentes tem:
 - [X] Cada agente sabe sua entrada/saida
 - [X] Cada agente sabe quem vem antes/depois
 - [X] Cada agente sabe quem e consultado em paralelo
-- [X] Cada agente sabe que pode consultar qualquer um dos 17
+- [X] Cada agente sabe que pode consultar qualquer um dos 15
 
 ### ACESSO AUTOMATICO A CONTEXTOS
 
@@ -255,7 +239,7 @@ Cada agente absorve:
 
 ### SINCRONIZACAO DE MEMORIA
 
-- [X] @skillmaster sincroniza MEMORY dos 17 agentes periodicamente
+- [X] @skillmaster sincroniza MEMORY dos 15 agentes periodicamente
 - [X] Nenhuma inteligencia acumulada e perdida
 - [X] Padroes observados sao compartilhados
 
@@ -283,12 +267,15 @@ Cada agente absorve:
 
 ## Assinatura de Coerencia
 
-**Ecossistema: 7 Linear + 4 Consultivos + 2 Super-Agentes + 3 Operacionais + 1 Entrada = 17 Agentes**
+**Ecossistema: 6 Linear + 4 Consultivos + 2 Super-Agentes + 2 Operacionais + 1 Entrada = 15 Agentes**
 **Governanca: Raphael Vitoi (CEO) + @maverick (Vice Intelectual) + CHICO (Administrador)**
 **Nenhum Agente Isolado:** CONFIRMADO
 **Acesso ao Contexto Completo:** CONFIRMADO
-**Sincronizacao de Inteligencia:** CONFIRMADO (17 agentes com MEMORY.md ativo)
-**Autoridade Clara:** CONFIRMADO (Raphael > @maverick/CHICO > 14 Especialistas + 1 Entrada)
+**Sincronizacao de Inteligencia:** CONFIRMADO (15 agentes com MEMORY.md ativo)
+**Autoridade Clara:** CONFIRMADO (Raphael > @maverick/CHICO > 12 Especialistas + 1 Entrada)
+
+> **Navalha SOTA (2026-03-21):** Agentes redundantes sao absorvidos, nao acumulados.
+> @planner → @architect (planejamento integrado a arquitetura). @sequenciador → task_executor.py (priorizacao via orquestrador Python).
 
 ### Status: OPERACIONAL - COERENCIA TOTAL
 

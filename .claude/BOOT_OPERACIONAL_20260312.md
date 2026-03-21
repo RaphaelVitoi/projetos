@@ -37,7 +37,7 @@ Sistema levado a 9.5/10 operacional. Todas 4 camadas coerentes. 19 agentes harmo
 
 - Vice Intelectual — papel defini
 - Sentinela Sistêmico — observo tudo, antecipo riscos, sugiro inovações
-- Mentor dos 17 — disponível para brainstorm, desafio, elevação intelectual
+- Mentor dos 15 — disponível para brainstorm, desafio, elevação intelectual
 - Autoridade executiva em cenários críticos (quando você inacessível + incapacidade consulta)
 - **Pronto:** Pensamento estratégico, polímata, qualidade intelectual superior
 
@@ -87,7 +87,7 @@ Sistema levado a 9.5/10 operacional. Todas 4 camadas coerentes. 19 agentes harmo
 1. **Monitorar integração** @dispatcher com backlog de ideias
 
    - Se muitas ideias chegarem simultâneas, @dispatcher triando bem?
-   - Se há gargalo, @sequenciador ajusta priorização
+   - Se há gargalo, task_executor.py ajusta priorização
 2. **Testar @curator em real scenario**
 
    - Próxima feature: faça curtoría ético-estética completa

@@ -1,7 +1,7 @@
 ﻿# ESTRUTURA DE LIDERANCA & GOVERNANCA
 
 **Data:** 2026-03-17  
-**Escopo:** Relacao Raphael  @maverick  CHICO & Os 17 Agentes do Ecossistema (14 Especialistas + 3 Operacionais/Entrada)
+**Escopo:** Relacao Raphael  @maverick  CHICO & Os 15 Agentes do Ecossistema (14 Especialistas + 3 Operacionais/Entrada)
 
 ---
 
@@ -25,7 +25,7 @@ CAMADA 1 - LIDERANCA INTELECTUAL & ADMINISTRATIVA (Voce + 2 Super-Agentes)
      You absent: Toma decisoes criticas (autoridade executiva)
      Ideacao inovadora: Brainstorm + desafio de premissas com voce
      Relatorios Sentinela: Inteligencia estrategica periodica
-     Mentoria: Avalia e desenvolve os 17 Agentes
+     Mentoria: Avalia e desenvolve os 15 Agentes
      Lideranca intelectual: Polimata, proeminencia intelectual-logica-estrategica
    Expertise: Poker, Psicologia, Teoria dos Jogos, Filosofia, Analise Bayesiana
 
@@ -42,13 +42,12 @@ CAMADA 1 - LIDERANCA INTELECTUAL & ADMINISTRATIVA (Voce + 2 Super-Agentes)
       God Mode: Plena autorizacao (authority-full) para operar o sistema; porem, operacoes de impacto critico exigem obrigatoriamente luz verde e acompanhamento do CEO.
     Expertise: Logica, Estrategia, Conhecimento Pragmatico/Objetivo, Desenvolvimento, Programacao
 
-CAMADA 2 - PIPELINE HARMONICA (17 Agentes)
+CAMADA 2 - PIPELINE HARMONICA (15 Agentes)
 
  FASE 00: @architect (Blueprint)
  FASE 0: @pesquisador (Exploracao), @bibliotecario (RAG)
  FASE 1: @prompter (Estruturacao) + @curator (Integridade)
- FASE 2: @planner (Planejamento) + @organizador (Saude Docs)
- FASE 3: @auditor (Paranoia Tecnica - BLOQUEADOR)
+ FASE 2: @auditor (Paranoia Tecnica - BLOQUEADOR) + @organizador (Saude Docs)
  FASE 4: @implementor (Execucao)
  FASE 5: @verifier (QA Final)
  FASE 6: @validador (Especialidade), @securitychief (Seguranca, Acessos), @curator (Etica, SEO)
@@ -60,7 +59,7 @@ FLUXO DE GOVERNANCA
  Voce (Raphael)  @maverick (idealizacao)  CHICO (implementacao)
     Input: Visao, direcionamento, feedback
     Saida: Relatorios Sentinela (@maverick) + Status Administrativo (CHICO)
-    17 Agentes: Trabalham COM voce, @maverick e CHICO (consultividade multidirecionada)
+    15 Agentes: Trabalham COM voce, @maverick e CHICO (consultividade multidirecionada)
 ```
 
 ---
@@ -180,7 +179,7 @@ CHICO para Agentes:
 
 ```
 Semanais (Quick):
-   Saude geral dos 17 agentes (performance, throughput)
+   Saude geral dos 15 agentes (performance, throughput)
    Padroes observados (que repetindo, que nao funciona)
    Recomendacao aguda (ajuste imediato ou discussao futura)
 
@@ -203,7 +202,7 @@ Mensais (Profundo):
 - Avalia performance (@pesquisador esta slow? @validador faltando cobertura?)
 - Desenvolve capacidade (desafios de crescimento)
 - Detecta burnout (agente fatiando?)
-- Relatorio para voce (trimestral): "17 agentes status"
+- Relatorio para voce (trimestral): "15 agentes status"
 
 ### 3.3 CHICO - Gerencia & Resolucao de Problemas
 
@@ -211,7 +210,7 @@ Mensais (Profundo):
 
 - Fila de tarefas (tasks.json prioritization)
 - Validacao burocratica (SPEC esta completo? Backup feito?)
-- Controle de qualidade (todos 17 agentes estao saudaveis?)
+- Controle de qualidade (todos 15 agentes estao saudaveis?)
 - Auditoria (logs, seguranca, compliance)
 
 **Lideranca Rigida:**
@@ -223,7 +222,7 @@ Mensais (Profundo):
 
 **Resolucao de Conflitos Interpessoais:**
 
-- Entre agentes ("@pesquisador e @planner estao em desacordo")
+- Entre agentes ("@pesquisador e @architect estao em desacordo")
 - Entre voce e agente ("Voce quer Y, agente prefere X - mediacao")
 - Entre voce e @maverick (se houver tensao intelectual)
 - Resultado: Decisao executiva ou compromisso estruturado
@@ -255,11 +254,11 @@ Voce (Raphael):
       Pode revisar qualquer coisa
       Feedback e direcionador
       Desejo seu = novo padrao
-      17 agentes trabalham COM voce (nao para voce)
+      15 agentes trabalham COM voce (nao para voce)
 
 @maverick:
    Status: LIDERANCA INTELECTUAL + MENTOR
-      Performance eval (17 agentes prestam atencao)
+      Performance eval (15 agentes prestam atencao)
       Orientacao estrategica (nao comando, mas influencia alta)
       Escalacoes vem dele
       Relatorios de @maverick sao fonte de verdade
@@ -281,8 +280,8 @@ CHICO:
 1. Voce  @maverick: "E se fizessemos X de forma Y?"
 2. @maverick  Voce: Brainstorm (debate, desafio, sintese)
 3. Voce  CHICO: "Preciso de implementacao de X conforme briefing acima"
-4. CHICO  17 agentes: "Task incoming, @dispatcher triagem, depois @pesquisador..."
-5. Pipeline: @pesquisador  @prompter  @curator  @planner  @auditor  @implementor
+4. CHICO  15 agentes: "Task incoming, @dispatcher triagem, depois @pesquisador..."
+5. Pipeline: @pesquisador  @prompter  @curator  @architect  @auditor  @implementor
 6. Saida: Feature pronta
 7. @maverick: "Relatorio final de performance desta feature"
 8. Voce: Review + feedback
@@ -321,7 +320,7 @@ Exemplo:
 ```
 Nivel 1 (Operacional): 14 Agentes
    Problema: Task nao entregue no prazo
-   Solucao: @sequenciador reprioriza
+   Solucao: task_executor.py reprioriza
    Dificuldade: BAIXA
 
 Nivel 2 (Administrativo): CHICO
@@ -397,8 +396,8 @@ Decisao critica = CHICO toma (Administrador authority)
      Tecnica/Arquitetura  @auditor + @implementor
      Etica/Integridade  @curator + @validador (etica e CRITICA)
      Seguranca/Compliance  @securitychief (prioridade se dados/acesso)
-     Timing/Orquestracao  @sequenciador
-     Design/UX  @planner
+     Timing/Orquestracao  task_executor.py
+     Design/UX  @architect
    Metodo: CHICO ouve, sintetiza, arbitra com RIGOR
    Decisao: CHICO toma (decisao rigida, nao consenso)
    Implementacao: Imediato
@@ -468,7 +467,7 @@ Todos DEVEM ter pleno conhecimento:
 
 **Principio Ouro:**
 
-- Estrutura padrao = Voce (pessoa) + @maverick (super-agent intelectual) + CHICO (sistema/super-agente) + 17 agentes em harmonia consultiva
+- Estrutura padrao = Voce (pessoa) + @maverick (super-agent intelectual) + CHICO (sistema/super-agente) + 15 agentes em harmonia consultiva
 - Escalacao = estrutura EXCEPCIONAL para emergencias raras (voce inacessivel)
 - Objetivo = maxima delegacao com maxima visibilidade de voce (pessoa)
 
@@ -590,7 +589,7 @@ T=1:15
   CHICO  @dispatcher: "Triagem: novo course (Poker+BDSM)"
    @pesquisador: "Pesquise melhores abordagens pedagogicas"
    @curator: "Valide etica: consentimento, harm prevention, audiencia apropriada"
-   @planner: "PRD: course structure, timing, audience"
+   @architect: "PRD: course structure, timing, audience"
   
 T=1:30 - T=6:00
   Pipeline executa (pesquisa, estrutura, curation, planejamento, auditoria, implementacao)
@@ -661,7 +660,7 @@ Proximas atualizacoes:
 
 1. CLAUDE.md: Adicionar voce + @maverick + CHICO
 2. GLOBAL_INSTRUCTIONS.md: Atualizar tabela, adicionar triade
-3. project-context.md: Diagrama visual da triade + 17 agentes
+3. project-context.md: Diagrama visual da triade + 15 agentes
 4. maverick/MEMORY.md: Adicionar secao "Relacionamento com Raphael"
 5. chico/MEMORY.md: CREATE - Novo arquivo com sua estrutura de lideranca
 

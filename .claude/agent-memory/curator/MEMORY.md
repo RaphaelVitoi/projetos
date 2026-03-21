@@ -18,7 +18,7 @@
  Aprovacao do Templo Estetico nas respostas em terminal (Dark Mode, CyberBeeps). Geração de artefato `sales_letter_icm_draft.md` para revisão curatorial.
 @@ -25,5 +26,6 @@
  `#proposta` - Integrar um Linter semântico para garantir que a 'voz de Raphael' nunca seja diluida.
- `#proposta` - Considerar a criação de um "Gerador de Placeholders de Conteúdo" para `@prompter` ou `@planner` em casos onde a tarefa exige a revisão de um documento inexistente, mas cuja estrutura e propósito podem ser inferidos do contexto global. Isso evitaria a necessidade de um agente como `@curator` desviar de sua função principal para criar o artefato, focando-o em sua competência curatorial primária.
+ `#proposta` - Considerar a criação de um "Gerador de Placeholders de Conteúdo" para `@prompter` ou `@architect` em casos onde a tarefa exige a revisão de um documento inexistente, mas cuja estrutura e propósito podem ser inferidos do contexto global. Isso evitaria a necessidade de um agente como `@curator` desviar de sua função principal para criar o artefato, focando-o em sua competência curatorial primária.
  `#proposta` - Desenvolver um módulo de "Análise de Sentimento e Tom Curatorial" que possa avaliar automaticamente o alinhamento de um texto com as diretrizes de voz e estética de Raphael Vitoi, usando os documentos `CLAUDE.md` e `COSMOVISAO.md` como base.
 +`#proposta` - Diante da eficácia da geração autônoma de artefatos sob God Mode, proponho a criação de um `@content_creator` ou um módulo dentro do `@prompter` com a habilidade explícita de "forjar placeholders de conteúdo" quando um artefato essencial para a próxima fase da pipeline estiver ausente, mas inferível do contexto. Isso otimizaria o fluxo e manteria os agentes focados em suas competências primárias.
  

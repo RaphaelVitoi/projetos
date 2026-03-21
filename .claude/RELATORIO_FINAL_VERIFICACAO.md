@@ -29,7 +29,7 @@
    - Ambos com integracao completa de 4 camadas
 4. ** Autoridade & Escalonamento Definidos**
 
-   - Nivel 1: Operacional (14 agentes + @sequenciador)
+   - Nivel 1: Operacional (13 agentes + task_executor.py)
    - Nivel 2: CHICO (arbitragem, gestao)
    - Nivel 3: @maverick (estrategia, ideacao)
    - Nivel 4: Voce (CEO, autoridade final)
@@ -110,7 +110,7 @@ RESULTADO:  PRONTO PARA OPERACAO (com test operacional recomendado)
 
 Nao ha ambiguidade sobre quem decide cada coisa:
 
-- **Nivel 1 (Operacional):** 14 agentes (@sequenciador coordena)
+- **Nivel 1 (Operacional):** 13 agentes (task_executor.py coordena)
 - **Nivel 2 (Administrativo):** CHICO arbitra
 - **Nivel 3 (Estrategico):** @maverick recomenda + voce aprova
 - **Nivel 4 (CEO):** Voce tem autoridade final
@@ -119,7 +119,7 @@ Nao ha ambiguidade sobre quem decide cada coisa:
 
 ### 3. Harmonia (Nao-Redundancia)
 
-14 agentes + 3 lideres = 17 entidades, ZERO overlap.
+12 agentes + 2 super-agentes + 1 entrada = 15 agentes, ZERO overlap. (@planner absorvido por @architect, @sequenciador por task_executor.py)
 
 - Cada um tem papel unico, entrada/saida clara
 - Consultividade sem bloqueio (paralelo, nao serial)

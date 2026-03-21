@@ -10,13 +10,9 @@ import aiohttp
 from aiohttp import web
 import urllib.error
 import logging
-import threading
-import concurrent.futures
 import asyncio
-from contextlib import contextmanager
 import traceback
 import functools
-from urllib.parse import urlparse, parse_qs
 import aiosqlite
 import sqlite3
 from pathlib import Path
@@ -125,7 +121,7 @@ INTENT_MAP = {f"@{name}": {"pattern": data.get("routing_pattern", "")} for name,
 AGENT_ROUTING_MAP = {f"@{name}": data.get("model_preference", "fast_operations") for name, data in AGENTS_MANIFEST.items()}
 VALID_AGENTS = list(INTENT_MAP.keys())
 
-rSYSTEM_CONFIG = load_json_config(Path("data/system_config.json"), {})
+SYSTEM_CONFIG = load_json_config(Path("data/system_config.json"), {})
 MODEL_ROUTING = SYSTEM_CONFIG.get("model_routing", {})
 DEEP_THINKING_MODELS = tuple(MODEL_ROUTING.get("deep_thinking", ("anthropic/claude-3.5-sonnet",)))
 FAST_OPERATIONS_MODELS = tuple(MODEL_ROUTING.get("fast_operations", ("google/gemini-flash-1.5",)))
@@ -1437,7 +1433,4 @@ if __name__ == "__main__":
         elif cmd == "worker-api":
             asyncio.run(start_worker_and_api())
     else:
-        if sys.argv[0] == "memory_rag.py":
-            # Avoids starting worker when only the memory_rag is called directly
-            return
         asyncio.run(start_worker())
