@@ -1,0 +1,1475 @@
+<!-- Chosen Palette: Slate Light Theme with Indigo, Sky, Rose, Emerald, and Amber accents -->
+<!-- Application Structure Plan: The SPA is a high-level pedagogical dashboard designed for precise, academic analysis of Game Theory Optimal (GTO) deviations under ICM pressure. The architecture uses a rigid flexbox layout to prevent content overflow, keeping the analytical charts and AI console perfectly docked. The left column controls the parameters (Matchups from specific FT setups), feeding data to the heuristic math engine. The right column visualizes the disparity between ChipEV and ICMev via Chart.js, while providing deeply technical, non-hyperbolic text sections explaining the shift in range morphologies and frequencies. -->
+<!-- Visualization & Content Choices: 
+1. Goal: Compare ChipEV vs ICM mathematically -> Method: Grouped Bar Chart (Chart.js) -> Interaction: Real-time update on matchup selection -> Justification: Provides clinical, emotionless data on the exact percentage deviation in Alpha and MDF caused by the Risk Premium.
+2. Goal: Display tactical theory -> Method: Scrollable, constrained text panels -> Justification: Allows the absorption of dense, academic paragraphs without breaking the visual symmetry of the dashboard.
+3. Goal: Multimodal AI Inference -> Method: Integrated console with Image/Text inputs -> Justification: Enables the user to input custom scenarios for the LLM to parse visually and textually, generating JSON scenarios or analytical responses based on the established non-hyperbolic theoretical framework.
+CONFIRMATION: NO SVG graphics generated from data logic. NO Mermaid JS used. Single file implementation. -->
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometria do Risco | PokerRacional Apex Engine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700;800&family=Great+Vibes&display=swap');
+        
+        :root {
+            --bg-base: #020617;
+            --bg-panel: #0f172a;
+            --border-subtle: rgba(148, 163, 184, 0.1);
+            --accent-sky: #0ea5e9;
+            --accent-rose: #e11d48;
+            --accent-indigo: #6366f1;
+            --accent-emerald: #10b981;
+            --accent-amber: #f59e0b;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-base);
+            color: #f8fafc;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.04), transparent 40%),
+                radial-gradient(circle at 100% 100%, rgba(14, 165, 233, 0.04), transparent 40%),
+                linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+        }
+
+        .glass-panel {
+            background-color: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 28px;
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255,255,255,0.06);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .data-mono { font-family: 'JetBrains Mono', monospace; font-variant-numeric: tabular-nums; }
+        .bar-transition { transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+
+        /* Custom Scrollbars */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.3); border-radius: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #334155; }
+
+        @keyframes pulseGlow {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.4)); }
+            50% { filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.8)); }
+        }
+        .pulse-glow { animation: pulseGlow 3s infinite; }
+
+        /* Chart Container Constraint */
+        .chart-container-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 200px;
+            max-height: 250px;
+        }
+
+        /* Select Dropdowns */
+        select {
+            -webkit-appearance: none; -moz-appearance: none; appearance: none;
+            background-color: #1e293b; border: 1px solid #334155; padding: 12px 16px;
+            border-radius: 12px; color: #f8fafc; font-weight: 600; width: 100%; cursor: pointer;
+            outline: none; transition: all 0.2s ease;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 12px center; background-size: 16px;
+        }
+        select:focus, select:hover { border-color: var(--accent-indigo); box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2); }
+
+        /* Segmented Tabs */
+        .tabs-container {
+            background: rgba(15, 23, 42, 0.6); border-radius: 20px; padding: 6px;
+            display: flex; gap: 6px; border: 1px solid rgba(255,255,255,0.05);
+        }
+        .action-tab {
+            flex: 1; padding: 12px 0; text-align: center; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.1em; font-size: 11px; color: #64748b; border-radius: 14px;
+            cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .action-tab:hover { color: #cbd5e1; background: rgba(30, 41, 59, 0.6); }
+        .action-tab.active { color: #fff; background: rgba(30, 41, 59, 0.9); box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .action-tab[data-target="theory"].active { color: var(--accent-sky); border: 1px solid rgba(14, 165, 233, 0.3); }
+        .action-tab[data-target="exploit"].active { color: var(--accent-indigo); border: 1px solid rgba(99, 102, 241, 0.3); }
+        .action-tab[data-target="quiz"].active { color: var(--accent-amber); border: 1px solid rgba(245, 158, 11, 0.3); }
+        .action-tab[data-target="ai-coach"].active { color: #d946ef; border: 1px solid rgba(217, 70, 239, 0.3); }
+        .action-tab[data-target="payouts"].active { color: var(--accent-emerald); border: 1px solid rgba(16, 185, 129, 0.3); }
+
+        .content-panel { display: none; height: 100%; }
+        .content-panel.active { display: flex; flex-direction: column; animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+        /* Quiz */
+        .quiz-option {
+            background: rgba(30, 41, 59, 0.3); border: 1px solid rgba(255,255,255,0.05);
+            padding: 18px 24px; border-radius: 14px; cursor: pointer; transition: all 0.2s;
+            display: flex; gap: 16px; align-items: flex-start;
+        }
+        .quiz-option:hover { background: rgba(30, 41, 59, 0.8); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .quiz-option.correct { background: rgba(16, 185, 129, 0.15); border-color: rgba(16, 185, 129, 0.5); box-shadow: inset 0 0 20px rgba(16, 185, 129, 0.1); }
+        .quiz-option.wrong { background: rgba(225, 29, 72, 0.15); border-color: rgba(225, 29, 72, 0.5); }
+        .quiz-option.disabled { pointer-events: none; opacity: 0.4; filter: grayscale(1); transform: none; box-shadow: none;}
+        
+        .signature-text {
+            font-family: 'Great Vibes', cursive; font-size: 3.5rem; color: #a5b4fc; 
+            background: linear-gradient(120deg, #e0e7ff 0%, #93c5fd 30%, #6366f1 70%, #4338ca 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            transform: rotate(-3deg); display: inline-block; text-shadow: 0 4px 20px rgba(99,102,241,0.3);
+        }
+
+        .gradient-text { background: linear-gradient(to right, #f8fafc, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* Ticker Axiomas */
+        .ticker-wrap { width: 100%; overflow: hidden; background: rgba(15, 23, 42, 0.9); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 8px 0; backdrop-filter: blur(10px); }
+        .ticker { display: inline-block; white-space: nowrap; animation: ticker 40s linear infinite; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.2em; color: #818cf8; }
+        @keyframes ticker { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
+
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(3, 7, 18, 0.85); backdrop-filter: blur(8px);
+            z-index: 100; display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-content {
+            background: var(--bg-panel); border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 24px; padding: 32px; width: 100%; max-width: 550px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+            transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .modal-overlay.active .modal-content { transform: scale(1); }
+
+        .ft-table-row {
+            display: flex; justify-content: space-between; padding: 6px 10px; 
+            border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.8rem;
+            border-radius: 6px; transition: background 0.2s;
+        }
+        .ft-table-row:hover { background: rgba(255,255,255,0.03); }
+        .ft-table-row.active-ip { background: rgba(14, 165, 233, 0.15); border-left: 2px solid #0ea5e9; }
+        .ft-table-row.active-oop { background: rgba(225, 29, 72, 0.15); border-left: 2px solid #e11d48; }
+        .ft-table-row:last-child { border-bottom: none; }
+        
+        .payout-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
+        .payout-table th { 
+            text-align: left; padding: 12px 16px; font-size: 10px; text-transform: uppercase; 
+            letter-spacing: 0.1em; color: #64748b; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .payout-table td { padding: 16px; background: rgba(30, 41, 59, 0.3); color: #cbd5e1; font-size: 14px; }
+        .payout-table tr td:first-child { border-top-left-radius: 8px; border-bottom-left-radius: 8px; font-weight: 600; color: #94a3b8;}
+        .payout-table tr td:last-child { border-top-right-radius: 8px; border-bottom-right-radius: 8px; text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #10b981;}
+        .payout-table tr:hover td { background: rgba(30, 41, 59, 0.6); }
+
+        /* Gauges */
+        .circular-chart { display: block; width: 100%; height: 100%; }
+        .circle-bg { fill: none; stroke: rgba(30, 41, 59, 0.6); stroke-width: 2.2; }
+        .circle { fill: none; stroke-width: 2.5; stroke-linecap: round; transition: stroke-dasharray 1.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        .circle.sky { stroke: #0ea5e9; filter: drop-shadow(0 0 6px rgba(14, 165, 233, 0.6)); }
+        .circle.rose { stroke: #e11d48; filter: drop-shadow(0 0 6px rgba(225, 29, 72, 0.6)); }
+        
+    </style>
+</head>
+<body class="p-0 md:p-6 lg:p-8 flex flex-col items-center">
+
+    <!-- AXIOM TICKER -->
+    <div class="ticker-wrap absolute top-0 left-0 z-50">
+        <div class="ticker">
+            <span class="mx-8"><i class="fa-solid fa-bolt mr-2"></i> O Risk Premium deriva diretamente da distribuição de Payouts cruzada com TODAS as stacks da mesa.</span>
+            <span class="mx-8"><i class="fa-solid fa-bolt mr-2"></i> Um pote 2-way numa FT sofre pressões letais porque a sua eliminação garante payjumps às outras 7 stacks passivas.</span>
+            <span class="mx-8"><i class="fa-solid fa-bolt mr-2"></i> A Especulação Assimétrica justifica os calls preliminares do Defensor. O overfold é estrutural, não cognitivo.</span>
+            <span class="mx-8"><i class="fa-solid fa-bolt mr-2"></i> O "Toy Game" do ICM é falho na essência geométrica, mas vital na orientação tática.</span>
+        </div>
+    </div>
+
+    <!-- POKERRACIONAL LOGO & HEADER -->
+    <div class="w-full max-w-[1400px] mt-12 flex flex-col items-center">
+        
+        <div class="flex items-center justify-center gap-4 mb-8">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-rose-500 flex items-center justify-center shadow-lg shadow-indigo-500/30 border border-white/10">
+                <i class="fa-solid fa-brain text-white text-2xl"></i>
+            </div>
+            <div class="flex flex-col text-left">
+                <span class="text-3xl font-black tracking-[0.15em] text-white uppercase leading-none">Poker<span class="text-rose-400">Racional</span></span>
+                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-[0.35em] mt-1">By Raphael Vitoi</span>
+            </div>
+        </div>
+
+        <header class="text-center mb-6 relative">
+            <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/20 mb-5 shadow-lg">
+                <div class="w-2.5 h-2.5 rounded-full bg-indigo-400 pulse-glow"></div>
+                <span class="text-[10px] font-black text-indigo-300 uppercase tracking-[0.2em]">Motor Matemático Não-Linear Ativo (V57)</span>
+            </div>
+            <h1 class="text-5xl md:text-7xl font-black tracking-tighter mb-4">
+                A Geometria do <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-indigo-500">Risco</span>
+            </h1>
+            <p class="text-slate-400 text-sm font-bold uppercase tracking-[0.3em]">
+                Simulador Heurístico de Abstração ICM
+            </p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start w-full px-4 md:px-0 mt-4">
+            
+            <!-- LEFT COLUMN: Matchup Controls & Board -->
+            <aside class="lg:col-span-4 flex flex-col gap-6 sticky top-8">
+                
+                <div class="glass-panel p-6">
+                    <h2 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 border-b border-slate-800 pb-3"><i class="fa-solid fa-server mr-2"></i> Matrizes Estruturais</h2>
+                    <select id="env-selector" onchange="window.setEnvironment(this.value)">
+                        <option value="FT1">Estrutura 1: Escalonamento Padrão</option>
+                        <option value="FT5">Estrutura 2: A Abstração Analítica (CL vs Mid)</option>
+                        <option value="FT4">Estrutura 3: Dominância Vertical (O Teto)</option>
+                        <option value="FT2">Estrutura 4: Tensão Bidirecional (Big vs Big)</option>
+                        <option value="FT3">Estrutura 5: Disparidade Exata</option>
+                    </select>
+                </div>
+
+                <div class="glass-panel p-6 flex flex-col gap-5">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <h2 class="text-xs font-black text-slate-400 uppercase tracking-[0.2em]">Cálculo de Intersecção</h2>
+                        <span class="text-[9px] font-bold text-emerald-400 bg-emerald-900/30 border border-emerald-500/30 px-2 py-1 rounded shadow-inner">Pot-Size Não-Linear</span>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="text-[10px] font-bold text-sky-400 uppercase tracking-widest mb-2 block"><i class="fa-solid fa-khanda mr-1"></i> Quadrante IP (Agressor)</label>
+                            <select id="sel-ip" onchange="window.updateMatchup()"></select>
+                        </div>
+                        <div>
+                            <label class="text-[10px] font-bold text-rose-400 uppercase tracking-widest mb-2 block"><i class="fa-solid fa-shield-halved mr-1"></i> Quadrante OOP (Defensor)</label>
+                            <select id="sel-oop" onchange="window.updateMatchup()"></select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3 mt-2">
+                        <div class="bg-slate-900/80 border border-sky-900/50 p-4 rounded-xl flex flex-col items-center justify-center shadow-inner">
+                            <span class="text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-2">Risk Premium (IP)</span>
+                            <span id="val-ip-rp" class="data-mono text-2xl font-black text-sky-400 drop-shadow-md">0.0%</span>
+                        </div>
+                        <div class="bg-slate-900/80 border border-rose-900/50 p-4 rounded-xl flex flex-col items-center justify-center shadow-inner">
+                            <span class="text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-2">Risk Premium (OOP)</span>
+                            <span id="val-oop-rp" class="data-mono text-2xl font-black text-rose-400 drop-shadow-md">0.0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-6 border border-indigo-500/20 bg-indigo-950/10">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></div>
+                            <h3 class="text-[10px] font-black text-indigo-300 uppercase tracking-[0.2em]">Contexto da Mesa Final</h3>
+                        </div>
+                    </div>
+                    <div id="ft-board" class="space-y-1 mb-2 custom-scrollbar max-h-[180px] overflow-y-auto pr-2">
+                        <!-- Gerado por JS -->
+                    </div>
+                </div>
+            </aside>
+
+            <!-- RIGHT STAGE: Visualizer & Interaction -->
+            <main class="lg:col-span-8 flex flex-col gap-6">
+                
+                <div class="glass-panel p-8 md:p-10 relative">
+                    <div class="absolute top-0 right-0 w-72 h-72 bg-sky-500/10 rounded-full filter blur-[100px] pointer-events-none"></div>
+                    <div class="absolute bottom-0 left-0 w-72 h-72 bg-rose-500/10 rounded-full filter blur-[100px] pointer-events-none"></div>
+
+                    <div class="flex justify-between items-start border-b border-slate-800 pb-6 mb-8 relative z-10">
+                        <div>
+                            <span class="text-[10px] font-black text-slate-400 bg-slate-800/50 px-3 py-1.5 rounded-md uppercase tracking-widest border border-slate-700/50 shadow-sm" id="stage-env">Contexto Numérico</span>
+                            <h2 class="text-3xl md:text-4xl font-black text-white mt-4 tracking-tight gradient-text" id="stage-title">Aguardando Avaliação</h2>
+                        </div>
+                        <div class="text-right hidden sm:flex flex-col items-end">
+                            <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-2">Classificação de Matriz</span>
+                            <div id="verdict-badge" class="px-4 py-2 rounded-lg text-xs font-black uppercase tracking-widest border transition-all duration-500 shadow-md">
+                                --
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between px-2 md:px-12 relative z-10">
+                        
+                        <div class="flex flex-col items-center flex-1">
+                            <div class="text-center mb-4">
+                                <span class="text-[11px] font-black text-sky-400 uppercase tracking-widest block mb-2">Polo In Position (IP)</span>
+                                <span class="text-2xl font-black text-white block mb-1" id="ip-pos">BTN</span>
+                                <span class="data-mono text-sm text-slate-400 font-medium bg-slate-900/50 px-2 py-0.5 rounded border border-slate-800" id="ip-stack">40.2 bb</span>
+                            </div>
+                            
+                            <div class="relative w-32 h-32 md:w-40 md:h-40 my-2 flex items-center justify-center">
+                                <svg viewBox="0 0 36 36" class="circular-chart absolute inset-0 w-full h-full">
+                                    <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                    <path class="circle sky" id="ip-rp-svg" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                </svg>
+                                <div class="relative z-10 flex flex-col items-center justify-center">
+                                    <span class="data-mono text-2xl md:text-3xl font-black text-white drop-shadow-lg leading-none tracking-tighter" id="ip-rp-txt">0.0%</span>
+                                    <span class="text-[8px] font-bold text-sky-400 uppercase tracking-widest mt-1.5 opacity-90">R. Premium</span>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6 text-center">
+                                <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest mb-1">Morfologia de Avaliação</p>
+                                <span class="text-[11px] font-bold text-sky-300 bg-sky-950/30 px-3 py-1.5 rounded-lg border border-sky-500/20 block text-center shadow-sm whitespace-nowrap" id="ip-morph">Pendente</span>
+                            </div>
+                        </div>
+
+                        <div class="flex-shrink-0 px-4 md:px-6 flex flex-col items-center">
+                            <div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center text-slate-400 font-black italic text-lg md:text-xl shadow-lg relative z-10">
+                                VS
+                            </div>
+                            <div class="w-[1px] h-20 md:h-24 bg-gradient-to-b from-slate-700 to-transparent mt-4"></div>
+                        </div>
+
+                        <div class="flex flex-col items-center flex-1">
+                            <div class="text-center mb-4">
+                                <span class="text-[11px] font-black text-rose-400 uppercase tracking-widest block mb-2">Polo Out of Position (OOP)</span>
+                                <span class="text-2xl font-black text-white block mb-1" id="oop-pos">BB</span>
+                                <span class="data-mono text-sm text-slate-400 font-medium bg-slate-900/50 px-2 py-0.5 rounded border border-slate-800" id="oop-stack">54.4 bb</span>
+                            </div>
+                            
+                            <div class="relative w-32 h-32 md:w-40 md:h-40 my-2 flex items-center justify-center">
+                                <svg viewBox="0 0 36 36" class="circular-chart absolute inset-0 w-full h-full">
+                                    <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                    <path class="circle rose" id="oop-rp-svg" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                </svg>
+                                <div class="relative z-10 flex flex-col items-center justify-center">
+                                    <span class="data-mono text-2xl md:text-3xl font-black text-white drop-shadow-lg leading-none tracking-tighter" id="oop-rp-txt">0.0%</span>
+                                    <span class="text-[8px] font-bold text-rose-400 uppercase tracking-widest mt-1.5 opacity-90">R. Premium</span>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6 text-center">
+                                <p class="text-[9px] text-slate-500 font-bold uppercase tracking-widest mb-1">Morfologia de Avaliação</p>
+                                <span class="text-[11px] font-bold text-rose-300 bg-rose-950/30 px-3 py-1.5 rounded-lg border border-rose-500/20 block text-center shadow-sm whitespace-nowrap" id="oop-morph">Pendente</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="glass-panel p-8 border-t-4 border-t-sky-500 transition-colors group">
+                        <div class="flex justify-between items-start mb-8">
+                            <div class="space-y-1.5">
+                                <h3 class="text-[12px] font-black text-slate-400 uppercase tracking-widest group-hover:text-sky-300 transition-colors">Taxa de Agressão (Alpha)</h3>
+                                <p class="text-[11px] text-slate-500 font-bold uppercase">Limiar Ótimo de Bluff</p>
+                            </div>
+                            <span id="del-bluff" class="data-mono text-xs font-bold px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-700 shadow-inner">-0.0%</span>
+                        </div>
+                        <div>
+                            <div class="flex items-baseline gap-2 mb-3">
+                                <span id="out-bluff" class="data-mono text-6xl font-black text-white tracking-tighter drop-shadow-md">33.3</span>
+                                <span class="text-2xl font-bold text-sky-400">%</span>
+                            </div>
+                            <div class="h-2 w-full bg-slate-800/80 rounded-full overflow-hidden mt-5 shadow-inner">
+                                <div id="bar-bluff" class="h-full bg-sky-500 bar-transition shadow-[0_0_15px_#0ea5e9]"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-8 border-t-4 border-t-rose-500 transition-colors group">
+                        <div class="flex justify-between items-start mb-8">
+                            <div class="space-y-1.5">
+                                <h3 class="text-[12px] font-black text-slate-400 uppercase tracking-widest group-hover:text-rose-300 transition-colors">Teto de Retenção (MDF)</h3>
+                                <p class="text-[11px] text-slate-500 font-bold uppercase">Frequência Mínima de Call</p>
+                            </div>
+                            <span id="del-defense" class="data-mono text-xs font-bold px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-700 shadow-inner">-0.0%</span>
+                        </div>
+                        <div>
+                            <div class="flex items-baseline gap-2 mb-3">
+                                <span id="out-defense" class="data-mono text-6xl font-black text-white tracking-tighter drop-shadow-md">50.0</span>
+                                <span class="text-2xl font-bold text-rose-400">%</span>
+                            </div>
+                            <div class="h-2 w-full bg-slate-800/80 rounded-full overflow-hidden mt-5 shadow-inner">
+                                <div id="bar-defense" class="h-full bg-rose-500 bar-transition shadow-[0_0_15px_#e11d48]"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-6">
+                    <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 border-b border-slate-800/50 pb-2 pl-2">Desvio Exponencial (Fricção Utilitária vs ChipEV)</h3>
+                    <div class="chart-container-wrapper">
+                        <canvas id="nashChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="glass-panel flex flex-col h-[780px]">
+                    <div class="p-4 border-b border-slate-800/80 bg-slate-900/40">
+                        <div class="tabs-container overflow-x-auto hide-scroll">
+                            <div class="action-tab active shrink-0 px-5" data-target="ai-coach">
+                                <span class="text-[#d946ef] opacity-80 mr-1">✨</span> Oráculo AI (Dinâmico)
+                            </div>
+                            <div class="action-tab shrink-0 px-5" data-target="theory">
+                                <i class="fa-solid fa-book-open text-sky-400 opacity-80"></i> Postulados Matemáticos
+                            </div>
+                            <div class="action-tab shrink-0 px-5" data-target="exploit">
+                                <i class="fa-solid fa-crosshairs text-indigo-400 opacity-80"></i> Plano de Ação
+                            </div>
+                            <div class="action-tab shrink-0 px-5" data-target="quiz">
+                                <i class="fa-solid fa-brain text-amber-400 opacity-80"></i> Prova Analítica
+                            </div>
+                            <div class="action-tab shrink-0 px-5" data-target="payouts">
+                                <i class="fa-solid fa-sack-dollar text-emerald-400 opacity-80"></i> Estrutura (10k)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex-1 relative overflow-hidden">
+                        
+                        <div id="ai-coach" class="content-panel active h-full flex flex-col px-8 py-6">
+                            
+                            <div class="mb-4 shrink-0 flex justify-between items-start">
+                                <div>
+                                    <h3 class="text-white font-bold text-2xl mb-1 tracking-tight">Consultoria de Confronto ✨</h3>
+                                    <p class="text-slate-400 text-sm">O modelo linguístico analisa a abstração do RP em tempo real. Solicite a equação subjacente à fricção utilitária.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-5 shrink-0">
+                                <button onclick="window.quickAIPrompt('Submeto a premissa de que o ICM pós-flop atua como uma abstração. Explique como o SPR dilui o Risk Premium, mas o Teto Absoluto se mantém, e de que modo a Falibilidade do Toy Game fundamenta a nossa adaptação (Expansão Passiva vs Opressão Contínua). Argumente com integridade técnica.')" class="bg-sky-500/10 text-sky-300 border border-sky-500/30 px-4 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-sky-500/20 transition-all flex items-center justify-center gap-2"><i class="fa-solid fa-microscope"></i> Análise de Abstração</button>
+                                <button onclick="window.setChatMode('simulator')" class="bg-teal-500/10 text-teal-300 border border-teal-500/30 px-4 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-teal-500/20 transition-all flex items-center justify-center gap-2">🌪️ Simulador GTO</button>
+                                <button onclick="window.setChatMode('villain')" class="bg-rose-500/10 text-rose-300 border border-rose-500/30 px-4 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-rose-500/20 transition-all flex items-center justify-center gap-2">🎭 Interrogar Vilão</button>
+                            </div>
+
+                            <div id="ai-chat-history" class="flex-1 overflow-y-auto space-y-4 mb-5 pr-3 custom-scrollbar border border-slate-800/50 bg-slate-900/30 rounded-2xl p-4 shadow-inner">
+                                <div class="flex justify-start">
+                                    <div class="bg-slate-800 border border-slate-700 rounded-r-2xl rounded-tl-2xl p-4 max-w-[85%] shadow-md">
+                                        <p class="text-sm text-slate-300 leading-relaxed"><strong class="text-fuchsia-400">Motor Exponencial Ativo ✨:</strong> Sistema não-linear inicializado. A diluição do SPR e a abstração do RP foram consideradas na geometria atual. <br><br>Solicite uma intervenção analítica ou <strong>anexe uma imagem da mesa</strong> para mapeamento via Processamento Multimodal.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="shrink-0 bg-slate-900/80 border border-slate-700 rounded-2xl overflow-hidden shadow-lg flex flex-col transition-all focus-within:border-indigo-500/50 focus-within:ring-1 focus-within:ring-indigo-500/50 relative">
+                                
+                                <div id="ai-image-preview" class="hidden px-4 py-3 border-b border-slate-700/50 bg-slate-800/80 justify-between items-center shadow-inner">
+                                    <div class="flex items-center gap-3">
+                                        <img id="ai-preview-img" src="" class="h-10 w-10 object-cover rounded-md border border-slate-600 shadow-sm">
+                                        <div>
+                                            <span class="text-[10px] font-bold text-sky-400 uppercase tracking-widest block leading-none mb-1">Processamento Visual (Vision)</span>
+                                            <span class="text-[10px] text-slate-400">Captura em modo de leitura algorítmica.</span>
+                                        </div>
+                                    </div>
+                                    <button onclick="window.clearImageUpload()" class="text-slate-500 hover:text-rose-400 transition-colors w-6 h-6 rounded-full hover:bg-slate-700 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+                                </div>
+
+                                <textarea id="ai-prompt-input" rows="2" class="w-full bg-transparent p-4 pb-2 text-sm text-white outline-none resize-none custom-scrollbar" placeholder="Descreva o vilão, solicite uma auditoria lógica ou anexe uma imagem..."></textarea>
+                                
+                                <div class="bg-slate-800/40 px-4 py-3 border-t border-slate-700/50 flex justify-between items-center mt-1">
+                                    <div id="ai-loading" class="hidden items-center">
+                                        <div class="inline-block animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-indigo-400 mr-3"></div>
+                                        <span class="text-[10px] text-indigo-300 font-bold uppercase tracking-widest animate-pulse">Computação Bayesiana...</span>
+                                    </div>
+                                    <div class="flex gap-3 ml-auto items-center">
+                                        <label for="ai-img-upload" class="cursor-pointer flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-sky-400 border border-slate-600/50 px-3.5 py-2 rounded-xl transition-all shadow-sm text-[10px] font-bold uppercase tracking-widest" title="Análise Multimodal (Vision)">
+                                            <i class="fa-solid fa-camera text-sm"></i> <span class="hidden sm:inline">Anexar Registo Visual</span>
+                                        </label>
+                                        <input type="file" id="ai-img-upload" accept="image/*" class="hidden" onchange="window.handleImageUpload(event)">
+
+                                        <button onclick="window.generateVillainAvatar()" class="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-amber-400 border border-slate-600/50 px-3.5 py-2 rounded-xl transition-all shadow-sm text-[10px] font-bold uppercase tracking-widest" title="Renderizar Perfil Psicológico">
+                                            <i class="fa-solid fa-paintbrush text-sm"></i> <span class="hidden sm:inline">Renderizar Vilão</span>
+                                        </button>
+                                        
+                                        <button id="ai-submit-btn" class="flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all shadow-md" onclick="window.askAICoach()">
+                                            <i class="fa-solid fa-paper-plane"></i> Submeter ✨
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="theory" class="content-panel h-full overflow-y-auto custom-scrollbar px-8 py-8"></div>
+                        <div id="exploit" class="content-panel h-full overflow-y-auto custom-scrollbar px-8 py-8"></div>
+                        <div id="quiz" class="content-panel h-full overflow-y-auto custom-scrollbar px-8 py-8"></div>
+
+                        <div id="payouts" class="content-panel h-full overflow-y-auto custom-scrollbar px-8 py-8">
+                            <h3 class="text-white font-bold text-2xl mb-3 tracking-tight">Estrutura Financeira Subjacente (10k BI)</h3>
+                            <p class="text-slate-400 text-[15px] mb-8 leading-relaxed">O presente modelo exibe as métricas de retorno que forçam a distorção da utilidade das fichas. A alocação assimétrica do capital dita a preservação do Expected Value monetário em detrimento da acumulação linear (ChipEV).</p>
+                            
+                            <div class="overflow-x-auto bg-slate-900/60 rounded-2xl border border-slate-700/50 shadow-inner">
+                                <table class="payout-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Classificação (Leaderboard)</th>
+                                            <th style="text-align: right;">Retorno Líquido (Payout USD)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="payout-tbody">
+                                        <!-- Preenchido via JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="mt-6 p-5 bg-indigo-900/20 border border-indigo-500/20 rounded-xl shadow-sm">
+                                <p class="text-sm text-indigo-300 leading-relaxed font-medium">Nota Analítica: A acentuada concentração de capital nos escalões de topo (Top-Heavy) confere uma flexibilidade estratégica (relaxamento do RP) aos intervenientes com stacks vulneráveis, uma vez que a sobrevivência puramente estática perde o seu rácio de compensação. Inversamente, a proteção do capital dita a contenção do risco nos líderes.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+
+        <footer class="w-full max-w-[1400px] mt-12 pt-8 pb-12 border-t border-slate-800/50 flex flex-col items-center">
+            <div class="flex items-center justify-center gap-3 mb-6 opacity-70 hover:opacity-100 transition-opacity">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-600 to-rose-500 flex items-center justify-center shadow-lg shadow-indigo-500/20 border border-white/10">
+                    <i class="fa-solid fa-brain text-white text-sm"></i>
+                </div>
+                <span class="text-xl font-black tracking-[0.15em] text-white uppercase">Poker<span class="text-rose-400">Racional</span></span>
+            </div>
+            
+            <div class="signature-text mb-4 text-4xl">Raphael Vitoi</div>
+            <p class="text-[11px] text-slate-400 uppercase tracking-[0.2em] font-bold text-center leading-relaxed">
+                Architecture & Theory Framework<br>Advanced Game Theory & Multimodal ICM Analytics
+            </p>
+        </footer>
+    </div>
+
+    <!-- Modal Gerador de Cenários IA -->
+    <div id="scenario-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-5 border-b border-slate-800/50 pb-4">
+                <h3 class="text-xl font-black text-indigo-400 flex items-center gap-3"><i class="fa-solid fa-wand-magic-sparkles text-2xl"></i> Construtor de Matriz</h3>
+                <button onclick="window.closeScenarioModal()" class="text-slate-500 hover:text-white bg-slate-800 hover:bg-slate-700 w-8 h-8 rounded-full flex items-center justify-center transition-colors"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <p class="text-sm text-slate-400 mb-6 leading-relaxed">Insira as condições estruturais do confronto. A arquitetura inferirá as equações de Nash subjacentes (com decaimento exponencial), gerando a resposta tática e a matriz de forma rigorosa.</p>
+            <textarea id="ai-gen-input" rows="4" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-4 text-sm text-white focus:border-indigo-500 outline-none mb-6 resize-none shadow-inner custom-scrollbar" placeholder="Ex: Situação de Bolha FT. O CL (80bb) abre no CO, e o Big Blind (15bb) é um jogador tight..."></textarea>
+            <button id="btn-generate-scenario" onclick="window.generateScenarioAI()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-3 shadow-lg hover:shadow-indigo-500/25">
+                Computar Matriz Exponencial ✨
+            </button>
+            <div id="gen-loading" class="hidden mt-5 text-center bg-slate-900/50 py-3 rounded-lg border border-slate-800">
+                <div class="inline-block animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-indigo-400 align-middle"></div>
+                <span class="text-xs text-indigo-300 ml-3 font-bold uppercase tracking-widest animate-pulse align-middle">A compilar JSON com Rigor Matemático...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Player (TTS) -->
+    <audio id="tts-player" class="hidden"></audio>
+
+    <script>
+        const apiKey = ""; 
+        
+        window.currentEnv = 'FT1';
+        window.currentId = "paradoxo"; 
+        window.isAnimating = false;
+        window.currentAIChatMode = 'coach';
+        window.currentUploadedBase64 = null;
+        window.myChart = null;
+        window.currentState = { ip_rp: 0, oop_rp: 0, bluff: 33.3, defense: 50.0, label: "", pA: {pos: 'BTN', bb: 40}, pB: {pos: 'BB', bb: 55} };
+
+        window.setTxt = function(id, txt) { const el = document.getElementById(id); if(el) el.innerText = txt; };
+        window.setHtml = function(id, html) { const el = document.getElementById(id); if(el) el.innerHTML = html; };
+        window.setCls = function(id, cls) { const el = document.getElementById(id); if(el) el.className = cls; };
+        window.setWidth = function(id, w) { const el = document.getElementById(id); if(el) el.style.width = w; };
+        window.setDash = function(id, val) { const el = document.getElementById(id); if(el) el.style.strokeDasharray = val; };
+        window.stripHtml = function(html) { const tmp = document.createElement("DIV"); tmp.innerHTML = html; return tmp.textContent || tmp.innerText || ""; };
+
+        window.animateValue = function(id, start, end, duration, formatStr = "%") {
+            if (start === end) { window.setTxt(id, end.toFixed(1) + formatStr); return; }
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const ease = 1 - Math.pow(1 - progress, 3);
+                const current = start + (end - start) * ease;
+                window.setTxt(id, current.toFixed(1) + formatStr);
+                if (progress < 1) window.requestAnimationFrame(step);
+            };
+            window.requestAnimationFrame(step);
+        };
+
+        window.calculateBF = function(rp) {
+            if(rp >= 100) return "∞";
+            if(rp === 0) return "1.00";
+            return (100 / (100 - rp)).toFixed(2);
+        };
+
+        // ==========================================
+        // O NOVO MODELO EXPONENCIAL (A ABSTRAÇÃO DO ICM)
+        // ==========================================
+        window.solveNashDynamics = function(rp_ip, rp_oop) {
+            if (rp_ip === 0 && rp_oop === 0) return { bluff: 33.3, defense: 50.0 };
+
+            // Conversão para decimais
+            let rA = rp_ip / 100;
+            let rD = rp_oop / 100;
+
+            // Constantes de Fricção Utilitária
+            const kappa_defense = 2.5; 
+            const kappa_bluff = 1.8;   
+
+            // MDF: O decaimento é exponencial sob a pressão de rD. 
+            // O RP do agressor (rA) também contribui, pois um range agressor mais honesto força mais folds.
+            let defense = 50.0 * Math.exp(-(kappa_defense * rD + 0.8 * rA));
+
+            // Alpha: Agressão expande fortemente se rD é alto (explora o overfold/abstenção do vilão), 
+            // mas colapsa logaritmicamente se o próprio RP do Agressor for alto (Paradoxo do Valuation).
+            let bluff = 33.3 * (1 + 2.0 * rD) * Math.exp(-kappa_bluff * rA);
+
+            defense = Math.max(0, Math.min(100, defense));
+            bluff = Math.max(0, Math.min(100, bluff));
+
+            return { bluff, defense };
+        };
+
+        window.fetchWithRetry = async function(url, options, retries = 5) {
+            let delay = 1000;
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    return await response.json();
+                } catch (e) {
+                    if (i === retries - 1) throw e;
+                    await new Promise(res => setTimeout(res, delay));
+                    delay *= 2;
+                }
+            }
+        };
+
+        window.base64ToArrayBuffer = function(base64) {
+            const binary_string = window.atob(base64);
+            const len = binary_string.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) { bytes[i] = binary_string.charCodeAt(i); }
+            return bytes.buffer;
+        };
+
+        window.writeString = function(view, offset, string) {
+            for (let i = 0; i < string.length; i++) { view.setUint8(offset + i, string.charCodeAt(i)); }
+        };
+
+        window.pcmToWav = function(pcmBuffer, sampleRate) {
+            const numChannels = 1; const bytesPerSample = 2; const blockAlign = numChannels * bytesPerSample;
+            const byteRate = sampleRate * blockAlign; const dataSize = pcmBuffer.byteLength;
+            const buffer = new ArrayBuffer(44 + dataSize); const view = new DataView(buffer);
+            
+            window.writeString(view, 0, 'RIFF'); view.setUint32(4, 36 + dataSize, true);
+            window.writeString(view, 8, 'WAVE'); window.writeString(view, 12, 'fmt ');
+            view.setUint32(16, 16, true); view.setUint16(20, 1, true); view.setUint16(22, numChannels, true);
+            view.setUint32(24, sampleRate, true); view.setUint32(28, byteRate, true);
+            view.setUint16(32, blockAlign, true); view.setUint16(34, bytesPerSample * 8, true);
+            window.writeString(view, 36, 'data'); view.setUint32(40, dataSize, true);
+            
+            new Uint8Array(buffer, 44).set(new Uint8Array(pcmBuffer));
+            return new Blob([buffer], { type: 'audio/wav' });
+        };
+
+
+        const PAYOUTS = [
+            { pos: "1º Lugar", val: "$355,000" }, { pos: "2º Lugar", val: "$279,000" },
+            { pos: "3º Lugar", val: "$219,000" }, { pos: "4º Lugar", val: "$171,000" },
+            { pos: "5º Lugar", val: "$134,000" }, { pos: "6º Lugar", val: "$105,000" },
+            { pos: "7º Lugar", val: "$83,000" },  { pos: "8º Lugar", val: "$65,000" },
+            { pos: "9º Lugar", val: "$51,000" }
+        ];
+
+        const PLAYERS_FT1 = [
+            { id: 'p1', pos: "BB", name: "Chip Leader", bb: 54.4 },
+            { id: 'p2', pos: "SB", name: "Vice CL", bb: 40.5 },
+            { id: 'p3', pos: "BTN", name: "Big Stack", bb: 40.2 },
+            { id: 'p4', pos: "UTG", name: "Mid Stack", bb: 23.3 },
+            { id: 'p5', pos: "UTG+1", name: "Mid-Short", bb: 13.9 },
+            { id: 'p6', pos: "UTG+2", name: "Mid-Short", bb: 13.2 },
+            { id: 'p7', pos: "MP", name: "Short Stack", bb: 12.0 },
+            { id: 'p8', pos: "MP+1", name: "Micro Stack", bb: 10.4 },
+            { id: 'p9', pos: "CO", name: "Micro Stack", bb: 9.8 }
+        ];
+
+        const PLAYERS_FT2 = [
+            { id: 'p1', pos: "UTG", name: "Chip Leader", bb: 70.0 },
+            { id: 'p2', pos: "UTG+1", name: "Vice CL", bb: 65.0 },
+            { id: 'p3', pos: "MP", name: "Mid-Short", bb: 15.0 },
+            { id: 'p4', pos: "HJ", name: "Short Stack", bb: 14.0 },
+            { id: 'p5', pos: "CO", name: "Short Stack", bb: 13.0 },
+            { id: 'p6', pos: "BTN", name: "Short Stack", bb: 12.0 },
+            { id: 'p7', pos: "SB", name: "Micro Stack", bb: 11.0 },
+            { id: 'p8', pos: "BB", name: "Micro Stack", bb: 9.7 },
+            { id: 'p9', pos: "UTG+2", name: "Micro Stack", bb: 8.0 }
+        ];
+
+        const PLAYERS_FT3 = [
+            { id: 'p1', pos: "BB", name: "God Mode", bb: 90.0 },
+            { id: 'p2', pos: "BTN", name: "Vice CL", bb: 25.0 },
+            { id: 'p3', pos: "CO", name: "Mid Stack", bb: 20.0 },
+            { id: 'p4', pos: "HJ", name: "Mid-Short", bb: 18.0 },
+            { id: 'p5', pos: "MP", name: "Short Stack", bb: 16.0 },
+            { id: 'p6', pos: "UTG+2", name: "Short Stack", bb: 14.0 },
+            { id: 'p7', pos: "UTG+1", name: "Short Stack", bb: 13.0 },
+            { id: 'p8', pos: "UTG", name: "Micro Stack", bb: 11.7 },
+            { id: 'p9', pos: "SB", name: "Micro Stack", bb: 10.0 }
+        ];
+
+        const PLAYERS_FT4 = [
+            { id: 'p1', pos: "Agressor (CL)", bb: 60.0 }, { id: 'p2', pos: "Defensor (OOP)", bb: 30.0 },
+            { id: 'p3', pos: "P3", bb: 28.0 }, { id: 'p4', pos: "P4", bb: 25.0 },
+            { id: 'p5', pos: "P5", bb: 22.0 }, { id: 'p6', pos: "P6", bb: 18.0 },
+            { id: 'p7', pos: "P7", bb: 15.0 }, { id: 'p8', pos: "P8", bb: 10.0 },
+            { id: 'p9', pos: "P9", bb: 9.7 }
+        ];
+
+        const PLAYERS_FT5 = [
+            { id: 'p1', pos: "Agressor (CL)", bb: 60.0 }, { id: 'p2', pos: "Defensor (Mid)", bb: 35.0 },
+            { id: 'p3', pos: "P3", bb: 28.0 }, { id: 'p4', pos: "P4", bb: 20.0 },
+            { id: 'p5', pos: "P5", bb: 18.0 }, { id: 'p6', pos: "P6", bb: 15.0 },
+            { id: 'p7', pos: "P7", bb: 12.0 }, { id: 'p8', pos: "P8", bb: 10.0 },
+            { id: 'p9', pos: "P9", bb: 8.0 }
+        ];
+
+        const RP_MATRIX_FT1 = {
+            'p1': { p1:0, p2:15.5, p3:15.2, p4:10.5, p5:6.5, p6:5.2, p7:4.8, p8:4.0, p9:3.4 },
+            'p2': { p1:21.5, p2:0, p3:19.7, p4:11.5, p5:5.8, p6:5.5, p7:4.9, p8:4.0, p9:3.5 },
+            'p3': { p1:20.5, p2:19.5, p3:0, p4:12.6, p5:8.6, p6:7.3, p7:6.7, p8:5.8, p9:5.3 },
+            'p4': { p1:22.5, p2:21.1, p3:20.8, p4:0, p5:11.2, p6:10.5, p7:9.8, p8:8.2, p9:7.5 },
+            'p5': { p1:23.0, p2:21.8, p3:21.5, p4:18.5, p5:0, p6:14.5, p7:13.2, p8:11.5, p9:10.2 },
+            'p6': { p1:23.2, p2:22.0, p3:21.8, p4:19.8, p5:15.2, p6:0, p7:13.8, p8:12.0, p9:10.8 },
+            'p7': { p1:23.4, p2:22.3, p3:22.1, p4:20.2, p5:16.5, p6:15.8, p7:0, p8:13.5, p9:12.1 },
+            'p8': { p1:23.7, p2:22.6, p3:22.4, p4:21.0, p5:18.0, p6:17.3, p7:16.0, p8:0, p9:14.2 },
+            'p9': { p1:24.0, p2:23.0, p3:22.8, p4:21.5, p5:19.5, p6:18.8, p7:17.5, p8:15.8, p9:0 }
+        };
+        const RP_MATRIX_FT2 = {
+            'p1': { p1:0, p2:23.5, p3:6.5, p4:6.2, p5:6.0, p6:5.8, p7:5.5, p8:5.2, p9:5.0 }, 
+            'p2': { p1:24.5, p2:0, p3:7.0, p4:6.7, p5:6.5, p6:6.2, p7:6.0, p8:5.5, p9:5.2 }, 
+            'p3': { p1:18.5, p2:18.0, p3:0, p4:9.5, p5:9.2, p6:9.0, p7:8.5, p8:8.0, p9:7.5 },
+            'p4': { p1:19.0, p2:18.5, p3:9.8, p4:0, p5:9.5, p6:9.2, p7:8.8, p8:8.2, p9:7.8 },
+            'p5': { p1:19.5, p2:19.0, p3:10.0, p4:9.8, p5:0, p6:9.5, p7:9.0, p8:8.5, p9:8.0 },
+            'p6': { p1:20.0, p2:19.5, p3:10.2, p4:10.0, p5:9.8, p6:0, p7:9.2, p8:8.8, p9:8.2 },
+            'p7': { p1:20.5, p2:20.0, p3:10.5, p4:10.2, p5:10.0, p6:9.8, p7:0, p8:9.0, p9:8.5 },
+            'p8': { p1:21.0, p2:20.5, p3:10.8, p4:10.5, p5:10.2, p6:10.0, p7:9.5, p8:0, p9:8.8 },
+            'p9': { p1:21.5, p2:21.0, p3:11.0, p4:10.8, p5:10.5, p6:10.2, p7:9.8, p8:9.5, p9:0 }
+        };
+        const RP_MATRIX_FT3 = {
+            'p1': { p1:0, p2:4.5, p3:3.5, p4:3.0, p5:2.8, p6:2.5, p7:2.2, p8:2.0, p9:1.8 }, 
+            'p2': { p1:24.0, p2:0, p3:10.5, p4:9.5, p5:8.5, p6:8.0, p7:7.5, p8:7.0, p9:6.5 }, 
+            'p3': { p1:22.0, p2:11.5, p3:0, p4:9.5, p5:9.0, p6:8.5, p7:8.0, p8:7.5, p9:7.0 },
+            'p4': { p1:22.5, p2:12.5, p3:10.5, p4:0, p5:9.5, p6:9.0, p7:8.5, p8:8.0, p9:7.5 },
+            'p5': { p1:23.0, p2:13.5, p3:11.0, p4:10.0, p5:0, p6:9.5, p7:9.0, p8:8.5, p9:8.0 },
+            'p6': { p1:23.5, p2:14.0, p3:11.5, p4:10.5, p5:10.0, p6:0, p7:9.5, p8:9.0, p9:8.5 },
+            'p7': { p1:24.0, p2:14.5, p3:12.0, p4:11.0, p5:10.5, p6:10.0, p7:0, p8:9.5, p9:9.0 },
+            'p8': { p1:24.5, p2:15.0, p3:12.5, p4:11.5, p5:11.0, p6:10.5, p7:10.0, p8:0, p9:9.5 },
+            'p9': { p1:25.0, p2:15.5, p3:13.0, p4:12.0, p5:11.5, p6:11.0, p7:10.5, p8:10.0, p9:0 }
+        };
+
+        const RP_MATRIX_FT4 = {
+            'p1': { p1:0, p2:6.0, p3:5.0, p4:4.5, p5:4.0, p6:3.5, p7:3.0, p8:2.5, p9:2.0 },
+            'p2': { p1:22.5, p2:0, p3:11.0, p4:10.5, p5:10.0, p6:9.5, p7:9.0, p8:8.0, p9:7.5 },
+            'p3': { p1:22.0, p2:10.5, p3:0, p4:10.0, p5:9.5, p6:9.0, p7:8.5, p8:7.5, p9:7.0 },
+            'p4': { p1:21.5, p2:10.0, p3:9.5, p4:0, p5:9.0, p6:8.5, p7:8.0, p8:7.0, p9:6.5 },
+            'p5': { p1:21.0, p2:9.5, p3:9.0, p4:8.5, p5:0, p6:8.0, p7:7.5, p8:6.5, p9:6.0 },
+            'p6': { p1:20.5, p2:9.0, p3:8.5, p4:8.0, p5:7.5, p6:0, p7:7.0, p8:6.0, p9:5.5 },
+            'p7': { p1:20.0, p2:8.5, p3:8.0, p4:7.5, p5:7.0, p6:6.5, p7:0, p8:5.5, p9:5.0 },
+            'p8': { p1:19.5, p2:8.0, p3:7.5, p4:7.0, p5:6.5, p6:6.0, p7:5.5, p8:0, p9:4.5 },
+            'p9': { p1:19.0, p2:7.5, p3:7.0, p4:6.5, p5:6.0, p6:5.5, p7:5.0, p8:4.5, p9:0 }
+        };
+
+        const RP_MATRIX_FT5 = {
+            'p1': { p1:0, p2:12.5, p3:10.0, p4:7.5, p5:6.0, p6:5.5, p7:4.0, p8:3.5, p9:2.5 },
+            'p2': { p1:20.0, p2:0, p3:10.0, p4:9.0, p5:8.5, p6:8.0, p7:7.5, p8:6.5, p9:6.0 },
+            'p3': { p1:21.0, p2:11.0, p3:0, p4:10.0, p5:9.5, p6:9.0, p7:8.5, p8:7.5, p9:7.0 },
+            'p4': { p1:22.0, p2:12.0, p3:10.0, p4:0, p5:9.5, p6:9.0, p7:8.5, p8:7.5, p9:7.0 },
+            'p5': { p1:22.5, p2:12.5, p3:10.5, p4:9.5, p5:0, p6:9.0, p7:8.5, p8:7.5, p9:7.0 },
+            'p6': { p1:23.0, p2:13.0, p3:11.0, p4:10.0, p5:9.5, p6:0, p7:8.5, p8:7.5, p9:7.0 },
+            'p7': { p1:23.5, p2:13.5, p3:11.5, p4:10.5, p5:10.0, p6:9.5, p7:0, p8:8.0, p9:7.5 },
+            'p8': { p1:24.0, p2:14.0, p3:12.0, p4:11.0, p5:10.5, p6:10.0, p7:9.5, p8:0, p9:8.0 },
+            'p9': { p1:24.5, p2:14.5, p3:12.5, p4:11.5, p5:11.0, p6:10.5, p7:10.0, p8:9.5, p9:0 }
+        };
+
+        const FT_CONTEXTS = {
+            FT5: { title: "FT 5: A Falibilidade do Toy Game", type: "Abstração de ICM & Especulação", stacks: PLAYERS_FT5, matrix: RP_MATRIX_FT5 },
+            FT4: { title: "FT 4: O Teto Absoluto", type: "A Ilusão do Range", stacks: PLAYERS_FT4, matrix: RP_MATRIX_FT4 },
+            FT1: { title: "FT 1: Dinâmica de Escada (Referência)", type: "Modelo Estrutural", stacks: PLAYERS_FT1, matrix: RP_MATRIX_FT1 },
+            FT2: { title: "FT 2: Evitação de Ruína", type: "Colisão de Líderes", stacks: PLAYERS_FT2, matrix: RP_MATRIX_FT2 },
+            FT3: { title: "FT 3: Dominância", type: "Vantagem Vertical", stacks: PLAYERS_FT3, matrix: RP_MATRIX_FT3 }
+        };
+
+        let DATABASE = [
+            {
+                id: "abstracao",
+                title: "A Falibilidade do Toy Game (A Abstração do RP)",
+                env: "Crítica ao Modelo ICM Pós-Flop",
+                icon: "🧠",
+                verdict: { label: "Fricção Exponencial", class: "text-amber-400 border-amber-500/30 bg-amber-900/30" },
+                ip: { pos: "Agressor (Máquina)", stack: "60 bb", rp: 12.5, morph: "Défice de Agressão Humana" },
+                oop: { pos: "Defensor (Humano)", stack: "35 bb", rp: 20.0, morph: "Expansão Passiva (Especulação)" },
+                theory: `
+                    <h3 class="text-white font-bold text-3xl mb-6 tracking-tight drop-shadow-md">A Inércia Humana e a Diluição do Risk Premium</h3>
+                    <p class="text-slate-300 leading-relaxed mb-5 text-[15px]">O modelo de ICM Pós-Flop puro — e a forma como os solvers o tratam — é, na sua essência, uma abstração. Ele opera como um "toy game", assumindo condições laboratoriais que frequentemente falham na mesa real. O solver GTO baseia-se numa premissa robótica inabalável: a de que o Agressor, protegido pela sua Vantagem de Risco, possuirá a frieza letal para polarizar o seu range e disparar agressões avassaladoras nas três <em>streets</em>, culminando invariavelmente num *shove* no river com a exata frequência exigida pelo Alpha.</p>
+                    <p class="text-slate-300 leading-relaxed mb-5 text-[15px]">Contudo, o póquer é jogado por humanos. Os humanos são entidades condicionadas por vieses emocionais e aversão à perda, tornando-os incapazes de reproduzir esta meticulosidade teórica de forma sustentada. A avassaladora maioria dos jogadores falha em executar a agressão perfeita, apresentando um grave <strong>défice de agressão no Turn e no River</strong>. Além disso, o Risk Premium não é estático. O RP extraído nas tabelas (ex: 20%) é calculado para uma colisão integral da stack no Pré-Flop. À medida que a mão avança (Flop, Turn), o pote cresce, a stack efetiva diminui e o SPR (Stack-to-Pot Ratio) cai. O dinheiro no centro torna-se *sunk cost*, e o RP residual dilui-se de forma exponencial. A pressão pura do ICM atenua-se, fazendo com que as <em>pot odds</em> recuperem parcialmente o seu protagonismo, embora o Teto Absoluto da eliminação continue a pairar no final da linha.</p>
+                    <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700/50 shadow-inner mt-6">
+                        <strong class="text-white text-lg block mb-3 flex items-center gap-2"><i class="fa-solid fa-microscope text-indigo-400"></i> A Equação da Fricção Exponencial</strong>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-3">Neste simulador, substituímos a regressão linear ingênua por um <strong>Modelo de Decaimento Exponencial</strong>. No póquer real, o MDF não decresce numa linha reta suave; ele sofre um colapso logarítmico sob o peso do RP (o Teto Absoluto). A fórmula <code>e^(-k * RP)</code> reflete que uma pressão letal de 20% não deduz apenas alguns pontos do MDF, mas sim esmaga a retenção da defesa, aproximando-a assintoticamente de uma faixa puramente restrita aos <em>nuts</em>.</p>
+                        <p class="text-slate-400 text-sm leading-relaxed border-t border-slate-700/50 pt-3 mt-3"><strong>A Resposta Tática:</strong> Se sabemos que o Agressor falha na sua obrigação matemática de pressionar as 3 <em>streets</em>, a resposta defensiva GTO não prescreve a fuga prematura, mas sim uma <strong>Expansão Passiva</strong>. O Defensor alarga os seus <em>flat calls</em> pré-flop e no flop (onde o risco/investimento ainda é diminuto), porque a inércia humana do Agressor garante-lhe *showdowns* baratos ou potes abandonados no Turn, gerando enormes Implied Odds quando acerta as suas equidades.</p>
+                    </div>
+                `,
+                exploit: `
+                    <h3 class="text-amber-400 font-bold text-2xl mb-6 tracking-tight">Expansão Passiva: Capitalizando o Medo Inerente</h3>
+                    <p class="text-slate-300 leading-relaxed mb-6 text-[15px]">O modelo ICM puro é como a democracia: falho, repleto de imperfeições, mas o melhor sistema que temos para ordenar o caos da mesa final. O seu <em>edge</em> provém de reconhecer onde a abstração falha e o humano tropeça.</p>
+                    <div class="bg-amber-900/20 p-6 rounded-2xl border border-amber-500/30 shadow-inner flex gap-5 mt-4">
+                        <div class="text-amber-400 text-3xl mt-1"><i class="fa-solid fa-expand-arrows-alt"></i></div>
+                        <div>
+                            <strong class="text-white text-lg block mb-3">Absorção de Equidade e Pot Control (Node-Locking Mental)</strong>
+                            <p class="text-[14px] text-slate-300 leading-relaxed mb-3">Sabendo que o adversário não terá a resiliência psicológica para manter o Teto de Agressão (Alpha) nas *streets* decisivas, a sua resposta como Defensor não é fugir. A sua resposta é <strong>especular barato</strong>. Você expande a sua grelha de <em>calls</em> marginais no início da mão, investindo poucas fichas. O objetivo é controlar o pote e absorver a equidade que ele cede graciosamente ao "travar" a agressão no Turn.</p>
+                            <p class="text-[14px] text-slate-400 leading-relaxed italic">Advertência Cirúrgica: Esta expansão passiva não é licença para re-agressão leviana (check-raises em bluff total). A premissa é estritamente realizar a equidade das suas mãos de forma barata, confiando que a pressão letal máxima ditada pelo ICM nunca se materializará de forma perfeita.</p>
+                        </div>
+                    </div>
+                `,
+                quiz: {
+                    q: "Se reconhecermos, através da perspetiva de que o ICM é uma abstração (um toy game), que um Agressor humano apresenta invariavelmente um défice de agressão no Turn e no River devido à pressão financeira, qual é o ajuste matemático (Exploit) correto para o Defensor?",
+                    opts: [
+                        { isCorrect: true, text: "O Defensor adota uma Expansão Passiva. Ele aumenta massivamente as suas frequências de call pré-flop e no flop, investindo pouco para especular. Ao saber que não enfrentará o 'Teto Absoluto' do shove letal no River com a frequência exigida pelo GTO, ele absorve a equidade de forma controlada." },
+                        { isCorrect: false, text: "O Defensor deve ignorar por completo a diluição do SPR e assumir o Risk Premium original de 20% em todas as streets. Se o Agressor não blefa, significa que o range dele é feito exclusivamente de <em>Nuts</em>, validando um fold compulsivo." },
+                        { isCorrect: false, text: "A falha de agressividade do adversário exige que o Defensor converta o seu range num polo puramente agressivo. Ele deve disparar check-raises massivos no Flop para punir de imediato o défice emocional do Chip Leader." }
+                    ],
+                    exp: "A Teoria da Exploração em Ambiente Real (Node-Locking) dita que se o Agressor trava a sua pressão, o Defensor é matematicamente incentivado a pagar mais leve (especular barato) nas <em>streets</em> iniciais, pois a ameaça final do RP não se concretizará. É a exploração da fricção emocional."
+                }
+            },
+            {
+                id: "perspetiva",
+                title: "A Batalha pela Perspetiva (Teto Negativo)",
+                env: "Dominância Absoluta Inquebrável",
+                icon: "🔭",
+                verdict: { label: "Vantagem de Risco Extrema", class: "text-sky-400 border-sky-500/30 bg-sky-900/30" },
+                ip: { pos: "CL Colossal", stack: "90 bb", rp: 2.0, morph: "Agressão Implacável (> ChipEV)" },
+                oop: { pos: "Mid-Stack", stack: "20 bb", rp: 22.0, morph: "Especulação Assimétrica" },
+                theory: `
+                    <h3 class="text-white font-bold text-3xl mb-6 tracking-tight drop-shadow-md">A Ilusão Monetária vs Perspetiva Matemática</h3>
+                    <p class="text-slate-300 leading-relaxed mb-5 text-[15px]">A comparação direta entre ICM e ChipEV encerra um erro categórico: são modelos de utilidade fundamentalmente distintos. A presunção de que um Chip Leader (CL) massivo, ao sofrer pouca pressão de eliminação, reverte passivamente para uma estratégia "quase ChipEV" é uma falácia comum.</p>
+                    <p class="text-slate-300 leading-relaxed mb-5 text-[15px]">Na realidade, devido à colossal distância entre os Risk Premiums (a Vantagem de Risco), o ICM rompe o que chamamos de <strong>"teto negativo" do ChipEV</strong>. O CL torna-se matematicamente <em>muito mais agressivo</em> do que seria num Cash Game. O dogma central do ICM postula que "as fichas perdidas impactam mais do que as fichas conquistadas". Embora incontestável na base, esta premissa torna-se enganadora quando aplicada a um CL de proporções colossais.</p>
+                    <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700/50 shadow-inner mt-6">
+                        <strong class="text-white text-lg block mb-3 flex items-center gap-2"><i class="fa-solid fa-microscope text-indigo-400"></i> A Queda do Risk Premium do CL</strong>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-3">O CL não luta pelo valor monetário isolado das fichas do pote; ele luta pela sua <strong>Perspetiva Matemática</strong> de alcançar o 1º e 2º lugares. Avalie o cenário: o CL tem 90bbs e enfrenta um oponente de 20bbs. Se o CL for *all-in* e perder, a sua stack decai para 70bbs. Num ecossistema onde o segundo classificado detém 30bbs, o CL perdeu fichas, <strong>mas perdeu pouquíssima Perspetiva</strong>. Como a sua Perspetiva permanece virtualmente intacta, o seu Risk Premium absoluto afunda para valores irrisórios (ex: 2%). Em contrapartida, a perspetiva do oponente de 20bbs seria aniquilada (RP > 20%). Assim, o solver não joga "solto como em ChipEV"; ele joga como um predador hiper-otimizado, excedendo os limites de bluff do modelo linear para capitalizar sobre o range forçosamente asfixiado do vilão.</p>
+                        <p class="text-slate-400 text-sm leading-relaxed border-t border-slate-700/50 pt-3 mt-3"><strong>A Especulação do Mid-Stack:</strong> Sob a perspetiva do Defensor (Mid-Stack), a sua abstenção nas <em>streets</em> finais não é um 'overfold' cognitivo, é uma abstenção estrutural correta ditada pelo teto do RP. A sua entrada no pote (pré-flop ou flop) baseia-se em <strong>Especulação Assimétrica</strong>. Ele investe o mínimo ciente da desvantagem posicional e de range, sabendo que o CL é obrigado a apostar pesadamente nas streets seguintes. Não se trata de pot odds imediatas, mas de <em>Implied Odds de ICM</em> ditadas pela inércia agressiva do oponente: se o Mid-Stack acerta o topo absoluto da <em>board</em> (os *nuts*), a perspetiva matemática dele explode, pois a obrigatoriedade do CL em manter a pressão fará com que o payoff seja gigantesco.</p>
+                    </div>
+                `,
+                exploit: `
+                    <h3 class="text-sky-400 font-bold text-2xl mb-6 tracking-tight">Armamento da Vantagem de Risco (Alpha Extremo)</h3>
+                    <p class="text-slate-300 leading-relaxed mb-6 text-[15px]">Tendo a consciência plena de que o risco de ruína pessoal é inexistente e de que a sua Perspetiva Matemática de liderança não é ameaçada por um desfecho negativo neste confronto específico, a adaptação GTO transita para um ataque ininterrupto que quebra as regras do Cash Game.</p>
+                    <div class="bg-sky-900/20 p-6 rounded-2xl border border-sky-500/30 shadow-inner flex gap-5 mt-4">
+                        <div class="text-sky-400 text-3xl mt-1"><i class="fa-solid fa-bolt"></i></div>
+                        <div>
+                            <strong class="text-white text-lg block mb-3">Ultrapassar a Frequência Base (Overbluff Estrutural)</strong>
+                            <p class="text-[14px] text-slate-300 leading-relaxed mb-3">O CL não está a tentar equilibrar um range de bluff de 33% (o limite cEV para uma aposta pot-size). A Vantagem de Risco autoriza-o a disparar a sua agressão para patamares de 50% ou 60% (conforme visível na barra Alpha acima), uma frequência que seria punida de forma letal num vácuo matemático, mas que no ICM imprime EV puro. O adversário não pode responder com a cadência necessária porque a 'distância entre RPs' atua como um multiplicador inquebrável de fold equity.</p>
+                            <p class="text-[14px] text-slate-400 leading-relaxed italic">Atenção Crítica: O Defensor não comete um erro ao foldar muito; ele abstém-se perante o Teto Absoluto do RP. A sua defesa inicial é especulativa. O CL capitaliza sobre esta submissão estrutural até que o vilão atinja os *nuts* absolutos.</p>
+                        </div>
+                    </div>
+                `,
+                quiz: {
+                    q: "No contexto da 'Batalha pela Perspetiva', como devemos interpretar as altas taxas de fold de um Mid-Stack face às agressões contínuas (3-barrels) de um CL colossal?",
+                    opts: [
+                        { isCorrect: true, text: "Não se trata de um 'overfold' (erro tático), mas sim de uma Abstenção GTO (Fold Estrutural). O Mid-Stack defende nas streets iniciais por Especulação Assimétrica (Implied Odds), investindo pouco. Quando a pressão final surge, o seu Teto de RP impede-o de pagar sem os *nuts*, forçando-o a um fold correto que o CL, em simultâneo, é forçado a explorar com overbluffs." },
+                        { isCorrect: false, text: "O Mid-Stack comete um erro cognitivo gravíssimo (overfold). Se ele sabe que o CL está a blefar com frequências acima do Alpha, ele é matematicamente obrigado a alargar o seu range de bluffcatchers no River para punir o CL." },
+                        { isCorrect: false, text: "O fold massivo deve-se ao facto de o CL estar a jogar de forma idêntica ao ChipEV. Como as pot odds são normais, o Mid-Stack folda porque o seu range pós-flop é estruturalmente inferior ao do Agressor." }
+                    ],
+                    exp: "A genialidade da Teoria dos Jogos no ICM é a simetria de intenções. O CL é obrigado a agredir massivamente porque a sua Perspetiva não diminui. O Mid-Stack é obrigado a foldar mãos médias (Teto de RP) porque a sua Perspetiva desaparece se errar. A defesa preliminar do Mid-Stack é apenas especulação barata para capturar a agressão cega do CL quando acerta o topo da board."
+                }
+            },
+            {
+                id: "paradoxo",
+                title: "A Assimetria do Valor",
+                env: "Análise Estrutural",
+                icon: "⚖️",
+                verdict: { label: "Fricção Utilitária", class: "text-rose-400 border-rose-500/30 bg-rose-900/30" },
+                ip: { pos: "Agressor Médio", stack: "40.2 bb", rp: 20.5, morph: "Frequência Contraída" },
+                oop: { pos: "Defensor Maior", stack: "54.4 bb", rp: 15.2, morph: "Defesa Alargada" },
+                theory: `
+                    <h3 class="text-white font-bold text-2xl mb-4 tracking-tight drop-shadow-md">A Disparidade no Valuation</h3>
+                    <p class="text-slate-300 leading-relaxed mb-5 text-[15px]">A intuição formulada na fase preliminar de torneios ou em modelos estritos de ChipEV induz a perspetiva de que o Agressor, munido de uma stack confortável de 40bb, detém a capacidade de oprimir a mesa livremente. O modelo HRC refuta este preceito, expondo uma discrepância analítica profunda: o Risk Premium suportado pelo Agressor continua a ser severamente superior ao do Defensor.</p>
+                    <p class="text-slate-300 leading-relaxed mb-6 text-[15px]">A matemática adapta-se através do decaimento exponencial, restringindo o Teto de Agressão (Alpha), estabelecendo uma barreira lógica contra a eliminação.</p>
+                    <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700/50 shadow-inner mt-6">
+                        <strong class="text-white text-lg block mb-3 flex items-center gap-2"><i class="fa-solid fa-chart-area text-indigo-400"></i> Síntese Analítica</strong>
+                        <p class="text-slate-400 text-sm leading-relaxed"><strong>O Fim da Perspetiva:</strong> A verdadeira assimetria (20.5% vs 15.2%) reside na totalidade do impacto. Se o Agressor errar e perder o seu all-in, o seu EV cai para zero absoluto. Ele perde a sobrevivência e todo o laddering dos micro-stacks. Por outro lado, o Defensor (BB com 54bb), se pagar os 40bb e perder, cai para 14bb. Ele destrói a sua liderança e a sua <em>Perspetiva de 1º lugar</em>, passando a lutar na lama com os shorts. Logo, o RP dele também é colossal (15.2%), provando que uma distância controlada de 5% no RP já dita uma fricção brutal no comportamento GTO.</p>
+                    </div>
+                `,
+                exploit: `
+                    <h3 class="text-indigo-400 font-bold text-2xl mb-6 tracking-tight">O Ajuste Conservador Otimizado</h3>
+                    <p class="text-slate-300 leading-relaxed mb-6 text-[15px]">Verificando a disparidade de risco inerente, a resposta estratégica aconselhável não repousa numa demonstração infundada de agressão contra quem detém a capacidade de o arruinar na mão. A contenção passa a reger o comportamento GTO.</p>
+                    <div class="bg-indigo-900/20 p-6 rounded-2xl border border-indigo-500/30 shadow-inner flex gap-5 mt-4">
+                        <div class="text-indigo-400 text-3xl mt-1"><i class="fa-solid fa-bullseye"></i></div>
+                        <div>
+                            <strong class="text-white text-lg block mb-3">Supressão do Volume Especulativo</strong>
+                            <p class="text-[14px] text-slate-300 leading-relaxed mb-3">O Agressor (BTN) deverá suspender os overbluffs e continuation bets abrangentes. O foco remete para a contenção do Stack-to-Pot Ratio (SPR) e para uma migração do range assente na obtenção de valor estrito. A utilidade marginal de ganhar as blinds não compensa o Risco letal de perder 40bb.</p>
+                        </div>
+                    </div>
+                `,
+                quiz: {
+                    q: "Face a um cenário onde a stack agressora de 40bb defronta o Chip Leader de 54bb, qual é o impacto do confronto no Risk Premium de ambos?",
+                    opts: [
+                        { isCorrect: true, text: "O Agressor enfrenta um risco letal absoluto (RP ~20.5%), pois perder significa a morte e o fim do laddering. O Defensor também sofre um RP massivo (~15.2%), porque perder 40bb destrói a sua Perspetiva de liderança, reduzindo-o a 14bb e atirando-o para a Guerra na Lama. A assimetria existe para limitar a agressão do BTN." },
+                        { isCorrect: false, text: "O solver anula o Risk Premium do Defensor porque ele não morre na mão. Ele jogará ChipEV puro pagando com bluffcatchers fracos." },
+                        { isCorrect: false, text: "O Risk Premium do Agressor é mitigado porque ele possui vantagem posicional. A pressão recai unicamente sobre o BB que será forçado a um overfold de 80% do range." }
+                    ],
+                    exp: "No ICM, a perda de Perspetiva (passar de 1º para short stack) também dita um Risk Premium altíssimo. A diferença entre os RPs não é um abismo matemático, mas uma margem técnica o suficiente para estrangular a frequência de blefe do Agressor."
+                }
+            },
+            {
+                id: "pacto",
+                title: "O Pacto Silencioso",
+                env: "Colisão Inter-Líderes",
+                icon: "🤝",
+                verdict: { label: "Evitação de Ruína", class: "text-indigo-400 border-indigo-500/30 bg-indigo-900/30" },
+                ip: { pos: "Vice CL", stack: "65 bb", rp: 24.5, morph: "Expansão de Call Especulativo" },
+                oop: { pos: "CL", stack: "70 bb", rp: 23.5, morph: "Retenção Passiva" },
+                theory: `
+                    <h3 class="text-white font-bold text-3xl mb-6 tracking-tight drop-shadow-md">A Dinâmica de Preservação Contínua</h3>
+                    <p class="text-slate-300 leading-relaxed mb-5 text-[15px]">Observando um ambiente com uma concentração financeira superior em torno de duas entidades dominantes na tabela, a perspetiva de um embate pre-flop total representa a configuração matemática com menor retenção de EV. As transferências financeiras provenientes das perdas diretas serão injetadas passivamente nos perfis mais fracos da arena.</p>
+                    <p class="text-slate-300 leading-relaxed mb-6 text-[15px]">O modelo ótimo reage anulando a frequência de polarização agressiva de forma exponencial. Produz-se um "Pacto Silencioso", traduzindo-se numa reconfiguração da resposta tática na qual o recurso à 3-bet se encontra quase erradicado em detrimento de uma expansão imensa dos parâmetros de call passivo, mesmo quando as propriedades das mãos detêm uma avaliação elevadíssima na grelha tradicional.</p>
+                    <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700/50 shadow-inner mt-6">
+                        <strong class="text-white text-lg block mb-3 flex items-center gap-2"><i class="fa-solid fa-chart-area text-indigo-400"></i> Síntese Analítica</strong>
+                        <p class="text-slate-400 text-sm leading-relaxed">A proteção contra a variância impõe que a definição do vencedor de potes marginais transite integralmente para os eixos do jogo pós-flop, acautelando que a introdução de fichas ocorra numa perspetiva de obtenção de pot odds, minimizando as probabilidades de ocorrência de situações onde todo o capital incorre num grau de incerteza global.</p>
+                    </div>
+                `,
+                exploit: `
+                    <h3 class="text-indigo-400 font-bold text-2xl mb-6 tracking-tight">O Castigo pelo Desvio Estrutural</h3>
+                    <p class="text-slate-300 leading-relaxed mb-6 text-[15px]">As dinâmicas recomendam contenção. Se uma das vertentes decide desrespeitar os princípios e adotar posturas de expansão da agressividade linear, esta atitude subverte as regras de preservação ditadas no enquadramento.</p>
+                    <div class="bg-indigo-900/20 p-6 rounded-2xl border border-indigo-500/30 shadow-inner flex gap-5 mt-4">
+                        <div class="text-indigo-400 text-3xl mt-1"><i class="fa-solid fa-shield-cat"></i></div>
+                        <div>
+                            <strong class="text-white text-lg block mb-3">Negação de Continuidade Barata</strong>
+                            <p class="text-[14px] text-slate-300 leading-relaxed mb-3">Na verificação de desvios excessivos no polo adverso, a neutralização processa-se extinguindo as margens de call e exigindo a resposta na extremidade do polo agressivo. Quando a confrontação é assumida, deverá restringir-se a uma componente tão fechada e sólida do range que retira a totalidade da equidade marginal gerada nas manobras alheias.</p>
+                        </div>
+                    </div>
+                `,
+                quiz: {
+                    q: "Na eventualidade de um encontro isolado entre os perfis detentores das maiores reservas de fichas, de que modo o GTO instrui a alteração nos parâmetros do confronto pré-flop?",
+                    opts: [
+                        { isCorrect: true, text: "Ocorre a supressão severa das incidências de 3-bet polarizada, alargando massivamente as ocorrências de call puramente especulativo para garantir contenção nos rácios de SPR." },
+                        { isCorrect: false, text: "Os jogadores assumem posturas de agressividade imediata para submeter o oponente principal na prossecução da dominância hegemónica na mesa final." },
+                        { isCorrect: false, text: "Os modelos impõem um abandono sistemático da mão, optando pelo fold cego até os adversários com menos fichas cederem as suas blinds repetidamente." }
+                    ],
+                    exp: "A colisão irrefletida gera o pior retorno monetário global perante a arquitetura de prêmios. A transferência da decisão para *streets* mais avançadas sem envolver o capital de risco global minimiza o perigo fatal de aniquilação prematura."
+                }
+            },
+            {
+                id: "batata",
+                title: "A Transferência do Risco",
+                env: "Dinâmica do Open-Shove",
+                icon: "🔥",
+                verdict: { label: "Fardo de Indiferença", class: "text-amber-400 border-amber-500/30 bg-amber-900/30" },
+                ip: { pos: "Instigador do All-in", stack: "25 bb", rp: 15.0, morph: "Polar Máximo e Letal" },
+                oop: { pos: "Recetor do Call", stack: "20 bb", rp: 19.5, morph: "Estreitamento de Defesa" },
+                theory: `
+                    <h3 class="text-white font-bold text-3xl mb-6 tracking-tight drop-shadow-md">A Interceção da Re-Agressão</h3>
+                    <p class="text-slate-300 leading-relaxed mb-5 text-[15px]">Nas frentes da Mesa Final, a atitude de iniciar o embate alocando, num único movimento, a totalidade do património disponível no meio, acarreta dinâmicas e implicações matemáticas profundas na geometria reacionária das restantes posições. É aquilo a que designamos de forma ilustrativa por transferência do "Efeito Batata Quente".</p>
+                    <p class="text-slate-300 leading-relaxed mb-6 text-[15px]">A fusão do Risk Premium com a imponente Fold Equity gerada neutraliza a principal defesa natural inerente a stacks médias. Estando impossibilitado de exercer a re-agressão, o Defensor vê o seu raio de manobra estrangulado, caindo o Minimum Defense Frequency (MDF) de forma exponencial. O solver impõe táticas que culminam frequentemente na aceitação sistémica da abstenção (fold estrutural).</p>
+                    <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700/50 shadow-inner mt-6">
+                        <strong class="text-white text-lg block mb-3 flex items-center gap-2"><i class="fa-solid fa-chart-area text-indigo-400"></i> Síntese Analítica</strong>
+                        <p class="text-slate-400 text-sm leading-relaxed">A entrega da deliberação terminal sob a imposição da totalidade de um Risk Premium restritivo obriga o Defensor a limitar a continuidade estritamente aos escalões mais puros do seu range de valor, anulando de igual modo a eficácia e a viabilidade dos chamados <em>bluffcatchers</em> fracos e de complexidade marginal.</p>
+                    </div>
+                `,
+                exploit: `
+                    <h3 class="text-indigo-400 font-bold text-2xl mb-6 tracking-tight">O Rendimento no Bloqueio Adverso</h3>
+                    <p class="text-slate-300 leading-relaxed mb-6 text-[15px]">Verificada a condicionante estrutural do bloqueio emocional ou matemático nas posições com capacidade reativa, o modelo de atuação favorece ativamente a propagação controlada do risco contínuo nas faixas apropriadas.</p>
+                    <div class="bg-indigo-900/20 p-6 rounded-2xl border border-indigo-500/30 shadow-inner flex gap-5 mt-4">
+                        <div class="text-indigo-400 text-3xl mt-1"><i class="fa-solid fa-bullseye"></i></div>
+                        <div>
+                            <strong class="text-white text-lg block mb-3">Ampliação do Espetro de Shove</strong>
+                            <p class="text-[14px] text-slate-300 leading-relaxed mb-3">Especialmente contra instâncias nas quais se detectem hesitações oriundas das restrições de bolhas de premiação ou das dinâmicas impostas de laddering, a arquitetura analítica requer o aumento sustentado do teto de agressão, explorando de forma inquestionável as falhas nas reações ideais e capitalizando a omissão de envolvimento adversária.</p>
+                        </div>
+                    </div>
+                `,
+                quiz: {
+                    q: "Na análise de uma jogada do tipo All-in inicial e direto no âmbito de HRC, que fundamento restritivo é implementado em consequência desta linha de ação, induzindo perdas na margem GTO defensiva adversária?",
+                    opts: [
+                        { isCorrect: true, text: "Ocorre a remoção absoluta da faculdade para efetuar respostas baseadas na re-agressão, sobrecarregando integralmente o defensor com o peso letal da Fold Equity somada ao seu próprio Risk Premium." },
+                        { isCorrect: false, text: "A ação imposta inviabiliza que as *pot odds* assumam qualquer impacto ponderado nos números teóricos exigidos para a sustentabilidade e avaliação das <em>calls</em>." },
+                        { isCorrect: false, text: "Provoca a inação geral devido ao aspeto intrínseco aos torneios em que as *micro-stacks* são forçadas a apostar em primeiro lugar como norma estrutural predefinida nas matrizes e *solvers*." }
+                    ],
+                    exp: "A transferência total do peso volitivo de uma aposta para quem detém as obrigações exclusivas de aceitar ou rejeitar elimina as *nuances* puristas de proteção por re-aumento, resultando de forma invariavelmente linear na quebra aguda da capacidade reativa aceitável no padrão ChipEV."
+                }
+            },
+            {
+                id: "agonia",
+                title: "O Colapso do Bluffcatcher",
+                env: "Fim da Resiliência (Condensado vs Polar)",
+                icon: "💔",
+                verdict: { label: "MDF Desfeito", class: "text-sky-400 border-sky-500/30 bg-sky-900/30" },
+                ip: { pos: "Agressor (Polar)", stack: "80 bb", rp: 4.5, morph: "Frequência Extremada" },
+                oop: { pos: "Defensor (Condensado)", stack: "30 bb", rp: 22.0, morph: "Retenção Especulativa (Fold Estrutural)" },
+                theory: `
+                    <h3 class="text-white font-bold text-3xl mb-6 tracking-tight drop-shadow-md">A Interceção da Ilusão Defensiva</h3>
+                    <p class="text-slate-300 leading-relaxed mb-5 text-[15px]">O parâmetro teórico que decreta a validade e a pertinência de um <em>Minimum Defense Frequency</em> é irrefutavelmente condicionado quando em exposição perante o agravante inerente à dinâmica imposta no final de torneios avançados. Em contexto neutro, uma aposta proporcional exige a contenção e a aceitação na baliza de percentagens na casa da metade.</p>
+                    <p class="text-slate-300 leading-relaxed mb-6 text-[15px]">Confrontado com uma polarização extremada operada com um RP significativamente minoritário, o bloco em estado defensivo, confinado nas delimitações rigorosas de um espetro avaliado como condensado (onde não prevalecem *nuts* irrefutáveis), absorve a punição matemática e cede exponencialmente. A equidade não apresenta retenção na medida requerida pela proteção de sobrevivência. Na ótica analítica, o resultado direto assenta na implosão do limiar exigido com a indução irrefreável ao fold estrutural (abstenção GTO) e na negação da aceitação marginal na via da especulação pura.</p>
+                    <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700/50 shadow-inner mt-6">
+                        <strong class="text-white text-lg block mb-3 flex items-center gap-2"><i class="fa-solid fa-chart-area text-indigo-400"></i> Síntese Analítica</strong>
+                        <p class="text-slate-400 text-sm leading-relaxed">A premissa da recompensa e da penalização utilitária não autoriza a justificação no <em>call</em> suportada e baseada puramente na apanha teórica de blefes com mãos medianas. A preservação do estatuto suplanta categoricamente a equidade linear de um mero pote em contenda num contexto de pressão assimétrica aguda.</p>
+                    </div>
+                `,
+                exploit: `
+                    <h3 class="text-indigo-400 font-bold text-2xl mb-6 tracking-tight">Autorização Sistémica à Continuidade da Agressão</h3>
+                    <p class="text-slate-300 leading-relaxed mb-6 text-[15px]">A validação algorítmica deste quadro não se circunscreve à constatação do colapso; ela incentiva ativamente a sua exploração.</p>
+                    <div class="bg-indigo-900/20 p-6 rounded-2xl border border-indigo-500/30 shadow-inner flex gap-5 mt-4">
+                        <div class="text-indigo-400 text-3xl mt-1"><i class="fa-solid fa-skull"></i></div>
+                        <div>
+                            <strong class="text-white text-lg block mb-3">Tática Linear de Overbluff</strong>
+                            <p class="text-[14px] text-slate-300 leading-relaxed mb-3">Reconhecendo as fragilidades e as assunções de inércia ou impossibilidade para a tomada de posições de resistência sólidas face aos encargos da eliminação contínua, o espetro de *triple barrels* levianos transforma-se num vetor imperativo de recolha de *dead money* que oprime consistentemente a capacidade do oponente intervir com viabilidade para um *showdown* sustentável e íntegro.</p>
+                        </div>
+                    </div>
+                `,
+                quiz: {
+                    q: "Na interseção tática entre um Agressor extremado sob polaridade ótima e um Defensor restrito ao perfil condensado, que motivo premente determina a erradicação do padrão de defesa teórica e do rácio MDF?",
+                    opts: [
+                        { isCorrect: true, text: "A retenção em equidade exigida perante as mãos e opções subjacentes num espetro meramente condensado não produz viabilidade compensatória de forma favorável quando sujeita às imposições exponenciais do Risk Premium, levando inegavelmente à retração preventiva (Fold Estrutural)." },
+                        { isCorrect: false, text: "As mãos constituídas na base analítica da categoria *bluffcatcher* veem o seu valor dissipado sem razões aparentes, com o GTO induzindo uma regressão que falha nas pot odds puras exigidas perante uma análise técnica correta." },
+                        { isCorrect: false, text: "Assenta no conhecimento comprovado em que a posição agressora invariavelmente assegura, no campo do longo-prazo e das *samples*, a recolha superior daquelas que são as texturas preferenciais dispostas de modo exato pela aleatoriedade estatística das odds." }
+                    ],
+                    exp: "Não subsiste relação plausível ou favorável na compensação matemática entre assumir lucros incertos associados a capturas do blefe e expor abertamente à ruína todo o património essencial num embate que, estatisticamente, inflige danos intoleráveis perante os *payouts* disponíveis no certame global."
+                }
+            },
+            {
+                id: "lama",
+                title: "Atrito de Micro-Stacks",
+                env: "Sobrevivência Pela Base",
+                icon: "⚔️",
+                verdict: { label: "Estabilidade de Laddering", class: "text-emerald-400 border-emerald-500/30 bg-emerald-900/30" },
+                ip: { pos: "Micro", stack: "12 bb", rp: 8.5, morph: "Linear Focado" },
+                oop: { pos: "Micro", stack: "10 bb", rp: 7.5, morph: "Call Controlado" },
+                theory: `
+                    <h3 class="text-white font-bold text-3xl mb-6 tracking-tight drop-shadow-md">A Rejeição Empírica da Nulidade (Risk Premium 0%)</h3>
+                    <p class="text-slate-300 leading-relaxed mb-5 text-[15px]">O ambiente comumente designado por "guerra de sobrevivência" reflete-se na existência de instâncias contíguas de stacks diminutas operando nas margens na coexistência de lideranças incontestáveis. O pensamento basilar aponta equívocamente e por falso silogismo à assunção de mecânicas ChipEV absolutas (ignorando o bust), dadas as escassas hipóteses de ascender de facto ao trono.</p>
+                    <p class="text-slate-300 leading-relaxed mb-6 text-[15px]">No entanto, o valor residual contido na abstenção e na passividade revela-se fortemente compensatório perante este modelo de competição. A permanência em contenção resulta na extração progressiva dos bónus associados de *laddering* perante o atrito e as perdas geradas de forma consistente nos lugares circundantes em risco similar ou em combates com a liderança do palco. Desta perspetiva, a inação constitui-se num preceito com remuneração associada sólida e constante, mantendo as âncoras para o envolvimento marginal seguras numa faixa balizada nas proximidades dos 8%, inviabilizando, sem contestação analítica, as tentativas doações sem escrúpulos ou os comportamentos levianos com lixo linear.</p>
+                    <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700/50 shadow-inner mt-6">
+                        <strong class="text-white text-lg block mb-3 flex items-center gap-2"><i class="fa-solid fa-chart-area text-indigo-400"></i> Síntese Analítica</strong>
+                        <p class="text-slate-400 text-sm leading-relaxed">Assumir riscos nesta instância implica a obrigação matemática estrita de que os possíveis ganhos angariados no embate direto superem com margem clara os rendimentos assegurados passivamente pelas eventuais purgas das posições laterais fragilizadas.</p>
+                    </div>
+                `,
+                exploit: `
+                    <h3 class="text-indigo-400 font-bold text-2xl mb-6 tracking-tight">O Fator de Aceleração Reacionária</h3>
+                    <p class="text-slate-300 leading-relaxed mb-6 text-[15px]">Um segmento considerável do corpo de utilizadores acusa os ditos preceitos numa interpretação de medo excessivo e de paralisia, estendendo abandonos sem mérito à espera cega da queda alheia das restantes micro-stacks, operando a estagnação completa.</p>
+                    <div class="bg-indigo-900/20 p-6 rounded-2xl border border-indigo-500/30 shadow-inner flex gap-5 mt-4">
+                        <div class="text-indigo-400 text-3xl mt-1"><i class="fa-solid fa-bullseye"></i></div>
+                        <div>
+                            <strong class="text-white text-lg block mb-3">Extorsão Focada nos Blinds</strong>
+                            <p class="text-[14px] text-slate-300 leading-relaxed mb-3">Perante um estado detetado de letargia indevida ancorada na falsa ilusão da proteção perante o ICM, é aconselhável e rigorosamente rentável invocar a aceleração da agressividade linear de base nas esferas em embate perante eles e capitalizando sem objeção o *Dead Money* flutuante.</p>
+                        </div>
+                    </div>
+                `,
+                quiz: {
+                    q: "Na análise estrutural focada entre contíguos posicionais caracterizados por um estado terminal das stacks em competição à sombra dos líderes, qual o preceito algorítmico que justifica a inibição persistente em aceder à mecânica clássica de 0% associada na raiz de ChipEV puro?",
+                    opts: [
+                        { isCorrect: true, text: "O facto incontornável de que o EV inerente à omissão voluntária no conflito acarreta ganhos compensatórios fiáveis na forma de progressão nas posições remanescentes e *laddering* em *payouts*. A aceitação de embates perigosos obriga a que os fatores intrínsecos de equidade contrariem devidamente este provento passivo na simulação teórica da mão." },
+                        { isCorrect: false, text: "O comportamento estrutural induz uma expansão oculta provocada através do aspeto impositivo em que os dominantes induzem e instigam uma taxa suplementar e inibidora na configuração de Risk Premium afetando irremediavelmente e artificialmente todas as pilhas nas cercanias sob efeito restrito das análises matemáticas." },
+                        { isCorrect: false, text: "Atendendo a que os pressupostos nas mesas não recusam as influências por contaminação de ICM, os modelos aplicados revelam de imediato e erróneamente uma falha conceptual perante a perceção estatística global dos micro-stacks operantes em simulação neutra no software." }
+                    ],
+                    exp: "Abster-se do prémio proveniente da aniquilação paralela imposta nas faixas adversárias para engajar levianamente numa perca substancial anula e subverte os ditames analíticos das perspetivas do *Expected Value*. O risco obriga, inevitavelmente, que os benefícios da jogada anulem as garantias oferecidas pela tática assente meramente no fold perante a volatilidade presente."
+                }
+            },
+            {
+                id: "ameaca",
+                title: "Dominância Estrutural",
+                env: "Contenção do Risco Extremo",
+                icon: "👑",
+                verdict: { label: "Hegemonia Protegida", class: "text-fuchsia-400 border-fuchsia-500/30 bg-fuchsia-900/30" },
+                ip: { pos: "Agressor (Líder)", stack: "90 bb", rp: 12.0, morph: "Controlo Polar Protegido" },
+                oop: { pos: "Defensor Subjugado", stack: "25 bb", rp: 21.0, morph: "Retenção Passiva Inelástica" },
+                theory: `
+                    <h3 class="text-white font-bold text-3xl mb-6 tracking-tight drop-shadow-md">A Complexidade da Prevenção da Hegemonia</h3>
+                    <p class="text-slate-300 leading-relaxed mb-5 text-[15px]">Num confronto delineado por uma desproporção absoluta, o Chip Leader que detém os inquestionáveis 90bb assume perante o campo de atuação uma aparente posição de imunidade (onde a perda provisória de algumas *blinds* não ameaça a ruína individual e terminal do seu estatuto operante e as suas esferas não incorrem numa obliteração efetiva em perigo). Convicções teóricas imaturas determinariam a prevalência de um estado desimpedido a atuar sob o fardo linear da cota mínima (ChipEV puro na base nula), exercendo total liberdade indiscriminada na aplicação desenfreada de manobras hostis e táticas impositivas com bluffs extremos sobre a *board*.</p>
+                    <p class="text-slate-300 leading-relaxed mb-6 text-[15px]">O ecossistema em avaliação nos modelos avançados e simulação integral do contexto real e futuro do torneio, utilizando preceitos focados perante os índices abrangentes expostos como o <strong>FGS (Future Game Simulation)</strong> em interseção aos mecanismos de <strong>Elasticidade Oscilante associada nos limites operantes de Bubble Factor</strong> desmantela em rigor o pressuposto empírico e inicial: Na configuração exata, a dobra e duplicação irrefletida infligida nas cotações e rendimentos atribuídos de facto ao segundo pilar na mesa transforma e capacita aquele oponente num bloco operante formidável nas proporções das 50bb+. Esta premissa tática, originada pela irreflexão na escolha analítica do Agressor dominante, introduz ou invoca a armadilha subjacente da eventual quebra letal que faria despontar uma força que intercetaria em conflitos perigosos ou limitantes para os ganhos pretendidos e as cotações futuras de alcance à coroa do cume nas frentes competitivas de lucro.</p>
+                    <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700/50 shadow-inner mt-6">
+                        <strong class="text-white text-lg block mb-3 flex items-center gap-2"><i class="fa-solid fa-chart-area text-indigo-400"></i> Síntese Analítica</strong>
+                        <p class="text-slate-400 text-sm leading-relaxed">Em termos matemáticos concisos e objetivos: O algoritmo impõe restrições ao comportamento e ao leque de manobras e *spots* levianos (a balizar o RP de contenção a limites da classe na dimensão de 12%), atuando como blindagem tática por obrigação predefinida nos comandos base para evitar a anulação em grau fatal perante as suas frentes prementes, garantindo ativamente e impossibilitando a construção irresponsável e artificial no próprio sistema competitivo adverso das ferramentas e rivais capacitados à obliteração futura na ascensão definitiva e no desígnio de sucesso da mesa.</p>
+                    </div>
+                `,
+                exploit: `
+                    <h3 class="text-indigo-400 font-bold text-2xl mb-6 tracking-tight">O Vetor Otimizado perante Inércia Adversa</h3>
+                    <p class="text-slate-300 leading-relaxed mb-6 text-[15px]">Verificando as circunstâncias de base que impõem na componente oposta uma inatividade defensiva ou imobilização letárgica, e reconhecida empiricamente e factualmente as falácias ou resistências assentes da componente ou silhueta adversa em rejeitar perentoriamente a adequação à dor letal assinalada pela barreira impeditiva das odds...</p>
+                    <div class="bg-indigo-900/20 p-6 rounded-2xl border border-indigo-500/30 shadow-inner flex gap-5 mt-4">
+                        <div class="text-indigo-400 text-3xl mt-1"><i class="fa-solid fa-bullseye"></i></div>
+                        <div>
+                            <strong class="text-white text-lg block mb-3">Supressão Extrema do Excedente Marginal e Conversão Linear no Valor de Aposta</strong>
+                            <p class="text-[14px] text-slate-300 leading-relaxed mb-3">O Agressor (CL) extirpa da sua mecânica as implementações marginais provenientes dos falsos ramos de polaridade sem *Fold Equity* ativa em resposta perante quem é imune ou insensível aos perigos estatísticos reais da *board*, substituindo os referidos movimentos base por uma ampliação consistente nas frentes onde a extração baseada no valor se executa de modo linear ao aproveitar as margens fracas opostas sem concessões.</p>
+                        </div>
+                    </div>
+                `,
+                quiz: {
+                    q: "Na análise do quadro que compreende uma imunidade direta perante a eliminação fúnebre do torneio (Agressor na posição predominante inquebrável), qual o fator rigoroso estabelecido nas métricas a impor a alocação premente num forte nível contínuo e obrigatório de restrição assinalada no índice final para penalizações na componente e equidade teórica de RP (Risk Premium)?",
+                    opts: [
+                        { isCorrect: true, text: "O princípio da defesa preventiva face a um enfraquecimento orgânico do domínio latente sobre o quadro da pauta ou tabela: Ao promover na conduta errática o engajamento ou na multiplicação desastrosa das *stacks* subjacentes da concorrência contígua e imediata, materializa-se na mesa um oponente perigosamente capacitado para inviabilizar e fustigar as hipóteses de manutenção da liderança final ditando o cancelamento a longo termo e preenchendo as quebras imensuráveis no fator relativo ao EV do *Prizepool* global estipulado e esperado e predefinido do jogador isolado no evento." },
+                        { isCorrect: false, text: "Dita estritamente pelo recurso artificial e a componente inserida de forma aleatória nas análises nas definições das configurações basais originadas ou derivadas nos algoritmos de HRC na estrita e única consideração das componentes inerentes às subtrações financeiras ou compensações nos cortes aplicados a nível primário na avaliação das tabelas impostas do mecanismo extrativo nos rácios base ou nos cálculos operacionais do fator de *Rake* em consideração no servidor." },
+                        { isCorrect: false, text: "Na necessidade premente estipulada de anular sistematicamente e obviar as contingências impostas e a propensão à formação sem dissimulação em parcerias tácitas no plano com intuitos delineados e associados pela coligação a promover estritamente nas dinâmicas a ocorrência da remoção e extração perigosa operando em simulações que eliminam jogadores fracos num quadro de alianças proibidas por *soft play* em conluio para garantir o lucro nas plataformas." }
+                    ],
+                    exp: "Com efeito analítico irrefutável na aplicação fidedigna da observação matemática nos planos globais de ICM (composto pela integridade na projeção predeterminada na avaliação exata das expectativas estatísticas de fechar triunfalmente numa pauta de 1º Lugar com os seus dividendos máximos), é demonstrável inequivocamente e de modo irrefutável que as apostas em que o CL possibilita ceder e alimentar deliberadamente a sobrevivência fortificada nas premissas contíguas num seu par concorrente representam invariavelmente uma autodestruição desastrosa ou cataclismo do seu estatuto dominante com o fim da sua própria primazia a comandar sem obstáculo nos trâmites remanescentes em curso para a recolha final lucrativa."
+                }
+            },
+            {
+                id: "chipev",
+                title: "O Vácuo Matemático",
+                env: "Equilíbrio Estável (ChipEV)",
+                icon: "⚙️",
+                verdict: { label: "MDF Perfeito", class: "text-slate-400 border-slate-500/30 bg-slate-800" },
+                ip: { pos: "Agressor Independente", stack: "100 bb", rp: 0.0, morph: "Polarização Perfeita Unexploitable" },
+                oop: { pos: "Defensor Neutro", stack: "100 bb", rp: 0.0, morph: "Defesa Base Sólida MDF" },
+                theory: `
+                    <h3 class="text-white font-bold text-3xl mb-6 tracking-tight drop-shadow-md">A Isenção de Variáveis Utilitárias e de Restrições Adjacentes</h3>
+                    <p class="text-slate-300 leading-relaxed mb-5 text-[15px]">Comparar ICM com ChipEV encerra um erro de categorização basal: não lidamos com proporções ou oscilações de um mesmo modelo, mas sim com ambientes de utilidade completamente distanciados. Em ChipEV (o "Vácuo Matemático"), aplicável no início de torneios ou em <strong>Fases de Heads-Up Final (Top 2)</strong>, a ausência de pressão de payjumps para sobreviventes paralelos estabelece uma dinâmica onde a utilidade das fichas é perfeitamente refletida no seu valor nominal estrito.</p>
+                    <p class="text-slate-300 leading-relaxed mb-6 text-[15px]">O Nash Equilibrium dita neste domínio a aplicação purista das odds. Para uma aposta na proporção integral do pote, o <strong>Alpha</strong> prescreve exatos 33.3% de frequências otimizadas e balanceadas de bluff. Em contrapartida, o <strong>MDF</strong> (Minimum Defense Frequency) garante a retenção exata em inabaláveis 50.0% das incidências. O modelo não sofre as distorções inerentes à queda financeira e não reage a fatores além da equidade imediata das cartas projetadas no pano.</p>
+                    <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-700/50 shadow-inner mt-6">
+                        <strong class="text-white text-lg block mb-3 flex items-center gap-2"><i class="fa-solid fa-chart-area text-indigo-400"></i> Síntese Analítica</strong>
+                        <p class="text-slate-400 text-sm leading-relaxed">Nota Crítica: Num Heads-Up Final (restam apenas 2 jogadores no torneio), o modelo reverte para ChipEV puro. Como não restam terceiros para originar *laddering* passivo, a sobrevivência perde o seu peso utilitário. O jogo passa a ser um *Winner-Takes-All* pelo delta residual entre o prémio de 1º e 2º lugar, tornando a utilidade das fichas novamente linear e simétrica.</p>
+                    </div>
+                `,
+                exploit: `
+                    <h3 class="text-indigo-400 font-bold text-2xl mb-6 tracking-tight">Punição Numérica Sem Complacência</h3>
+                    <p class="text-slate-300 leading-relaxed mb-6 text-[15px]">Com os polos extirpados de condutas emocionais na inibição ou das abstenções geradas pela salvaguarda preventiva, as margens de exploração residem na observação analítica restrita a anomalias frequentes de implementação no desvio prático das matrizes teóricas na *table* ou *range*.</p>
+                    <div class="bg-indigo-900/20 p-6 rounded-2xl border border-indigo-500/30 shadow-inner flex gap-5 mt-4">
+                        <div class="text-indigo-400 text-3xl mt-1"><i class="fa-solid fa-bullseye"></i></div>
+                        <div>
+                            <strong class="text-white text-lg block mb-3">Intervenção Imediata Baseada nas Disparidades do Oponente</strong>
+                            <p class="text-[14px] text-slate-300 leading-relaxed mb-3">Verificado com rigoroso diagnóstico estatístico e empírico que o Oponente incide com frequências exatas em padrões de abandono indevido superiores ou acima da regra intocável (o fold para lá dos 50%), processa-se em retorno imediato a ampliação massiva da cunhagem automática e da inserção forçosa com overbluffs impressos ou faturados fáceis e lucrativamente nas margens exploráveis à luz dos seus defeitos de base. Inversamente a incidir com excessos nas chamadas, cancelam-se bluffs para focar e alargar sem pudor as restrições à faturação da extração marginal em valor.</p>
+                        </div>
+                    </div>
+                `,
+                quiz: {
+                    q: "Avalie e detalhe o preceito analítico e justifique por qual fundamento inalienável em dinâmicas e premissas operantes na total falta ou ausência de constrangimentos adjacentes inerentes à presença da aversão em bolhas na tabela ou ICM, a execução matemática num defeso GTO perfeito castiga automaticamente as oscilações num desvio imposto com origem incerta no Alpha?",
+                    opts: [
+                        { isCorrect: true, text: "O facto incontroverso e irrefutável incide em que destituído perante o impacto e o fardo assimétrico exigido a suportar nas premissas que ditarão a retração obrigatória subjacente à mecânica contígua ao 'overfold' em modo sobrevivência, o sistema oposto cederá os pagamentos baseando-se restrita e infalivelmente em conformidade pura baseada num enquadramento com as *Pot Odds* na mesa. Blefar em acréscimo fora dos limites entrega dividendos no ato e cede obrigatoriamente margens nos potes ao benefício matemático adverso, emulando um prejuízo real ou automático a cada cêntimo ajuizado e calculado fora do limite sem concessões às tabelas impostas." },
+                        { isCorrect: false, text: "As equações originadas nas variáveis imutáveis de programação base indicam nas frentes associadas de Nash Equilibrium ou no seu GTO de matriz que perante as fragilidades oponentes a extração ou o comportamento do vilão permite visualizar intempestivamente ou em segredo a sua intenção tática nos limites do software através e associada na falibilidade oculta proveniente do seu erro fatal detetado ou exposto através no enquadramento no desvio." },
+                        { isCorrect: false, text: "Em dinâmicas puramente estipuladas ao abrigo em que apenas prevalece nas bases em ChipEV, os simuladores ditam que só as frentes constituídas e suportadas por vertentes marginais predefinidas nas esferas associadas aos calibres com underbets forçados reúnem e permitem obter o aval estritamente lucrativo para proceder aos ganhos e as cotações nas faturas dos potes na mesa nas margens rentáveis aplicáveis nos limites associados ao sistema na sua mecânica subjacente." }
+                    ],
+                    exp: "Com o colapso ausente da premissa emocional no pavor gerado à morte a abster o raciocínio frio, a base orientadora assenta liminarmente na aceitação plena nas simetrias estáticas. O defeso operante executa sem falhas com as percentagens cruas provenientes da *board*, capturando irremediavelmente e punindo de modo automático os excessos praticados, os quais doam por inerência ganhos líquidos imediatos a reter pela consistência analítica na tática defensiva alheia."
+                }
+            }
+        ];
+
+        // ==========================================
+        // 4. LÓGICA CORE DA APLICAÇÃO (Ligada à Window)
+        // ==========================================
+        window.initChart = function() {
+            const ctxEl = document.getElementById('nashChart');
+            if(!ctxEl) return;
+            const ctx = ctxEl.getContext('2d');
+            window.myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Alpha (Bluff)', 'MDF (Call)'],
+                    datasets: [
+                        { label: 'ChipEV Base', data: [33.3, 50.0], backgroundColor: 'rgba(148, 163, 184, 0.2)', borderColor: 'rgba(148, 163, 184, 0.5)', borderWidth: 1, barPercentage: 0.7 },
+                        { label: 'ICM Dinâmico (Exponencial)', data: [33.3, 50.0], backgroundColor: ['rgba(14, 165, 233, 0.7)', 'rgba(225, 29, 72, 0.7)'], borderColor: ['rgb(2, 132, 199)', 'rgb(190, 18, 60)'], borderWidth: 1, barPercentage: 0.7 }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#94a3b8' } } }, scales: { y: { beginAtZero: true, max: 100, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b', callback: v => v+'%' } }, x: { grid: { display: false }, ticks: { color: '#cbd5e1' } } } }
+            });
+        };
+
+        window.updateChart = function(bluff, defense) {
+            if(window.myChart) {
+                window.myChart.data.datasets[1].data = [bluff, defense];
+                window.myChart.update();
+            }
+        };
+
+        window.setEnvironment = function(env) {
+            window.currentEnv = env;
+            const data = FT_CONTEXTS[env];
+            const board = document.getElementById('ft-board');
+            if(board) {
+                board.innerHTML = '';
+                data.stacks.forEach(p => {
+                    board.innerHTML += `<div class="flex justify-between items-center py-1 border-b border-slate-800/50 text-xs"><span class="text-slate-300 font-bold">${p.pos}</span><span class="text-sky-300 font-mono">${p.bb.toFixed(1)} bb</span></div>`;
+                });
+            }
+            const selIP = document.getElementById('sel-ip');
+            const selOOP = document.getElementById('sel-oop');
+            if(selIP && selOOP) {
+                selIP.innerHTML = ''; selOOP.innerHTML = '';
+                data.stacks.forEach((p, idx) => {
+                    selIP.innerHTML += `<option value="${p.id}" ${idx===0?'selected':''}>${p.pos} (${p.bb}bb)</option>`;
+                    selOOP.innerHTML += `<option value="${p.id}" ${idx===1?'selected':''}>${p.pos} (${p.bb}bb)</option>`;
+                });
+            }
+            window.updateMatchup();
+        };
+
+        window.updateMatchup = function() {
+            const selIP = document.getElementById('sel-ip');
+            const selOOP = document.getElementById('sel-oop');
+            if(!selIP || !selOOP) return;
+
+            const idIP = selIP.value;
+            const idOOP = selOOP.value;
+            const data = FT_CONTEXTS[window.currentEnv];
+            if(!data) return;
+
+            const pIP = data.stacks.find(s=>s.id === idIP);
+            const pOOP = data.stacks.find(s=>s.id === idOOP);
+            if(!pIP || !pOOP) return;
+            
+            const ip_rp = idIP === idOOP ? 0 : data.matrix[idIP][idOOP];
+            const oop_rp = idIP === idOOP ? 0 : data.matrix[idOOP][idIP];
+
+            window.setTxt('val-ip-rp', `${ip_rp.toFixed(1)}%`);
+            window.setTxt('val-oop-rp', `${oop_rp.toFixed(1)}%`);
+
+            window.setTxt('ip-pos', pIP.pos); window.setTxt('ip-stack', `${pIP.bb.toFixed(1)} bb`);
+            window.setTxt('oop-pos', pOOP.pos); window.setTxt('oop-stack', `${pOOP.bb.toFixed(1)} bb`);
+            window.setTxt('ip-morph', 'Motor Exponencial'); window.setTxt('oop-morph', 'Motor Exponencial');
+
+            const { bluff, defense } = window.solveNashDynamics(ip_rp, oop_rp);
+            
+            let errLabel = "Equilíbrio Estável"; let errClass = "text-emerald-400 bg-emerald-900/30 border-emerald-500/30";
+            if (idIP === idOOP) { errLabel = "N/A"; errClass = "text-slate-400 bg-slate-800 border-slate-700"; }
+            else if (ip_rp >= 18 && oop_rp >= 18 && Math.abs(ip_rp - oop_rp) <= 4) { errLabel = "Pacto Silencioso"; errClass = "text-indigo-400 bg-indigo-900/30 border-indigo-500/30"; }
+            else if (ip_rp > oop_rp + 5) { errLabel = "Agressão Estrangulada"; errClass = "text-rose-400 bg-rose-900/30 border-rose-500/30"; }
+            else if (oop_rp > ip_rp + 5) { errLabel = "MDF Quebrado / Opressão"; errClass = "text-amber-400 bg-amber-900/30 border-amber-500/30"; }
+
+            window.setTxt('dyn-matchup-title', `${pIP.pos} vs ${pOOP.pos}`);
+            window.setTxt('verdict-badge', errLabel);
+            window.setCls('verdict-badge', `px-5 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest border transition-all duration-300 shadow-md ${errClass}`);
+
+            window.animateValue('ip-rp-txt', window.currentState.ip_rp, ip_rp, 600, "");
+            window.animateValue('oop-rp-txt', window.currentState.oop_rp, oop_rp, 600, "");
+            window.animateValue('out-bluff', window.currentState.bluff, bluff, 600, "");
+            window.animateValue('out-defense', window.currentState.defense, defense, 600, "");
+
+            window.setWidth('bar-bluff', `${bluff}%`); window.setWidth('bar-defense', `${defense}%`);
+            
+            const fillIP = Math.min(100, (ip_rp / 26) * 100); 
+            window.setDash('ip-rp-svg', `${fillIP}, 100`);
+            const fillOOP = Math.min(100, (oop_rp / 26) * 100);
+            window.setDash('oop-rp-svg', `${fillOOP}, 100`);
+
+            window.updateChart(bluff, defense);
+            
+            window.currentState = { ip_rp, oop_rp, bluff, defense, label: errLabel, pA: pIP, pB: pOOP };
+        };
+
+        window.init = function(initial = true) {
+            const list = document.getElementById('scenario-list');
+            if (list) {
+                list.innerHTML = "";
+                DATABASE.forEach(sc => {
+                    const btn = document.createElement('button');
+                    btn.className = `scenario-btn ${sc.id === window.currentId ? 'active' : ''}`;
+                    btn.dataset.id = sc.id;
+                    btn.onclick = () => window.loadScenario(sc.id);
+                    btn.innerHTML = `
+                        <div class="icon-box shadow-md">${sc.icon}</div>
+                        <div class="flex flex-col text-left w-full pr-2">
+                            <span class="text-[10px] font-bold uppercase tracking-widest opacity-60 mb-1">${sc.env}</span>
+                            <span class="text-[13px] font-bold text-white tracking-wide leading-tight">${sc.title}</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-slate-600 opacity-50 text-xs ml-auto"></i>
+                    `;
+                    list.appendChild(btn);
+                });
+            }
+
+            if(initial) {
+                const tbody = document.getElementById('payout-tbody');
+                if (tbody) {
+                    PAYOUTS.forEach(p => {
+                        tbody.innerHTML += `<tr><td class="px-6 py-5 border-b border-slate-800/50">${p.pos}</td><td class="px-6 py-5 border-b border-slate-800/50 text-right">${p.val}</td></tr>`;
+                    });
+                }
+                
+                const inputEl = document.getElementById('ai-prompt-input');
+                if(inputEl) {
+                    inputEl.addEventListener('keydown', (e) => {
+                        if(e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            window.askAICoach();
+                        }
+                    });
+                }
+
+                window.initChart();
+                window.setEnvironment('FT1'); // Iniciar na Meta-Teoria
+
+                window.loadScenario(window.currentId, true);
+                window.setupTabs();
+            }
+        };
+
+        window.loadScenario = function(id, initialLoad = false) {
+            if (window.isAnimating && !initialLoad) return;
+            window.isAnimating = true;
+            window.currentAIChatMode = 'coach'; 
+
+            const oldData = DATABASE.find(s => s.id === window.currentId);
+            window.currentId = id;
+            const data = DATABASE.find(s => s.id === id);
+            if (!data) return;
+            
+            document.querySelectorAll('.scenario-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.id === id) btn.classList.add('active');
+            });
+
+            window.setTxt('stage-env', data.env);
+            window.setTxt('stage-title', data.title);
+            
+            const verdict = document.getElementById('verdict-badge');
+            if (data.verdict) {
+                window.setTxt('verdict-badge', data.verdict.label);
+                window.setCls('verdict-badge', `px-5 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest border transition-all duration-300 shadow-md ${data.verdict.class}`);
+            } else {
+                 window.setTxt('verdict-badge', "Nash Equilibrium");
+                 window.setCls('verdict-badge', "px-5 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest border bg-slate-800 text-slate-300 border-slate-700 shadow-md");
+            }
+
+            window.setTxt('ip-pos', data.ip.pos);
+            window.setTxt('ip-stack', data.ip.stack);
+            window.setTxt('ip-morph', data.ip.morph);
+            window.setTxt('ip-bf-txt', window.calculateBF(data.ip.rp));
+
+            window.setTxt('oop-pos', data.oop.pos);
+            window.setTxt('oop-stack', data.oop.stack);
+            window.setTxt('oop-morph', data.oop.morph);
+            window.setTxt('oop-bf-txt', window.calculateBF(data.oop.rp));
+
+            const { bluff, defense } = window.solveNashDynamics(data.ip.rp, data.oop.rp);
+            const oldMath = initialLoad ? { bluff: 0, defense: 0, ipRp: 0, oopRp: 0 } : window.solveNashDynamics(oldData.ip.rp, oldData.oop.rp);
+
+            window.animateValue('ip-rp-txt', initialLoad ? 0 : oldData.ip.rp, data.ip.rp, 800, "");
+            window.animateValue('oop-rp-txt', initialLoad ? 0 : oldData.oop.rp, data.oop.rp, 800, "");
+            window.animateValue('out-bluff', oldMath.bluff, bluff, 800, "");
+            window.animateValue('out-defense', oldMath.defense, defense, 800, "");
+
+            window.setWidth('bar-bluff', `${bluff}%`);
+            const dB = bluff - 33.3;
+            window.setTxt('del-bluff', `${dB > 0 ? '+' : ''}${dB.toFixed(1)}% vs cEV`);
+            window.setCls('del-bluff', `data-mono text-xs font-bold px-3 py-1.5 rounded-lg border shadow-inner ${dB > 0 ? 'text-sky-400 bg-sky-500/10 border-sky-500/20' : (dB < 0 ? 'text-rose-400 bg-rose-500/10 border-rose-500/20' : 'bg-slate-800 border-slate-700 text-slate-400')}`);
+
+            window.setWidth('bar-defense', `${defense}%`);
+            const dD = defense - 50.0;
+            window.setTxt('del-defense', `${dD > 0 ? '+' : ''}${dD.toFixed(1)}% vs cEV`);
+            window.setCls('del-defense', `data-mono text-xs font-bold px-3 py-1.5 rounded-lg border shadow-inner ${dD > 0 ? 'text-sky-400 bg-sky-500/10 border-sky-500/20' : (dD < 0 ? 'text-rose-400 bg-rose-500/10 border-rose-500/20' : 'bg-slate-800 border-slate-700 text-slate-400')}`);
+
+            window.updateChart(bluff, defense);
+
+            setTimeout(() => {
+                const ipFill = Math.min(100, (data.ip.rp / 26) * 100); 
+                window.setDash('ip-rp-svg', `${ipFill}, 100`);
+                const oopFill = Math.min(100, (data.oop.rp / 26) * 100);
+                window.setDash('oop-rp-svg', `${oopFill}, 100`);
+            }, 50);
+
+            const theoryBtnHTML = `<div class="mt-12 pt-8 border-t border-slate-800/50 flex items-center"><button id="btn-narrate-theory" onclick="window.narrate('theory')" class="bg-sky-500/10 text-sky-300 border border-sky-500/30 px-6 py-4 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-sky-500/20 transition-all flex items-center justify-center gap-3 shadow-md w-full sm:w-auto"><i class="fa-solid fa-volume-high text-xl"></i> Processar Acústica Teórica ✨</button></div>`;
+            const exploitBtnHTML = `<div class="mt-12 pt-8 border-t border-slate-800/50 flex items-center"><button id="btn-narrate-exploit" onclick="window.narrate('exploit')" class="bg-indigo-500/10 text-indigo-300 border border-indigo-500/30 px-6 py-4 rounded-xl text-xs font-bold uppercase tracking-widest hover:bg-indigo-500/20 transition-all flex items-center justify-center gap-3 shadow-md w-full sm:w-auto"><i class="fa-solid fa-volume-high text-xl"></i> Processar Acústica de Exploit ✨</button></div>`;
+
+            window.setHtml('theory', data.theory + theoryBtnHTML);
+            window.setHtml('exploit', data.exploit + exploitBtnHTML);
+            window.renderQuiz(data.quiz);
+
+            document.querySelectorAll('.content-panel').forEach(p => {
+                if (p.classList.contains('active')) {
+                    p.classList.remove('animate-fade-up');
+                    void p.offsetWidth; 
+                    p.classList.add('animate-fade-up');
+                }
+            });
+
+            setTimeout(() => { window.isAnimating = false; }, 800);
+        }
+
+        window.setupTabs = function() {
+            const tabs = document.querySelectorAll('.action-tab');
+            const panels = document.querySelectorAll('.content-panel');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    panels.forEach(p => p.classList.remove('active'));
+
+                    tab.classList.add('active');
+                    document.getElementById(tab.dataset.target).classList.add('active');
+                    
+                    const targetPanel = document.getElementById(tab.dataset.target);
+                    targetPanel.classList.remove('animate-fade-up');
+                    void targetPanel.offsetWidth;
+                    targetPanel.classList.add('animate-fade-up');
+                });
+            });
+        };
+
+        window.renderQuiz = function(quizData) {
+            const container = document.getElementById('quiz');
+            if(!container || !quizData) return;
+            
+            let opts = [...quizData.opts];
+            
+            for (let i = opts.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [opts[i], opts[j]] = [opts[j], opts[i]];
+            }
+
+            let html = `
+                <div class="quiz-block">
+                    <p class="text-slate-200 font-medium text-xl leading-relaxed mb-10 border-l-4 border-amber-500 pl-5 py-2">${quizData.q}</p>
+                    <div class="space-y-5" id="quiz-options">
+            `;
+
+            opts.forEach(opt => {
+                html += `
+                    <div class="quiz-option bg-slate-900/40 hover:bg-slate-800/80 border border-slate-700/50 p-6 rounded-2xl cursor-pointer transition-all flex gap-5 items-start shadow-sm" onclick="window.handleQuiz(this, ${opt.isCorrect})" data-correct="${opt.isCorrect}">
+                        <div class="w-8 h-8 shrink-0 rounded-lg border border-slate-600 flex items-center justify-center mt-0.5 icon-box text-sm bg-slate-800 shadow-inner"></div>
+                        <span class="text-slate-300 text-[16px] font-medium leading-relaxed">${opt.text}</span>
+                    </div>
+                `;
+            });
+
+            html += `
+                    </div>
+                    <div id="quiz-explanation" class="hidden mt-10 bg-indigo-950/40 border border-indigo-500/30 p-8 rounded-2xl relative overflow-hidden shadow-inner">
+                        <div class="absolute left-0 top-0 bottom-0 w-2 bg-indigo-500"></div>
+                        <h4 class="text-indigo-400 font-black text-xs uppercase tracking-widest mb-4 ml-2"><i class="fa-solid fa-microscope mr-2"></i> Auditoria Lógica Detalhada</h4>
+                        <p class="text-slate-300 text-[15.5px] leading-relaxed ml-2 font-medium">${quizData.exp}</p>
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = html;
+        };
+
+        window.handleQuiz = function(el, isCorrect) {
+            const container = el.closest('#quiz-options');
+            if (container.classList.contains('answered')) return;
+            container.classList.add('answered');
+
+            const options = container.querySelectorAll('.quiz-option');
+            options.forEach(opt => {
+                opt.classList.add('disabled', 'opacity-40', 'grayscale');
+                opt.classList.remove('hover:bg-slate-800/80');
+                if(opt.dataset.correct === "true" && !isCorrect) {
+                    opt.classList.remove('disabled', 'opacity-40', 'grayscale');
+                    opt.classList.add('correct', 'bg-emerald-900/20', 'border-emerald-500/40');
+                    opt.querySelector('.icon-box').innerHTML = '<i class="fa-solid fa-check text-emerald-400"></i>';
+                }
+            });
+
+            el.classList.remove('disabled', 'opacity-40', 'grayscale');
+            if (isCorrect) {
+                el.classList.add('correct', 'bg-emerald-900/30', 'border-emerald-500/50', 'shadow-[0_0_20px_rgba(16,185,129,0.15)]');
+                el.querySelector('.icon-box').innerHTML = '<i class="fa-solid fa-check text-emerald-400 text-xl drop-shadow-md"></i>';
+            } else {
+                el.classList.add('wrong', 'bg-rose-900/30', 'border-rose-500/50');
+                el.querySelector('.icon-box').innerHTML = '<i class="fa-solid fa-xmark text-rose-400 text-xl drop-shadow-md"></i>';
+            }
+
+            const exp = document.getElementById('quiz-explanation');
+            exp.classList.remove('hidden');
+            exp.classList.add('animate-fade-up');
+        };
+
+        window.onload = () => window.init(true);
+    </script>
+</body>
+</html>
