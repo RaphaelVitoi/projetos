@@ -1,25 +1,53 @@
-﻿# ðŸ—‚ï¸ Ãndice Mestre do Ecossistema v5.1
-> Gerado pelo @organizador | Data: 2026-03-13
+Indice Mestre do Ecossistema v6.4
+=================================
+Gerado pelo @organizador | Data: 2026-03-17
 
-## ðŸ¤– 1. EsquadrÃ£o de Agentes (Identidades)
-- **@pesquisador:** Busca de Estado da Arte e Mapeamento de Mercado.
-- **@prompter:** Refinamento de prompts e formataÃ§Ã£o estruturada.
-- **@planner:** ElaboraÃ§Ã£o de PRDs e Arquitetura de Software.
-- **@auditor:** ValidaÃ§Ã£o de seguranÃ§a, compliance e caÃ§a a bugs.
-- **@implementor:** ExecuÃ§Ã£o de cÃ³digo pesado (JS, HTML, CSS, PowerShell).
-- **@verifier:** Quality Assurance (QA) e testes unitÃ¡rios/visuais.
-- **@maverick:** Sentinela Criativo, InovaÃ§Ã£o e GamificaÃ§Ã£o.
-- **@curator:** Ã‰tica, estÃ©tica, copywriting e identidade visual.
-- **@organizador:** ManutenÃ§Ã£o de diretÃ³rios, Ã­ndices e documentaÃ§Ã£o.
-- **@skillmaster:** (Em breve) CoordenaÃ§Ã£o de automaÃ§Ãµes 24/7.
-- **@sequenciador:** OrquestraÃ§Ã£o de trÃ¡fego de tarefas paralelas.
+1. Agentes (Identidades)
+------------------------
+@architect, @pesquisador, @prompter, @planner, @auditor, @implementor,
+@verifier, @validador, @curator, @seo, @bibliotecario, @maverick,
+@sequenciador, @skillmaster, @dispatcher, @organizador, @securitychief, @chico.
 
-## âš™ï¸ 2. Motor Central (Kernel)
-- `do.ps1` -> A Membrana Inteligente (CLI Interativa).
-- `Agent-TaskManager.psm1` -> Motor de JSON e gerenciamento da fila.
-- `cleanup.ps1` -> Script de Cold Storage (Arquivamento de tarefas antigas).
+Alias de roteamento: @architecter -> @architect.
 
-## ðŸ“‚ 3. Topologia de DiretÃ³rios
-- `/docs/reports/` -> RelatÃ³rios Sentinela e Health Checks.
-- `/docs/tasks/` -> Ãreas de isolamento para implementaÃ§Ãµes (ex: aula-icm-rp).
-- `/.claude/agent-memory/` -> O cÃ³rtex de memÃ³ria persistente dos agentes.
+2. Motor Central (Kernel)
+-------------------------
+do.ps1
+  CLI inteligente para entrada de tarefas e roteamento.
+
+Agent-TaskManager.psm1
+  Kernel de enfileiramento e regras da fila.
+
+task_executor.py
+  Worker e operacoes SQLite (tasks.db).
+
+3. Topologia de Diretorios
+--------------------------
+/docs/
+  Documentacao principal do sistema.
+/docs/reports/
+  Relatorios e health checks.
+/docs/tasks/
+  Areas isoladas por tarefa.
+/.claude/
+  Memoria e configuracoes dos agentes.
+/queue/tasks.db
+  Banco SQLite da fila.
+
+4. Documentos-Chave
+-------------------
+docs/AGENTS.md
+docs/MANUAL_WORKFLOW_AGENTES.md
+docs/PRD.md
+docs/DEPLOY.md
+docs/STRUCTURE_SRC.md
+docs/INVENTARIO_FERRAMENTAS.md
+
+5. Scripts CLI
+--------------
+do.ps1
+scripts/cli/status.ps1
+scripts/cli/nexus_status.ps1
+scripts/cli/dashboard.ps1
+scripts/cli/dashboard_queue.ps1
+scripts/cli/nexus_hub.ps1

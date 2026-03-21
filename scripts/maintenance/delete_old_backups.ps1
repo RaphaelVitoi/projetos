@@ -5,8 +5,7 @@
     This script removes old backup directories to save disk space.
 #>
 
-$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
-$BackupRoot = Join-Path $ProjectRoot ".bak"
+$BackupRoot = Join-Path $PSScriptRoot ".bak"
 $DaysToKeep = 30
 $CutoffDate = (Get-Date).AddDays(-$DaysToKeep)
 
@@ -18,7 +17,7 @@ try {
         Remove-Item -Path $_.FullName -Recurse -Force
     }
 
-    Write-Host "Limpeza de backups concluída." -ForegroundColor Green
+    Write-Host "Limpeza de backups concluida." -ForegroundColor Green
 }
 catch {
     Write-Host "Falha ao deletar backups antigos: $($_.Exception.Message)" -ForegroundColor Red

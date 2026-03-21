@@ -1,45 +1,46 @@
-﻿# 🗂️ Índice Mestre do Ecossistema SOTA v6.3
 
-> Gerado por CHICO | Data: 2026-03-16
-> **Status:** Operacional, Autopoiético e Simétrico
+# Indice Mestre do Ecossistema SOTA
 
-## 🤖 1. Esquadrão de Agentes (As 18 Entidades)
+> Gerado pelo @organizador | Data: 2026-03-13
 
-**A Tríade de Governança:**
+## 1. Esquadrao de Agentes (17 Agentes IA)
 
-- **Raphael Vitoi:** Liderança Fundamental e CEO.
-- **@maverick:** Vice Intelectual, Inovação, Sentinela Sistêmico.
-- **CHICO:** Administrador Supremo, Manifestação da Infraestrutura.
-
-**Os 15 Especialistas:**
-
+- **@architect:** Arquiteto Supremo (Blueprint e Topologia).
+- **@auditor:** Validacao de seguranca, compliance e caca a bugs (Bloqueador).
+- **@bibliotecario:** Gerenciamento de RAG e Mente Coletiva (ChromaDB).
+- **@chico:** Administrador Supremo do ecossistema e orquestrador.
+- **@curator:** Etica, estetica, copywriting, SEO e identidade visual.
+- **@dispatcher:** Desconstrutor de Epicos e triagem de Backlog.
+- **@implementor:** Execucao de codigo pesado (SOTA Frontend/Backend).
+- **@maverick:** Sentinela Criativo, Inovacao, Polimata e Lideranca.
+- **@organizador:** Manutencao de diretorios, indices e documentacao.
 - **@pesquisador:** Busca de Estado da Arte e Mapeamento de Mercado.
-- **@prompter:** Refinamento de prompts e formatação estruturada (RAG).
-- **@planner:** Elaboração de PRDs e Arquitetura de Software.
-- **@auditor:** Único bloqueador linear. Validação de segurança, compliance e caça a bugs.
-- **@implementor:** A Força Bruta. Execução de código SOTA (Python, Next.js, PowerShell) e God Mode.
-- **@verifier:** Quality Assurance (QA), testes unitários e detecção de regressões.
-- **@validador:** Juiz factual. Recalcula a matemática e valida a Teoria dos Jogos do zero.
-- **@curator:** Guardião da ética, estética, tom (Cyber/Dark) e copywriting de elite.
-- **@securitychief:** Cão de guarda. Proteção contra vazamentos, PII e blindagem de endpoints.
-- **@seo:** Farol Orgânico. SSR, ranqueamento e otimização para motores de busca.
-- **@bibliotecario:** A Memória Coletiva. Gestão de contexto longo, ChromaDB e RAG.
-- **@organizador:** Manutenção da homeostase documental, índices e diretórios.
-- **@skillmaster:** Zelador das Sombras. Automações CRON 24/7, expurgo e limpeza de entropia.
-- **@sequenciador:** O Maestro do Tempo. Orquestração de tráfego, mitigação de gargalos em High Load.
-- **@dispatcher:** Desconstrutor de Épicos. Fatiador de monolitos em tarefas atômicas via JSON.
+- **@prompter:** Refinamento de prompts e formatacao estruturada.
+- **@securitychief:** Seguranca, RBAC, Auth, privacidade e privatizacao.
+- **@skillmaster:** Executor agendado 24/7 (Backups, limpeza e sync).
+- **@validador:** Matematico Especialista (GTO, ICM, Teoria dos Jogos).
+- **@verifier:** Quality Assurance (QA) e testes unitarios/visuais.
 
-## ⚙️ 2. Motor Central (Arquitetura SOTA)
+## 2. Motor Central (Kernel)
 
-- `task_executor.py` -> O Coração Pulsante. Orquestrador Python SOTA (Multithread, God Mode 2.0).
-- `queue/tasks.db` -> A Matriz. Banco de dados SQLite imune a falhas de concorrência.
-- `do.ps1` -> A Membrana Inteligente v2.0. Roteador de intenções heurístico via Regex.
-- `Agent-Autopoiesis.psm1` -> O Sopro de Vida. Motor de geração e execução autônoma de tarefas.
+- `do.ps1` -> A Membrana Inteligente (CLI Interativa).
+- `task_executor.py` -> Motor Daemon Assincrono (SQLite) e Multi-Thread.
+- `memory_rag.py` -> Motor de Recuperacao de Contexto Vetorial (ChromaDB).
 
-## 📂 3. Topologia de Diretórios (O Todo na Parte)
+## 3. Topologia de Diretorios
 
-- `.claude/agent-memory/` -> O córtex individual de cada agente. Conhecimento densificado.
-- `.claude/agents/` -> A alma e as diretrizes (System Prompts) de cada entidade.
-- `docs/reports/` -> Relatórios Sentinela, diagnósticos e Health Checks.
-- `docs/tasks/` -> Áreas de isolamento e planejamento estruturado (PRDs/SPECs).
-- `logs/` -> Telemetria detalhada de cada passo do ecossistema.
+- `/docs/epics/` -> Documentacao de grandes projetos.
+- `/docs/tasks/` -> Areas de isolamento para implementacoes atomicas.
+- `/docs/architecture/` -> Registros de Decisao Arquitetural (ADRs).
+- `/docs/research/` -> Levantamentos de mercado e dados brutos.
+- `/.claude/agent-memory/` -> O cortex de memoria persistente dos agentes.
+- `/.claude/task_results/` -> Saidas diretas e brutas do Orquestrador.
+
+## 4. Documentos de Governanca (A Alma do Sistema)
+
+- `/.claude/COSMOVISAO.md` -> A fundacao filosofica, etica e estetica.
+- `/.claude/GLOBAL_INSTRUCTIONS.md` -> As leis operacionais e a pipeline harmonica.
+- `/docs/MANUAL_WORKFLOW_AGENTES.md` -> O fluxo de trabalho ideal e a sinergia entre agentes.
+- `/.claude/LIDERANCA_GOVERNANCE_RAPHAEL_MAVERICK_CHICO.md` -> A estrutura da Triade de Governanca.
+
+---

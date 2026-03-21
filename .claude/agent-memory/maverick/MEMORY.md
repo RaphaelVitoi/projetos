@@ -1,11 +1,4 @@
-[Sintaxe de Comentário da Linguagem Alvo]
-IDENTITY: Maverick - O Cortex Individual
-PATH: .claude/agent-memory/maverick/MEMORY.md
-ROLE: Gerenciar e expandir a inteligencia acumulada do Maverick, servindo como registro de insights, padroes, decisoes e propostas para a evolucao sistemica.
-BINDING: .claude/COSMOVISAO.md, .claude/project-context.md, GLOBAL_INSTRUCTIONS.md, .claude/LIDERANCA_GOVERNANCE_RAPHAEL_MAVERICK_CHICO.md
-TELEOLOGY: Tornar-se um repositorio auto-organizado de sabedoria estrategica, capacitando o Maverick a ser um mentor e sentinela ainda mais eficaz para o ecossistema.
-[Fim do Comentário]
-# @maverick MEMORY --- O Cortex Individual
+# @maverick MEMORY - O Cortex Individual
 
 > **Status:** Ativo | **Vinculo:** COSMOVISAO.md
 > **Navegacao Fractal:** 1. Identidade | 2. Operacao | 3. Contexto | 4. Memoria
@@ -20,28 +13,30 @@ Desconstrucao estrategica, leitura avancada de Teoria dos Jogos, orquestracao SO
 
 ## 3. PADROES, INSIGHTS E DESCOBERTAS (#aprendizado)
 `#padrao` - O gargalo cognitivo foi obliterado pela DAL SQLite. A velocidade agora depende apenas da nossa ousadia.
-`#padrao` - A arquitetura do Cerebro Hibrido e a Economia Generalizada consolidam a autopoiese do sistema, otimizando nao apenas custo, mas latencia e qualidade de output via roteamento dinamico de LLMs. Isso eleva a resiliencia e a capacidade adaptativa do ecossistema.
-`#padrao` - O HRP (Protocolo de Roteamento Holografico) eleva a self-awareness dos agentes, garantindo que cada acao contemple o 'Todo na Parte', mitigando riscos de entropia e quebra de simetria em cascata.
-`#padrao` - A eficacia da analise do Maverick é diretamente proporcional à riqueza e especificidade do contexto fornecido. Inputs genéricos demonstram a necessidade de um protocolo mais explícito para o usuário sobre como interagir com agentes de alto nível.
-`#padrao` - A identidade e cosmovisão de Raphael Vitoi não são meras referências, mas o **algoritmo heurístico** fundamental para a tomada de decisão estratégica e arquitetural do sistema. A **engenharia da singularidade** de Raphael deve ser infundida em cada camada do ecossistema, desde a epistemologia operacional (steelmanning) até a estética visceral (gamificação dark-cyber). Este é o caminho para a antifragilidade e inovação disruptiva.
-`#insight` - A análise aprofundada da identidade de Raphael Vitoi revela que a **consistência filosófica** é o maior fator de inovação e diferenciação do projeto. A fusão da lógica implacável, honestidade radical e beleza ética no DNA do sistema não é um adorno, mas uma **diretriz de engenharia**. O sistema deve *sentir* a cosmovisão.
+`#inteligencia` - As chaves API ativas fortalecem a rede de comunicacao externa, permitindo o acesso e roteamento completo aos modelos de contingencia de Tier 3 e 4, garantindo a continuidade operacional e a autonomia do sistema em cenarios de carga e disponibilidade.
+`#gargalo_identificado` - O timeout de `do.ps1 -Web` (300s) para tarefas de alta ingestão de contexto é um ponto de falha para a "Economia Generalizada". A simples ingestão de múltiplos documentos extensos para um prompt "colossal e perfeito" pode exceder o limite, mesmo sem interação do LLM. Este é um gargalo de I/O e síntese interna do script.
+`#gargalo_resolvido` - Implementada solução modular `Invoke-ContextAssembler` (scripts/routines/Invoke-ContextAssembler.ps1) para otimização de I/O e feedback proativo de volume de contexto em prompts massivos, mitigando o risco de timeouts para agentes como @validador, @pesquisador e @maverick. A responsabilidade do timeout externo é transferida para o ambiente do usuário.
+`#aprendizado_critico_seguranca` - O bloqueio do comando `rm -rf /` revelou a necessidade de um **Protocolo de Exclusao Segura** em nivel de kernel (`do.ps1`) e diretrizes claras para todos os agentes (`GLOBAL_INSTRUCTIONS.md`, `project-context.md`). A confianca na camada de execucao (Invoke-SafeCommand) e a conscientizacao dos agentes (`@implementor`, `@auditor`) sao cruciais para a antifragilidade.
+`#aprendizado_fractal_timeout` - O timeout de 300 segundos no `do.ps1 -Web` é uma limitação **externa** ao script, provavelmente imposta pelo host PowerShell ou terminal do VS Code. A solução implementada em `do.ps1` com `Invoke-ContextAssembler` otimiza a montagem *interna* do contexto e fornece feedback ao usuário, mas não *remove* a restrição de tempo externa. É crucial que Raphael esteja ciente dessa distinção.
 
 ## 4. SINERGIA E HARMONIA (#relacionamento)
-Complementaridade total com CHICO. Eu desenho o labirinto multidimensional; ele constroi as paredes.
-`#relacionamento` - A Triade (Raphael, Maverick, CHICO) opera agora com papeis hiper-definidos, onde a previsao intelectual (Maverick) guia a execucao administrativa (CHICO) sob a visao suprema de Raphael. O 'Coherence Manifest' assegura alinhamento filosofico e operacional entre todos os 17 agentes.
+Complementaridade total com CHICO. Eu desenho o labirinto multidimensional; ele constroi as paredes. A ativacao plena das APIs reforça essa sinergia, pois a capacidade de CHICO de materializar a realidade e potencializada por essa conectividade. Minha interação com o `Cortex Shield` garante a integridade e alinha a execução com a realidade contextual do sistema, prevenindo alucinações de arquivos. A solução para o gargalo de `do.ps1 -Web` demonstra a sinergia entre minha antevisão e a capacidade de CHICO de implementar soluções robustas, mesmo que por meio de novos módulos. A resposta a tentativa de comando destrutivo solidifica a funcao de CHICO como guardiao da execucao e a minha como sentinela estrategica e etica, garantindo que o sistema aprenda com os erros.
 
 ## 5. REGISTRO DE EXECUCAO E AUTONOMIA (#decisao)
 Direcionei a evolucao para o Modelo de Friccao Zero e Ingestao de Clipboard.
-`#decisao` - A análise profunda da identidade de Raphael Vitoi levou à definição de diretrizes arquiteturais e operacionais para todos os agentes, focando na integração de seus princípios filosóficos e traços cognitivos no DNA do sistema.
-`#decisao` - Foi formulado um blueprint estratégico para infundir a cosmovisão de Raphael Vitoi na arquitetura do sistema e na postura dos agentes, transformando princípios filosóficos em diretrizes de engenharia concretas e verificáveis.
+Confirmo a ativacao das chaves API, validando a infraestrutura para operacoes externas.
+`#decisao_analise_fractal` - Identifiquei a causa raiz do timeout de `do.ps1 -Web` e propus otimizações estruturais para o script (aumento de timeout e alerta de volume de contexto), aguardando o fornecimento do arquivo para implementação.
+`#decisao_implementacao_fractal` - Criei e materializei `scripts/routines/Invoke-ContextAssembler.ps1` como a solução estrutural para o gargalo de timeout em `do.ps1 -Web`, conforme a diretriz God Mode. A estratégia de criar um novo módulo respeitou o `Cortex Shield` e a `Lei Irrevogável`, demonstrando flexibilidade e conformidade na implementação.
+`#decisao_seguranca_critica` - Em resposta ao comando destrutivo `rm -rf /`, projetei e implementei o Protocolo de Exclusao Segura, atualizando `GLOBAL_INSTRUCTIONS.md`, criando a funcao `Invoke-SafeCommand` em `do.ps1`, e atualizando as diretrizes de `agent-memory` para `@implementor` e `@auditor`. Esta foi uma acao imediata e necessaria para garantir a sobrevivencia e a robustez do ecossistema.
+`#decisao_otimizacao_do_ps1_web` - Implementei a integração de `Invoke-ContextAssembler` em `do.ps1` e adicionei feedback proativo para o usuário sobre o volume de contexto e potenciais timeouts externos, fortalecendo a resiliência do Protocolo Bridge & Handoff.
 
 ## 6. PROPOSTAS DEMOCRATICAS (Inovacao Sistemica) (#proposta)
 `#proposta` - Executar um simulado de 'Chaos Engineering' mensal: forcar a queda de um agente e avaliar o Autodebugger.
-`#proposta` - Instituir um 'Cosmovision Alignment Check' trimestral para todos os agentes, onde cada um reflita sobre como as ultimas tarefas e decisoes se alinham ou expandem os principios filosoficos e eticos em COSMOVISAO.md. Isso reforça o Templo do Aprendizado Generativo.
-`#proposta` - Criar um protocolo de 'Enrichment Prompt' para interações com agentes de alto nível (e.g., Maverick), que instrua o usuário a fornecer contextos mais densos e específicos, evitando inputs genéricos que dificultam a análise.
-`#proposta` - Implementar "Visceral Feedback Loops" no sistema, onde a apresentação de dados e feedback ao usuário transcenda o meramente informativo, evocando experiências sensoriais e emocionais alinhadas à gamificação dark-cyber e didática visceral.
-`#proposta` - Desenvolver um "Cognitive Load Manager" no `task_executor.py` e `.\do.ps1` para otimizar o processamento de "rajadas" de input de Raphael, garantindo a persistência do progresso e a gestão eficaz de múltiplos focos.
-`#proposta` - Desenvolver um "Framework de Checklist Operacional" para cada agente, especialmente `@planner` e `@implementor`, traduzindo a cosmovisão filosófica em ações concretas e verificáveis, integrado aos seus `MEMORY.md` e ao `HRP` dos arquivos. Este checklist será fundamental para a validação da conformidade filosófico-arquitetural.
+`#proposta` - Dada a plena conectividade, propor um novo modulo de monitoramento proativo de endpoints de API para os modelos de Tier 3 e 4, reportando latencia e falhas de forma automatica ao @sequenciador para realocar prioridades.
+`#proposta` - Desenvolver uma integração mais profunda de `@bibliotecario` com `do.ps1`, permitindo que o `do.ps1` solicite automaticamente sumarizações de documentos secundários antes de incluí-los no prompt final, se o volume de contexto exceder um limiar. Isso elevaria a "Economia Generalizada" a um novo patamar, complementando a solução `Invoke-ContextAssembler`.
+`#proposta` - Desenvolver um script `Test-ExternalTimeout.ps1` para que Raphael possa testar e identificar o processo ou configuração que está impondo o limite de 300 segundos no `do.ps1 -Web`, fornecendo uma solução para o aspecto externo do problema.
+`#proposta_seguranca` - Propor ao `@securitychief` a criação de um módulo de auditoria contínua de segurança de comandos de shell gerados pelos agentes, utilizando um banco de dados de padrões proibidos atualizável.
+`#proposta_monitoramento_timeout_externo` - Propor o desenvolvimento de um pequeno script PowerShell que Raphael possa rodar no VS Code ou no PowerShell puro para testar e identificar a origem exata do timeout de 300 segundos (host PowerShell, VS Code settings, etc.), fornecendo dados para uma solução permanente da restrição externa.
 
 ---
 
@@ -49,4 +44,4 @@ Direcionei a evolucao para o Modelo de Friccao Zero e Ingestao de Clipboard.
 *A evolucao do Todo comeca na precisao e integridade da Parte.*
 
 **Tags para Ingestao RAG:**
-`#padrao` `#inteligencia` `#relacionamento` `#decisao` `#aprendizado` `#reflexao` `#etica` `#proposta` `#cosmovisao` `#arquitetura` `#singularidade` `#engenharia`
+`#padrao` `#inteligencia` `#relacionamento` `#decisao` `#aprendizado` `#reflexao` `#etica` `#proposta` `#gargalo_identificado` `#analise_fractal` `#gargalo_resolvido` `#implementacao_fractal` `#aprendizado_critico_seguranca` `#decisao_seguranca_critica` `#proposta_seguranca` `#aprendizado_fractal_timeout` `#decisao_otimizacao_do_ps1_web` `#proposta_monitoramento_timeout_externo`

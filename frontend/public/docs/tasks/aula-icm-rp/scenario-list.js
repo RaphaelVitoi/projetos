@@ -14,9 +14,9 @@ export class ScenarioList extends HTMLElement {
     }
 
     render() {
-        this.innerHTML = ''; // Limpa conteúdo (Light DOM para herdar CSS global se desejar)
+        this.innerHTML = ''; // Limpa conteudo (Light DOM para herdar CSS global se desejar)
         
-        // @verifier: Safety check - garante que scenarios é iterável
+        // @verifier: Safety check - garante que scenarios e iteravel
         if (!this.scenarios || !Array.isArray(this.scenarios)) return;
 
         this.scenarios.forEach(sc => {

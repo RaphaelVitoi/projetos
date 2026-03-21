@@ -29,6 +29,7 @@ export default function EquityCalculator() {
   const [prizes, setPrizes] = useState<number[]>([65, 35]);
   const [handText, setHandText] = useState('');
   const [showParser, setShowParser] = useState(false);
+  const [parserError, setParserError] = useState<string | null>(null);
 
   // Cálculo ICM memoizado
   const results = useMemo(
@@ -93,11 +94,14 @@ export default function EquityCalculator() {
 
   // Parse hand history
   const parseHand = useCallback(() => {
+    setParserError(null);
     const parsed = parseHandHistory(handText);
-    if (parsed.length > 0) {
+    if (parsed.length >= 2) {
       setPlayers(parsed);
       setShowParser(false);
       setHandText('');
+    } else {
+      setParserError('Não foi possível identificar pelo menos 2 jogadores. Verifique o formato (ex: "Seat 1: Nome (15000 in chips)").');
     }
   }, [handText]);
 
@@ -159,6 +163,21 @@ export default function EquityCalculator() {
               resize: 'vertical',
             }}
           />
+          {parserError && (
+            <div style={{
+              marginTop: '0.6rem',
+              padding: '0.5rem 0.75rem',
+              borderRadius: '6px',
+              background: 'rgba(225, 29, 72, 0.1)',
+              border: '1px solid rgba(225, 29, 72, 0.3)',
+              color: '#f43f5e',
+              fontSize: '0.6rem',
+              fontWeight: 600,
+            }}>
+              <i className="fa-solid fa-triangle-exclamation" style={{ marginRight: '6px' }} />
+              {parserError}
+            </div>
+          )}
           <button
             onClick={parseHand}
             disabled={!handText.trim()}
@@ -233,7 +252,7 @@ export default function EquityCalculator() {
               <input
                 type="number"
                 value={p.stack}
-                onChange={(e) => updateStack(p.id, parseInt(e.target.value) || 0)}
+                onChange={(e) => updateStack(p.id, Math.max(0, parseInt(e.target.value) || 0))}
                 style={{
                   width: '60px',
                   background: '#0a0f1c',
@@ -300,7 +319,7 @@ export default function EquityCalculator() {
               <input
                 type="number"
                 value={prize}
-                onChange={(e) => updatePrize(idx, parseFloat(e.target.value) || 0)}
+                onChange={(e) => updatePrize(idx, Math.max(0, parseFloat(e.target.value) || 0))}
                 style={{
                   flex: 1,
                   background: '#0a0f1c',

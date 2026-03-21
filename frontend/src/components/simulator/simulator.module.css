@@ -21,6 +21,23 @@
   --sim-border: rgba(255, 255, 255, 0.06);
   --sim-radius-lg: 24px;
   --sim-radius-md: 12px;
+
+  /* Variaveis para o TheoryPanel (Preparacao para Temas) */
+  --sim-bg-subpanel: rgba(15, 23, 42, 0.6);
+  --sim-border-light: rgba(255, 255, 255, 0.05);
+  --sim-card-ip-bg: rgba(99, 102, 241, 0.1);
+  --sim-card-ip-border: rgba(99, 102, 241, 0.2);
+  --sim-card-oop-bg: rgba(225, 29, 72, 0.1);
+  --sim-card-oop-border: rgba(225, 29, 72, 0.2);
+  --sim-exploit-bg: rgba(16, 185, 129, 0.08);
+  --sim-exploit-border: rgba(16, 185, 129, 0.2);
+
+  /* Variaveis para a RangeMatrix */
+  --sim-range-core: rgba(16, 185, 129, 0.8);
+  --sim-range-marginal: rgba(245, 158, 11, 0.8);
+  --sim-range-bluff: rgba(99, 102, 241, 0.8);
+  --sim-range-death: rgba(225, 29, 72, 0.5);
+  --sim-range-fold: rgba(30, 41, 59, 0.4);
 }
 
 /* ==============================================
@@ -28,30 +45,83 @@
    ============================================== */
 
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(20px); filter: blur(4px); }
-  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+    filter: blur(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
 }
 
 @keyframes pulseGlow {
-  0%, 100% { filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.4)); }
-  50% { filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.8)); }
+
+  0%,
+  100% {
+    filter: drop-shadow(0 0 10px rgba(99, 102, 241, 0.4));
+  }
+
+  50% {
+    filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.8));
+  }
 }
 
 @keyframes deathPulse {
-  0% { stroke-opacity: 1; stroke-width: 2.5; }
-  50% { stroke-opacity: 0.6; stroke-width: 4.5; }
-  100% { stroke-opacity: 1; stroke-width: 2.5; }
+  0% {
+    stroke-opacity: 1;
+    stroke-width: 2.5;
+  }
+
+  50% {
+    stroke-opacity: 0.6;
+    stroke-width: 4.5;
+  }
+
+  100% {
+    stroke-opacity: 1;
+    stroke-width: 2.5;
+  }
 }
 
 @keyframes highRiskPulse {
-  0% { stroke-opacity: 0.8; }
-  50% { stroke-opacity: 1; stroke-width: 3; }
-  100% { stroke-opacity: 0.8; }
+  0% {
+    stroke-opacity: 0.8;
+  }
+
+  50% {
+    stroke-opacity: 1;
+    stroke-width: 3;
+  }
+
+  100% {
+    stroke-opacity: 0.8;
+  }
 }
 
 @keyframes tickerScroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes fadeUpToast {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
 }
 
 .animateFadeUp {
@@ -90,13 +160,25 @@
   max-width: 130px;
   aspect-ratio: 1;
   margin: 0 auto 0.5rem auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Fallback estrutural para dispositivos móveis antigos (ex: Safari < 15) que não suportam aspect-ratio */
+@supports not (aspect-ratio: 1) {
+  .gaugeWrap {
+    height: 120px;
+  }
 }
 
 .gaugeSvg {
   width: 100%;
   height: 100%;
+  max-height: 100%;
   transform: rotate(-90deg);
   display: block;
+  overflow: visible;
 }
 
 .gaugeArc {
@@ -209,10 +291,22 @@
   flex: 1;
 }
 
-.selectorList::-webkit-scrollbar { width: 4px; }
-.selectorList::-webkit-scrollbar-track { background: transparent; }
-.selectorList::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
-.selectorList::-webkit-scrollbar-thumb:hover { background: #475569; }
+.selectorList::-webkit-scrollbar {
+  width: 4px;
+}
+
+.selectorList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.selectorList::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 10px;
+}
+
+.selectorList::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
 
 .selectorGroup {
   margin-bottom: 1rem;
@@ -567,6 +661,122 @@
 }
 
 /* ==============================================
+   THEORY PANEL
+   ============================================== */
+
+.tabsContainer {
+  display: flex;
+  gap: 0.35rem;
+  margin-bottom: 1.5rem;
+  background: var(--sim-bg-subpanel);
+  border: 1px solid var(--sim-border-light);
+  border-radius: 14px;
+  padding: 6px;
+  flex-wrap: wrap;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.tabBtn {
+  flex: 1;
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: transparent;
+  color: #64748b;
+  box-shadow: none;
+}
+
+.tabBtn:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: #e2e8f0;
+}
+
+.tabBtnActive {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(99, 102, 241, 0.05));
+  color: #fff;
+  border-color: rgba(99, 102, 241, 0.3);
+  box-shadow: inset 0 0 20px rgba(99, 102, 241, 0.1), 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.tabBtnActive i {
+  color: #818cf8;
+  filter: drop-shadow(0 0 5px rgba(129, 140, 248, 0.6));
+}
+
+.bfCardIp,
+.bfCardOop {
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.bfCardIp {
+  background: var(--sim-card-ip-bg);
+  border: 1px solid var(--sim-card-ip-border);
+}
+
+.bfCardOop {
+  background: var(--sim-card-oop-bg);
+  border: 1px solid var(--sim-card-oop-border);
+}
+
+.comparisonCard {
+  background: var(--sim-bg-subpanel);
+  border: 1px solid var(--sim-border-light);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.exploitItem {
+  background: var(--sim-exploit-bg);
+  border: 1px solid var(--sim-exploit-border);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+/* ==============================================
+   RANGE MATRIX
+   ============================================== */
+
+.rangeGrid {
+  display: grid;
+  grid-template-columns: repeat(13, 1fr);
+  gap: 2px;
+  background: var(--sim-bg-subpanel);
+  padding: 0.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--sim-border-light);
+  overflow-x: auto;
+}
+
+.rangeCell {
+  aspect-ratio: 1/1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(0.5rem, 1vw, 0.65rem);
+  font-weight: 800;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  border: 1px solid var(--sim-border-light);
+  cursor: crosshair;
+  transition: transform 0.1s ease;
+}
+
+/* ==============================================
    AXIOM TICKER
    ============================================== */
 
@@ -625,6 +835,32 @@
 }
 
 /* ==============================================
+   TOAST NOTIFICATION (SOTA)
+   ============================================== */
+
+.toastNotification {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  padding: 0.6rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #e2e8f0;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 999px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(16, 185, 129, 0.15);
+  animation: fadeUpToast 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ==============================================
    SCENARIO STAGE
    ============================================== */
 
@@ -637,13 +873,439 @@
    ============================================== */
 
 @media (prefers-reduced-motion: reduce) {
-  .tickerTrack { animation: none; }
-  .gaugeDeathPulse { animation: none; }
-  .gaugeHighRisk { animation: none; }
-  .animateFadeUp { animation: none; opacity: 1; transform: none; }
+  .tickerTrack {
+    animation: none;
+  }
+
+  .gaugeDeathPulse {
+    animation: none;
+  }
+
+  .gaugeHighRisk {
+    animation: none;
+  }
+
+  .animateFadeUp {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
 }
 
 /* Pausa no hover — acessibilidade e leitura */
 .tickerWrap:hover .tickerTrack {
   animation-play-state: paused;
+}
+
+.simRoot {
+  min-height: 100vh;
+  background: var(--sim-bg-dark);
+  color: #e2e8f0;
+  overflow-x: hidden;
+}
+
+.headerWrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem 0;
+}
+
+.headerMain {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.headerControls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.toolSwitcher {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: none;
+}
+
+.toolSwitcher::-webkit-scrollbar {
+  display: none;
+}
+
+.toolButton {
+  padding: 0.6rem 1.25rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  background: rgba(15, 23, 42, 0.4);
+  color: #64748b;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+}
+
+.toolButton:hover {
+  background: rgba(30, 41, 59, 0.6);
+  color: #e2e8f0;
+  border-color: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.toolButtonActive {
+  border-color: rgba(99, 102, 241, 0.5);
+  background: linear-gradient(135deg, rgba(30, 34, 69, 0.9), rgba(15, 23, 42, 0.9));
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.toolButtonActive .toolIcon {
+  color: #818cf8;
+  filter: drop-shadow(0 0 4px rgba(129, 140, 248, 0.6));
+}
+
+.toolIcon {
+  font-size: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.layoutContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem 3rem;
+}
+
+.layoutGrid {
+  display: grid;
+  grid-template-columns: minmax(280px, 320px) 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.layoutGridCollapsed {
+  grid-template-columns: 1fr;
+}
+
+.sidebar {
+  position: sticky;
+  top: 1rem;
+  z-index: 10;
+}
+
+.mainArea {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+.aiPanelWrapper {
+  padding: 1.5rem;
+  min-height: 580px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.aiPanelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.aiPanelHeader h3 {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin: 0;
+  color: #cbd5e1;
+}
+
+.aiPanelHeader p {
+  margin: 0;
+  font-size: 0.65rem;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+
+.aiModeBadge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+.aiQuickButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+  justify-content: space-between;
+}
+
+.aiQuickButton {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.6rem 0.9rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(15, 23, 42, 0.8);
+  color: #cbd5e1;
+  transition: all 0.2s ease;
+  min-width: 180px;
+  text-align: center;
+  flex: 1 1 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+  line-height: 1.3;
+  white-space: normal;
+}
+
+.aiQuickButton:hover {
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+}
+
+.aiChatHistory {
+  flex: 1;
+  min-height: 240px;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  overflow-y: auto;
+}
+
+.aiChatBubble {
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  max-width: 90%;
+}
+
+.aiChatUser {
+  align-self: flex-end;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(37, 99, 235, 0.2));
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+.aiChatAssistant {
+  align-self: flex-start;
+  background: rgba(15, 23, 42, 0.8);
+}
+
+.aiChatLabel {
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #94a3b8;
+  margin-bottom: 0.25rem;
+}
+
+.aiInputArea {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.aiPromptInput {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(15, 23, 42, 0.85);
+  color: #e2e8f0;
+  padding: 0.85rem 1rem;
+  font-size: 0.85rem;
+  font-family: 'Inter', sans-serif;
+  resize: none;
+}
+
+.aiControls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.aiModePills {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.aiModePill {
+  border-radius: 999px;
+  padding: 0.25rem 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: transparent;
+  cursor: pointer;
+  letter-spacing: 0.08em;
+}
+
+.aiModePillActive {
+  background: rgba(99, 102, 241, 0.08);
+}
+
+.aiSubmitButton {
+  border: none;
+  border-radius: 12px;
+  padding: 0.65rem 1.4rem;
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  min-width: 160px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.aiSubmitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.aiSubmitButton:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 30px rgba(99, 102, 241, 0.25);
+}
+
+.footer {
+  text-align: center;
+  padding: 2rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.footer p {
+  font-size: 0.6rem;
+  color: #334155;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+/* ==============================================
+   ACESSIBILIDADE E RESPONSIVIDADE (Fase 2)
+   ============================================== */
+
+.toolButton:focus-visible,
+.scenarioBtn:focus-visible,
+.aiSubmitButton:focus-visible,
+.aiQuickButton:focus-visible,
+.quizOption:focus-visible {
+  outline: 2px solid var(--sim-color-indigo-light);
+  outline-offset: 3px;
+  border-radius: inherit;
+  transition: outline-offset 0.2s ease;
+}
+
+@media (max-width: 800px) {
+  .layoutGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: relative;
+    top: 0;
+  }
+
+  .headerMain {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+
+  .headerControls {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+/* ==============================================
+   AJUSTES MOBILE E TECLADO VIRTUAL
+   ============================================== */
+@media (max-width: 600px) {
+  .aiPanelWrapper {
+    min-height: 60dvh;
+    /* Adapta-se ativamente ao teclado aberto (Dynamic Viewport) */
+    padding: 1rem;
+  }
+
+  .aiPromptInput {
+    font-size: 16px;
+    /* Evita o zoom automático do iOS Safari no evento de Focus */
+  }
+
+  .aiChatHistory {
+    min-height: 160px;
+    /* Reduz a altura mínima para caber com o teclado virtual aberto */
+  }
+}
+
+/* ==============================================
+   IMPRESSÃO E EXPORTAÇÃO PDF (SOTA)
+   ============================================== */
+
+@media print {
+  @page {
+    margin: 1.5cm;
+    size: auto;
+  }
+
+  .simRoot {
+    background: var(--sim-bg-dark) !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    min-height: auto;
+  }
+
+  /* Oculta UI desnecessária no PDF */
+  .sidebar,
+  .toolSwitcher,
+  .headerControls,
+  .footer,
+  .aiInputArea,
+  .aiQuickButtons,
+  .scenarioChevron {
+    display: none !important;
+  }
+
+  .layoutGrid {
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
+  }
+
+  .glassPanel {
+    break-inside: avoid;
+    margin-bottom: 2rem !important;
+    box-shadow: none !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  }
 }

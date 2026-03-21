@@ -17,7 +17,7 @@ if ($null -ne $TargetFile -and $TargetFile.FullName) {
     Write-Host ('=== [READ] RESULTADO: {0} ===' -f $TargetFile.Name) -ForegroundColor Cyan
     Write-Host '==========================================================================' -ForegroundColor DarkGray
     
-    # Formatação Sintática Dinâmica (Estética)
+    # Formatacao Sintatica Dinamica (Estetica)
     Get-Content $TargetFile.FullName | ForEach-Object {
         if ($_ -match '^#') { Write-Host $_ -ForegroundColor Cyan }
         elseif ($_ -match '^> ') { Write-Host $_ -ForegroundColor DarkGray }
@@ -34,3 +34,4 @@ if ($null -ne $TargetFile -and $TargetFile.FullName) {
 else {
     Write-Host ('[FAIL] Nenhum resultado markdown encontrado com a chave: {0}' -f $TaskId) -ForegroundColor Red
 }
+

@@ -1,9 +1,21 @@
 import sys
 import os
+import re
+import asyncio
 from pathlib import Path
+import logging
 import chromadb
 from chromadb.utils import embedding_functions
+import aiofiles
 
+# =================================================
+# CONFIGURACAO SOTA (Estado da Arte)
+# =================================================
+CHUNK_SIZE = 1500
+CHUNK_OVERLAP = 200
+HYBRID_SEARCH_LEXICAL_WEIGHT = 0.4
+HYBRID_SEARCH_N_RESULTS_MULTIPLIER = 5
+EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 class MemoryRAG:
     def __init__(self, memory_dir: str = ".claude/agent-memory"):
         self.memory_dir = Path(memory_dir)
@@ -12,69 +24,223 @@ class MemoryRAG:
         self.client = chromadb.PersistentClient(path=db_path)
         
         self.emb_fn = embedding_functions.SentenceTransformerEmbeddingFunction(
-            model_name="all-MiniLM-L6-v2" 
+            model_name=EMBEDDING_MODEL 
         )
         
         self.collection = self.client.get_or_create_collection(
             name="agent_collective_memory",
             embedding_function=self.emb_fn
         )
-
-    def _chunk_text(self, text: str, chunk_size: int = 1000) -> list[str]:
-        paragraphs = text.split('\n\n')
-        return [p.strip() for p in paragraphs if len(p.strip()) > 10]
-
-    def ingest_all_memories(self):
-        print("[RAG] Iniciando ingestão de memórias...")
-        memory_files = list(self.memory_dir.rglob("MEMORY.md"))
         
-        for file_path in memory_files:
+    def _chunk_text(self, text: str, chunk_size: int = CHUNK_SIZE, overlap: int = CHUNK_OVERLAP) -> list[str]:
+        """Quebra o texto em fragmentos, respeitando os limites dos parágrafos."""
+        if not text:
+            return []
+        
+        paragraphs = text.split('\n\n')
+        all_chunks = []
+        
+        for paragraph in paragraphs:
+            p = paragraph.strip()
+            if not p:
+                continue
+            
+            if len(p) <= chunk_size:
+                all_chunks.append(p)
+            else:
+                # Se o parágrafo for muito longo, divida-o com sobreposição
+                start = 0
+                while start < len(p):
+                    end = start + chunk_size
+                    all_chunks.append(p[start:end])
+                    start += chunk_size - overlap
+                    
+        return all_chunks
+    async def ingest_all_memories(self):
+        logging.info("[RAG] Iniciando expansao de consciencia (Memorias + Base de Conhecimento)...")
+        
+        target_files = []
+        base_path = Path(__file__).parent
+        
+        # 1. Memorias Individuais dos Agentes
+        target_files.extend(list(self.memory_dir.rglob("MEMORY.md")))
+        
+        # 2. Documentacao Mestra e Manuais (Poker, Sistema, Arquitetura)
+        docs_dir = base_path / "docs"
+        if docs_dir.exists():
+            target_files.extend(list(docs_dir.rglob("*.md")))
+            target_files.extend(list(docs_dir.rglob("*.docx")))
+            
+        # Conteudos (Aulas e Materiais)
+        content_dir = base_path / "content"
+        if content_dir.exists():
+            target_files.extend(list(content_dir.rglob("*.docx")))
+            
+        # 3. Textos Fundacionais (A Alma do Templo)
+        claude_dir = base_path / ".claude"
+        if claude_dir.exists():
+            for md in ["COSMOVISAO.md", "CLAUDE.md", "project-context.md", "GLOBAL_INSTRUCTIONS.md", "ESTADO_ARTE_APRENDIZADO_GENERATIVO.md"]:
+                doc_path = claude_dir / md
+                if doc_path.exists():
+                    target_files.append(doc_path)
+                    
+        # 4. Codigo-fonte SOTA (React/TypeScript do Frontend)
+        frontend_dir = base_path / "frontend"
+        if frontend_dir.exists():
+            target_files.extend(list(frontend_dir.rglob("*.tsx")))
+            target_files.extend(list(frontend_dir.rglob("*.ts")))
+            
+        # 5. O Proprio Cerebro (Back-end Python SOTA)
+        for py_dir in ["core", "database", "engine", "utils", "api", "."]:
+            py_path = base_path / py_dir
+            if py_path.exists():
+                target_files.extend(list(py_path.rglob("*.py")))
+        
+        all_generated_ids = set()
+
+        for file_path in set(target_files): # set() remove eventuais duplicatas
             # Ignora a própria pasta do ChromaDB se estiver ali dentro
             if ".chroma_db" in str(file_path): continue
                 
-            agent_name = file_path.parent.name
-            with open(file_path, "r", encoding="utf-8") as f:
-                content = f.read()
+            # Identifica a fonte para rastreabilidade (nome da pasta pai ou do proprio arquivo)
+            source_name = file_path.parent.name if file_path.name == "MEMORY.md" else file_path.stem
+            
+            if file_path.suffix.lower() == '.docx':
+                try:
+                    from docx import Document
+                    doc = Document(file_path)
+                    content = '\n'.join(p.text for p in doc.paragraphs if p.text.strip())
+                except (ImportError, Exception):
+                    logging.error("[RAG] python-docx nao instalado. Ignorando arquivo .docx")
+                    continue
+            else:
+                async with aiofiles.open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+                    content = await f.read()
             
             chunks = self._chunk_text(content)
-            ids = [f"{agent_name}_chunk_{i}" for i in range(len(chunks))]
-            metadatas = [{"agent": agent_name, "source": str(file_path)} for _ in chunks]
+            ids = [f"{source_name}_chunk_{i}" for i in range(len(chunks))]
+            all_generated_ids.update(ids)
+            metadatas = [{"agent": source_name, "source": str(file_path)} for _ in chunks]
             
             if chunks:
-                self.collection.upsert(
+                await asyncio.to_thread(
+                    self.collection.upsert,
                     documents=chunks,
                     metadatas=metadatas,
                     ids=ids
                 )
-                print(f"  + Ingeridos {len(chunks)} fragmentos do agente @{agent_name}")
+                logging.info(f"Ingeridos {len(chunks):02d} fragmentos de: {source_name}")
+                
+        # Sincronia de Exclusão (Purge) - Remove memórias que não existem mais no disco
+        try:
+            existing_data = await asyncio.to_thread(self.collection.get)
+            existing_ids = set(existing_data.get('ids', []))
+            ids_to_delete = list(existing_ids - all_generated_ids)
+            if ids_to_delete:
+                await asyncio.to_thread(self.collection.delete, ids=ids_to_delete)
+                logging.info(f"Expurgados {len(ids_to_delete)} fragmentos obsoletos (Limpeza de Entropia).")
+        except Exception as e:
+            logging.error(f"[RAG] Erro ao limpar memórias antigas: {e}")
 
-    def query_memory(self, question: str, n_results: int = 3):
-        print(f"\n[RAG] Buscando na mente coletiva: '{question}'\n")
-        results = self.collection.query(
-            query_texts=[question],
-            n_results=n_results
-        )
-        
-        if not results['documents'][0]:
-            print("Nenhuma memória relevante encontrada.")
-            return
+    async def _expand_query(self, question: str) -> list[str]:
+        """Usa um LLM rapido para gerar variacoes e palavras-chave da pergunta original."""
+        try:
+            # Lazy import para evitar problemas de dependencia circular
+            from task_executor import call_gemini, call_openrouter, GEMINI_KEYS, OPENROUTER_KEYS
+            import aiohttp
+            import json
+
+            system_prompt = "Voce e um especialista em search query expansion. Dada uma pergunta, gere 4 variacoes ou perguntas relacionadas que capturem a mesma intencao, mas com palavras-chave diferentes. Retorne apenas uma lista de strings em formato JSON, nada mais."
+            user_prompt = f"Pergunta original: '{question}'"
             
-        for i, doc in enumerate(results['documents'][0]):
-            agent = results['metadatas'][0][i]['agent']
-            dist = results['distances'][0][i]
-            print(f"--- Trecho {i+1} (@{agent} | Distância: {dist:.3f}) ---")
-            print(f"{doc}\n")
+            async with aiohttp.ClientSession() as session:
+                # Prioridade 1: Chaves gratuitas do Google (via direta)
+                if GEMINI_KEYS:
+                    try:
+                        logging.info("[RAG] Tentando expansao de query via Gemini (Free Tier)...")
+                        response, _ = await call_gemini(session, "gemini-1.5-flash-latest", system_prompt, user_prompt, GEMINI_KEYS[0])
+                        expanded_queries = json.loads(response.strip('`').strip('json\n').strip())
+                        return [question] + expanded_queries
+                    except Exception as e:
+                        logging.warning(f"[RAG] Falha na expansao via Gemini (Free Tier): {e}. Tentando fallback para OpenRouter.")
+                
+                # Prioridade 2 (Fallback): OpenRouter (pode ter custo, mas e rapido)
+                if OPENROUTER_KEYS:
+                    try:
+                        logging.info("[RAG] Tentando expansao de query via OpenRouter (Fallback)...")
+                        response, _ = await call_openrouter(session, "google/gemini-flash-1.5", system_prompt, user_prompt, OPENROUTER_KEYS[0])
+                        expanded_queries = json.loads(response.strip('`').strip('json\n').strip())
+                        return [question] + expanded_queries
+                    except Exception as e:
+                        logging.warning(f"[RAG] Falha na expansao via OpenRouter: {e}.")
+        except Exception as e:
+            logging.error(f"[RAG] Erro inesperado na expansao de query: {e}")
+        return [question] # Retorna a original em caso de falha
+
+    async def query_memory(self, question: str, n_results: int = 3) -> str:
+        try:
+            # 1. Expansao da Query com IA para Recall Semantico Superior
+            expanded_queries = await self._expand_query(question)
+            results = await asyncio.to_thread(
+                self.collection.query,
+                query_texts=expanded_queries,
+                n_results=n_results * HYBRID_SEARCH_N_RESULTS_MULTIPLIER
+            )
+            
+            if not results['documents'] or not results['documents'][0]:
+                return ""
+                
+            documents = results['documents'][0]
+            metadatas = results['metadatas'][0]
+            distances = results['distances'][0]
+            
+            # 2. Reranking com Busca Lexical SOTA (BM25-lite / Keyword Boost)
+            query_terms = set(re.findall(r'\b\w{3,}\b', question.lower()))
+            
+            scored_docs = []
+            for i, doc in enumerate(documents):
+                doc_terms = set(re.findall(r'\b\w{3,}\b', doc.lower()))
+                
+                # Jaccard similarity for lexical match score
+                intersection = len(query_terms.intersection(doc_terms))
+                union = len(query_terms.union(doc_terms))
+                lexical_score = intersection / union if union > 0 else 0
+                
+                semantic_score = 1.0 / (1.0 + distances[i])
+                
+                # Weighted hybrid score
+                hybrid_score = (semantic_score * (1 - HYBRID_SEARCH_LEXICAL_WEIGHT)) + (lexical_score * HYBRID_SEARCH_LEXICAL_WEIGHT)
+                
+                scored_docs.append({
+                    'doc': doc,
+                    'agent': metadatas[i]['agent'],
+                    'source': metadatas[i].get('source', 'N/A'),
+                    'score': hybrid_score
+                })
+            
+            # 3. Reranking e Seleção Final
+            scored_docs.sort(key=lambda x: x['score'], reverse=True)
+            top_docs = scored_docs[:n_results]
+                
+            output_parts = ["\n=== MENTE COLETIVA (BUSCA HÍBRIDA SOTA) ==="]
+            for i, item in enumerate(top_docs):
+                output_parts.append(f"--- Fragmento #{i+1} de @{item['agent']} (Fonte: {Path(item['source']).name}) ---\n{item['doc']}\n")
+            return "\n".join(output_parts)
+        except Exception as e:
+            logging.error(f"[RAG] Falha na consulta ChromaDB: {e}")
+            return ""
 
 if __name__ == "__main__":
     rag = MemoryRAG()
     if len(sys.argv) > 1:
         cmd = sys.argv[1]
         if cmd == "ingest":
-            rag.ingest_all_memories()
+            asyncio.run(rag.ingest_all_memories())
         elif cmd == "query" and len(sys.argv) > 2:
             question = sys.argv[2]
-            rag.query_memory(question)
+            result = asyncio.run(rag.query_memory(question))
+            print(result)
         else:
-            print("Uso: python memory_rag.py [ingest | query 'pergunta']")
+            logging.error("Uso: python memory_rag.py [ingest | query 'pergunta']")
     else:
-        rag.ingest_all_memories()
+        asyncio.run(rag.ingest_all_memories())

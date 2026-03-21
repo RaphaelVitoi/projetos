@@ -1,6 +1,6 @@
 # Sonda de Reconhecimento - Mapeamento da Raiz (Site)
 # Agente: @implementor
-# Objetivo: Listar recursivamente arquivos para análise de arquitetura
+# Objetivo: Listar recursivamente arquivos para analise de arquitetura
 
 $SrcPath = $PSScriptRoot
 $ReportPath = Join-Path $PSScriptRoot "docs\reports\STRUCTURE_SRC.md"
@@ -8,7 +8,7 @@ $ReportDir = Split-Path $ReportPath
 
 if (-not (Test-Path $ReportDir)) { New-Item -ItemType Directory -Path $ReportDir -Force | Out-Null }
 
-$header = "# Mapa do Território: Raiz (Site)`n**Data:** $(Get-Date -Format 'yyyy-MM-dd HH:mm')`n`n## Estrutura de Arquivos`n"
+$header = "# Mapa do Territorio: Raiz (Site)`n**Data:** $(Get-Date -Format 'yyyy-MM-dd HH:mm')`n`n## Estrutura de Arquivos`n"
 Set-Content -Path $ReportPath -Value $header -Encoding UTF8
 
 if (Test-Path $SrcPath) {
@@ -25,11 +25,11 @@ if (Test-Path $SrcPath) {
         Write-Host "[RECONHECIMENTO] Mapa salvo em: $ReportPath" -ForegroundColor Green
     }
     else {
-        Add-Content -Path $ReportPath -Value "*Nenhum arquivo encontrado ou diretório vazio.*"
-        Write-Warning "[RECONHECIMENTO] Diretório raiz vazio (filtrado)."
+        Add-Content -Path $ReportPath -Value "*Nenhum arquivo encontrado ou diretorio vazio.*"
+        Write-Warning "[RECONHECIMENTO] Diretorio raiz vazio (filtrado)."
     }
 }
 else {
     Add-Content -Path $ReportPath -Value "*ERRO DE CAMINHO.*"
-    Write-Error "[RECONHECIMENTO] CRÍTICO: Caminho raiz não acessível."
+    Write-Error "[RECONHECIMENTO] CRITICO: Caminho raiz nao acessivel."
 }

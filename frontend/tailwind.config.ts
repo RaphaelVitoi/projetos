@@ -7,28 +7,7 @@ const config: Config = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    extend: {
-      colors: {
-        accent: {
-          primary: 'var(--accent-primary)',
-          secondary: 'var(--accent-secondary)',
-          sky: 'var(--accent-sky)',
-          rose: 'var(--accent-rose)',
-          indigo: 'var(--accent-indigo)',
-          emerald: 'var(--accent-emerald)',
-          amber: 'var(--accent-amber)',
-        }
-      },
-      fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-        heading: ['Montserrat', 'sans-serif'],
-        mono: ['JetBrains Mono', 'monospace'],
-        signature: ['Great Vibes', 'cursive'],
-      },
-      transitionTimingFunction: {
-        'master': 'cubic-bezier(0.16, 1, 0.3, 1)',
-      }
-    },
+    extend: {},
   },
   plugins: [],
 };

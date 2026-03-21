@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Exibe as tarefas concluídas nos últimos 7 dias.
+    Exibe as tarefas concluidas nos ultimos 7 dias.
 #>
 
 $QueuePath = Join-Path $PSScriptRoot "queue\tasks.json"

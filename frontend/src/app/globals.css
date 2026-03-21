@@ -1,11 +1,8 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700;800&family=Montserrat:wght@700;800;900&display=swap');
+@import "tailwindcss";
 
 @layer base {
-    @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css');
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700;800&family=Montserrat:wght@700;800;900&display=swap');
-
     :root {
         /* === Paleta de Cores (Sincronizada com Legacy style.css) === */
         --bg-base: #020617;
@@ -1335,6 +1332,7 @@
         font-size: 0.95rem;
     }
 }
+
 
 @layer utilities {
     .font-inter {

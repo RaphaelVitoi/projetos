@@ -8,7 +8,7 @@ Write-Host "=== ELEVANDO SISTEMA AO ESTADO DA ARTE (CLI GLOBAL) ===" -Foreground
 $ProfilePath = $PROFILE
 $NexusDir = $PSScriptRoot
 
-# Cria o arquivo de profile global do usuário se não existir
+# Cria o arquivo de profile global do usuario se nao existir
 if (-not (Test-Path $ProfilePath)) {
     New-Item -ItemType Directory -Path (Split-Path $ProfilePath) -Force | Out-Null
     New-Item -ItemType File -Path $ProfilePath -Force | Out-Null
@@ -16,7 +16,7 @@ if (-not (Test-Path $ProfilePath)) {
 
 $ProfileContent = Get-Content $ProfilePath -Raw -ErrorAction SilentlyContinue
 
-# AUTO-UPDATE: Se o bloco já existe, remove-o de forma limpa para injetar a versão atualizada
+# AUTO-UPDATE: Se o bloco ja existe, remove-o de forma limpa para injetar a versao atualizada
 if ($ProfileContent -match "# NEXUS SYSTEM ENVIRONMENT") {
     $Pattern = "(?ms)`n# ==========================================.*?# NEXUS SYSTEM ENVIRONMENT.*?# =========================================="
     $ProfileContent = $ProfileContent -replace $Pattern, ""
@@ -58,12 +58,12 @@ function nexus {
     else { & `$DoScript -InputString `$Intent }
 }
 
-# Ponte Híbrida (Conecta a nuvem Web ao God Mode Local)
+# Ponte Hibrida (Conecta a nuvem Web ao God Mode Local)
 function nexus-bridge {
     param([Parameter(Mandatory=`$true)][string]`$FilePath)
-    if (-not (Test-Path `$FilePath)) { Write-Host "[FAIL] Arquivo não encontrado: `$FilePath" -ForegroundColor Red; return }
-    Write-Host "[BRIDGE] Conectando Macro-Cognição à Micro-Execução..." -ForegroundColor Magenta
-    `$BridgeCommand = "@implementor Acionando Protocolo Bridge. Leia e analise rigorosamente a especificação contida no arquivo '`$FilePath'. Use sua Autorização Suprema (God Mode) para executar os comandos de terminal necessários (ex: npm install) e forjar os arquivos físicos no sistema, materializando fielmente a arquitetura descrita."
+    if (-not (Test-Path `$FilePath)) { Write-Host "[FAIL] Arquivo nao encontrado: `$FilePath" -ForegroundColor Red; return }
+    Write-Host "[BRIDGE] Conectando Macro-Cognicao a Micro-Execucao..." -ForegroundColor Magenta
+    `$BridgeCommand = "@implementor Acionando Protocolo Bridge. Leia e analise rigorosamente a especificacao contida no arquivo '`$FilePath'. Use sua Autorizacao Suprema (God Mode) para executar os comandos de terminal necessarios (ex: npm install) e forjar os arquivos fisicos no sistema, materializando fielmente a arquitetura descrita."
     nexus `$BridgeCommand -Force
 }
 # ==========================================
@@ -71,5 +71,5 @@ function nexus-bridge {
 
 Add-Content -Path $ProfilePath -Value $Injection -Encoding UTF8
 
-Write-Host "[SUCESSO] Vocabulário nativo injetado na alma do PowerShell!" -ForegroundColor Green
-Write-Host "Feche esta janela e abra um terminal novo para a mágica acontecer." -ForegroundColor Magenta
+Write-Host "[SUCESSO] Vocabulario nativo injetado na alma do PowerShell!" -ForegroundColor Green
+Write-Host "Feche esta janela e abra um terminal novo para a magica acontecer." -ForegroundColor Magenta

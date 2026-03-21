@@ -8,7 +8,7 @@ param(
 )
 
 if ([string]::IsNullOrWhiteSpace($Question)) {
-    Write-Host "=== 📚 BIBLIOTECÁRIO NEXUS ===" -ForegroundColor Green
+    Write-Host "===  BIBLIOTECARIO NEXUS ===" -ForegroundColor Green
     $Question = Read-Host "O que deseja buscar na Mente Coletiva?"
 }
 

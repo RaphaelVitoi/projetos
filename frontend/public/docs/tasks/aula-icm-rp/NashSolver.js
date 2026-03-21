@@ -11,10 +11,10 @@ export class NashSolver {
     }
 
     /**
-     * Calcula o equilíbrio ajustado pelo Risk Premium
+     * Calcula o equilibrio ajustado pelo Risk Premium
      * @param {number} ipRp - Risk Premium do Agressor (IP)
      * @param {number} oopRp - Risk Premium do Defensor (OOP)
-     * @param {number} agressionFactor - Fator de agressividade (0.5 a 1.5, padrão 1.0)
+     * @param {number} agressionFactor - Fator de agressividade (0.5 a 1.5, padrao 1.0)
      */
     solve(ipRp, oopRp, agressionFactor = 1.0) {
         // @verifier: Input Sanitization (Garante estabilidade do motor)
@@ -22,24 +22,24 @@ export class NashSolver {
         const safeOopRp = Math.max(0, parseFloat(oopRp) || 0);
         const safeFactor = Math.max(0.1, Math.min(3.0, parseFloat(agressionFactor) || 1.0));
 
-        // Heurística de Ajuste ICM
+        // Heuristica de Ajuste ICM
         // 1. Defensor (OOP): Perde MDF drasticamente conforme seu RP sobe.
         //    Ganha leve incentivo de call se o IP estiver sob risco extremo (IP blefa menos).
         let defense = this.BASELINE.MDF - (safeOopRp * 1.4) + (safeIpRp * 0.2);
 
         // 2. Agressor (IP): Aumenta blefes se OOP estiver pressionado (exploit).
-        //    Reduz blefes drasticamente se seu próprio RP for alto (preservação).
+        //    Reduz blefes drasticamente se seu proprio RP for alto (preservacao).
         let bluff = this.BASELINE.ALPHA + (safeOopRp * 1.0) - (safeIpRp * 1.1);
 
-        // Aplica o fator de agressividade (modulação comportamental)
+        // Aplica o fator de agressividade (modulacao comportamental)
         bluff = bluff * safeFactor;
 
-        // 3. EV Diff (Diferença de Valor Esperado):
-        //    Quanto a equidade necessária "salta" do ChipEV (33%) para o ICM.
-        //    EV Diff = (Equity ICM - Equity ChipEV) = Basicamente o próprio RP (OOP) contextualizado.
+        // 3. EV Diff (Diferenca de Valor Esperado):
+        //    Quanto a equidade necessaria "salta" do ChipEV (33%) para o ICM.
+        //    EV Diff = (Equity ICM - Equity ChipEV) = Basicamente o proprio RP (OOP) contextualizado.
         let requiredEquity = this.BASELINE.EQUITY + safeOopRp;
 
-        // Clamping (Limites físicos de 0% a 100%)
+        // Clamping (Limites fisicos de 0% a 100%)
         defense = Math.max(0, Math.min(100, defense));
         bluff = Math.max(0, Math.min(100, bluff));
 
@@ -52,7 +52,7 @@ export class NashSolver {
             bluff: {
                 value: bluff.toFixed(1),
                 delta: (bluff - this.BASELINE.ALPHA).toFixed(1),
-                label: "Freq. Bluff Ótima"
+                label: "Freq. Bluff Otima"
             },
             evDiff: {
                 value: (requiredEquity - this.BASELINE.EQUITY).toFixed(1),
@@ -64,16 +64,16 @@ export class NashSolver {
     }
 
     _getVerdict(def, bluff) {
-        if (def < 35) return "Overfold Massivo (Exploitável)";
-        if (bluff < 20) return "Agressão Contida (Valor Puro)";
-        if (bluff > 45) return "Overbluff (Punição de ICM)";
-        return "Equilíbrio GTO Padrão";
+        if (def < 35) return "Overfold Massivo (Exploitavel)";
+        if (bluff < 20) return "Agressao Contida (Valor Puro)";
+        if (bluff > 45) return "Overbluff (Punicao de ICM)";
+        return "Equilibrio GTO Padrao";
     }
 
     /**
-     * Simula a decisão para uma mão específica
-     * @param {number} handEquity - Equidade bruta da mão (0-100)
-     * @param {number} requiredEquity - Equidade necessária calculada (ICM)
+     * Simula a decisao para uma mao especifica
+     * @param {number} handEquity - Equidade bruta da mao (0-100)
+     * @param {number} requiredEquity - Equidade necessaria calculada (ICM)
      */
     simulateHand(handEquity, requiredEquity) {
         const diff = handEquity - requiredEquity;

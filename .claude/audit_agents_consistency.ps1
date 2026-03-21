@@ -16,16 +16,16 @@ Write-Host "=== INICIANDO PROTOCOLO DE AUDITORIA DE AGENTES ===" -ForegroundColo
 $taskId = "AUDIT-AGENTS-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
 $taskDescription = @"
 DIRETRIZ PARA @organizador:
-Inicie uma auditoria rigorosa de consistência de agentes em todo o nosso Córtex Documental.
+Inicie uma auditoria rigorosa de consistencia de agentes em todo o nosso Cortex Documental.
 
-FONTES PARA CRUZAMENTO DE DADOS:
-1. `data/intentmap.json` (Fonte da verdade de roteamento - deve refletir a Triade + 15 Especialistas = 18 entidades).
+FONTES PARA CRUZAMENTO DE DADOS (O Manifesto e a fonte unica de verdade):
+1. `data/agents_manifest.json` (Fonte da verdade de roteamento - deve refletir os 15 Agentes IA).
 2. `.claude/project-context.md` (Verificar a Secao 'Pipeline de Agentes').
 3. `.claude/GLOBAL_INSTRUCTIONS.md` (Verificar a Secao 'Pipeline Harmonica').
 4. `.claude/agents/*.md` (Arquivos fisicos de definicao de persona).
 
 O QUE VOCE DEVE FAZER:
-- Verifique se TODOS os 18 agentes estao descritos nas listas de pipeline no `project-context.md` e `GLOBAL_INSTRUCTIONS.md`. (Recentemente o @seo e @bibliotecario foram adicionados, garanta que nao foram esquecidos no meio das documentacoes).
+- Verifique se TODOS os 15 agentes IA estao descritos corretamente nas listas de pipeline no `project-context.md` e `GLOBAL_INSTRUCTIONS.md`.
 - Se encontrar qualquer assimetria, ausencia ou redundancia, utilize o seu 'God Mode' para editar e corrigir os arquivos markdown instantaneamente.
 - Ao final, ateste o conserto atualizando o log em `task_log.md` ou declarando a simetria na sua resposta final.
 "@

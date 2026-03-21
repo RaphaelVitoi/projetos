@@ -1,19 +1,6 @@
-# Script Utilitário: Visualização de Telemetria dos Agentes
-# Exibe as estatísticas de execução acumuladas na sessão atual.
+# Script Utilitario: Visualizacao de Telemetria dos Agentes
+# Exibe as estatisticas de execucao acumuladas na sessao atual.
 
-$AutopoiesisPath = Join-Path $PSScriptRoot "Agent-Autopoiesis.psm1"
-
-if (Test-Path $AutopoiesisPath) {
-    Write-Host "=== 📊 TELEMETRIA DO ECOSSISTEMA ===" -ForegroundColor Cyan
-    
-    # Importa o módulo para acessar as estatísticas em cache
-    Import-Module $AutopoiesisPath -Force
-    
-    # Chama a função de exibição integrada
-    Show-AgentStats
-    
-    Write-Host "`n[SISTEMA] Dados extraídos com sucesso." -ForegroundColor DarkGray
-}
-else {
-    Write-Host "❌ [ERRO] Módulo Agent-Autopoiesis.psm1 não encontrado." -ForegroundColor Red
-}
+# [REMOVIDO] Agent-Autopoiesis.psm1 nao existe mais
+# Script inteiro dependia exclusivamente deste modulo.
+Write-Host "[AVISO] show_stats.ps1: Modulo Agent-Autopoiesis.psm1 foi removido. Este script esta desativado." -ForegroundColor Yellow

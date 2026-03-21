@@ -40,16 +40,25 @@ interface HandSimulatorProps {
 
 export default function HandSimulator({ oopRp }: Readonly<HandSimulatorProps>) {
   const [handEquity, setHandEquity] = useState(65);
+  const [fgsActive, setFgsActive] = useState(false);
+  const [position, setPosition] = useState<'early' | 'late'>('early');
 
   // Equidade necessária ajustada pelo RP
   // Fórmula: BaseEquity(33.3%) + RP_adjustment
   // Coeficiente 0.7: calibrado para refletir que em Death Zone (RP>=40%),
   // a equidade necessária sobe para ~60-65%, consistente com outputs de HRC.
   // Em RP moderado (~12%), sobe para ~42%, alinhado com ICM padrão.
-  const requiredEquity = useMemo(
-    () => 33.3 + (oopRp * 0.7),
-    [oopRp]
-  );
+  const requiredEquity = useMemo(() => {
+    let eq = 33.3 + (oopRp * 0.7);
+    if (fgsActive) {
+      if (position === 'late') {
+        eq -= 2.5; // Próximo aos blinds -> Maior pressão para agir
+      } else {
+        eq += 1.5; // Longe dos blinds -> Pode aguardar
+      }
+    }
+    return eq;
+  }, [oopRp, fgsActive, position]);
 
   const result = useMemo(
     () => simulateHand(handEquity, requiredEquity),
@@ -99,6 +108,7 @@ export default function HandSimulator({ oopRp }: Readonly<HandSimulatorProps>) {
         display: 'flex',
         alignItems: 'center',
         gap: '0.5rem',
+        flexWrap: 'wrap',
       }}>
         <span style={{ fontSize: '0.55rem', color: '#475569', flexShrink: 0 }}>Fórmula:</span>
         <code style={{
@@ -107,8 +117,72 @@ export default function HandSimulator({ oopRp }: Readonly<HandSimulatorProps>) {
           color: '#f59e0b',
           fontFamily: "'JetBrains Mono', monospace",
         }}>
-          Eq. Req. = 33.3% + (RP × 0.7)
+          Eq. Req. = 33.3% + (RP × 0.7) {fgsActive ? (position === 'late' ? '- 2.5% (FGS)' : '+ 1.5% (FGS)') : ''}
         </code>
+      </div>
+
+      {/* Controles Avançados (FGS) */}
+      <div style={{
+        background: 'rgba(15, 23, 42, 0.6)',
+        border: '1px solid rgba(255, 255, 255, 0.06)',
+        borderRadius: '12px',
+        padding: '1rem',
+        marginBottom: '1rem',
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: fgsActive ? '0.75rem' : '0' }}>
+          <span style={{ fontSize: '0.65rem', fontWeight: 900, color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+            FGS (Future Game Sim)
+          </span>
+          <button
+            onClick={() => setFgsActive(!fgsActive)}
+            style={{
+              padding: '0.2rem 0.6rem',
+              borderRadius: '999px',
+              background: fgsActive ? '#10b981' : 'rgba(255, 255, 255, 0.1)',
+              color: fgsActive ? '#020617' : '#94a3b8',
+              border: 'none',
+              fontSize: '0.55rem',
+              fontWeight: 800,
+              cursor: 'pointer',
+              textTransform: 'uppercase',
+              transition: 'all 0.2s',
+            }}
+          >
+            {fgsActive ? 'Ativo' : 'Inativo'}
+          </button>
+        </div>
+
+        {fgsActive && (
+          <div className={styles.animateFadeUp}>
+            <p style={{ fontSize: '0.55rem', color: '#64748b', marginBottom: '0.6rem', lineHeight: 1.4 }}>
+              O FGS projeta o impacto do relógio do torneio. Qual a sua distância (como Defensor) para o Big Blind?
+            </p>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <button
+                onClick={() => setPosition('early')}
+                style={{
+                  flex: 1, padding: '0.4rem', borderRadius: '6px', cursor: 'pointer', transition: 'all 0.2s',
+                  background: position === 'early' ? 'rgba(99, 102, 241, 0.2)' : 'rgba(30, 41, 59, 0.5)',
+                  border: `1px solid ${position === 'early' ? '#6366f1' : 'rgba(255, 255, 255, 0.05)'}`,
+                  color: position === 'early' ? '#818cf8' : '#94a3b8', fontSize: '0.55rem', fontWeight: 700,
+                }}
+              >
+                Longe (UTG/MP)
+              </button>
+              <button
+                onClick={() => setPosition('late')}
+                style={{
+                  flex: 1, padding: '0.4rem', borderRadius: '6px', cursor: 'pointer', transition: 'all 0.2s',
+                  background: position === 'late' ? 'rgba(225, 29, 72, 0.2)' : 'rgba(30, 41, 59, 0.5)',
+                  border: `1px solid ${position === 'late' ? '#e11d48' : 'rgba(255, 255, 255, 0.05)'}`,
+                  color: position === 'late' ? '#f43f5e' : '#94a3b8', fontSize: '0.55rem', fontWeight: 700,
+                }}
+              >
+                Próximo (SB/BTN)
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Slider de equidade */}

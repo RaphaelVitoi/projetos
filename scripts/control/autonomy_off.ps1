@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Desativa a Autonomia Sistêmica. O handoff ocorre apenas sob comando manual.
+    Desativa a Autonomia Sistemica. O handoff ocorre apenas sob comando manual.
 #>
 $ConfigPath = Join-Path $PSScriptRoot ".claude\autonomy.json"
 $ConfigDir = Split-Path $ConfigPath

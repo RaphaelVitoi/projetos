@@ -1,5 +1,5 @@
 # scripts/maintenance/migrate_json_to_sqlite.ps1
-# Bridge para a Fase 1 da Visão 4D - Migra as tarefas do JSON legado para o DB SOTA.
+# Bridge para a Fase 1 da Visao 4D - Migra as tarefas do JSON legado para o DB SOTA.
 
 $ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 $QueuePath = Join-Path $ProjectRoot "queue\tasks.json"
@@ -10,7 +10,7 @@ if (Test-Path $VenvPython) { $PythonCmd = $VenvPython }
 
 Write-Host "Iniciando migracao de tasks.json para SQLite..." -ForegroundColor Cyan
 
-# Inicializa o DB através do Python DAL
+# Inicializa o DB atraves do Python DAL
 & $PythonCmd $PyScript db-init
 
 if (Test-Path $QueuePath) {
@@ -28,7 +28,7 @@ if (Test-Path $QueuePath) {
         }
         Write-Host "Migracao concluida. $count tarefas inseridas no SQLite (queue/tasks.db)." -ForegroundColor Green
         
-        # Backup do JSON original como prova criptográfica do legado
+        # Backup do JSON original como prova criptografica do legado
         $bakPath = "$QueuePath.bak.$(Get-Date -Format 'yyyyMMddHHmmss')"
         Move-Item -Path $QueuePath -Destination $bakPath -Force
         Write-Host "Arquivo JSON original ancorado para $bakPath" -ForegroundColor DarkGray

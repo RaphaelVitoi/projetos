@@ -15,5 +15,5 @@ if ($Workers) {
     }
 }
 else {
-    Write-Host "[INFO] Nenhum orquestrador encontrado em execução." -ForegroundColor DarkGray
+    Write-Host "[INFO] Nenhum orquestrador encontrado em execucao." -ForegroundColor DarkGray
 }

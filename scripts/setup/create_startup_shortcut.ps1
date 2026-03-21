@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Cria um atalho no diretório 'Startup' do Windows para inicializar o Worker Pydantic automaticamente.
+    Cria um atalho no diretorio 'Startup' do Windows para inicializar o Worker Pydantic automaticamente.
 #>
 
 $TargetScript = Join-Path $PSScriptRoot "start_worker.ps1"

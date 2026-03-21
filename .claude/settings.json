@@ -1,12 +1,33 @@
 {
   "permissions": {
     "allow": [
-      "Bash(powershell.exe -Command \"netstat -ano | findstr '':3000 :3002''\")",
-      "Bash(powershell.exe -Command \"Invoke-WebRequest -Uri ''http://127.0.0.1:3000'' -UseBasicParsing -TimeoutSec 5 2>&1 | Select-Object StatusCode, StatusDescription\")",
-      "Bash(powershell.exe -Command \"Stop-Process -Id 18236, 11240 -Force; Start-Sleep 1; Write-Host ''Processos encerrados''\")"
+      "Read(//dev/**)",
+      "Bash(find c:/Users/Raphael/OneDrive/Documentos/Site/archive/ -type f -name *.tsx -o -name *.ts -o -name *.md -o -name *.ps1)",
+      "Bash(wc -l \"c:/Users/Raphael/OneDrive/Documentos/Site/archive/legacy_pages/\"*/page.tsx)",
+      "Bash(ARCHIVE=c:/Users/Raphael/OneDrive/Documentos/Site/archive/legacy_pages APP=c:/Users/Raphael/OneDrive/Documentos/Site/frontend/src/app __NEW_LINE_a3dbdf75a281d9fd__ cp $ARCHIVE/artigos_estado-da-arte/page.tsx $APP/artigos/estado-da-arte/page.tsx cp $ARCHIVE/artigos_smart-sniper/page.tsx $APP/artigos/smart-sniper/page.tsx cp $ARCHIVE/artigos_validacao-smart-sniper/page.tsx $APP/artigos/validacao-smart-sniper/page.tsx cp $ARCHIVE/aula-1-2/page.tsx $APP/aula-1-2/page.tsx cp $ARCHIVE/biblioteca_hermeneutica-blefe/page.tsx $APP/biblioteca/hermeneutica-blefe/page.tsx cp $ARCHIVE/biblioteca_motor-diluicao/page.tsx $APP/biblioteca/motor-diluicao/page.tsx cp $ARCHIVE/biblioteca_paradoxo-valuation/page.tsx $APP/biblioteca/paradoxo-valuation/page.tsx cp $ARCHIVE/leitura-icm/page.tsx $APP/leitura-icm/page.tsx __NEW_LINE_a3dbdf75a281d9fd__ echo 'Done. Verifying...' ls $APP/artigos/*/page.tsx $APP/aula-1-2/page.tsx $APP/biblioteca/*/page.tsx $APP/leitura-icm/page.tsx)",
+      "Bash(find . -maxdepth 3 -name *.docx -o -name *.docx.url)",
+      "Bash(xargs wc:*)",
+      "Bash(grep -rn from.*panels/ . --include=*.tsx --include=*.ts)",
+      "Bash(grep -rn from.*ui/ . --include=*.tsx --include=*.ts)",
+      "Bash(git -C \"c:/Users/Raphael/OneDrive/Documentos/Site\" show HEAD:frontend/src/app/globals.css)",
+      "Read(//tmp/**)",
+      "Bash(npm uninstall:*)"
     ],
     "additionalDirectories": [
-      "c:\\Users\\Raphael\\OneDrive\\Documentos\\Site\\.claude"
+      "c:\\Users\\Raphael\\OneDrive\\Documentos\\Site\\.claude\\agents",
+      "c:\\Users\\Raphael\\OneDrive\\Documentos\\Site\\.claude\\agent-memory",
+      "c:\\Users\\Raphael\\OneDrive\\Documentos\\Site\\.claude",
+      "c:\\Users\\Raphael\\OneDrive\\Documentos\\Site\\.claude\\stats",
+      "c:\\Users\\Raphael\\OneDrive\\Documentos\\Site\\.claude\\backups",
+      "\\dev",
+      "c:\\Users\\Raphael\\OneDrive\\Documentos\\Site\\frontend\\.claude"
     ]
-  }
+  },
+  "geminicodeassist.agentDebugMode": false,
+  "geminicodeassist.agentYoloMode": false,
+  "geminicodeassist.codeGenerationPaneViewEnabled": true,
+  "geminicodeassist.outlines.automaticOutlineGeneration": false,
+  "geminicodeassist.verboseLogging": false,
+  "geminicodeassist.inlineSuggestions.nextEditPredictions": false,
+  "liveServer.settings.port": 5501
 }

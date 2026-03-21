@@ -1,262 +1,318 @@
 /**
- * IDENTITY: Página ICM Masterclass
+ * IDENTITY: Pagina ICM Masterclass
  * PATH: src/app/aula-icm/page.tsx
- * ROLE: Aula principal de ICM e Risk Premium Pós-Flop.
- * BINDING: [layout.tsx, globals.css, SimuladorICM.tsx]
+ * ROLE: Aula principal de ICM e Risk Premium Pos-Flop.
+ * BINDING: [layout.tsx, globals.css, SimuladorICM.tsx, page.module.css]
  */
 
 import Link from 'next/link';
+import styles from './page.module.css';
+import SimuladorICM from '../../components/SimuladorICM';
 
 export const metadata = {
-  title: 'ICM Pós-Flop | Raphael Vitoi',
-  description: 'Aula Exclusiva: ICM e Risk Premium no Poker. A Geometria do Risco e a desconstrução do pós-flop.',
+  title: 'ICM Pos-Flop | Raphael Vitoi',
+  description: 'Aula exclusiva sobre Risk Premium, Downward Drift e a Geometria do Risco no poker.',
 };
+
+const metrics = [
+  {
+    label: 'Perda de Edge (ChipEV) vs RP',
+    value: '10-12% ROI',
+    detail: 'Jogando o mesmo range de cash game em mesas finais sem ajustar o RP.',
+  },
+  {
+    label: 'Angular Drift',
+    value: 'RP\u2193 \u2192 Frequencia\u2191',
+    detail: 'Downward Drift mostra como o risco se curva ao longo das streets.',
+  },
+  {
+    label: 'RP vs Bubble Factor',
+    value: 'RP \u2265 2\u00d7 BF',
+    detail: 'Meta-projecao: o diferencial determina se o fold e uma obrigacao matematica.',
+  },
+  {
+    label: 'Pressao do Chip Leader',
+    value: 'RP ~12%',
+    detail: 'Defende o climax do "Pacto Silencioso" com laminas recortadas em equities.',
+  },
+];
+
+const timeline = [
+  {
+    epoch: 'Modo de Operacao',
+    title: 'Estado-base',
+    copy: 'Proximas fichas geram valores numericos. A Geometria do Risco define "pontos fixos" no board.',
+  },
+  {
+    epoch: 'Transicao',
+    title: 'Drift acumulado',
+    copy: 'O RP se dissipa em cada street; o solver classico "empurra" valores lineares, o ICM se curva.',
+  },
+  {
+    epoch: 'Resultado',
+    title: 'Bifurcacao do Edge',
+    copy: 'Os jogadores que interpretam o risco em termos geometricos exploram "angulos" que os outros nao veem.',
+  },
+];
+
+const pillars = [
+  {
+    title: 'Dados em tempo real',
+    copy: 'Laboratorios de toy games calibrados com GTO Wizard / DeepSolver 2026.',
+    icon: 'fa-satellite-dish',
+    tag: 'LIVE',
+    accent: 'rgba(14, 165, 233, 0.6)',
+  },
+  {
+    title: 'Heuristicas renomeadas',
+    copy: 'Risk Premium, Downward Drift, Teto do RP e Pacto Silencioso guiando decisoes.',
+    icon: 'fa-compass',
+    tag: 'HEUR',
+    accent: 'rgba(99, 102, 241, 0.6)',
+  },
+  {
+    title: 'Aplicacao pixel a pixel',
+    copy: 'Cada street recebe mapas de pressao, permitindo artesanais recalibragens.',
+    icon: 'fa-layer-group',
+    tag: 'MAPA',
+    accent: 'rgba(16, 185, 129, 0.6)',
+  },
+];
+
+const archetypes = [
+  {
+    id: '01',
+    icon: 'fa-shield-halved',
+    title: 'O Pacto Silencioso',
+    text: 'Chip Leader (70bb) vs. Vice CL (65bb). RP > 20%, 3-bets desaparecem e o foco fica em defender coolers minimalistas pos-flop.',
+    tone: 'rgba(99,102,241,0.2)',
+  },
+  {
+    id: '02',
+    icon: 'fa-scale-unbalanced',
+    title: 'Paradoxo do Valuation',
+    text: 'BTN (40bb) blefa contra BB (54bb). RP ~21% vs 12%: hero-blefs custam caro, a agressao e estrangulada.',
+    tone: 'rgba(225,29,72,0.2)',
+  },
+  {
+    id: '03',
+    icon: 'fa-skull',
+    title: 'Guerra na Lama',
+    text: 'Dois shorts dominados por gigantes. A abundancia de foes eleva o EV do fold; quem ignora o RP sangra equity.',
+    tone: 'rgba(16,185,129,0.2)',
+  },
+  {
+    id: '04',
+    icon: 'fa-crown',
+    title: 'A Ameaca Organica',
+    text: 'Chip Leader (90bb) cuida de RP ~12%. Jogar como se o RP fosse 0% abre brechas fatais no river.',
+    tone: 'rgba(245,158,11,0.2)',
+  },
+];
+
+const callouts = [
+  {
+    title: 'A Equacao do Desespero',
+    type: 'secondary',
+    lines: [
+      'O OP perde mais do que ganha. O RP forca folds abaixo dos 38%.',
+      'O IP apenas blefa quando o RP cai; a exploracao e rara e precisa.',
+    ],
+  },
+  {
+    title: 'O Freio Bayesiano',
+    type: 'neutral',
+    lines: [
+      'RP alto congela blefes. A agressao polariza; equilibrio conservador define o jogo.',
+    ],
+  },
+  {
+    title: 'Dissipacao do RP por street',
+    type: 'emerald',
+    lines: [
+      'Pre-flop: RP maximo \u2192 Drift maximo.',
+      'Flop/Turn: RP residual \u2192 Drift moderado.',
+      'River: RP baixo \u2192 o jogo se aproxima do ChipEV.',
+    ],
+  },
+];
 
 export default function AulaICMPage() {
   return (
-    <main style={{ minHeight: '100vh' }}>
-      {/* Hero */}
-      <header className="page-header" style={{ paddingTop: '5rem', paddingBottom: '3rem', maxWidth: '900px' }}>
-        <p className="page-label" style={{ color: 'var(--accent-secondary)' }}>
-          <span className="fa-solid fa-bolt"></span> State of the Art
+    <main className={styles.page}>
+      <header className={styles.hero}>
+        <p className={styles.heroLabel}>
+          <span className="fa-solid fa-bolt" /> State of the Art
         </p>
-        <h1 style={{ background: 'linear-gradient(135deg, #fff 0%, #fca5a5 50%, #a5b4fc 100%)', backgroundClip: 'text', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', fontSize: 'clamp(2rem, 5vw, 3.2rem)' }}>
-          O Edge Mudou de Lugar.
-        </h1>
-        <p className="page-subtitle" style={{ maxWidth: '700px', fontSize: '1.1rem' }}>
-          Descubra por que jogar ChipEV em mesas finais está custando, em média, mais de{' '}
-          <strong style={{ color: 'var(--accent-secondary)' }}>10% do seu ROI</strong> e como a elite do poker
-          usa o &quot;Downward Drift&quot; para dominar o pós-flop em 2026.
+        <h1 className={styles.heroTitle}>O Edge Mudou de Lugar.</h1>
+        <p className={styles.heroSubtitle}>
+          Jogar ChipEV contra o Downward Drift custa, em media, <strong>10% do ROI</strong>.
+          Esta aula mostra como o Risk Premium redefine o pos-flop de 2026.
         </p>
+        <div className={styles.heroActions}>
+          <Link href="#arsenal" className={`btn-primary ${styles.heroButton}`}>
+            Arsenal Tatico
+          </Link>
+          <Link href="/tools/simulador" className={`btn-secondary ${styles.heroButton}`}>
+            Abrir Motor ICM &rarr;
+          </Link>
+        </div>
       </header>
 
-      {/* Artigo Principal */}
-      <div className="sim-container">
-        <article style={{ maxWidth: '840px', margin: '0 auto 4rem' }}>
-          <h2>A Geometria do Risco</h2>
-          <p style={{ color: 'var(--accent-primary)', fontFamily: 'var(--font-mono)', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', marginTop: '-0.5rem', marginBottom: '2rem' }}>
-            A Desconstrução do Pós-Flop sob a Ótica do ICM
-          </p>
+      <section className={styles.stateOfArtSection}>
+        <div className={`glass-panel ${styles.stateOfArtPanel}`}>
+          <div className={styles.stateOfArtIntro}>
+            <p className="page-label">
+              <span className="fa-solid fa-radar" /> Geometria do Risco
+            </p>
+            <h2>Operamos com dados de vanguarda.</h2>
+            <p>
+              O mundo real exige renderizar o Risk Premium em espectros. Estas metricas sintetizam
+              o comportamento geoestrategico do RP, do Drift e do Bubble Factor para que a mesa final
+              se torne um mapa legivel.
+            </p>
+          </div>
+          <div className={`${styles.metricGrid} hub-grid`}>
+            {metrics.map((metric) => (
+              <article key={metric.label} className={`hub-card ${styles.metricCard}`}>
+                <p className={styles.metricLabel}>{metric.label}</p>
+                <strong>{metric.value}</strong>
+                <p>{metric.detail}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
 
-          <blockquote>
-            &quot;O poker é uma ciência de informação incompleta jogada por humanos falhos. Acreditamos
-            dominar a matemática, mas frequentemente somos traídos por aplicar a equação certa no
-            universo errado.&quot;
-          </blockquote>
-
-          <h3>1. A Ilusão do Vácuo (ChipEV vs. ICM)</h3>
+      <section className={styles.timelineSection}>
+        <div className={`glass-panel ${styles.timelineCard}`}>
+          <h3>Linha do Tempo do RP</h3>
           <p>
-            Hoje, a teoria do poker está democratizada. Solvers (PioSolver, GTO Wizard) e trackers
-            mapearam as tendências da população. No entanto, uma cegueira coletiva ainda assombra o
-            High Stakes: a aplicação robótica de conceitos de ChipEV em ambientes de alta pressão
-            utilitária (ICM).
+            A geometria do risco move-se como uma trajetoria curva. Interpretamos cada momento
+            para antecipar o impacto percentual do RP e guiar as proximas jogadas.
           </p>
-          <p>
-            Fora do Heads-Up, praticamente todas as fases de um torneio são distorcidas pelo ICM.
-            Uma ficha ganha nunca terá o mesmo valor de uma ficha perdida. O erro do jogador mediano
-            é tentar aplicar o clássico MDF (Minimum Defense Frequency) numa Mesa Final onde a sua
-            sobrevivência financeira está em risco.
-          </p>
-
-          <h3>2. O Motor Invisível: Risk Premium (RP) e Bubble Factor (BF)</h3>
-          <p>Para entender a mutação dos ranges, precisamos entender o peso das fichas:</p>
-          <ul>
-            <li>
-              <strong>Bubble Factor (BF):</strong> É o multiplicador da dor.
-              Se o seu BF é de 1.5, significa que perder a mão lhe custa 50% a mais do que o valor
-              que você ganharia.
-            </li>
-            <li>
-              <strong>Risk Premium (RP):</strong> É a tradução do BF em
-              equidade. A &quot;taxa extra&quot; de certeza matemática que você precisa ter para
-              colocar o seu torneio em risco.
-            </li>
-          </ul>
-
-          <h3>3. Os 4 Arquétipos Clínicos do ICM</h3>
-          <p>Ao analisarmos matrizes reais de Mesa Final, identificamos quatro comportamentos absolutos:</p>
-        </article>
-
-        {/* Cards dos Arquétipos */}
-        <div style={{ maxWidth: '900px', margin: '0 auto 5rem', display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.25rem' }}>
-          {[
-            { n: '01', icon: 'fa-shield-halved', color: 'var(--accent-primary)', rgb: '99,102,241', title: 'O Pacto Silencioso', text: 'Chip Leader (70bb) vs Vice CL (65bb) com mesa cheia de micro-stacks. O RP de ambos ultrapassa 20%. A 3-bet linear desaparece, ranges de flat call inflam massivamente, e o foco vira caçar cooler absoluto pós-flop investindo o mínimo pré-flop. Traps e slowplays tornam-se armas de defesa.' },
-            { n: '02', icon: 'fa-scale-unbalanced', color: 'var(--accent-secondary)', rgb: '225,29,72', title: 'Paradoxo do Valuation', text: 'BTN (40bb) abre, BB (54bb) defende. O Mid acha que pode imprimir overbluffs — mas o RP do BTN (~21%) é quase o dobro do BB (~12%). Se o BTN errar um hero-bluff e tomar call, derrete de 40bb para o pó absoluto. A agressão é estrangulada. A matemática corta brutalmente a frequência de blefe do IP.' },
-            { n: '03', icon: 'fa-skull', color: 'var(--accent-emerald)', rgb: '16,185,129', title: 'A Guerra na Lama', text: 'Dois shorts (~10bb) numa mesa dominada por gigantes (80bb+). Parece que deveriam jogar sem restrições (RP 0%). Falso: a abundância de outros shorts eleva o EV do fold (laddering). O RP ancora entre 7% e 10%. Quem entra em overfold rezando pelo ICM sangra equity. Quem ignora o RP e jamba tudo perde payjumps passivos.' },
-            { n: '04', icon: 'fa-crown', color: 'var(--accent-amber)', rgb: '245,158,11', title: 'A Ameaça Orgânica', text: 'Chip Leader (90bb) ataca Vice (25bb). O CL parece invulnerável — RP de 0%, blefaria 100%? Não. O HRC impõe RP substancial (~12%) ao CL: se o Vice dobrar após um shove descuidado, salta para 50bb e torna-se o único rival capaz de usurpar a coroa. O solver protege o God Mode exigindo seleção de mãos.' },
-          ].map(({ n, icon, color, rgb, title, text }) => (
-            <div key={n} style={{
-              background: `linear-gradient(150deg, rgba(${rgb},0.07) 0%, var(--bg-card) 60%)`,
-              backdropFilter: 'blur(12px)',
-              border: 'var(--glass-border)',
-              borderTop: `3px solid ${color}`,
-              borderRadius: 'var(--radius-lg)',
-              padding: '1.75rem',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '1.25rem',
-              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ width: '44px', height: '44px', borderRadius: '10px', background: `rgba(${rgb},0.15)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <span className={`fa-solid ${icon}`} style={{ color, fontSize: '1rem' }}></span>
+          <div className={styles.timeline}>
+            {timeline.map((step) => (
+              <div key={step.title} className={`hub-card ${styles.timelineStep}`}>
+                <span className={styles.timelineEpoch}>{step.epoch}</span>
+                <h4>{step.title}</h4>
+                <p>{step.copy}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className={`${styles.pillars} hub-grid`}>
+          {pillars.map((pillar) => (
+            <div
+              key={pillar.title}
+              className={`hub-card ${styles.pillarCard}`}
+              style={{ ['--pillar-accent' as string]: pillar.accent }}
+            >
+              <div className={styles.pillarTop}>
+                <span className={styles.pillarTag}>{pillar.tag}</span>
+                <span className={styles.pillarIcon}>
+                  <i className={`fa-solid ${pillar.icon}`} />
                 </span>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', fontWeight: 800, color: `rgba(${rgb},0.3)`, letterSpacing: '0.1em' }}>{n}</span>
               </div>
-              <div>
-                <h3 style={{ margin: '0 0 0.5rem', fontFamily: 'var(--font-heading)', fontSize: '1.15rem', fontWeight: 700, color: 'var(--text-main)', lineHeight: 1.2, letterSpacing: '-0.02em' }}>{title}</h3>
-                <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>{text}</p>
-              </div>
+              <h4>{pillar.title}</h4>
+              <p>{pillar.copy}</p>
+              <div className={styles.pillarVisual} aria-hidden="true" />
             </div>
           ))}
         </div>
+      </section>
 
-        <article style={{ maxWidth: '840px', margin: '0 auto 4rem' }}>
-          <h2>4. A Falsa Equivalência do MDF</h2>
+      <section className={styles.articleSection}>
+        <article className={styles.article}>
+          <h2>A Geometria do Risco</h2>
+          <p className={styles.articleTag}>A desconstrucao do pos-flop sob a otica do ICM</p>
           <p>
-            O clássico MDF dita que, contra uma aposta do tamanho do pote, o defensor deve pagar 50% das
-            vezes para tornar os blefes do agressor indiferentes. Essa matemática é válida em ChipEV.
-            No ICM, ela quebra.
+            Solvers e trackers democratizaram teorias de poker, mas poucos entendem que o valor de uma ficha depende de quem a perde.
+            O MDF aplicado a forca em mesas finais ignora que cada ficha carrega um multiplicador de dor.
           </p>
+          <p>
+            Risk Premium e Bubble Factor sao os motores invisiveis do fluxo de fichas. Desenhar ranges sem contemplar essas forcas e
+            entregar juizes para os algoritmos.
+          </p>
+        </article>
 
-          <div className="callout callout-secondary">
-            <h4 style={{ marginTop: 0, color: 'var(--accent-secondary)' }}>A Equação do Desespero</h4>
-            <p>Quando o OOP enfrenta uma aposta de um pote inteiro em Mesa Final, dois mecanismos operam simultaneamente:</p>
+        <div className={styles.archetypeGrid}>
+          {archetypes.map(({ id, icon, title, text, tone }) => (
+            <article key={id} className={styles.archetypeCard}>
+              <div className={styles.archetypeHeader}>
+                <div className={styles.archetypeIcon} style={{ background: tone }}>
+                  <i className={`fa-solid ${icon}`} />
+                </div>
+                <span className={styles.archetypeId}>{id}</span>
+              </div>
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className={styles.calloutsSection}>
+        {callouts.map(({ title, type, lines }) => (
+          <div key={title} className={`${styles.callout} ${styles[`callout-${type}`]}`}>
+            <h4>{title}</h4>
             <ul>
-              <li>
-                <strong>O OOP Atinge o Teto de Dor:</strong> Um range condensado (cheio de bluffcatchers)
-                não suporta um RP alto. A realização de equidade despenca porque o agressor pode colocar o
-                OOP em all-in no turn ou river. A defesa quebra de 50% para a faixa de{' '}
-                <strong>30% a 38%</strong> — um overfold matemático forçado pela estrutura do ICM, não por
-                fraqueza do jogador.
-              </li>
-              <li style={{ marginTop: '0.75rem' }}>
-                <strong>O IP Oprime (Se Puder):</strong> Se o IP tiver RP baixo (Vantagem de Risco), seu
-                Alpha de blefes aumenta para explorar o overfold do adversário. A agressão se torna
-                matematicamente justificada.
-              </li>
+              {lines.map((line) => (
+                <li key={line}>{line}</li>
+              ))}
             </ul>
           </div>
+        ))}
+      </section>
 
-          <div className="callout" style={{ marginTop: '1.5rem' }}>
-            <h4 style={{ marginTop: 0 }}>O Freio Bayesiano</h4>
-            <p style={{ marginBottom: 0 }}>
-              Se o IP também tiver RP alto — o Paradoxo do Valuation — ele <em>não pode</em> explorar
-              o overfold do vilão. Seu range de agressão condensa-se e a frequência de blefe cai abaixo dos
-              33.3%. O solver simultaneamente força o defensor a foldar mais <em>e</em> proíbe o agressor
-              de blefar mais. Ambos ficam presos num equilíbrio de alta pressão, baixa ação — o Pacto
-              Silencioso em miniatura.
-            </p>
-          </div>
-
-          <blockquote>
-            &ldquo;Frases feitas como &apos;ele está shovando tudo, vou pagar light&apos; destroem
-            profissionais em retas finais. A matemática exige extração cirúrgica de EV. Numa mesa final,
-            a responsabilidade de cada jogador é realizar o EV monetário daquela stack específica, não
-            provar coragem.&rdquo;
-          </blockquote>
-        </article>
-
-        <article style={{ maxWidth: '840px', margin: '0 auto 4rem' }}>
-          <h2>Conclusão: A Arte da Adaptação</h2>
-          <p>
-            Os Solvers são bússolas, não destinos. A vantagem competitiva moderna não está em
-            decorar tabelas pré-flop. Está em compreender a Elasticidade do Risk Premium no pós-flop.
-          </p>
-
-          <div className="callout callout-secondary">
-            <h4 style={{ marginTop: 0, color: 'var(--accent-secondary)' }}>O Downward Drift</h4>
-            <p>
-              Conceito formalizado por Dara O&apos;Kearney: o ICM força os solvers a comprimirem as
-              ações. Bets grandes viram bets pequenos. Bets pequenos viram checks ou calls. Raises
-              viram calls. <strong>A ação &ldquo;deriva para baixo&rdquo; em variância</strong> para
-              proteger o valor financeiro da stack.
-            </p>
-            <p style={{ marginBottom: 0 }}>
-              A exceção crítica: quando há vantagem clara, o solver não aposta médio — ele ou
-              min-bets ou vai all-in. O meio-termo cria decisões difíceis e caras. O Drift convive
-              com polarização extrema.
-            </p>
-          </div>
-
-          <div className="callout callout-emerald" style={{ marginTop: '1.5rem' }}>
-            <h4 style={{ marginTop: 0, color: 'var(--accent-emerald)' }}>Dissipação do RP por Street</h4>
-            <p>
-              O Drift não é constante ao longo da mão. Ele é proporcional ao RP residual: quanto
-              maior o RP naquele momento, mais forte o Drift. Conforme fichas entram no pote e a
-              stack restante diminui, o RP dissipa — e o Drift enfraquece.
-            </p>
-            <p>
-              <strong>Pré-flop:</strong> RP no máximo → Drift máximo (evitar all-in, comprimir ação).
-              <br />
-              <strong>Flop/Turn:</strong> RP residual moderado → Drift moderado.
-              <br />
-              <strong>River:</strong> RP residual baixo → Drift enfraquece → o jogo se aproxima do
-              ChipEV. O defensor <em>precisa</em> pagar mais do que intuitivamente esperaria.
-            </p>
-            <p style={{ marginBottom: 0 }}>
-              Jogar o river como se o RP pré-flop ainda estivesse ativo é o erro mais comum e
-              custoso no pós-flop de ICM. A stack já comprometeu o risco nas streets anteriores.
-            </p>
-          </div>
-        </article>
-
-        {/* Arsenal Tatico */}
-        <section style={{ maxWidth: '900px', margin: '0 auto 4rem' }}>
-          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.15em', textAlign: 'center', marginBottom: '0.75rem' }}>
-            <span className="fa-solid fa-compass" style={{ marginRight: '0.5rem' }}></span> Navegação
-          </p>
-          <h3 style={{ textAlign: 'center', marginBottom: '2rem', fontSize: '1.6rem' }}>O Arsenal Tatico</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
-            <Link href="/leitura-icm" className="nav-card">
-              <span className="nav-card-icon" style={{ background: 'rgba(99, 102, 241, 0.12)' }}>
-                <span className="fa-solid fa-file-lines" style={{ color: 'var(--accent-primary)' }}></span>
-              </span>
-              <div>
-                <strong>Ler Whitepaper</strong>
-                <span>Teoria Completa &rarr;</span>
-              </div>
-            </Link>
-            <a href="#simulador-section" className="nav-card" style={{ borderColor: 'rgba(16, 185, 129, 0.2)' }}>
-              <span className="nav-card-icon" style={{ background: 'rgba(16, 185, 129, 0.12)' }}>
-                <span className="fa-solid fa-gamepad" style={{ color: 'var(--accent-emerald)' }}></span>
-              </span>
-              <div>
-                <strong>Usar Simulador</strong>
-                <span style={{ color: 'var(--accent-emerald)' }}>Laboratório Interativo &rarr;</span>
-              </div>
-            </a>
-            <Link href="/aula-1-2" className="nav-card">
-              <span className="nav-card-icon" style={{ background: 'rgba(14, 165, 233, 0.12)' }}>
-                <span className="fa-solid fa-graduation-cap" style={{ color: 'var(--accent-sky)' }}></span>
-              </span>
-              <div>
-                <strong>Aula 1.2</strong>
-                <span>Material Complementar &rarr;</span>
-              </div>
-            </Link>
-          </div>
-        </section>
-
-        {/* Link para o Motor ICM */}
-        <section id="simulador-section" style={{ scrollMarginTop: '6rem', maxWidth: '900px', margin: '4rem auto 0', padding: '3rem 0 0', textAlign: 'center' }}>
-          <p className="page-label">
-            <span className="fa-solid fa-chart-area"></span> Geometria do Risco Engine
-          </p>
-          <h2>Motor ICM</h2>
-          <p style={{ color: '#94a3b8', marginBottom: '2rem' }}>
-            9 cenários clínicos, calculadora Malmuth-Harville, NashSolver, quizzes interativos, modo comparação e simulação por mão.
-          </p>
-          <Link href="/tools/simulador" className="btn-primary" style={{ padding: '1rem 2.5rem', fontSize: '0.95rem' }}>
-            Abrir Motor ICM &rarr;
+      <section className={styles.arsenal} id="arsenal">
+        <p className={styles.sectionTag}>
+          <span className="fa-solid fa-compass" /> Navegacao
+        </p>
+        <h3>O Arsenal Tatico</h3>
+        <div className={styles.navGrid}>
+          <Link href="/leitura-icm" className={styles.navCard}>
+            <span className="fa-solid fa-file-lines" />
+            <div>
+              <strong>Whitepaper ICM</strong>
+              <span>Teoria completa &rarr;</span>
+            </div>
           </Link>
-        </section>
+          <a href="#simulador-section" className={styles.navCard}>
+            <span className="fa-solid fa-gamepad" />
+            <div>
+              <strong>Motor ICM</strong>
+              <span>Laboratorio interativo &rarr;</span>
+            </div>
+          </a>
+          <Link href="/aula-1-2" className={styles.navCard}>
+            <span className="fa-solid fa-graduation-cap" />
+            <div>
+              <strong>Aula 1.2</strong>
+              <span>Material complementar &rarr;</span>
+            </div>
+          </Link>
+        </div>
+      </section>
 
-        <nav className="article-nav" style={{ marginBottom: '4rem' }}>
-          <Link href="/leitura-icm">&larr; Whitepaper ICM</Link>
-          <Link href="/aula-1-2">Aula 1.2 &rarr;</Link>
-        </nav>
-      </div>
+      <section id="simulador-section" className={styles.simInfo}>
+        <p className="page-label">
+          <span className="fa-solid fa-chart-area" />
+          Geometria do Risco Engine
+        </p>
+        <h2>Motor ICM</h2>
+        <p>
+          9 cenarios clinicos, calculadora Malmuth-Harville, NashSolver, quizzes e comparacao de maos acompanhando o Risk Premium em tempo real.
+        </p>
+        <div className="mt-12 w-full text-left">
+          <SimuladorICM />
+        </div>
+      </section>
+
+      <nav className={`${styles.articleNav} article-nav`}>
+        <Link href="/leitura-icm">&larr; Whitepaper ICM</Link>
+        <Link href="/aula-1-2">Aula 1.2 &rarr;</Link>
+      </nav>
     </main>
   );
 }

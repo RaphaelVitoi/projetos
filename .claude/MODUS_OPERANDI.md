@@ -37,14 +37,13 @@
 ## 7. Prevencao de Truncamento (Otimizacao de Output da IA)
 
 - **O Problema:** Respostas da IA que combinam analises longas com blocos de codigo extensos estouram o limite maximo de saida (output limit). Isso trunca o final do diff e impede a aplicacao automatica na IDE.
-- **A Solucao SOTA (Dividir para Conquistar):** Ao fornecer modificacoes de codigo, a IA DEVE ser cirurgica. NUNCA envie o conteudo completo de um arquivo longo. Se o diff ainda for grande, a IA DEVE fatiar as modificacoes em partes menores, topico por topico, em blocos de `diff` curtos e separados.
+- **A Solucao SOTA (A Lei do Fatiamento Estrito - Zero-Rework):** O retrabalho destroi a Economia Generalizada. E ESTRITAMENTE PROIBIDO enviar diffs ou blocos de codigo continuos que ultrapassem 120-150 linhas. A IA DEVE fatiar a entrega em blocos atomicos e aguardar a confirmacao ("feito") do usuario antes de enviar o proximo bloco.
 
-## 8. Antevisao e Proatividade (A Engenharia Preditiva)
+## 8. A Navalha SOTA (Exclusão, Arquivamento, Melhorar ou Fundir)
+- **O Princípio:** Redundância é o primeiro passo para a entropia. Arquivos soltos e componentes subutilizados diluem a atenção do sistema e aumentam a complexidade de manutenção.
+- **A Diretriz:** Antes de criar o novo, avalie o existente. Diante de qualquer componente, aplique o filtro impiedosamente: **1. Excluir** (se obsoleto/malicioso/bugado); **2. Arquivar** (se for legado inativo sem uso prático); **3. Fundir** (se funções se sobrepõem, consolide-as no componente mais moderno/capaz); **4. Melhorar** (se o componente tem potencial mas está subutilizado, eleve-o ao Estado da Arte); **5. Organização Ideal** (a alocação física do arquivo deve refletir perfeitamente a topologia do sistema, sem arquivos desgarrados). A densidade funcional supera a dispersão.
+- **Hierarquia de Ação (Anti-Explosão):** A exclusão é o último recurso, reservado para o que é comprovadamente prejudicial (bugs, lixo, redundâncias irrecuperáveis). A ordem de prioridade para lidar com entropia é sempre: **Fundir > Melhorar > Arquivar > Excluir**, pois as três primeiras ações preservam ou agregam valor.
 
-- **O Problema:** A execucao focada puramente na demanda imediata gera debito tecnico e quebra silenciosa de arquivos adjacentes (testes, schemas).
-- **A Solucao SOTA:** Ao atuar em um escopo, o agente preve a reacao em cadeia. Alterar a Home exige consertar os Testes da Home. Injetar uma consulta SQL exige propor o Schema correspondente. A proatividade atua antes da compilacao falhar.
-
-## 9. Simetria, Harmonia e Autopoiese (O Todo e a Parte)
-
-- **O Problema:** Sistemas escalam como um amontoado de scripts e ferramentas desconexas, gerando redundância, atrito e uma "arquitetura Frankenstein".
-- **A Solucao SOTA:** Obrigatoriedade absoluta de organização e compatibilidade. Todo novo componente criado (A Parte) DEVE potencializar a arquitetura global (O Todo), e a infraestrutura global DEVE nutrir e potencializar a Parte. Não há espaço para soluções isoladas ou "gambiarras". Cada novo script, módulo ou interface deve espelhar a elegância, a integridade ética e o rigor lógico de todo o ecossistema.
+## 9. A Engenharia da Antevisão e Economia Generalizada
+- **O Princípio:** A execução mecânica sem visão de futuro gera dívida técnica. A sofisticação e a inteligência devem sempre substituir a força bruta e a complexidade.
+- **A Diretriz:** Todo movimento arquitetural deve ser guiado por 3 passos: 1. **Antevisão:** Construir a imagem mental do objetivo final, prevendo o impacto e as portas que a implementação abrirá. 2. **Previsão:** Identificar colisões, bugs e redundâncias potenciais antes de forjar o código. 3. **Economia Generalizada:** Escolher a rota mais limpa, atômica e eficiente que evite retrabalho futuro. Se um problema pode ser evitado por design, ele não deve existir para ser corrigido.

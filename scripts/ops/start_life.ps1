@@ -1,11 +1,6 @@
 # Gatilho de Vida Artificial (Autopoiese)
-# Inicia o loop contínuo de criação, planejamento e auditoria.
+# Inicia o loop continuo de criacao, planejamento e auditoria.
 
-$Source = Join-Path $PSScriptRoot "Agent-Autopoiesis.psm1"
-
-Write-Host "=== INICIANDO SISTEMA DE VIDA ARTIFICIAL ===" -ForegroundColor Cyan
-Write-Host "Carregando a Alma do Sistema (Autopoiese v6.0)..." -ForegroundColor Gray
-Import-Module $Source -Force
-
-# Inicia o ciclo vital (Loop Infinito)
-Start-OrganismPulse -HeartRateSeconds 5
+# [REMOVIDO] Agent-Autopoiesis.psm1 nao existe mais
+# Script inteiro dependia exclusivamente deste modulo.
+Write-Host "[AVISO] start_life.ps1: Modulo Agent-Autopoiesis.psm1 foi removido. Este script esta desativado." -ForegroundColor Yellow

@@ -23,7 +23,7 @@ foreach ($Agent in $Agents) {
 
     # Template de Memória com o novo sistema de Tagging e Coerência de 4 Camadas
     $Template = @"
-# @$Agent MEMORY — Inteligência Acumulada
+# @$Agent MEMORY - O Cortex Individual
 
 > **Status:** Ativo
 > **Vínculo:** Honrando COSMOVISAO.md
@@ -32,30 +32,30 @@ foreach ($Agent in $Agents) {
 ---
 
 ## 1. PERFIL & IDENTIDADE
-Identidade e especialização do agente conforme definido em `.claude/agents/$Agent.md`.
+Descreva o perfil e alinhamento do agente com o projeto.
 
 ## 2. COMPETÊNCIAS ATIVAS
-Mapeamento de habilidades validadas durante a operação.
+Liste as competencias e habilidades do agente.
 
 ## 3. PADRÕES & INSIGHTS (#aprendizado)
 Registro de descobertas e padrões observados.
 
-*   **Exemplo:** #padrão #reflexão - Observado que a profundidade analítica aumenta quando o prompt inicial cita explicitamente a Teoria dos Jogos.
+*   **Exemplo:** #padrao #reflexao - Observado que a profundidade analítica aumenta quando o prompt inicial cita explicitamente a Teoria dos Jogos.
 
 ## 4. RELACIONAMENTOS (#relacionamento)
 Com quem este agente mais colabora e como a simetria é mantida.
 
 ## 5. REGISTRO DE EXECUÇÃO (#decisão)
-Histórico de decisões críticas e rationale aplicado.
+Registre as decisoes e resultados relevantes para o agente.
 
 ---
 
 ## TAGS SUGERIDAS
 Use estas hashtags para categorizar informações:
-`#padrão` `#inteligência` `#relacionamento` `#decisão` `#aprendizado` `#reflexão` `#ética`
+`#padrao` `#inteligencia` `#relacionamento` `#decisao` `#aprendizado` `#reflexao` `#etica`
 
 ## AGREGAÇÃO FILOSÓFICA
-*Como este agente contribuiu para a COSMOVISAO.md nesta sessão?*
+Como este agente contribuiu para a COSMOVISAO.md?
 "@
 
     if (-not (Test-Path $FilePath)) {

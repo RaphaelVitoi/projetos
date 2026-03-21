@@ -11,9 +11,9 @@ if (Test-Path $TargetDir) {
     
     if ($FilesToDelete) {
         $FilesToDelete | Remove-Item -Force
-        Write-Host "[CLEANUP] $($FilesToDelete.Count) relatórios residuais isolados e removidos de $TargetDir." -ForegroundColor Green
+        Write-Host "[CLEANUP] $($FilesToDelete.Count) relatorios residuais isolados e removidos de $TargetDir." -ForegroundColor Green
     }
     else {
-        Write-Host "[CLEANUP] Simetria mantida. Nenhum relatório residual encontrado." -ForegroundColor DarkGray
+        Write-Host "[CLEANUP] Simetria mantida. Nenhum relatorio residual encontrado." -ForegroundColor DarkGray
     }
 }

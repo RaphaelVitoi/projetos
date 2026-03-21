@@ -15,6 +15,7 @@ import {
   PolarRadiusAxis,
   Radar,
   Legend,
+  Tooltip,
   ResponsiveContainer,
 } from 'recharts';
 import type { Scenario } from '../engine/types';
@@ -147,6 +148,15 @@ export default function ComparisonRadar({ scenarios, currentId }: Readonly<Compa
                 strokeWidth={2}
               />
             )}
+            <Tooltip
+              contentStyle={{
+                backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                border: '1px solid rgba(99, 102, 241, 0.3)',
+                borderRadius: '8px',
+                color: '#e2e8f0'
+              }}
+              itemStyle={{ fontSize: '0.75rem', fontWeight: 600, fontFamily: "'JetBrains Mono', monospace" }}
+            />
             <Legend
               wrapperStyle={{ fontSize: '0.6rem', color: '#94a3b8' }}
             />

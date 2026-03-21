@@ -2,7 +2,8 @@
 # Inicia o ecossistema em background para processamento continuo
 
 $ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
-Import-Module (Join-Path $ProjectRoot "Agent-TaskManager.psm1") -Force
+# [REMOVIDO] Agent-TaskManager.psm1 nao existe mais
+# Import-Module (Join-Path $ProjectRoot "Agent-TaskManager.psm1") -Force
 
 Write-Host "=== INICIANDO PROTOCOLO DE AUTONOMIA TOTAL ===" -ForegroundColor Magenta
 
@@ -15,10 +16,11 @@ $tasks = @(
 foreach ($t in $tasks) { Add-AgentTask -NewTask $t }
 Write-Host "[KERNEL] Tarefas de UI e Auditoria enfileiradas." -ForegroundColor Green
 
-# 2. Lancar Dashboard de Visão Global (Hemisfério Direito)
+# 2. Lancar Dashboard de Visao Global (Hemisferio Direito)
 Start-Process powershell -ArgumentList "-NoExit", "-Command", "& { . $($ProjectRoot)\scripts\cli\dashboard_queue.ps1 }" -WindowStyle Normal
-Write-Host "[SISTEMA] Nexus Dashboard lançado em background." -ForegroundColor Cyan
+Write-Host "[SISTEMA] Nexus Dashboard lancado em background." -ForegroundColor Cyan
 
-# 3. Lancar Pulso de Vida (Autopoiese / Organismo Vivo)
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "& { Import-Module $($ProjectRoot)\Agent-Autopoiesis.psm1 -Force; Start-OrganismPulse }" -WindowStyle Normal
-Write-Host "[SISTEMA] Motor de Autopoiese (Sentinela e Orquestrador) operando ininterruptamente." -ForegroundColor Yellow
+# 3. [REMOVIDO] Agent-Autopoiesis.psm1 nao existe mais
+# Start-Process powershell -ArgumentList "-NoExit", "-Command", "& { Import-Module $($ProjectRoot)\Agent-Autopoiesis.psm1 -Force; Start-OrganismPulse }" -WindowStyle Normal
+# Write-Host "[SISTEMA] Motor de Autopoiese (Sentinela e Orquestrador) operando ininterruptamente." -ForegroundColor Yellow
+Write-Host "[AVISO] Motor de Autopoiese desativado (modulo removido)." -ForegroundColor Yellow

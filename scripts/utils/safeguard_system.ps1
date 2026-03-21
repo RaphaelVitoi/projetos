@@ -1,11 +1,11 @@
-# Script de Salvaguarda Sistêmica (Snapshot de Segurança)
-# Cria backup imediato de configurações, memórias e documentação crítica.
+# Script de Salvaguarda Sistemica (Snapshot de Seguranca)
+# Cria backup imediato de configuracoes, memorias e documentacao critica.
 
 $BackupRoot = Join-Path $PSScriptRoot ".backups"
 $Timestamp = Get-Date -Format "yyyy-MM-dd_HHmmss"
 $SnapshotDir = Join-Path $BackupRoot "Snapshot_$Timestamp"
 
-# Definição de alvos críticos (O Cérebro e a Lei do Sistema)
+# Definicao de alvos criticos (O Cerebro e a Lei do Sistema)
 $Targets = @(".claude", "docs", "queue", "logs")
 
 Write-Host "[SAFEGUARD] Iniciando protocolo de salvaguarda..." -ForegroundColor Cyan

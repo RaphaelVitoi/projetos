@@ -27,7 +27,7 @@ class GameEngine {
         this.currentSolution = null;
         this.currentScenarioData = null;
         this.agressionFactor = 1.0;
-        this.charts = {}; // Armazena instâncias do ApexCharts
+        this.charts = {}; // Armazena instancias do ApexCharts
         this.isMuted = true; // Inicia mutado para contornar bloqueio de Autoplay dos navegadores
         this.init();
     }
@@ -44,7 +44,7 @@ class GameEngine {
             this.ui.list.addEventListener('scenario-select', handleSelect);
         }
 
-        // Alternar modo de comparação
+        // Alternar modo de comparacao
         this.ui.btnCompare.addEventListener('click', () => {
             const isHidden = this.ui.compareArea.classList.contains('hidden');
             if (isHidden) {
@@ -52,24 +52,24 @@ class GameEngine {
                 this.ui.compareArea.classList.remove('hidden');
                 if (this.ui.singleView) this.ui.singleView.classList.add('hidden');
                 this.ui.btnCompare.innerHTML = '<i class="fa-solid fa-arrow-left"></i> Voltar';
-                this.ui.title.innerText = "Comparação Tática";
-                this.ui.contextBadge.innerText = "Modo Análise";
+                this.ui.title.innerText = "Comparacao Tatica";
+                this.ui.contextBadge.innerText = "Modo Analise";
                 this.renderComparisonInterface();
             } else {
                 this.ui.compareArea.classList.add('hidden');
                 if (this.ui.singleView) this.ui.singleView.classList.remove('hidden');
                 this.ui.btnCompare.innerHTML = '<i class="fa-solid fa-code-compare"></i> Comparar';
-                // Recarrega o cenário atual para restaurar títulos
+                // Recarrega o cenario atual para restaurar titulos
                 if(this.currentScenarioData) this.loadScenario(this.currentScenarioData.id);
             }
         });
 
-        // Configura listener global para o input de simulação (Delegate)
+        // Configura listener global para o input de simulacao (Delegate)
         this.ui.content.addEventListener('input', (e) => {
             if (e.target.id === 'sim-equity-input') {
                 this.runSimulation(e.target.value);
             }
-            // Listener para o select de mãos
+            // Listener para o select de maos
             if (e.target.id === 'sim-hand-select') {
                 const equity = e.target.value;
                 if (equity) {
@@ -85,13 +85,13 @@ class GameEngine {
             if (e.target.id === 'agression-slider') {
                 this.agressionFactor = parseFloat(e.target.value);
                 document.getElementById('agression-value').innerText = this.agressionFactor.toFixed(1) + 'x';
-                // Recalcula e atualiza apenas o painel, mantendo o conteúdo estático
+                // Recalcula e atualiza apenas o painel, mantendo o conteudo estatico
                 this.recalcScenario();
                 if (window.Analytics) window.Analytics.trackEvent('simulator_agression_change', { factor: this.agressionFactor });
             }
         });
 
-        // Listeners da Área de Comparação
+        // Listeners da Area de Comparacao
         this.ui.compareArea.addEventListener('change', (e) => {
             if (e.target.classList.contains('scenario-selector')) {
                 this.updateComparisonChart();
@@ -106,12 +106,12 @@ class GameEngine {
             }
         });
 
-        // Listener para o botão Mute
+        // Listener para o botao Mute
         this.ui.content.addEventListener('click', (e) => {
             const btn = e.target.closest('#btn-toggle-mute');
             if (btn) {
                 this.isMuted = !this.isMuted;
-                // Atualiza o painel (ícone do botão)
+                // Atualiza o painel (icone do botao)
                 this.recalcScenario();
                 // Propaga o estado para os Web Components imediatamente
                 if (this.currentScenarioData) {
@@ -128,7 +128,7 @@ class GameEngine {
                 this.loadScenario(ALL_SCENARIOS[0].id);
             }
         } catch (err) {
-            if (this.ui.title) this.ui.title.innerText = "Erro Crítico de Motor";
+            if (this.ui.title) this.ui.title.innerText = "Erro Critico de Motor";
             if (this.ui.content) this.ui.content.innerHTML = `<div class="bg-rose-500/10 border border-rose-500/30 p-4 rounded text-rose-400 font-mono text-xs">${err.message}</div>`;
         }
     }
@@ -136,7 +136,7 @@ class GameEngine {
     loadScenario(id) {
         try {
             const data = ALL_SCENARIOS.find(s => s.id === id);
-            if (!data) throw new Error("Cenário não encontrado.");
+            if (!data) throw new Error("Cenario nao encontrado.");
             if (window.Analytics) window.Analytics.trackEvent('simulator_load_scenario', { id: data.id, label: data.label });
             
             this.currentScenarioData = data;
@@ -168,7 +168,7 @@ class GameEngine {
 
             this._renderMainChart(this.currentSolution);
         } catch (err) {
-            if (this.ui.title) this.ui.title.innerText = "Erro ao Renderizar Cenário";
+            if (this.ui.title) this.ui.title.innerText = "Erro ao Renderizar Cenario";
             if (this.ui.content) this.ui.content.innerHTML = `<div class="bg-rose-500/10 border border-rose-500/30 p-4 rounded text-rose-400 font-mono text-xs">${err.stack}</div>`;
         }
     }
@@ -186,8 +186,8 @@ class GameEngine {
         el.setAttribute('value', d.rp); 
         el.setAttribute('pos', d.pos); 
         el.setAttribute('stack', d.stack);
-        el.setAttribute('threshold', '20'); // Define limite crítico de 20%
-        el.setAttribute('opponent-value', opponentRp); // Alimenta lógica do Predator Mode
+        el.setAttribute('threshold', '20'); // Define limite critico de 20%
+        el.setAttribute('opponent-value', opponentRp); // Alimenta logica do Predator Mode
         // Aplica atributo muted se o estado global estiver silenciado
         if (this.isMuted) el.setAttribute('muted', ''); else el.removeAttribute('muted');
     }
@@ -203,7 +203,7 @@ class GameEngine {
 
         const req = parseFloat(this.currentSolution.evDiff.totalRequired);
         
-        // Cálculo de Simulação Reversa (Internalizado)
+        // Calculo de Simulacao Reversa (Internalizado)
         const margin = equity - req;
         const isCall = margin >= 0;
         const isClose = Math.abs(margin) <= 3.5;
@@ -224,7 +224,7 @@ class GameEngine {
         
         const chartHtml = this._renderChart(sol);
         
-        // Estado visual sofisticado para o controle de áudio
+        // Estado visual sofisticado para o controle de audio
         const muteStateClass = this.isMuted 
             ? 'bg-rose-500/10 border-rose-500/30 text-rose-400 hover:bg-rose-500/20' 
             : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-white';
@@ -232,7 +232,7 @@ class GameEngine {
         const muteText = this.isMuted ? 'Mutado' : 'Som Ativo';
         
         return `
-            <!-- Controles de Simulação Avançada -->
+            <!-- Controles de Simulacao Avancada -->
             <div class="flex items-center justify-between mb-6 bg-slate-900/30 p-3 rounded-lg border border-white/5">
                 <div class="flex items-center gap-3">
                     <div class="text-[9px] font-bold uppercase tracking-widest text-slate-500">Agressividade (IP)</div>
@@ -287,12 +287,12 @@ class GameEngine {
                     </div>
                 </div>
 
-                <!-- Simulação Reversa (Novo) -->
+                <!-- Simulacao Reversa (Novo) -->
                 <div class="col-span-1 md:col-span-2 bg-slate-900/40 border border-white/5 rounded-xl p-4 flex items-center justify-between gap-4">
                     <div class="flex items-center gap-3">
                         <div class="w-8 h-8 rounded bg-slate-800 flex items-center justify-center text-slate-400"><i class="fa-solid fa-calculator"></i></div>
                         <div class="flex flex-col gap-1">
-                            <div class="text-[9px] font-bold uppercase tracking-widest text-slate-500">Simulação Reversa</div>
+                            <div class="text-[9px] font-bold uppercase tracking-widest text-slate-500">Simulacao Reversa</div>
                             <div class="flex gap-2">
                                 <select id="sim-hand-select" class="bg-slate-800 border-none text-white text-[10px] rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer">
                                     <option value="">Exemplos...</option>
@@ -313,7 +313,7 @@ class GameEngine {
                     </div>
                 </div>
 
-                <!-- Gráfico Comparativo SVG -->
+                <!-- Grafico Comparativo SVG -->
                 <div class="col-span-1 md:col-span-2 bg-slate-900/40 border border-white/5 rounded-xl p-4 flex flex-col items-center">
                     <span class="text-[9px] font-bold uppercase tracking-widest text-slate-500 mb-4">Impacto ICM (GTO vs Ajustado)</span>
                     ${chartHtml}
@@ -392,7 +392,7 @@ class GameEngine {
             dataLabels: { enabled: false },
             stroke: { show: true, width: 2, colors: ['transparent'] },
             xaxis: {
-                categories: ['Frequência de Bluff', 'Frequência de Defesa'],
+                categories: ['Frequencia de Bluff', 'Frequencia de Defesa'],
                 labels: { style: { colors: '#94a3b8', fontSize: '11px' } },
                 axisBorder: { show: false },
                 axisTicks: { show: false }
@@ -424,13 +424,13 @@ class GameEngine {
         this.ui.compareArea.innerHTML = `
             <div class="grid grid-cols-2 gap-4 mb-6">
                 <div>
-                    <label class="text-[10px] uppercase font-bold text-slate-500 block mb-1">Cenário A</label>
+                    <label class="text-[10px] uppercase font-bold text-slate-500 block mb-1">Cenario A</label>
                     <select id="sel-sc1" class="scenario-selector w-full bg-slate-900 border border-slate-700 text-white text-sm rounded-lg p-2 focus:ring-2 focus:ring-indigo-500 outline-none">
                         ${optionsHtml}
                     </select>
                 </div>
                 <div>
-                    <label class="text-[10px] uppercase font-bold text-slate-500 block mb-1">Cenário B</label>
+                    <label class="text-[10px] uppercase font-bold text-slate-500 block mb-1">Cenario B</label>
                     <select id="sel-sc2" class="scenario-selector w-full bg-slate-900 border border-slate-700 text-white text-sm rounded-lg p-2 focus:ring-2 focus:ring-pink-500 outline-none">
                         ${optionsHtml}
                     </select>
@@ -440,7 +440,7 @@ class GameEngine {
             <div id="comparison-verdict" class="mt-4 text-center text-xs text-slate-400"></div>
         `;
 
-        // Define valores iniciais (1º e 2º cenário se possível)
+        // Define valores iniciais (1o e 2o cenario se possivel)
         const sel2 = document.getElementById('sel-sc2');
         if(ALL_SCENARIOS.length > 1) sel2.value = ALL_SCENARIOS[1].id;
 
@@ -535,7 +535,7 @@ class GameEngine {
             <div style="padding: 40px; font-family: 'Helvetica', sans-serif; color: #1e293b; background: #fff;">
                 <div style="border-bottom: 2px solid #6366f1; padding-bottom: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end;">
                     <div>
-                        <h1 style="margin: 0; font-size: 24px; color: #0f172a;">Relatório de Análise ICM</h1>
+                        <h1 style="margin: 0; font-size: 24px; color: #0f172a;">Relatorio de Analise ICM</h1>
                         <p style="margin: 5px 0 0; font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 1px;">Geometria do Risco | Masterclass</p>
                     </div>
                     <div style="text-align: right;">
@@ -545,7 +545,7 @@ class GameEngine {
                 </div>
 
                 <div style="margin-bottom: 30px; background: #f8fafc; padding: 20px; border-radius: 8px;">
-                    <h2 style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #6366f1; margin-top: 0;">Cenário: ${data.label}</h2>
+                    <h2 style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #6366f1; margin-top: 0;">Cenario: ${data.label}</h2>
                     <p style="font-size: 14px; margin: 5px 0 0; color: #334155;"><strong>Contexto:</strong> ${data.context}</p>
                     <div style="display: flex; gap: 40px; margin-top: 20px;">
                         <div>
@@ -562,22 +562,22 @@ class GameEngine {
                 </div>
 
                 <div style="margin-bottom: 30px;">
-                    <h3 style="font-size: 12px; text-transform: uppercase; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Resultados da Simulação</h3>
+                    <h3 style="font-size: 12px; text-transform: uppercase; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px;">Resultados da Simulacao</h3>
                     <table style="width: 100%; margin-top: 15px; border-collapse: collapse;">
                         <tr style="text-align: left; color: #64748b; font-size: 10px; text-transform: uppercase;">
-                            <th style="padding-bottom: 10px;">Métrica</th>
+                            <th style="padding-bottom: 10px;">Metrica</th>
                             <th style="padding-bottom: 10px;">GTO Base</th>
                             <th style="padding-bottom: 10px;">Ajustado (ICM)</th>
                             <th style="padding-bottom: 10px;">Delta</th>
                         </tr>
                         <tr style="border-bottom: 1px solid #f1f5f9;">
-                            <td style="padding: 10px 0; font-weight: bold; font-size: 14px;">Frequência de Bluff</td>
+                            <td style="padding: 10px 0; font-weight: bold; font-size: 14px;">Frequencia de Bluff</td>
                             <td style="padding: 10px 0; color: #64748b;">33.3%</td>
                             <td style="padding: 10px 0; color: #6366f1; font-weight: bold;">${sol.bluff.value}%</td>
                             <td style="padding: 10px 0; font-family: monospace;">${sol.bluff.delta > 0 ? '+' : ''}${sol.bluff.delta}%</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #f1f5f9;">
-                            <td style="padding: 10px 0; font-weight: bold; font-size: 14px;">Frequência de Defesa</td>
+                            <td style="padding: 10px 0; font-weight: bold; font-size: 14px;">Frequencia de Defesa</td>
                             <td style="padding: 10px 0; color: #64748b;">50.0%</td>
                             <td style="padding: 10px 0; color: #ec4899; font-weight: bold;">${sol.defense.value}%</td>
                             <td style="padding: 10px 0; font-family: monospace;">${sol.defense.delta > 0 ? '+' : ''}${sol.defense.delta}%</td>

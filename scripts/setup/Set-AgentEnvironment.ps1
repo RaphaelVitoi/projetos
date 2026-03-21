@@ -11,7 +11,7 @@ function Set-AgentEnvironment {
 
     if (-not (Test-Path $vscodeDir)) { New-Item -ItemType Directory -Path $vscodeDir -Force | Out-Null }
 
-    # Topologia de Configuração Estrita (Ordem Garantida)
+    # Topologia de Configuracao Estrita (Ordem Garantida)
     $optimizedSettings = [ordered]@{
         "geminicodeassist.agentDebugMode"                        = $false
         "geminicodeassist.agentYoloMode"                         = $false
@@ -33,14 +33,14 @@ function Set-AgentEnvironment {
             }
         }
         catch {
-            Write-Warning "[KERNEL] Estrutura JSON corrompida. Reconstruindo a partir do Vazio Quântico."
+            Write-Warning "[KERNEL] Estrutura JSON corrompida. Reconstruindo a partir do Vazio Quantico."
             $currentSettings = @{}
         }
     }
 
     foreach ($key in $optimizedSettings.Keys) { $currentSettings[$key] = $optimizedSettings[$key] }
 
-    # Serialização determinística profunda e I/O nativo
+    # Serializacao deterministica profunda e I/O nativo
     $jsonOutput = $currentSettings | ConvertTo-Json -Depth 10 -Compress:$false
     [System.IO.File]::WriteAllText($settingsPath, $jsonOutput, [System.Text.Encoding]::UTF8)
     
@@ -48,3 +48,4 @@ function Set-AgentEnvironment {
 }
 
 Set-AgentEnvironment
+

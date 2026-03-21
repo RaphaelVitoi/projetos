@@ -1,20 +1,20 @@
 <#
 .SYNOPSIS
-    Dashboard de Health-Check e Inteligência (Agentes)
+    Dashboard de Health-Check e Inteligencia (Agentes)
 .DESCRIPTION
-    Analisa a estrutura .claude/agent-memory/ e exibe a saúde, engajamento e as tags aprendidas.
+    Analisa a estrutura .claude/agent-memory/ e exibe a saude, engajamento e as tags aprendidas.
 #>
 
-Write-Host "=== [SENTINELA] DASHBOARD DE SAÚDE DOS AGENTES ===" -ForegroundColor Cyan
+Write-Host "=== [SENTINELA] DASHBOARD DE SAUDE DOS AGENTES ===" -ForegroundColor Cyan
 
 $MemoryDir = Join-Path $PSScriptRoot ".claude\agent-memory"
 
 if (-not (Test-Path $MemoryDir)) {
-    Write-Host "[ERROR] Diretório de memória não encontrado." -ForegroundColor Red
+    Write-Host "[ERROR] Diretorio de memoria nao encontrado." -ForegroundColor Red
     exit
 }
 
-Write-Host "Agente           | Insights/Tags | Status/Última Modificação" -ForegroundColor DarkGray
+Write-Host "Agente           | Insights/Tags | Status/Ultima Modificacao" -ForegroundColor DarkGray
 Write-Host "-----------------|---------------|--------------------------"
 
 Get-ChildItem -Path $MemoryDir -Directory | ForEach-Object {

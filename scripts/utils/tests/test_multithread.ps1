@@ -5,9 +5,9 @@
 Write-Host "=== TESTE DEFINITIVO: MULTI-THREADING ===" -ForegroundColor Magenta
 
 $Tasks = @(
-    "@implementor rodar comando para criar uma pasta de testes temporária `mkdir teste_nexus`. Demore um pouco antes de responder.",
-    "@curator escreva uma frase sobre estética cyberpunk.",
-    "@maverick gere uma reflexão curta sobre sistemas assíncronos."
+    "@implementor rodar comando para criar uma pasta de testes temporaria `mkdir teste_nexus`. Demore um pouco antes de responder.",
+    "@curator escreva uma frase sobre estetica cyberpunk.",
+    "@maverick gere uma reflexao curta sobre sistemas assincronos."
 )
 
 foreach ($t in $Tasks) {
@@ -17,3 +17,4 @@ foreach ($t in $Tasks) {
 }
 
 Write-Host "`n[NEXUS] 3 tarefas injetadas simultaneamente. Abra o 'dashboard' ou 'monitor' e veja todas sendo processadas em paralelo!" -ForegroundColor Green
+

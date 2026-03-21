@@ -5,12 +5,10 @@
     Le e valida a sintaxe e a estrutura logica (Schema) dos arquivos JSON
     que compoem a base de conhecimento do ecossistema de agentes.
 #>
-$ErrorActionPreference = "Stop"
-
 $ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
 
 $CortexFiles = @(
-    @{ Name = "intentmap.json"; Type = "Dictionary"; KeyPrefix = "@"; ValueType = "String" },
+    @{ Name = "agents_manifest.json"; Type = "Dictionary"; KeyPrefix = "@"; ValueType = "PSCustomObject" },
     @{ Name = "synonyms.json"; Type = "Dictionary"; KeyPrefix = "@"; ValueType = "Array" },
     @{ Name = "aphorisms.json"; Type = "Array"; KeyPrefix = $null; ValueType = "String" }
 )
@@ -45,8 +43,8 @@ foreach ($file in $CortexFiles) {
                 if (-not $key.StartsWith($file.KeyPrefix)) {
                     throw "Chave invalida '$key'. Deve obrigatoriamente comecar com '$($file.KeyPrefix)'."
                 }
-                if ($file.ValueType -eq "String" -and $val.GetType().Name -ne "String") {
-                    throw "O valor da chave '$key' deve ser do tipo String."
+                if ($file.ValueType -eq "PSCustomObject" -and $val.GetType().Name -ne "PSCustomObject") {
+                    throw "O valor da chave '$key' deve ser um Objeto (PSCustomObject)."
                 }
                 if ($file.ValueType -eq "Array" -and -not ($val -is [array])) {
                     throw "O valor da chave '$key' deve ser um Array."

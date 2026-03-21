@@ -24,48 +24,48 @@ export class RiskGauge extends HTMLElement {
         const threshold = parseFloat(this.getAttribute('threshold'));
         const opponentValue = parseFloat(this.getAttribute('opponent-value'));
 
-        // Lógica de Cor Crítica (Threshold)
+        // Logica de Cor Critica (Threshold)
         const safeValue = isNaN(value) ? 0 : value;
         const safeOpponentValue = isNaN(opponentValue) ? 0 : opponentValue;
         
         const isCritical = !isNaN(threshold) && safeValue >= threshold;
         const isDeathZone = safeValue >= 40.0; // A Singularidade
-        const isPredatorZone = safeOpponentValue >= 40.0 && safeValue < 25.0; // Oportunidade de Pressão (Eles morrem, nós matamos)
+        const isPredatorZone = safeOpponentValue >= 40.0 && safeValue < 25.0; // Oportunidade de Pressao (Eles morrem, nos matamos)
         
-        // Lógica de Gatilho Sonoro (Easter Egg)
+        // Logica de Gatilho Sonoro (Easter Egg)
         const currentState = isDeathZone ? 'death' : (isPredatorZone ? 'predator' : 'normal');
         
         if (this.isConnected && currentState !== this._lastState) {
             // Intensidade baseada no RP que disparou o gatilho (Data Sonification)
             const intensity = isDeathZone ? safeValue : safeOpponentValue;
 
-            // Toca apenas na transição de entrada
+            // Toca apenas na transicao de entrada
             if (currentState === 'predator') this._playTone('predator', intensity);
             if (currentState === 'death') this._playTone('death', intensity);
             this._lastState = currentState;
         }
 
-        // Definição de Cores e Estados
+        // Definicao de Cores e Estados
         let color = baseColor;
         if (isCritical) color = '#ef4444'; // Red-500
         if (isDeathZone) color = '#ff0055'; // Neon Pink/Red (Radioativo)
         if (isPredatorZone) color = '#10b981'; // Emerald-500 (Green Light/Go)
         
-        // Cálculo do dash array para animação SVG
-        const dash = (safeValue / 26) * 100; // Escala visual arbitrária para drama (Max RP ~26%)
+        // Calculo do dash array para animacao SVG
+        const dash = (safeValue / 26) * 100; // Escala visual arbitraria para drama (Max RP ~26%)
         const clampDash = Math.min(100, Math.max(0, dash));
 
-        // @maverick: Easter Egg Filosófico (Singularidade)
-        // Só dispara se estiver na Death Zone e evita spam no console se já tiver disparado recentemente
+        // @maverick: Easter Egg Filosofico (Singularidade)
+        // So dispara se estiver na Death Zone e evita spam no console se ja tiver disparado recentemente
         if (isDeathZone) {
             const msg = [
-                "%c⚠️ SINGULARIDADE ICM DETECTADA (RP > 40%) ⚠️",
+                "%c SINGULARIDADE ICM DETECTADA (RP > 40%) ",
                 "color: #ff0055; font-weight: bold; font-size: 12px; background: #200010; padding: 4px; border: 1px solid #ff0055;",
-                "\nNeste nível de pressão, a matemática sugere que a coragem é apenas uma forma elaborada de suicídio financeiro.",
-                "Foldar não é covardia; é darwinismo aplicado.\n",
+                "\nNeste nivel de pressao, a matematica sugere que a coragem e apenas uma forma elaborada de suicidio financeiro.",
+                "Foldar nao e covardia; e darwinismo aplicado.\n",
                 "Survival > Accumulation."
             ];
-            // Pequeno delay para garantir que o console esteja pronto e não bloqueie a renderização
+            // Pequeno delay para garantir que o console esteja pronto e nao bloqueie a renderizacao
             setTimeout(() => console.log(msg[0], msg[1], msg[2], msg[3], msg[4]), 500);
         }
 
@@ -87,7 +87,7 @@ export class RiskGauge extends HTMLElement {
                 .pos { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; color: white; }
                 .stack { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: #94a3b8; }
 
-                /* Animação da Zona da Morte */
+                /* Animacao da Zona da Morte */
                 ${isDeathZone ? `
                 .circle-val {
                     animation: death-pulse 2s infinite;
@@ -101,7 +101,7 @@ export class RiskGauge extends HTMLElement {
                 }
                 ` : ''}
 
-                /* Animação Predator Mode (Green Pulse) */
+                /* Animacao Predator Mode (Green Pulse) */
                 ${isPredatorZone ? `
                 .circle-val {
                     animation: predator-pulse 3s infinite;
@@ -139,9 +139,9 @@ export class RiskGauge extends HTMLElement {
         `;
     }
 
-    // Sintetizador de Áudio Minimalista (Sem arquivos externos)
+    // Sintetizador de Audio Minimalista (Sem arquivos externos)
     _playTone(type, intensity = 40) {
-        // Verifica se está mutado antes de tentar tocar
+        // Verifica se esta mutado antes de tentar tocar
         if (this.hasAttribute('muted')) return;
 
         try {
@@ -156,8 +156,8 @@ export class RiskGauge extends HTMLElement {
             gain.connect(ctx.destination);
 
             if (type === 'predator') {
-                // Radar Ping (Alta frequência, tecnológico, limpo)
-                // Modulação: Quanto maior o RP do vilão, mais agudo e urgente é o lock (40% -> 1200Hz, 80% -> 2200Hz)
+                // Radar Ping (Alta frequencia, tecnologico, limpo)
+                // Modulacao: Quanto maior o RP do vilao, mais agudo e urgente e o lock (40% -> 1200Hz, 80% -> 2200Hz)
                 const freq = 1200 + ((intensity - 40) * 25);
 
                 osc.type = 'sine';
@@ -168,8 +168,8 @@ export class RiskGauge extends HTMLElement {
                 osc.start(ctx.currentTime);
                 osc.stop(ctx.currentTime + 0.15);
             } else if (type === 'death') {
-                // Radiation Hazard (Baixa frequência, "sujo", alerta)
-                // Modulação: Quanto maior o RP, mais grave e instável ("Geiger" pesado) (40% -> 80Hz, 80% -> 40Hz)
+                // Radiation Hazard (Baixa frequencia, "sujo", alerta)
+                // Modulacao: Quanto maior o RP, mais grave e instavel ("Geiger" pesado) (40% -> 80Hz, 80% -> 40Hz)
                 const freq = Math.max(40, 80 - ((intensity - 40) * 1));
 
                 osc.type = 'sawtooth';

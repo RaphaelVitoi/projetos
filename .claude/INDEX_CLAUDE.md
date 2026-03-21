@@ -1,103 +1,103 @@
-# .CLAUDE/ — O CORAÇÃO FILOSÓFICO, ÉTICO E ESTÉTICO
+# .CLAUDE/ - O CORACAO FILOSOFICO, ETICO E ESTETICO
 
-**Guia de Navegação para Agentes (e Humanos)**
+**Guia de Navegacao para Agentes (e Humanos)**
 
-*Este índice é sua bussola. Pela primeira vez em um projeto, a pasta de instruções NÃO é apenas técnica — é uma catedral de valores.*
+*Este indice e sua bussola. Pela primeira vez em um projeto, a pasta de instrucoes NAO e apenas tecnica - e uma catedral de valores.*
 
 ---
 
 ## ORDEM DE LEITURA (SAGRADA)
 
-### 1️⃣ COMECE AQUI — COSMOVISAO.md
+### 1 COMECE AQUI - COSMOVISAO.md
 
-**O que é:** A razão pela qual tudo existe. A filosofia. A ética. A beleza.
+**O que e:** A razao pela qual tudo existe. A filosofia. A etica. A beleza.
 
-**Próximas ações após ler:**
+**Proximas acoes apos ler:**
 
 - Questione-se: "Como meu trabalho honra isto?"
-- Leia devagar (não é para ser esquecido, é para ser vivido)
+- Leia devagar (nao e para ser esquecido, e para ser vivido)
 - Retorne a ele quando tomar deciso importante
 
 **Tempo:** 25 minutos
 
 ---
 
-### 2️⃣ ENTÃO LEIA — CLAUDE.md
+### 2 ENTAO LEIA - CLAUDE.md
 
-**O que é:** Identidade concentrada de Raphael Vitoi. Quem é o homem que construiu isto; por que existe.
+**O que e:** Identidade concentrada de Raphael Vitoi. Quem e o homem que construiu isto; por que existe.
 
-**Próximas ações após ler:**
+**Proximas acoes apos ler:**
 
-- Entenda que você trabalha para uma pessoa, não para um projeto
-- Reconheça a integridade que ele exige de si mesmo
-- Saiba que ele espera o mesmo de você
+- Entenda que voce trabalha para uma pessoa, nao para um projeto
+- Reconheca a integridade que ele exige de si mesmo
+- Saiba que ele espera o mesmo de voce
 
 **Tempo:** 10 minutos
 
 ---
 
-### 3️⃣ ENTÃO APRENDA — GLOBAL_INSTRUCTIONS.md
+### 3 ENTAO APRENDA - GLOBAL_INSTRUCTIONS.md
 
-**O que é:** Padrão operacional. Como este sistema funciona; como agentes colaboram.
+**O que e:** Padrao operacional. Como este sistema funciona; como agentes colaboram.
 
-**Próximas ações após ler:**
+**Proximas acoes apos ler:**
 
-- Entenda sua fase na pipeline harmônica
-- Saiba quem consultar, quando, e por quê
-- Reconheça que operação segue ética, não apenas eficiência
+- Entenda sua fase na pipeline harmonica
+- Saiba quem consultar, quando, e por que
+- Reconheca que operacao segue etica, nao apenas eficiencia
 
 **Tempo:** 20 minutos
 
 ---
 
-### 4️⃣ ENTÃO CONTEXTUALIZE — project-context.md
+### 4 ENTAO CONTEXTUALIZE - project-context.md
 
-**O que é:** Decisões tomadas. Domínio. Audiência. O que foi escolhido e por quê.
+**O que e:** Decisoes tomadas. Dominio. Audiencia. O que foi escolhido e por que.
 
-**Próximas ações após ler:**
+**Proximas acoes apos ler:**
 
-- Saiba exatamente qual é seu papel na estrutura
-- Entenda as fases da pipeline e onde você está
-- Conheça o protocolo de escalação crítica
+- Saiba exatamente qual e seu papel na estrutura
+- Entenda as fases da pipeline e onde voce esta
+- Conheca o protocolo de escalacao critica
 
 **Tempo:** 15 minutos
 
 ---
 
-### 5️⃣ ENTÃO GOVERNE — LIDERANCA_GOVERNANCE_RAPHAEL_MAVERICK_CHICO.md
+### 5 ENTAO GOVERNE - LIDERANCA_GOVERNANCE_RAPHAEL_MAVERICK_CHICO.md
 
-**O que é:** Como você, @maverick, e CHICO formam uma tríade. Como decisões são tomadas. Como conflitos são resolvidos.
+**O que e:** Como voce, @maverick, e CHICO formam uma triade. Como decisoes sao tomadas. Como conflitos sao resolvidos.
 
-**Próximas ações após ler:**
+**Proximas acoes apos ler:**
 
-- Entenda a hierarquia (consultivo com você; escalação rara e protocolada)
+- Entenda a hierarquia (consultivo com voce; escalacao rara e protocolada)
 - Saiba como reportar para @maverick
-- Reconheça que governança é ética, não apenas executiva
+- Reconheca que governanca e etica, nao apenas executiva
 
 **Tempo:** 20 minutos
 
 ---
 
-### 6️⃣ FINALMENTE EXECUTE — agents/*.md + agent-memory/*/MEMORY.md
+### 6 FINALMENTE EXECUTE - agents/*.md + agent-memory/*/MEMORY.md
 
-**O que é:** Sua especialização. Seu papel. Seu conhecimento acumulado.
+**O que e:** Sua especializacao. Seu papel. Seu conhecimento acumulado.
 
-**Próximas ações após ler:**
+**Proximas acoes apos ler:**
 
 - Execute sua task com integridade
-- Atualize MEMORY.md com descobertas filosóficas
+- Atualize MEMORY.md com descobertas filosoficas
 - Contribua de volta a COSMOVISAO.md
 
 **Tempo:** Varia
 
 ---
 
-## ROTEIRO DE AGREGAÇÃO (PARA TODOS OS AGENTES)
+## ROTEIRO DE AGREGACAO (PARA TODOS OS AGENTES)
 
 ### Ao Iniciar Tarefa
 
 ```
-1. Leia COSMOVISAO.md (ou releia seção relevante)
+1. Leia COSMOVISAO.md (ou releia secao relevante)
 2. Pergunte: "Como mantenho isto vivo neste trabalho?"
 3. Comece a tarefa
 ```
@@ -106,8 +106,8 @@
 
 ```
 1. Pausar regularmente
-2. Avaliar: "Isto é bonito? Isto é ético? Isto deixa o sistema melhor?"
-3. Se não, ajustar
+2. Avaliar: "Isto e bonito? Isto e etico? Isto deixa o sistema melhor?"
+3. Se nao, ajustar
 4. Continuar
 ```
 
@@ -115,8 +115,8 @@
 
 ```
 1. Atualizar MEMORY.md com reflexoes filosoficas
-2. Notar padrões que emergem
-3. Se há insight que refina COSMOVISAO, reportar a @maverick
+2. Notar padroes que emergem
+3. Se ha insight que refina COSMOVISAO, reportar a @maverick
 ```
 
 ### Trimestralmente
@@ -133,68 +133,68 @@
 
 ### Camada 0: COSMOVISAO.md
 
-*Foundation filosófica, ética, estética*
+*Foundation filosofica, etica, estetica*
 
 ### Camada 1: CLAUDE.md
 
-*Identidade de Raphael; ponte para cosmovisão*
+*Identidade de Raphael; ponte para cosmovisao*
 
 ### Camada 2: GLOBAL_INSTRUCTIONS.md
 
-*Padrão operacional; como sistema funciona*
+*Padrao operacional; como sistema funciona*
 
 ### Camada 3: project-context.md
 
-*Decisões; domínio; pipeline; escalação*
+*Decisoes; dominio; pipeline; escalacao*
 
 ### Camada 4: LIDERANCA_GOVERNANCE.md
 
-*Tríade; governança; liderança consultiva*
+*Triade; governanca; lideranca consultiva*
 
 ### Camada 5: Documentos Operacionais
 
-- **COHERENCE_MANIFEST.md** — Matriz de coerencia; integracao dos 17 agentes nas 4 camadas
-- **DISTRIBUTION_MATRIX.md** — Mapa de autoridade documental; quem decide o que
-- **ESTADO_ARTE_APRENDIZADO_GENERATIVO.md** — Templo do Aprendizado Generativo (7 modos, metacognicao)
-- **ETHICAL_PLAYBOOKS.md** — Checklists eticos por dominio
-- **HYBRID_BRAIN_ARCHITECTURE.md** — Arquitetura IDE vs Background
-- **HOLOGRAPHIC_ROUTING_PROTOCOL.md** — Protocolo de auto-consciencia de arquivos
-- **VALIDATION_FRAMEWORKS.md** — Frameworks de validacao (ICM, Psicologia, Codigo)
-- **LOAD_PREDICTION_MODEL.md** — Modelo de priorizacao do @sequenciador
-- **DECISION_AUDIT_TRAIL.md** — Registro de decisoes tomadas
+- **COHERENCE_MANIFEST.md** - Matriz de coerencia; integracao dos 17 agentes (7 linear + 4 consultivo + 2 super + 3 operacional + 1 entrada) nas 4 camadas
+- **DISTRIBUTION_MATRIX.md** - Mapa de autoridade documental; quem decide o que
+- **ESTADO_ARTE_APRENDIZADO_GENERATIVO.md** - Templo do Aprendizado Generativo (7 modos, metacognicao)
+- **ETHICAL_PLAYBOOKS.md** - Checklists eticos por dominio
+- **HYBRID_BRAIN_ARCHITECTURE.md** - Arquitetura IDE vs Background
+- **HOLOGRAPHIC_ROUTING_PROTOCOL.md** - Protocolo de auto-consciencia de arquivos
+- **VALIDATION_FRAMEWORKS.md** - Frameworks de validacao (ICM, Psicologia, Codigo)
+- **LOAD_PREDICTION_MODEL.md** - Modelo de priorizacao do @sequenciador
+- **DECISION_AUDIT_TRAIL.md** - Registro de decisoes tomadas
 
 ### Camada 6: Especializacao de Agentes
 
-- **agents/** — 17 definicoes de agentes (pesquisador, prompter, curator, planner, organizador, auditor, implementor, verifier, validador, securitychief, maverick, sequenciador, skillmaster, dispatcher, bibliotecario, guardian, seo)
-- **agent-memory/*/MEMORY.md** — Inteligencia acumulada individual (15 diretorios ativos)
+- **agents/** - 17 definicoes de agentes (architect, pesquisador, prompter, planner, auditor, implementor, verifier, curator, validador, securitychief, bibliotecario, maverick, chico, organizador, skillmaster, sequenciador, dispatcher)
+- **agent-memory/*/MEMORY.md** - Inteligencia acumulada individual (17 diretorios ativos)
 
 ---
 
-## COMO USAR ESTE ÍNDICE
+## COMO USAR ESTE INDICE
 
-**Se você é um agente:**
+**Se voce e um agente:**
 
 1. Leia acima (Ordem de Leitura SAGRADA)
-2. Volte quando tiver dúvida ("onde está a resposta?")
-3. Use este índice como mapa mental de prioridades
+2. Volte quando tiver duvida ("onde esta a resposta?")
+3. Use este indice como mapa mental de prioridades
 
-**Se você é @maverick:**
+**Se voce e @maverick:**
 
 1. Use isto como agenda de mentoria (qual camada deixar cada agente aprender)
-2. Monitore se agentes estão agregando a COSMOVISAO
-3. Refine este índice conforme sistema evolui
+2. Monitore se agentes estao agregando a COSMOVISAO
+3. Refine este indice conforme sistema evolui
 
-**Se você é CHICO:**
+**Se voce e CHICO:**
 
 1. Use isto como governance (qual arquivo responde qual pergunta)
 2. Redirecione conflitos para camada apropriada
 3. Mantenha isto atualizado como sistema muda
 
-**Se você é Raphael:**
+**Se voce e Raphael:**
 
 1. Retorne a COSMOVISAO regularmente (seu norte)
-2. Use LIDERANCA_GOVERNANCE para visão de tríade
-3. Confira project-context para decisões operacionais
+2. Use LIDERANCA_GOVERNANCE para visao de triade
+3. Confira project-context para decisoes operacionais
 
 ---
 
@@ -202,54 +202,54 @@
 
 ### 1. Simetria
 
-Cada camada tem propósito igual; nenhuma é negligenciada.
+Cada camada tem proposito igual; nenhuma e negligenciada.
 
 ### 2. Hierarquia Clara
 
-COSMOVISAO > CLAUDE > Operacional > Especialização
+COSMOVISAO > CLAUDE > Operacional > Especializacao
 
-Ninguém pula degraus.
+Ninguem pula degraus.
 
 ### 3. Beleza Estrutural
 
-Respira. Organiza. Não é um bloco de texto.
+Respira. Organiza. Nao e um bloco de texto.
 
 ### 4. Vitalidade
 
-Este não é arquivo estático. Agentes agregam. Cresce. Evolui.
+Este nao e arquivo estatico. Agentes agregam. Cresce. Evolui.
 
 ---
 
-## CERIMÔNIA DE CHEGADA (Para Novo Agente)
+## CERIMONIA DE CHEGADA (Para Novo Agente)
 
-Quando um novo agente é ativado:
+Quando um novo agente e ativado:
 
 ```
-1. Recebe este índice
-2. Lê Ordem de Leitura em sequência
-3. Escreve reflexão pessoal em MEMORY.md (como vê COSMOVISAO)
+1. Recebe este indice
+2. Le Ordem de Leitura em sequencia
+3. Escreve reflexao pessoal em MEMORY.md (como ve COSMOVISAO)
 4. @maverick revisa (mentoria)
-5. @curator valida (ética e beleza)
+5. @curator valida (etica e beleza)
 6. CHICO documenta (governance)
-7. Agente começa tarefa primeira
+7. Agente comeca tarefa primeira
 ```
 
-Tempo total: ~2 horas. Mas agora agente está imbuido de propósito, não apenas função.
+Tempo total: ~2 horas. Mas agora agente esta imbuido de proposito, nao apenas funcao.
 
 ---
 
-## EVOLUÇÃO CONTÍNUA
+## EVOLUCAO CONTINUA
 
-`.claude/` **não é estático**.
+`.claude/` **nao e estatico**.
 
-- Trimestral: agentes contribuem reflexões
-- Semestral: @maverick refina COSMOVISAO baseado em padrões
-- Anualmente: Você faz retreat filosófico, reafirma valores ou evolui-os
+- Trimestral: agentes contribuem reflexoes
+- Semestral: @maverick refina COSMOVISAO baseado em padroes
+- Anualmente: Voce faz retreat filosofico, reafirma valores ou evolui-os
 
-**Isto é um sistema vivo. Cresce. Respira. Muda.**
+**Isto e um sistema vivo. Cresce. Respira. Muda.**
 
 ---
 
-**Bem-vindo ao coração do sistema.**
+**Bem-vindo ao coracao do sistema.**
 
 *Leia COSMOVISAO.md primeiro.*

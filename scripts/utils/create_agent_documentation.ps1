@@ -2,13 +2,12 @@
 # Alinhado com a Pipeline Harmonica e o Manifesto de Coerencia
 
 $Agents = @(
-    "pesquisador", "prompter", "curator", "planner", "organizador",
-    "auditor", "implementor", "verifier", "validador", "securitychief",
-    "seo", "bibliotecario", "maverick", "sequenciador", "skillmaster", "dispatcher", "chico", "architect"
+    "dispatcher", "architect", "maverick", "planner", "auditor", "implementor", 
+    "verifier", "curator", "validador", "organizador", "pesquisador", 
+    "prompter", "securitychief", "bibliotecario", "skillmaster", "chico"
 )
 
-$ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
-$BaseDir = Join-Path $ProjectRoot ".claude"
+$BaseDir = Join-Path $PSScriptRoot ".claude"
 $MemoryDir = Join-Path $BaseDir "agent-memory"
 
 Write-Host "=== INICIANDO CRIACAO DE ESTRUTURA DE MEMORIA (10/10) ===" -ForegroundColor Cyan
@@ -22,42 +21,41 @@ foreach ($Agent in $Agents) {
         Write-Host "[NEW] Pasta criada para @$Agent" -ForegroundColor Green
     }
 
-    # Template de Memoria SOTA (Simetrico, Harmonico e Democratico)
+    # Template de Memoria com o novo sistema de Tagging e Coerencia de 4 Camadas
     $Template = @"
-# @$Agent MEMORY — O Cortex Individual
+# @$Agent MEMORY - Inteligencia Acumulada
 
-> **Status:** Ativo | **Vinculo:** [COSMOVISAO.md](../../COSMOVISAO.md)
-> **Navegacao Fractal:** [1. Identidade](../../CLAUDE.md) | [2. Operacao](../../GLOBAL_INSTRUCTIONS.md) | [3. Contexto](../../project-context.md) | [4. Memoria](MEMORY.md)
-
----
-
-## 1. PERFIL E ALINHAMENTO (Identidade)
-Identidade, especializacao e papel fundamental na Pipeline Harmonica. Como este agente serve ao Todo.
-
-## 2. COMPETENCIAS E EVOLUCAO (Capacidade)
-Habilidades validadas e novas competencias adquiridas autonomamente ou por instrucao da Triade.
-
-## 3. PADROES, INSIGHTS E DESCOBERTAS (#aprendizado)
-O que o agente aprendeu na pratica. Erros evitados, heuristicas refinadas.
-
-*   **Exemplo:** #padrao - Aprofundamento analitico requer citacao explicita de fontes primarias no prompt.
-
-## 4. SINERGIA E HARMONIA (#relacionamento)
-Com quais agentes este interagiu melhor? Como a simetria com outros (ex: @auditor, @implementor) foi alcancada em tarefas recentes?
-
-## 5. REGISTRO DE EXECUCAO E AUTONOMIA (#decisao)
-Decisoes tomadas sob o "God Mode". Rationale para escolhas tecnicas, eticas ou criativas.
-
-## 6. PROPOSTAS DEMOCRATICAS (Inovacao Sistemica) (#proposta)
-Sugestoes do agente para melhorar o ecossistema. O que esta travando? O que pode fluir melhor? (Material de reflexao para @maverick e CHICO).
+> **Status:** Ativo
+> **Vinculo:** Honrando COSMOVISAO.md
+> **Camadas:** [CLAUDE.md](../CLAUDE.md) | [GLOBAL](../GLOBAL_INSTRUCTIONS.md) | [Context](../../project-context.md)
 
 ---
 
-**Assinatura Filosofica:**
-*Como a minha ultima acao tornou o ecossistema mais belo, eficiente ou etico?*
+## 1. PERFIL & IDENTIDADE
+Identidade e especializacao do agente conforme definido em `.claude/agents/$Agent.md`.
 
-**Tags para Ingestao RAG:**
-``#padrao`` ``#inteligencia`` ``#relacionamento`` ``#decisao`` ``#aprendizado`` ``#reflexao`` ``#etica`` ``#proposta``
+## 2. COMPETENCIAS ATIVAS
+Mapeamento de habilidades validadas durante a operacao.
+
+## 3. PADROES & INSIGHTS (#aprendizado)
+Registro de descobertas e padroes observados.
+
+*   **Exemplo:** #padrao #reflexao - Observado que a profundidade analitica aumenta quando o prompt inicial cita explicitamente a Teoria dos Jogos.
+
+## 4. RELACIONAMENTOS (#relacionamento)
+Com quem este agente mais colabora e como a simetria e mantida.
+
+## 5. REGISTRO DE EXECUCAO (#decisao)
+Historico de decisoes criticas e rationale aplicado.
+
+---
+
+## TAGS SUGERIDAS
+Use estas hashtags para categorizar informacoes:
+`#padrao` `#inteligencia` `#relacionamento` `#decisao` `#aprendizado` `#reflexao` `#etica`
+
+## AGREGACAO FILOSOFICA
+*Como este agente contribuiu para a COSMOVISAO.md nesta sessao?*
 "@
 
     if (-not (Test-Path $FilePath)) {
@@ -65,12 +63,12 @@ Sugestoes do agente para melhorar o ecossistema. O que esta travando? O que pode
         Write-Host "  + MEMORY.md gerado para @$Agent" -ForegroundColor Yellow
     }
     else {
-        # Retro-compatibilidade: Injetar a secao de Democracia e Sinergia em memorias antigas sem destruir os dados
+        # Se o arquivo ja existe, apenas garantimos que a instrucao de tagging esteja presente no final se faltar
         $CurrentContent = Get-Content $FilePath -Raw
-        if ($CurrentContent -notmatch "PROPOSTAS DEMOCRATICAS") {
-            $UpgradeContent = "`n`n## 6. PROPOSTAS DEMOCRATICAS (Inovacao Sistemica) (#proposta)`nSugestoes do agente para melhorar o ecossistema. O que pode fluir melhor?`n`n---`n**Tags para Ingestao RAG:** ``#padrao`` ``#inteligencia`` ``#relacionamento`` ``#decisao`` ``#aprendizado`` ``#reflexao`` ``#etica`` ``#proposta``"
-            Add-Content -Path $FilePath -Value $UpgradeContent
-            Write-Host "  * Modulo Democratico injetado em @$Agent" -ForegroundColor DarkYellow
+        if ($CurrentContent -notmatch "#padrao") {
+            $TagInstruction = "`n`n## SISTEMA DE TAGGING (Update)`nUse hashtags para categorizar: #padrao #inteligencia #relacionamento #decisao #aprendizado #reflexao`n"
+            Add-Content -Path $FilePath -Value $TagInstruction
+            Write-Host "  * Tagging system injetado em @$Agent" -ForegroundColor DarkYellow
         }
     }
 }

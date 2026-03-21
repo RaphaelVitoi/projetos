@@ -1,394 +1,240 @@
 <#
-/**
- * IDENTITY: Membrana Inteligente (Smart CLI v2.0)
- * PATH: do.ps1
- * ROLE: Atuar como duto interativo de intencao, aplicando heuristica de Regex para rotear inputs humanos ao agente adequado.
- * BINDING: [Agent-TaskManager.psm1 (Kernel para enfileiramento), synonyms.json (Cortex de sinonimos)]
- * TELEOLOGY: Reduzir a carga cognitiva do usuario a zero na entrada de tarefas, filtrando a entropia antes que alcance o nucleo de processamento do ecossistema.
- */
 .SYNOPSIS
-    Smart CLI Wrapper (do.ps1) - A Membrana Inteligente v2.0
-    Baseado na SPEC auditada e aprovada pelo @maverick.
+    A Membrana Inteligente (CLI Interativa) e ponto de entrada para o ecossistema de agentes.
+    Orquestra a enfileiracao de tarefas e executa comandos com seguranca.
 
 .DESCRIPTION
-    Roteador de intencoes que aceita input natural, sanitiza,
-    identifica o agente correto via heuristica (Regex) e
-    encaminha para o Agent-TaskManager com identidade visual "Cyber/Sintetica".
-#>
+    Este script e o coracao da interacao do usuario com o sistema de agentes.
+    Ele permite:
+    1. Enfileirar novas tarefas para processamento assincrono.
+    2. Opcionalmente, preparar prompts para execucao na interface Web (Claude Pro/Gemini Advanced).
+    3. Executar comandos de forma segura, validando contra acoes destrutivas.
 
+.PARAMETER Description
+    A descricao da tarefa a ser enfileirada.
+.PARAMETER Web
+    Se presente, o script preparara o contexto e copiara para o clipboard
+    para uso na interface Web do LLM (Claude Pro/Gemini Advanced).
+.PARAMETER Execute
+    Um comando PowerShell a ser executado diretamente. Este comando passara
+    pelo Protocolo de Exclusao Segura.
+.PARAMETER Chaos
+    Aciona a Engenharia do Caos (chaos-core.ts) para testar a resiliencia da infraestrutura.
+.PARAMETER FixEPERM
+    Executa o protocolo implacável do Chico para aniquilar o OneDrive e processos Node travados, resolvendo o erro EPERM.
+#>
+[CmdletBinding()]
 param (
-    [Parameter(Position = 0, ValueFromRemainingArguments = $true)]
-    [string[]]$InputWords,
+    [string]$Description,
+    [switch]$Web,
+    [string]$Execute,
+    [switch]$Chaos,
+    [string]$FixEPERM,
     [switch]$Force,
-    [switch]$Web, # Roteamento direto para a IDE (Zero Custo API / Modelos Premium Web)
-    [switch]$CheckCortex, # Validar a saude das regras (Cortex) silenciosamente antes de operar
-    [switch]$Ingest, # Receptor Web: Materializa codigos do clipboard localmente
-    [switch]$Wait, # Modo Sincrono: Trava o terminal e imprime a resposta assim que concluida
-    [switch]$Last  # Imprime imediatamente a ultima resposta gerada
+    [ValidateSet('low', 'medium', 'high', 'gto')]
+    [string]$Intensity = 'low',
+    [ValidateSet('worker', 'frontend')]
+    [string]$Target = 'worker'
 )
 
-$InputString = $InputWords -join " "
+# Constantes e Configuracoes (PURE ASCII, sem UTF-8)
+$ScriptDirectory = Split-Path -Parent $MyInvocation.MyCommand.Definition
+$ContextAssemblerPath = Join-Path $ScriptDirectory "scripts\routines\Invoke-ContextAssembler.ps1"
+$MemoryBasePath = Join-Path $ScriptDirectory ".claude\agent-memory"
 
-# --- PROTECAO CONTRA ENTROPIA DE PASTE ---
-# Se o terminal engolir as flags para dentro da string devido a quebras de linha, nos a resgatamos.
-if ($InputString -match '(?i)\s-Web\b') {
-    $Web = $true
-    $InputString = $InputString -replace '(?i)\s-Web\b', ''
-}
-if ($InputString -match '(?i)\s-Wait\b') {
-    $Wait = $true
-    $InputString = $InputString -replace '(?i)\s-Wait\b', ''
-}
+# --- Funcoes Core ---
 
-# --- BOOTSTRAP ---
-$EnvPath = Join-Path $PSScriptRoot "_env.ps1"
-if (Test-Path $EnvPath) { . $EnvPath }
-# Set a flag to indicate that the environment has been loaded
-$Script:EnvLoaded = $true
+# Protocolo de Exclusao Segura (Implementado por @maverick)
+function Invoke-SafeCommand {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $true)]
+        [string]$Command
+    )
 
-# Fallback Estrutural: Garante que $Global:AgentPaths e suas chaves vitais existam
-if ($null -eq $Global:AgentPaths) {
-    $Global:AgentPaths = @{}
-}
-if (-not $Global:AgentPaths.Root) { $Global:AgentPaths.Root = $PSScriptRoot }
-if (-not $Global:AgentPaths.Kernel) { $Global:AgentPaths.Kernel = Join-Path $PSScriptRoot "Agent-TaskManager.psm1" }
-if (-not $Global:AgentPaths.Log) { $Global:AgentPaths.Log = Join-Path $PSScriptRoot ".claude\logs" }
-if (-not $Global:AgentPaths.Docs) { $Global:AgentPaths.Docs = Join-Path $PSScriptRoot "docs" }
-if (-not $Global:AgentPaths.Queue) { $Global:AgentPaths.Queue = Join-Path $PSScriptRoot "queue\tasks.db" }
-if (-not $Global:AgentPaths.Archive) { $Global:AgentPaths.Archive = Join-Path $PSScriptRoot "queue\archive.db" }
-if ($null -eq $Global:TaskManagerConfig) { $Global:TaskManagerConfig = @{ MutexName = "Global\ChicoTaskManagerMutex" } }
+    # Abordagem de Allowlist: Apenas comandos explicitamente seguros sao permitidos.
+    $AllowedCommands = @(
+        'Get-Process',
+        'Get-Service',
+        'Get-ChildItem',
+        'ls',
+        'dir',
+        'Get-Help',
+        'echo',
+        'Write-Host'
+    )
 
-# Import Kernel
-$KernelPath = if ($Global:AgentPaths.Kernel) { $Global:AgentPaths.Kernel } else { Join-Path $PSScriptRoot "Agent-TaskManager.psm1" }
+    $CommandName = $Command.Split(' ')[0]
 
-if (Test-Path $KernelPath) {
-    Import-Module $KernelPath -Force -DisableNameChecking
-}
-else {
-    Write-Host "[KERNEL ERROR] Agent-TaskManager.psm1 not found." -ForegroundColor Red
-    exit
-}
-
-# --- FUNCOES DE CARREGAMENTO JSON ---
-function Import-ValidJson {
-    param([string]$Path, [string]$FileName, [switch]$Critical)
-    if (-not (Test-Path $Path)) {
-        if ($Critical) { Write-Host "[ERROR] $FileName not found in $PSScriptRoot." -ForegroundColor Red; exit }
-        return $null
+    if ($CommandName -in $AllowedCommands) {
+        Write-Host "[INFO] Executando comando seguro (Allowlist): $Command" -ForegroundColor Cyan
+        Invoke-Expression $Command
+        return $true
     }
-    try {
-        return (Get-Content -Path $Path -Raw -Encoding UTF8 | ConvertFrom-Json -ErrorAction Stop)
-    }
-    catch {
-        Write-Host "[ERROR] Malformed JSON in $FileName`nDetails: $($_.Exception.Message)" -ForegroundColor Red
-        if ($Critical) { exit }
-        return $null
+    else {
+        Write-Error "Comando '$CommandName' bloqueado. Apenas comandos na lista de permissões (allowlist) podem ser executados via -Execute para garantir a seguranca do sistema."
+        return $false
     }
 }
 
-# --- CONFIGURACAO EXTERNA (Cortex JSON) ---
-
-# 1. IntentMap (Mapeamento de Agentes)
-$IntentMapPath = Join-Path $PSScriptRoot "data\intentmap.json"
-$IntentMap = [ordered]@{}
-
-$jsonIntentMap = Import-ValidJson -Path $IntentMapPath -FileName "intentmap.json" -Critical
-if ($null -ne $jsonIntentMap) {
-    foreach ($property in $jsonIntentMap.psobject.properties) {
-        $IntentMap[$property.Name] = $property.Value
+function Invoke-ContextAssembler {
+    # Stub para a funcao Invoke-ContextAssembler, caso o script nao seja fornecido.
+    # Em um ambiente real, este modulo seria carregado dinamicamente.
+    # Por simplicidade e conformidade com Cortex Shield, se o script nao existe, faremos um stub.
+    
+    if (Test-Path $ContextAssemblerPath) {
+        . $ContextAssemblerPath
+        return Invoke-ContextAssembler @args
     }
-}
+    else {
+        Write-Warning "scripts/routines/Invoke-ContextAssembler.ps1 nao encontrado. Funcionalidade de montagem de contexto otimizada nao disponivel."
 
-# 2. Synonyms (Entropia Humana e Variacoes)
-$SynonymsPath = Join-Path $PSScriptRoot "data\synonyms.json"
-$Synonyms = @{}
-
-$jsonSynonyms = Import-ValidJson -Path $SynonymsPath -FileName "synonyms.json"
-if ($null -ne $jsonSynonyms) {
-    foreach ($property in $jsonSynonyms.psobject.properties) {
-        $Synonyms[$property.Name] = $property.Value
-    }
-}
-else {
-    if (-not (Test-Path $SynonymsPath)) {
-        Write-Host "[WARNING] synonyms.json not found. Using exact matches only." -ForegroundColor DarkYellow
-    }
-}
-
-# 3. Aphorisms (Easter Eggs do @maverick)
-$AphorismsPath = Join-Path $PSScriptRoot "data\aphorisms.json"
-$Aphorisms = @()
-$jsonAphorisms = Import-ValidJson -Path $AphorismsPath -FileName "aphorisms.json"
-if ($null -ne $jsonAphorisms) {
-    $Aphorisms = @($jsonAphorisms)
-}
-else {
-    if (-not (Test-Path $AphorismsPath)) {
-        $Aphorisms = @("Silence is the loudest sound in the void.")
-    }
-}
-
-# --- FUNCOES ---
-
-function Invoke-CyberBeep {
-    param([string]$Type)
-    # Falha silenciosamente se o sistema não suportar beeps (ex: alguns terminais Linux/VS Code integrados silenciosos)
-    try {
-        switch ($Type) {
-            'Boot' { [console]::Beep(800, 80); [console]::Beep(1200, 120) }
-            'Scan' { [console]::Beep(600, 50); [console]::Beep(650, 50); [console]::Beep(700, 50) }
-            'Match' { [console]::Beep(1046, 100); [console]::Beep(1318, 150) }
-            'Success' { [console]::Beep(1567, 100); [console]::Beep(2093, 200) }
-            'Error' { [console]::Beep(400, 200); [console]::Beep(300, 300) }
-            'Select' { [console]::Beep(900, 100) }
-        }
-    }
-    catch {}
-}
-
-function Resolve-Intent {
-    param([string]$InputText)
-
-    # 1. Override Absoluto: Se o comando contiver @agente explicitamente, ignora a heuristica.
-    if ($InputText -match '(@[a-zA-Z0-9_]+)') {
-        $explicitAgent = $matches[1].ToLower()
-        if ($IntentMap.Contains($explicitAgent)) {
-            return $explicitAgent
-        }
-    }
-
-    # 2. Sistema de Pontuacao (Scoring)
-    $bestAgent = $null
-    $maxScore = 0
-
-    foreach ($agent in $IntentMap.Keys) {
-        $pattern = $IntentMap[$agent]
-        if ($Synonyms -and $Synonyms[$agent]) {
-            $synonymGroup = $Synonyms[$agent]
-            $synonymPattern = ($synonymGroup | ForEach-Object { [regex]::Escape($_) }) -join "|"
-            $pattern = "($pattern|$synonymPattern)"
-        }
+        # Retorna o contexto simples, sem otimizacao e tratamento de Encoding
+        $GlobalInstructions = Get-Content -Path (Join-Path $ScriptDirectory "GLOBAL_INSTRUCTIONS.md") -Raw
+        $ClaudeIdentity = Get-Content -Path (Join-Path $ScriptDirectory ".claude" "CLAUDE.md") -Raw
+        $ProjectContext = if (Test-Path (Join-Path $ScriptDirectory ".claude" "project-context.md")) { Get-Content -Path (Join-Path $ScriptDirectory ".claude" "project-context.md") -Raw } else { "" }
         
-        $matchCount = [regex]::Matches($InputText, $pattern, "IgnoreCase").Count
-        if ($matchCount -gt $maxScore) {
-            $maxScore = $matchCount
-            $bestAgent = $agent
-        }
-    }
-    return $bestAgent
-}
-
-function Show-Header {
-    Invoke-CyberBeep -Type 'Boot'
-    Write-Host "=== CHICO SMART CLI v2.0 ===" -ForegroundColor Cyan
-    
-    # Easter Egg (10% chance)
-    if ((Get-Random -Minimum 1 -Maximum 100) -le 10) {
-        $msg = $Aphorisms | Get-Random
-        Write-Host "`n> $msg" -ForegroundColor Magenta
+        return @"
+=== CONTEXTO GLOBAL ===
+$GlobalInstructions`n=== IDENTIDADE DO USUARIO (Raphael Vitoi) ===
+$ClaudeIdentity`n=== CONTEXTO DO PROJETO ===
+$ProjectContext
+"@
     }
 }
 
-function Get-ValidatedAgent {
-    <#
-    .SYNOPSIS
-        Prompts the user for a manual agent ID and validates it against the IntentMap.
-    #>
-    while ($true) {
-        $manualAgent = Read-Host
 
-        if ([string]::IsNullOrWhiteSpace($manualAgent)) {
-            Write-Host "[ABORT] No agent selected." -ForegroundColor Red
-            exit
-        }
+# --- Logica Principal ---
 
-        # Normalize: add '@' if missing
-        if (!$manualAgent.StartsWith('@')) { $manualAgent = "@$manualAgent" }
+# Tratamento para o parametro -Chaos (Engenharia SOTA)
+if ($Chaos) {
+    Write-Host "=== [PROTOCOLO DE ENTROPIA] ENGENHARIA DO CAOS ===" -ForegroundColor Red
+    Write-Host "  > Nivel de Intensidade : $Intensity" -ForegroundColor Yellow
+    Write-Host "  > Alvo da Infeccao     : $Target" -ForegroundColor Yellow
+    Write-Host "---------------------------------------------------" -ForegroundColor DarkGray
 
-        if ($IntentMap.Contains($manualAgent)) {
-            return $manualAgent
-        }
-        Write-Host "[ERROR] Invalid agent ID. Please try again." -ForegroundColor Red
-        Write-Host "[MANUAL INPUT] Enter target agent > " -NoNewline -ForegroundColor Cyan
-    }
-}
-
-# --- RECEPTOR WEB (INGESTION PIPELINE) ---
-if ($Ingest) {
-    Show-Header
-    Write-Host "`n[INGEST PIPELINE] Lendo area de transferencia..." -ForegroundColor DarkGray
+    # Friccao de Ecossistema: Forcamos o Node a entender modulos CommonJS no Windows para o Chaos
+    $env:TS_NODE_COMPILER_OPTIONS = '{"module":"CommonJS"}'
     
-    $clipboard = Get-Clipboard -Raw
-    if ([string]::IsNullOrWhiteSpace($clipboard)) {
-        Invoke-CyberBeep -Type 'Error'
-        Write-Host "[ABORT] Area de transferencia vazia. Copie a resposta da IA primeiro." -ForegroundColor Red
-        exit 1
-    }
-    
-    $dropzoneDir = Join-Path $PSScriptRoot ".claude"
-    if (-not (Test-Path $dropzoneDir)) { New-Item -ItemType Directory -Path $dropzoneDir -Force | Out-Null }
-    
-    $dropzoneFile = Join-Path $dropzoneDir "dropzone.md"
-    [System.IO.File]::WriteAllText($dropzoneFile, $clipboard, [System.Text.Encoding]::UTF8)
-    
-    Write-Host "[GOD MODE] Acionando motor Python de forja..." -ForegroundColor Yellow
-    
-    $pythonCmd = "python"
-    $executorScript = Join-Path $PSScriptRoot "task_executor.py"
-    & $pythonCmd $executorScript "ingest" $dropzoneFile
-    
-    Invoke-CyberBeep -Type 'Success'
+    # Invoca o caos on-the-fly
+    $ChaosCmd = "npx ts-node scripts/tests/chaos-core.ts --intensity $Intensity --target $Target"
+    & $ChaosCmd
     exit 0
 }
 
-# --- INTEGRITY CHECK SILENCIOSO ---
-if ($CheckCortex) {
-    Write-Host "`n[CORTEX] Analisando integridade do schema em background..." -ForegroundColor DarkGray
-    $CheckScriptPath = Join-Path $PSScriptRoot "scripts\setup\check-cortex.ps1"
-    
-    if (Test-Path $CheckScriptPath) {
-        # Absorve e funde todos os streams (*>&1) para suprimir poluição de Write-Host
-        $checkOutput = & $CheckScriptPath *>&1
-        $outputStr = $checkOutput -join " "
-        
-        if ($outputStr -match "\[SUCCESS\]") {
-            Add-CortexValidationLog -Success $true -Details "Validacao invocada pela CLI"
-            Write-Host "[CORTEX] Homeostase confirmada. Sistema integro." -ForegroundColor Green
-        }
-        else {
-            Add-CortexValidationLog -Success $false -Details "Entropia detectada via CLI: $outputStr"
-            Write-Host "[CRITICAL] Entropia no Cortex. Corrupcao ou violacao de Schema. Abortando execucao." -ForegroundColor Red
-            exit
-        }
-    }
-}
+# Tratamento para o parametro -FixEPERM (Anti-Entropia)
+if ($PSBoundParameters.ContainsKey('FixEPERM')) {
+    Write-Host "=== [PROTOCOLO ANTI-EPERM] CHICO NO CONTROLE ===" -ForegroundColor Red
 
-# --- MODO INTERATIVO ---
-if ([string]::IsNullOrWhiteSpace($InputString)) {
-    Show-Header
-    if ($Force) {
-        Write-Host "[ABORT] No input string provided and -Force is active." -ForegroundColor Red
+    if ([string]::IsNullOrWhiteSpace($FixEPERM)) {
+        Write-Error "O parametro -FixEPERM agora requer um comando para ser executado. Ex: -FixEPERM 'npm install'"
         exit 1
     }
-    Write-Host "[NEXUS] Awaiting Directive > " -NoNewline -ForegroundColor Cyan
-    $InputString = Read-Host
-}
 
-# --- COMANDOS RAPIDOS (DYNAMIC READ) ---
-$isReadCmd = $Last -or ($InputString.Length -lt 25 -and $InputString -match '(?i)\b(last|read|ver|resposta|resultado)\b')
-if ($isReadCmd) {
-    $ResultsDir = Join-Path $PSScriptRoot ".claude\task_results"
-    if (Test-Path $ResultsDir) {
-        $LastFile = Get-ChildItem -Path $ResultsDir -Filter "*.md" | Sort-Object LastWriteTime -Descending | Select-Object -First 1
-        if ($LastFile) {
-            Write-Host "`n=== ULTIMO DOSSIE GERADO: $($LastFile.Name) ===`n" -ForegroundColor Green
-            Get-Content $LastFile.FullName -Encoding UTF8 | Write-Host
-            exit 0
+    # 1. Pausa os processos que causam lock
+    Write-Host "[ANTI-EPERM] Aniquilando processos Node zumbis..." -ForegroundColor Yellow
+    Get-Process -Name "node" -ErrorAction SilentlyContinue | Stop-Process -Force
+
+    Write-Host "[ANTI-EPERM] Pausando sincronizacao do OneDrive para evitar locks..." -ForegroundColor Yellow
+    $oneDriveProcess = Get-Process -Name "OneDrive" -ErrorAction SilentlyContinue
+    $oneDrivePath = $null
+    if ($oneDriveProcess) {
+        $oneDrivePath = $oneDriveProcess.Path
+        Stop-Process -Name "OneDrive" -Force -ErrorAction SilentlyContinue
+        $oneDriveProcess | Wait-Process -Timeout 30 -ErrorAction SilentlyContinue
+    }
+
+    # 2. Executa o comando protegido
+    try {
+        Write-Host "[ANTI-EPERM] Executando comando protegido: '$FixEPERM'" -ForegroundColor Cyan
+        Invoke-Expression $FixEPERM
+        Write-Host "[VITORIA] Comando executado com sucesso. EPERM neutralizado." -ForegroundColor Green
+    }
+    catch {
+        Write-Error "[FALHA] O comando protegido falhou: $_"
+    }
+    finally {
+        # 3. Reinicia o OneDrive
+        if ($oneDrivePath) {
+            Write-Host "[ANTI-EPERM] Reiniciando o OneDrive para restaurar a sincronizacao..." -ForegroundColor Yellow
+            Start-Process -FilePath $oneDrivePath
         }
     }
-    Write-Host "`n[ERRO] Nenhuma resposta encontrada no Córtex." -ForegroundColor Red
-    exit 1
+    exit 0
 }
 
-# --- FLUXO DE INTENCAO ---
-Invoke-CyberBeep -Type 'Scan'
-$suggestedAgent = Resolve-Intent -InputText $InputString
-
-# 3. Handshake
-Write-Host "`n[KERNEL] Computing vectors..." -ForegroundColor DarkGray
-Start-Sleep -Milliseconds 300
-
-$agent = $null
-if ($suggestedAgent) {
-    Write-Host "[PATTERN MATCH] Intent detected: " -NoNewline -ForegroundColor Cyan
-    Write-Host "'$suggestedAgent' [OK]" -NoNewline -ForegroundColor Yellow
-    
-    if ($Force) {
-        Write-Host " (Auto-Confirmed by -Force)" -ForegroundColor DarkGray
-        $agent = $suggestedAgent
-    }
-    else {
-        Write-Host ". Confirm? [Y/n] " -NoNewline -ForegroundColor Cyan
-        Invoke-CyberBeep -Type 'Match'
-        $confirm = Read-Host
-        
-        if ($confirm -match '^(n|N|no|nao)$') {
-            Write-Host "[MANUAL OVERRIDE] Enter agent ID > " -NoNewline -ForegroundColor Cyan
-            Invoke-CyberBeep -Type 'Select'
-            $agent = Get-ValidatedAgent
-        }
-        else {
-            $agent = $suggestedAgent
-        }
-    }
-}
-else {
-    Invoke-CyberBeep -Type 'Error'
-    Write-Host "[WARNING] Signal ambiguous. Falling back to default agent: " -NoNewline -ForegroundColor Yellow
-    Write-Host "'@maverick'" -ForegroundColor Cyan
-    
-    $agent = "@maverick"
-    Invoke-CyberBeep -Type 'Match'
-}
-
-if ([string]::IsNullOrWhiteSpace($agent)) {
-    Write-Host "[ABORT] No agent selected." -ForegroundColor Red
-    exit
-}
-
-# --- ROTEAMENTO WEB/IDE (CUSTO ZERO API) ---
+# Tratamento para o parametro -Web (Handoff para LLM Web)
 if ($Web) {
-    Write-Host "`n[HYBRID BRAIN] Compilando pacote cognitivo massivo..." -ForegroundColor DarkGray
-    $ContextPath = Join-Path $PSScriptRoot ".claude\project-context.md"
-    $ContextContent = if (Test-Path $ContextPath) { Get-Content $ContextPath -Raw -Encoding UTF8 } else { "" }
+    Write-Host "=== [PROTOCOLO DE HANDOFF WEB] CEREBRO HIBRIDO ===" -ForegroundColor Cyan
+    Write-Host "1. Claude 3.5 Sonnet / Opus (Codificacao Cirurgica e Paranoia Tecnologica)"
+    Write-Host "2. Gemini 1.5 Pro / Advanced (Contexto Massivo, RAG e Visao Holistica)"
+    Write-Host "3. Modelos Abertos / DeepSeek (Raciocinio Bruto Step-by-Step)"
     
-    $AgentPath = Join-Path $PSScriptRoot ".claude\agents\$($agent.Replace('@','')).md"
-    $AgentContent = if (Test-Path $AgentPath) { Get-Content $AgentPath -Raw -Encoding UTF8 } else { "Voce e o $agent." }
+    $MenuChoice = Read-Host "Selecione o motor cognitivo alvo [1/2/3]"
     
-    $ClipboardText = "== IDENTIDADE ASSUMIDA ==`n$AgentContent`n`n== CONTEXTO DO PROJETO ==`n$ContextContent`n`n== SUA DIRETRIZ ==`n$InputString`n`n[DIRETRIZ DE LLM] Ao final da sua resposta, analise a tarefa e o contexto. Recomende qual modelo (Claude Pro/Opus, Gemini Advanced/1.5 Pro, ou um modelo API especifico) seria o mais adequado para a *proxima* etapa ou para a *atual* tarefa, justificando a escolha com base na 'Economia Generalizada' (custo financeiro, latencia, janela de contexto, qualidade de output). Se a tarefa for melhor executada na interface Web (com suas assinaturas pagas), instrua o usuario a usar o Protocolo de Handoff (-Web)."
-    Set-Clipboard -Value $ClipboardText
-    
-    Invoke-CyberBeep -Type 'Success'
-    Write-Host "[SOTA] Handoff completo para a Interface Web!" -ForegroundColor Magenta
-    Write-Host "Aperte Ctrl+V no chat do VS Code (Opus/Gemini Advanced) para executar a tarefa com as assinaturas Premium." -ForegroundColor Cyan
-    Write-Host "Isto garante o uso dos melhores modelos sem consumir limite da API e aproveitando suas assinaturas pagas." -ForegroundColor DarkGray
-    exit
-}
-
-# --- ENFILEIRAMENTO DE TAREFA ---
-$taskId = "TASK-$(Get-Date -Format 'yyyyMMdd-HHmmss')" 
-$newTask = [ordered]@{
-    id          = $taskId
-    description = $InputString
-    status      = "pending"
-    timestamp   = (Get-Date -Format "o")
-    agent       = $agent
-}
-
-try {
-    Add-AgentTask -NewTask $newTask
-    Invoke-CyberBeep -Type 'Success'
-    Write-Host "`n[SYMMETRY] Integrity verified. Cycle complete." -ForegroundColor Green
-    Write-Host "ID: $taskId" -ForegroundColor DarkGray
-    
-    if ($Wait) {
-        Write-Host "`n[NEXUS SÍNCRONO] Aguardando o Orquestrador processar a resposta..." -ForegroundColor Yellow
-        $ResultFile = Join-Path $PSScriptRoot ".claude\task_results\$taskId.md"
-        $Waited = 0
-        while ($Waited -lt 300) {
-            # 5 minutos maximo
-            if (Test-Path $ResultFile) {
-                Write-Host "`n=== RESPOSTA MATERIALIZADA ===`n" -ForegroundColor Green
-                Get-Content $ResultFile -Encoding UTF8 | Write-Host
-                exit 0
-            }
-            Start-Sleep -Seconds 2
-            $Waited += 2
-            Write-Host "." -NoNewline -ForegroundColor DarkGray
-        }
-        Write-Host "`n`n[TIMEOUT] O agente está demorando além do normal. A tarefa continua rodando em background." -ForegroundColor Red
+    $RecomendacaoLLM = switch ($MenuChoice) {
+        '1' { "Recomendacao LLM: Use Claude. Ideal para codigo restrito e arquitetura impecavel." }
+        '2' { "Recomendacao LLM: Use Gemini. Cole todo o contexto; ele vai engolir a complexidade do projeto." }
+        '3' { "Recomendacao LLM: Use DeepSeek/Llama. Excelente para resolucao de gargalos algoritmicos." }
+        default { "Recomendacao LLM: Oraculo indefinido. Assumindo Claude Opus por padrao." }
     }
+    
+    Write-Host "`n[INFO] Sintetizando artefatos e memorias no Clipboard..." -ForegroundColor Yellow
+
+    # Validar os caminhos dos arquivos antes de invocar o script
+    if (-not (Test-Path (Join-Path $ScriptDirectory "GLOBAL_INSTRUCTIONS.md"))) { Write-Error "Arquivo GLOBAL_INSTRUCTIONS.md nao encontrado."; exit 1 }
+    if (-not (Test-Path (Join-Path $ScriptDirectory ".claude" "CLAUDE.md"))) { Write-Error "Arquivo CLAUDE.md nao encontrado."; exit 1 }
+    if (-not (Test-Path (Join-Path $ScriptDirectory ".claude" "project-context.md"))) { Write-Warning "Arquivo project-context.md nao encontrado. Contexto do projeto omitido." }
+
+    try {
+        # Invoca o script para montar o contexto
+        $contextContent = Invoke-ContextAssembler -GlobalInstructionsPath (Join-Path $ScriptDirectory "GLOBAL_INSTRUCTIONS.md") -ClaudeIdentityPath (Join-Path $ScriptDirectory ".claude" "CLAUDE.md") -ProjectContextPath (Join-Path $ScriptDirectory ".claude" "project-context.md") -LLMRecommendation $RecomendacaoLLM
+    }
+    catch {
+        Write-Error "Erro ao montar o contexto: $($_.Exception.Message)"
+    }
+
+    Set-Clipboard -Value $contextContent
+    Write-Host "[HANDOFF COMPLETO] Contexto copiado para o clipboard. Cole na interface Web do seu LLM e diga 'Ola, Chico'." -ForegroundColor Green
+    Write-Host $RecomendacaoLLM -ForegroundColor Magenta
+    exit 0
 }
-catch {
-    Write-Host "[CRITICAL] Task ingestion failed: $_" -ForegroundColor Red
+
+# Tratamento para o parametro -Execute (Execucao de comando segura)
+if ($Execute) {
+    Invoke-SafeCommand -Command $Execute
+    exit 0
+}
+
+# Tratamento para o parametro -Description (Enfileirar tarefa)
+if ($Description) {
+    $NewTask = [ordered]@{
+        id          = "TASK-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
+        description = $Description
+        status      = "pending"
+        timestamp   = (Get-Date -Format "o")
+        agent       = "@dispatcher"
+    }
+    try {
+        $taskJson = $NewTask | ConvertTo-Json -Depth 10 -Compress
+        $apiUrl = "http://127.0.0.1:17042/add"
+        $headers = @{ "Content-Type" = "application/json" }
+        Invoke-WebRequest -Uri $apiUrl -Method Post -Body $taskJson -Headers $headers -UseBasicParsing | Out-Null
+
+        Write-Host "[TAREFA ENFILEIRADA SOTA] ID: $($NewTask.id) (API Sincronizado)" -ForegroundColor Green
+    }
+    catch {
+        Write-Error "Falha critica ao injetar tarefa no Kernel (API): $_. Certifique-se que o worker esta rodando com 'python task_executor.py worker-api'."
+    }
+    exit 0
+}
+
+# Se nenhum parametro for fornecido, mostra a ajuda
+if (-not $PSBoundParameters.ContainsKey('Description') -and `
+        -not $PSBoundParameters.ContainsKey('Web') -and `
+        -not $PSBoundParameters.ContainsKey('Execute') -and `
+        -not $PSBoundParameters.ContainsKey('Chaos') -and `
+        -not $PSBoundParameters.ContainsKey('FixEPERM')) {
+
+    Get-Help -Full $MyInvocation.MyCommand.Name
 }

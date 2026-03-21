@@ -1,4 +1,4 @@
-# Limpeza de Backups Legados (Pós-Migração Kernel v3.0)
+# Limpeza de Backups Legados (Pos-Migracao Kernel v3.0)
 # Remove arquivos *.backup gerados pelos scripts antigos (do.ps1 v1, validate-queue.ps1)
 
 $QueueDir = Join-Path $PSScriptRoot "queue"

@@ -17,12 +17,18 @@ if (-not (Test-Path $ArchiveDir)) {
 }
 
 # 1. Limpeza de Duplicatas de Scripts na Raiz
-$RedundantScripts = @("create_agent_documentation.ps1", "deploy_v1.ps1")
+$RedundantScripts = @("create_agent_documentation.ps1", "deploy_v1.ps1", "invoke_daily_report.ps1")
 foreach ($script in $RedundantScripts) {
     $targetPath = Join-Path $Root $script
     if (Test-Path $targetPath) {
-        Move-Item -Path $targetPath -Destination $ArchiveDir -Force
-        Write-Host "  [MOVIDO] Script redundante arquivado: $script" -ForegroundColor DarkYellow
+        try {
+            if (!(Test-Path $ArchiveDir)) { New-Item -ItemType Directory -Force -Path $ArchiveDir | Out-Null }
+            Move-Item -Path $targetPath -Destination $ArchiveDir -Force -ErrorAction Stop
+            Write-Host "  [MOVIDO] Script redundante arquivado: $script" -ForegroundColor DarkYellow
+        }
+        catch {
+            Write-Warning "Falha ao mover '$script': $($_.Exception.Message)"
+        }
     }
 }
 
@@ -36,8 +42,13 @@ $OrphanDocs = @("PRD.md", "SPEC.md")
 foreach ($doc in $OrphanDocs) {
     $targetPath = Join-Path $Root $doc
     if (Test-Path $targetPath) {
-        Move-Item -Path $targetPath -Destination $DocsDir -Force
-        Write-Host "  [ORGANIZADO] Documento realocado para /docs: $doc" -ForegroundColor Green
+        try {
+            Move-Item -Path $targetPath -Destination $DocsDir -Force -ErrorAction Stop
+            Write-Host "  [ORGANIZADO] Documento realocado para /docs: $doc" -ForegroundColor Green
+        }
+        catch {
+            Write-Warning "Falha ao mover '$doc': $($_.Exception.Message)"
+        }
     }
 }
 

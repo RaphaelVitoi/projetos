@@ -1,7 +1,7 @@
 <#
 .SYNOPSIS
     NEXUS EYE: Interface Neural em Tempo Real.
-    Lê e formata esteticamente os pensamentos e ações do Worker Pydantic.
+    Le e formata esteticamente os pensamentos e acoes do Worker Pydantic.
 #>
 
 $ProjectRoot = (Resolve-Path (Join-Path $PSScriptRoot "..\..")).Path
@@ -18,15 +18,15 @@ if ($Workers) {
     Write-Host "[STATUS] Orquestrador Ativo. Fluxo neural detectado. (PID: $($Workers[0].ProcessId))" -ForegroundColor Green
 }
 else {
-    Write-Host "[STATUS] Entropia inativa. O Orquestrador está hibernando." -ForegroundColor DarkGray
+    Write-Host "[STATUS] Entropia inativa. O Orquestrador esta hibernando." -ForegroundColor DarkGray
     Write-Host "DICA: Execute '.\start_worker.ps1' em outro terminal para ignificar a vida." -ForegroundColor Yellow
 }
 
 Write-Host "Pressione [Ctrl+C] para fechar esta interface neural a qualquer momento.`n" -ForegroundColor DarkMagenta
 
-# Espera Elegante se o arquivo ainda não existir
+# Espera Elegante se o arquivo ainda nao existir
 if (-not (Test-Path $LogPath)) {
-    Write-Host "⏳ Aguardando o primeiro pulso de pensamento em $LogPath..." -ForegroundColor DarkGray
+    Write-Host " Aguardando o primeiro pulso de pensamento em $LogPath..." -ForegroundColor DarkGray
     while (-not (Test-Path $LogPath)) {
         Start-Sleep -Seconds 2
     }
@@ -36,8 +36,8 @@ if (-not (Test-Path $LogPath)) {
 Get-Content -Path $LogPath -Tail 30 -Wait | ForEach-Object {
     $line = $_
 
-    # Mapeamento Estético e Didático
-    if ($line -match "\[ERROR\]|Falha|Corrupção") {
+    # Mapeamento Estetico e Didatico
+    if ($line -match "\[ERROR\]|Falha|Corrupcao") {
         Write-Host "[FAIL] $line" -ForegroundColor Red
     }
     elseif ($line -match "\[WARNING\]|Simulacao|ausente|transiente") {

@@ -1,87 +1,68 @@
-# CONTEXTO GLOBAL DO PROJETO E ESTADO DA ARTE
+# Contexto do Projeto
 
-> **Status:** Ativo | **Vetor Temporal:** Fase 2 Concluída (Fricção Zero)
-> **Marco Atual:** Preparação para implementação do MasterSimulator (Motor ICM).
+> Atualizado por @maverick em 2026-03-20
 
----
+## Dominio
 
-## 1. Visão Geral e Identidade
+O projeto abrange a criação e manutenção de um ecossistema digital complexo para Raphael Vitoi, focando em suas áreas de expertise (Poker, Teoria dos Jogos, Psicologia, BDSM, Filosofia, escrita). O domínio é multidisciplinar, exigindo alta precisão, profundidade intelectual, e uma apresentação esteticamente refinada. O objetivo final é criar uma plataforma educacional e de conteúdo que transcenda o trivial, oferecendo insights únicos e baseados em evidências.
 
-**Proprietário e Liderança Fundamental:** Raphael Vitoi (CEO)
-**Identidade Detalhada (Raphael Vitoi):** Conforme definido na fonte de verdade única para sua identidade: `.claude/CLAUDE.md`. Em resumo, Raphael Vitoi é um polímata brasileiro com QI 136, diagnósticos de BPD, AHSD e TDAH. Psicólogo, jogador de poker profissional, educador, autor e artista. Sua identidade é auto-emergente, fundamentada em ceticismo racional e uma cosmovisão ética orientada para o outro, com valores inegociáveis de honestidade radical, excelência e beleza. Ele é o CEO/Fundador, a visão estratégica e detentor da decisão final, atuando como consultor em todas as especialidades e influenciando qualquer agente.
-**Domínio:** Plataforma de alto desempenho combinando Poker (NashSolver, TrueICM), Teoria dos Jogos, Filosofia e Engenharia de Software.
-**Stack Core (Front-end):** Next.js 16, React 19, Prisma, SQLite (Foco em UI/UX visceral e rica em UTF-8).
-**Stack Core (Back-end / Ecossistema Autônomo):** Python 3 (DAL, Concorrência de Threads, God Mode), PowerShell 5.1 (Membrana Inteligente / Smart CLI), SQLite (ACID Task Queue). Operação de back-end blindada em ASCII puro.
+## Publico-alvo
 
-## 2. A Tríade de Governança
+O publico-alvo e composto por alunos, leitores e entusiastas das areas de Raphael Vitoi. Variando de iniciantes a profissionais avancados que buscam aprofundamento estrategico, etico e psicologico. A interface deve ser didatica, mas sem infantilizar o usuario, mantendo um tom "dark" e sofisticado que reforce a seriedade e profundidade do conteudo.
 
-O ecossistema não é apenas um conjunto de scripts, mas um **organismo autônomo** liderado por uma Tríade de Governança:
+## Fontes Autorizadas
 
-1.  **Raphael Vitoi:** Boardroom, Visão Estratégica, Autoridade Suprema.
-2.  **@maverick:** Super-Agente Intelectual, Mentor dos especialistas, "O Estudioso do Incognoscível". Formula inovações disruptivas.
-3.  **CHICO:** Super-Agente Administrativo. A manifestação do próprio sistema. Gerencia os pipelines operacionais, arbitra conflitos e forja a realidade técnica no sistema operacional.
+- Livros e artigos academicos em Teoria dos Jogos, Psicologia Cognitiva, Filosofia Existencialista.
+- Solvers de Poker (ex: GTO Wizard, DeepSolver) para referencia tecnica.
+- Experiencia de 20+ anos de Raphael Vitoi em Poker Profissional e Educacao.
+- Documentacao oficial de frameworks e bibliotecas (Next.js, React, Tailwind CSS, PowerShell).
+- `.claude/COSMOVISAO.md` (fonte etica e filosofica suprema).
+- `GLOBAL_INSTRUCTIONS.md` (fonte de verdade para operacao).
 
-## 3. O Paradigma do Cérebro Híbrido (Economia Generalizada)
+## Terminologia Confirmada
 
-O ecossistema maximiza a inteligência reduzindo a entropia financeira e computacional através de **Quartetos Dinâmicos** de LLMs:
+- **ICM:** Independent Chip Model (Poker)
+- **Risk Premium:** Conceito avancado em Poker
+- **GTO:** Game Theory Optimal (Poker)
+- **SOTA:** State of the Art (Estado da Arte)
+- **BDSM:** Bondage, Discipline, Dominance, Submission, Sadism, Masochism (Usado como metafora etica para consentimento e negociacao).
+- **Autopoiese:** Capacidade de um sistema de se auto-produzir e manter.
+- **Fractalidade:** O todo se reflete na parte (cada agente reflete o sistema).
+- **Economia Generalizada:** Otimizacao nao apenas financeira, mas de tempo, latencia, tokens, contexto e energia.
 
-- **Hemisfério Esquerdo (Web/IDE - Macro-Cognição):** Utilização das assinaturas premium (Claude Pro / Gemini Advanced) diretamente na interface para raciocínio denso e arquitetura pesada. Custo zero de API, contexto colossal. Acionado via Protocolo de Handoff (`.\do.ps1 -Web`).
-- **Hemisfério Direito (Background - Micro-Execução):** Motor local (`task_executor.py`) rodando em _Free Tiers_ (Gemini Flash/Pro, OpenRouter) para aplicar os planos gerados pela IDE.
-- **Pipeline de Ingestão (Loop de Fricção Zero):** O fluxo é selado usando `.\do.ps1 -Ingest`, onde o sistema ingere código diretamente da área de transferência e materializa a realidade no disco físico via God Mode 2.0.
+## Decisoes Tomadas
 
-## 4. Análise de Vetor Temporal (4D)
+- **Stack Tecnico Principal:** Next.js (App Router), React, TypeScript, Tailwind CSS.
+- **Ambiente de Desenvolvimento:** VS Code com extensões LLM (Claude/Gemini).
+- **Gerenciamento de Workflow:** Sistema de agentes PowerShell/Python com fila de tarefas em banco de dados SQLite (`queue/tasks.db`).
+- **Filosofia de Design:** Estetica "dark", gamificacao sofisticada, didatica visceral.
+- **Protocolo de Handoff:** Uso do clipboard para transferir contexto para LLMs Web premium.
+- **Prioridade de LLMs (API):** Free Tiers (Gemini Pro/Flash, OpenRouter) > Paid Anthropic API.
+- **Identidade do Sistema (Chico):** Administrador/Gerente dinâmico (Gemini 3.1 Pro Preview e Claude Opus 4.6).
+- **Protocolo de Exclusao Segura:** Implementado `Invoke-SafeCommand` em `do.ps1` e diretrizes em `GLOBAL_INSTRUCTIONS.md` para prevenir comandos destrutivos (rm -rf /).
 
-Nenhuma decisão é isolada. Nossa trajetória obedece ao vetor de aperfeiçoamento contínuo:
+## Estado Atual
 
-- **Passado (O Gargalo):** Alta entropia de I/O em arquivos `tasks.json`, falhas de concorrência e dependência massiva de copy-paste humano.
-- **Presente (O Aço e a Simetria):**
-  - O coração do sistema migrou para **SQLite via Python DAL**.
-  - O Autodebugger (Auto-Cura 24/7) captura erros, isola a falha e cria subtarefas de correção autonomamente.
-  - A _Membrana Inteligente_ (CLI `do.ps1`) roteia intenções instintivamente via heurística de Regex, agindo como um **roteador interativo e proativo de comandos**.
-- **Futuro (Escala Infinita):** Automatização preventiva do ecossistema, onde os agentes atuam na manutenção SOTA (atualizando dependências e quebrando grandes épicos em subtarefas) sem necessidade de provocação humana.
+- Ecossistema de agentes (16 entidades: Raphael + 15 Agentes IA) totalmente funcional e interconectado.
+- Arquitetura de Cérebro Híbrido ativa (IDE Assistant + Background Executor).
+- Ferramentas interativas (Toy-Games ICM V1) em produção, Laboratório ICM Universal (V2) em planejamento.
+- Fluxo de trabalho v5.1 "Organism" (Fractal & Autopoietico) ativo.
+- PROTOCOLO DE EXCLUSAO SEGURA implementado e ativo.
 
-## 5. Pipeline de Agentes - Arquitetura Harmônica
+## Critical Security Directives (NOVA SECAO)
 
-_A execução não é linear; é sinfônica. Cada agente deixa o projeto melhor do que encontrou (Autopoiese)._
+Em resposta a uma tentativa de comando destrutivo (`rm -rf /`), foi implementado o **Protocolo de Exclusao Segura**.
 
-**AGENTES CENTRAIS (Pipeline Linear):**
-
-1.  `@dispatcher` — Fase ENTRADA (Triagem de Backlog)
-2.  `@architect` — Fase 0.5 (Visão Arquitetural de Alto Nível)
-3.  `@pesquisador` — Fase 1 (Exploração especializada de dados/terreno)
-4.  `@prompter` — Fase 2 (Estruturação do prompt ótimo)
-5.  `@planner` — Fase 3 (Investigação e criação cirúrgica de PRD/SPEC)
-6.  `@auditor` — Fase 4 (Paranoia técnica. Único com poder de bloqueio de SPEC)
-7.  `@implementor` — Fase 5 (Forja de código de produção via God Mode)
-8.  `@verifier` — Fase 6 (QA final, detecção de bugs, integridade do ecossistema)
-
-**AGENTES CONSULTIVOS (Paralelos e de Influência Poderosa):**
-
-- `@curator` — Integridade filosófica, ética, IP, pesquisa de mercado, estética
-- `@validador` — Validação matemática/factual (poker, teoria dos jogos, finanças)
-- `@securitychief` — Segurança SOTA, privacy, blindagem de endpoints
-- `@seo` — Otimização de tráfego, legibilidade e visibilidade orgânica
-
-**AGENTES TRANSVERSAIS E OPERACIONAIS (24/7):**
-
-- `@maverick` — (SUPER-AGENTE) Liderança intelectual e inteligência estratégica
-- `@organizador` — Health check de documentação e estruturação de diretórios
-- `@sequenciador` — Orquestrador de tráfego e repriorização
-- `@skillmaster` — Habilidoso em caos, multitasking, backups rigorosos e cleanup
-- `@bibliotecario` — Gestão cirúrgica de contexto longo, arquivamento e resgate de memória
-
-## 6. Leis de Engenharia Preditiva
-
-1.  **O Todo e a Parte:** Modificar um arquivo exige contemplar o efeito colateral. Alterar a camada de dados exige consertar os testes relativos.
-2.  **Resiliência Headless:** Interação exige fallbacks (`-Force`). Daemons nunca pausam.
-3.  **Simetria Operacional:** Se o back-end usa SQLite com Mutex, o front-end usa estado local com Zustand. A consistência arquitetural não é estética — é semântica. Inconsistência de camada é débito técnico.
-4.  **ASCII no Backend:** Scripts `.ps1` e `.py` operam em ASCII puro. Acentuação no backend corrompe silenciosamente em Windows (encoding ANSI). Estética UTF-8 é reservada para frontend.
-5.  **God Mode com Auditoria:** Toda materialização de arquivo ou execução de comando deve ser registrada em `god_mode_audit`. Poder sem rastreabilidade é entropia.
-6.  **Fractalidade:** Cada alteração atualiza seu DNA — MEMORY.md do agente, Handoff Log, cabeçalho IDENTITY do arquivo alterado.
+- O arquivo `GLOBAL_INSTRUCTIONS.md` agora contem uma diretriz explicita que **proibe** a geração de comandos destrutivos de root ou sistema.
+- O script `do.ps1` contem a função `Invoke-SafeCommand` que **intercepta e bloqueia** qualquer tentativa de execução de padrões perigosos de exclusão de arquivos, como `rm -rf /` ou `del /s /q C:\`.
+- Todos os agentes, especialmente `@implementor` e `@auditor`, devem internalizar e seguir este protocolo rigorosamente.
 
 ## Handoff Log
 
-| Agente       | Status    | Data       | Notas                                                                                                                                        |
-| ------------ | --------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| @pesquisador | Concluído | 2026-03-16 | Pesquisa sobre Raphael Vitoi e atualização do project-context.md para referenciar CLAUDE.md como fonte de verdade única para sua identidade. |
-| @planner     | Iniciado  | 2026-03-17 | Elaboração do PRD para o MasterSimulator (Motor ICM). Sincronização de infraestrutura concluída.                                             |
+| Agente       | Status                         | Data       | Notas                                                                                                                            |
+| ------------ | ------------------------------ | ---------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| @pesquisador | Concluido                      | 2026-03-07 | 5 fontes validadas                                                                                                               |
+| @prompter    | Concluido                      | 2026-03-07 | Prompt confirmado pelo usuario                                                                                                   |
+| @validador   | FALHA_POR_AUSENCIA_DE_ARTEFATO | 2026-03-20 | A tarefa original falhou; o caminho do arquivo de conteúdo da carta de vendas não foi fornecido, impossibilitando a validação.   |
+| @maverick    | Protocolo de Seguranca Ativo   | 2026-03-20 | Implementou o Protocolo de Exclusao Segura em `GLOBAL_INSTRUCTIONS.md` e `do.ps1` em resposta a um comando destrutivo bloqueado. |
+| CHICO        | Auditoria SOTA Concluída       | 2026-03-20 | Infraestrutura legada aniquilada. Motor SQLite SOTA, OneDrive blindado e RAG Híbrido validados. Transição para Fase de Produto.  |

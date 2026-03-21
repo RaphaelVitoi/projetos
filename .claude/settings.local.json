@@ -1,7 +1,7 @@
 {
   "version": "1.0",
   "permissions": {
-    "description": "Operações permitidas com referência simbólica para reutilização",
+    "description": "Operacoes permitidas com referencia simbolica para reutilizacao",
     "allow": [
       "agent_sync",
       "backup_queue",
@@ -38,7 +38,7 @@
     }
   },
   "scheduling": {
-    "description": "Tarefas agendadas para manutenção periódica",
+    "description": "Tarefas agendadas para manutencao periodica",
     "tasks": [
       {
         "name": "monthly_backup",

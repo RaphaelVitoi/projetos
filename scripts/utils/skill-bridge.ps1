@@ -7,7 +7,7 @@ param(
     [string[]]$Payload
 )
 
-# Configuração de caminhos absolutos para robustez
+# Configuracao de caminhos absolutos para robustez
 $basePath = "c:\Users\Raphael\OneDrive\Documentos\Site"
 $scripts = @{
     "do"        = Join-Path $basePath "do.ps1"
@@ -24,18 +24,18 @@ function Write-ChicoLog {
 
 try {
     if (-not $scripts.ContainsKey($Skill)) {
-        throw "Habilidade '$Skill' não mapeada no Orquestrador."
+        throw "Habilidade '$Skill' nao mapeada no Orquestrador."
     }
 
     $scriptPath = $scripts[$Skill]
 
     if (-not (Test-Path $scriptPath)) {
-        throw "Script não encontrado em: $scriptPath"
+        throw "Script nao encontrado em: $scriptPath"
     }
 
     Write-ChicoLog "Invocando '$Skill' com payload: $Payload"
 
-    # Execução dinâmica baseada na habilidade
+    # Execucao dinamica baseada na habilidade
     if ($Skill -eq "do") {
         & $scriptPath -Prompt ($Payload -join " ")
     }
@@ -69,5 +69,5 @@ catch {
     exit 1
 }
 finally {
-    Write-ChicoLog "Operação concluída."
+    Write-ChicoLog "Operacao concluida."
 }

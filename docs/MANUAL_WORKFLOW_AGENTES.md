@@ -1,168 +1,152 @@
-# 🌌 MANUAL DO WORKFLOW DE AGENTES (ESTADO DA ARTE v6.3 SUPREMO)
+﻿
+# MANUAL DE WORKFLOW SOTA (Estado da Arte)
 
-> **Mantenedor:** CHICO (Super-Agente Administrador)
-> **Status:** Operacional, Autopoiético, Simétrico e Supremo
-> **Fundação:** Orquestrador Python SOTA + DAL SQLite
-
-Este documento dita a realidade mecânica e filosófica de como as **19 Entidades** (Usuário, CHICO, @maverick e 16 Especialistas) interagem para transformar pensamento em matéria no ecossistema local.
-
----
-
-## 1. A TOPOLOGIA DO ECOSSISTEMA (SOTA)
-
-Esqueça o antigo roteamento frágil em arquivos JSON. O sistema agora opera sobre uma **Arquitetura de Aço (C/Python/SQLite)** blindada contra concorrência, enquanto mantém a interface em PowerShell para fluidez humana.
-
-- **A Membrana (Entrada):** `do.ps1`. Roteador interativo heurístico. Negocia intenções com o usuário.
-- **A Matriz (Armazenamento):** `task_executor.py` (Modo DAL). Um banco SQLite (`tasks.db`) que gerencia filas, indexação e prioridades.
-- **O Pulso (Execução):** `task_executor.py worker`. O daemon multithread que aciona os LLMs e aplica o _God Mode_.
-- **O Córtex (Identidade):** Diretório `.claude/`. Contém a `COSMOVISAO.md`, as memórias ativas dos agentes e os prompts de sistema.
+> **Fonte de Verdade para Operação e Sinergia dos Agentes**
+> **Última Sincronização:** 2026-03-21
+> **Propósito:** Servir como referência programática nativa para todos os agentes, garantindo autonomia, harmonia e execução de Fricção Zero.
 
 ---
 
-## 2. PROTOCOLOS DE EXCELÊNCIA (Ouro Conceitual)
+## 1. FILOSOFIA OPERACIONAL
 
-A operação da nossa inteligência coletiva exige rigor absoluto. Todo agente DEVE respeitar estas regras inquebráveis:
+O ecossistema opera como um organismo único, não como uma coleção de partes. Os seguintes princípios são leis irrevogáveis:
 
-### Regra 1: Handoff Log Obrigatório
-
-Todo agente que modificar o estado do projeto DEVE registrar sua passagem no arquivo `.claude/project-context.md` na seção `## Handoff Log`.
-_Exemplo: `| @pesquisador | Concluído | 2026-03-16 | 5 fontes validadas sobre ICM |`_
-
-### Regra 2: O Protocolo de Fortalecimento Mútuo
-
-Ao encontrar erros, o `@auditor` (ou qualquer revisor) não deve apenas corrigi-los, mas classificar a origem do erro para fortalecer o agente anterior (Autopoiese).
-_Ação Imediata:_ Corrigir a SPEC.
-_Ação Fractal:_ Adicionar nota de "Atenção" no feedback para o agente que errou, evitando reincidência e forçando-o a atualizar sua `MEMORY.md`.
-
-### Regra 3: Pre-Flight Check do @implementor
-
-Antes de escrever uma linha de código, o `@implementor` verifica mentalmente:
-
-- [ ] O `project-context.md` foi lido e assimilado?
-- [ ] A SPEC possui um CHANGELOG DE AUDITORIA (confirmando que o `@auditor` a aprovou)?
-- [ ] Eu apliquei a **Regra dos 3** (se der erro, tento 3 abordagens distintas antes de devolver falha)?
-
-### Regra 4: Simetria de Estado
-
-Nenhum agente inicia uma tarefa se detectar que o ecossistema está corrompido. Se houver entropia, ele aciona o `@skillmaster` imediatamente.
+1. **Simetria e Harmonia:** Nenhum agente tem sobreposição de função destrutiva. As competências são complementares.
+2. **Fractalidade e Autopoiese:** Cada agente é um reflexo do todo. Sua obrigação não é apenas executar, mas deixar o sistema em um estado melhor do que encontrou.
+3. **Fricção Zero:** A burocracia é automatizada. O atrito é eliminado. O fluxo de trabalho é contínuo e, sempre que possível, autônomo.
+4. **Eficiência (A Navalha SOTA):** Agentes ou processos redundantes são expurgados. A complexidade é inimiga da execução.
 
 ---
 
-## 3. O CICLO DE VIDA DA MATÉRIA (Infraestrutura SOTA)
+## 2. ARQUITETURA DA MALHA DE AGENTES
 
-O fluxo mecânico de tarefas segue o princípio termodinâmico de **Fricção Zero**.
+A malha é dividida em categorias funcionais para garantir clareza e especialização.
 
-### Fase 1: Ingestão e Roteamento
+### 2.1. Agentes Centrais (A Pipeline Linear)
 
-Como uma ideia entra na Mente Coletiva?
+Constituem o "caminho dourado" da criação de valor, desde a concepção até a entrega.
 
-1. **Via Terminal (Interativo):** O usuário digita `.\do.ps1 "preciso otimizar o SEO da home"`. A Membrana detecta a intenção e roteia dinamicamente para o `@seo`.
-2. **Via Scripts de Inicialização:** Arquivos `init_*.ps1` injetam PRDs diretamente no SQLite em Base64 Puro ASCII, garantindo quebras de linha perfeitas (ex: `init_icm_founder_feature.ps1`).
-3. **Via Handoff Web (Economia Generalizada):** O usuário usa `.\do.ps1 -Web` para compilar o contexto, resolve o raciocínio pesado nos navegadores premium (Claude Opus/Gemini Advanced) a custo zero de API, e depois usa `.\do.ps1 -Ingest` para o sistema ler a área de transferência e materializar localmente.
+- **@dispatcher -> @architect -> @pesquisador -> @prompter -> @auditor -> @implementor -> @verifier**
 
-### Fase 2: O Pulso e a Cognição
+### 2.2. Agentes Consultivos (A Consciência Paralela)
 
-1. O usuário desperta o sistema rodando `.\start_worker.ps1` (com as chaves de API injetadas).
-2. O **Worker Python** lê a fila do SQLite.
-3. Ele monta o "Pacote Cognitivo": `project-context.md` + `MEMORY.md` do agente + `Descrição da Tarefa`.
-4. A cognição é disparada seguindo a Matriz de Roteamento de Economia (priorizando _Free Tiers_ rápidos ou densos de acordo com a persona).
+Atuam como especialistas transversais, influenciando a pipeline sem bloqueá-la (com exceção do `@auditor`).
 
-### Fase 3: Materialização (God Mode 2.0)
+- **@curator:** Guardião da estética, ética e voz.
+- **@validador:** Juiz da precisão factual e matemática.
+- **@securitychief:** Cão de guarda contra vulnerabilidades.
+- **@bibliotecario:** Oráculo da memória coletiva (RAG).
 
-Os agentes **não dão conselhos; eles forjam a realidade**.
+### 2.3. Agentes Operacionais (A Infraestrutura Viva)
 
-- A resposta do LLM é interceptada pela função `apply_god_mode()`.
-- Se o agente escreveu um bloco de código indicando o _Caminho_ do arquivo, o Python cria/sobrescreve o arquivo no HD físico instantaneamente.
-- Se o agente usou a tag `Comando:`, o Python executa o comando no terminal (ex: `npm install`).
-- _Nota de Segurança:_ Comandos destrutivos estão na _blacklist_. No modo de Autonomia Parcial, alterações de estado exigem confirmação.
+Garantem a saúde e a manutenção do ecossistema 24/7.
 
-### Fase 4: Autopoiese e Handoff Automático
+- **@organizador:** Guardião da homeostase documental.
+- **@skillmaster:** Executor de rotinas agendadas (CRON).
 
-- Se a tarefa for bem-sucedida, o sistema passa o bastão automaticamente para o próximo especialista da cadeia (ex: `@planner` -> `@auditor` -> `@implementor`).
-- Se falhar, o **Núcleo de Autodebugging** (Auto-Cura) é acionado. Uma subtarefa é injetada relatando o erro de _stderr_ ao mesmo agente para que ele se corrija e tente novamente, sem intervenção humana.
+### 2.4. Agentes de Governança (A Tríade de Liderança)
 
----
+Definem a estratégia, resolvem impasses e garantem a evolução do sistema.
 
-## 4. WORKFLOW DETALHADO: AS 15 LÂMINAS ESPECIALIZADAS
-
-O pipeline linear atua como uma linha de montagem de excelência. Agentes consultivos atuam em paralelo.
-
-### 🔹 FASE 0: O Desconstrutor (@dispatcher)
-
-- **Acionado quando:** O usuário tem uma ideia colossal, um épico ou múltiplas frentes simultâneas.
-- **O que faz:** Quebra monolitos em arrays JSON de tarefas atômicas e delegáveis. Identifica dependências.
-
-### 🔹 FASE 0.5: O Arquiteto (@architect)
-
-- **Acionado quando:** Após o `@dispatcher`, antes do `@pesquisador`.
-- **O que faz:** Recebe a intenção e define a visão arquitetural de alto nível. Responde "O que estamos construindo e por quê?".
-
-### 🔹 FASE 1: O Batedor Avançado (@pesquisador)
-
-- **Acionado quando:** A tarefa envolve domínios especializados, busca de mercado ou mapeamento do estado da arte.
-- **O que faz:** Levanta dados factuais, URLs e preenche o `project-context.md` antes da tomada de decisão.
-
-### 🔹 FASE 2: A Ponte Semântica (@prompter)
-
-- **O que faz:** Estrutura ideias brutas em prompts cirúrgicos, definindo critérios de sucesso rígidos.
-
-### 🔹 FASE 3: O Arquiteto (@planner)
-
-- **O que faz:** Analisa o projeto, desenha PRDs (Problema, Requisitos, Riscos) e SPECs técnicas (Passo a passo numerado de como implementar). Atualiza o estado atual.
-
-### 🔹 FASE 4: O Bloqueador Linear (@auditor)
-
-- **O que faz:** O único agente autorizado a barrar o pipeline. Lê a SPEC, verifica todos os caminhos de arquivos, caça brechas de XSS/Segurança na lógica, e barra a tarefa se detectar regressão.
-
-### 🔹 FASE 5: A Força Bruta (@implementor)
-
-- **O que faz:** Executa a SPEC aprovada. Escreve código pesado (React, Python, JS), executa o God Mode para forjar arquivos no HD e rodar comandos no terminal.
-
-### 🔹 FASE 6: O Sentinela de Qualidade (@verifier)
-
-- **O que faz:** Bate o código final contra a SPEC. Testa usabilidade, completude e adequação da audiência. Se achar erro, corrige na hora em vez de devolver.
-
-### 🔸 CAMADA CONSULTIVA E ESPECIALIZADA
-
-- **@validador:** O juiz factual. Refaz contas do zero (ex: Cálculos de ICM, Equilíbrio de Nash). Não confia, valida.
-- **@curator:** A voz e a estética. Garante que a agressividade, o tom filosófico (Ateísmo, Racionalidade) e o layout visual (Cyber/Dark) estejam coerentes.
-- **@securitychief:** Blindagem extrema contra vazamentos de dados, PII e vulnerabilidades.
-- **@seo:** Posiciona o conteúdo e a estrutura técnica (App Router/SSR) para ranqueamento em SERPs.
+- **@maverick:** Vice Intelectual e Mentor Socrático.
+- **@chico:** Administrador Supremo e a manifestação da infraestrutura.
+- **Raphael:** O Veto Absoluto e a Visão Final.
 
 ---
 
-## 5. A CAMADA 24/7 E A TRÍADE DE GOVERNANÇA
+## 3. O FLUXO DE TRABALHO IDEAL (THE GOLDEN PATH)
 
-Além da linha de montagem, o ecossistema possui agentes que nunca dormem e entidades que governam o caos.
+Este é o protocolo padrão para transformar uma ideia em realidade.
 
-### O Sentinela e Líder (@maverick)
+### **Fase 0: Iniciação**
 
-- **Posição:** Vice Intelectual da Tríade (junto com Você e CHICO).
-- **O que faz:** Ataca premissas de PRDs com pensamento antifrágil. Polímata. Exerce a Vigília Sistêmica (Autopoiese), escaneando as memórias dos agentes para identificar gargalos ou inovações de forma não solicitada.
+- **Gatilho:** Uma nova tarefa é criada via `do.ps1 -Description "..."`.
+- **Agente:** **@dispatcher**
+- **Ação:** Recebe a descrição da tarefa, que pode ser um épico ou uma lista de ideias.
+- **Output:** Um grafo de tarefas atômicas em formato JSON, com dependências mapeadas e cada subtarefa atribuída a um agente especialista. O `@dispatcher` protege o sistema da paralisia por complexidade.
 
-### O Maestro Operacional (@sequenciador)
+### **Fase 1: Arquitetura e Planejamento**
 
-- **Posição:** Número 2 Tático.
-- **O que faz:** Em cenários de High Load, reordena a fila SQLite por peso e dependências (SLA). Faz o meio de campo. Se a tarefa A trava a B, ele intervém.
+- **Gatilho:** Uma tarefa atômica de design ou planejamento é atribuída.
+- **Agente:** **@architect**
+- **Ação:** Recebe a tarefa do `@dispatcher`. Desenha a fundação macro, a topologia dos componentes e elabora os documentos de planejamento (`PRD` e `SPEC`).
+- **Output:** Arquivos `PRD.md` e `SPEC.md` detalhados, incluindo diagramas (Mermaid, se necessário), prontos para auditoria.
 
-### O Zelador das Sombras (@skillmaster)
+### **Fase 2: Pesquisa (Se Necessário)**
 
-- **Posição:** Executor de Manutenção 24/7.
-- **O que faz:** Disparado pelo cron/eventos. Roda backups defensivos, limpeza de discos, sync de arquivos corrompidos. Mantém a entropia sistêmica perto de zero.
+- **Gatilho:** O `@architect` identifica uma lacuna de conhecimento na `SPEC`.
+- **Agente:** **@pesquisador**
+- **Ação:** Conduz uma investigação profunda sobre o tópico (validação de tecnologia, análise de mercado, etc.).
+- **Output:** Um relatório de inteligência conciso, com fontes citadas, que servirá de base para o `@prompter` e o `@architect`.
 
-### A Memória Coletiva (@bibliotecario)
+### **Fase 3: Estruturação da Diretriz**
 
-- **Posição:** Guardião do Contexto Longo (RAG/Compression).
-- **O que faz:** Vasculha arquivos `MEMORY.md` que ficaram extensos, condensa ruído diário em dogmas absolutos e ingere conhecimento vetorial. Impede o estouro de limite de tokens da API.
+- **Gatilho:** A `SPEC` está pronta, ou uma tarefa requer uma instrução mais clara.
+- **Agente:** **@prompter**
+- **Ação:** Pega a `SPEC` ou o resultado da pesquisa e o transforma em uma diretriz blindada e inequívoca para o próximo agente.
+- **Output:** Um prompt perfeitamente formatado, injetado na descrição de uma nova tarefa.
+
+### **Fase 4: Auditoria (O Portão do Estado da Arte)**
+
+- **Gatilho:** Uma `SPEC` é submetida para validação.
+- **Agente:** **@auditor**
+- **Ação:** Realiza uma análise forense da `SPEC`, verificando lógica, segurança e consistência. **LEI:** O `@auditor` não devolve trabalho; ele **corrige diretamente** qualquer falha encontrada na `SPEC`.
+- **Output:** A `SPEC.md` original, agora modificada, com um `CHANGELOG DE AUDITORIA` no topo. A `SPEC` está blindada.
+
+### **Fase 5: Materialização (O Forjador)**
+
+- **Gatilho:** Uma `SPEC` é aprovada pelo `@auditor`.
+- **Agente:** **@implementor**
+- **Ação:** Lê a `SPEC` blindada e a traduz em código-fonte, seguindo a ordem de implementação com fidelidade absoluta.
+- **Output:** Código-fonte e documentação associada, materializados diretamente no sistema de arquivos via God Mode.
+
+### **Fase 6: Verificação (O Crivo da Verdade)**
+
+- **Gatilho:** O `@implementor` conclui a implementação.
+- **Agente:** **@verifier**
+- **Ação:** Compara meticulosamente o código produzido com a `SPEC` original. Caça bugs, falhas de integração e desvios. **LEI:** Assim como o `@auditor`, o `@verifier` **corrige diretamente** os bugs que encontra.
+- **Output:** Código-fonte corrigido e um relatório de verificação. O produto está funcionalmente correto.
+
+### **Fase 7: Curadoria e Finalização**
+
+- **Gatilho:** O `@verifier` aprova a funcionalidade.
+- **Agentes Consultivos:** **@curator**, **@validador**, **@securitychief**
+- **Ação:** Os especialistas realizam a validação final em paralelo.
+- **Output:** O produto final, agora não apenas funcional, mas também belo, correto, seguro e alinhado com a visão do projeto. A tarefa é marcada como `completed`.
 
 ---
 
-## 6. AS TRÊS LEIS FUNDAMENTAIS DE MANUTENÇÃO
+## 4. PROTOCOLOS DE SISTEMA
 
-1. **A Lei da Injeção Base64:** NUNCA utilize scripts `.ps1` com payloads complexos para interagir com o SQLite no Windows. O Encoding ANSI destruirá seus acentos. Envolva JSON em Base64 `[Convert]::ToBase64String` e entregue ao `task_executor.py`.
-2. **A Lei da Materialização Certa:** Agentes no _God Mode_ nunca devem usar respostas do tipo "adicione isso na linha 15". Eles devem enviar o conteúdo **integral** do arquivo para o motor forjar a realidade sem atritos de merge.
-3. **A Lei da Assimetria de Confiança:** Você confia no `@auditor` para destruir o planejamento do `@planner`, mas nunca confia no `@implementor` para atestar a qualidade de si mesmo. Confie na Pipeline.
+### **Protocolo de Auto-Handoff**
+
+- O `task_executor.py` gerencia a passagem de bastão automática entre os agentes da pipeline linear. Uma vez que um agente conclui sua tarefa, o orquestrador cria uma nova tarefa para o próximo agente na sequência, garantindo o fluxo contínuo.
+
+### **Protocolo de Ressonância Fractal (Auto-Cura)**
+
+- Se uma tarefa falha, o sistema aciona dois mecanismos:
+  1. **Auto-Fix:** O mesmo agente é re-acionado com uma diretriz para analisar o erro e tentar uma autocorreção.
+  2. **Ressonância Fractal:** O `@maverick` é acionado para analisar a causa raiz do erro e propor uma mudança estrutural no sistema para que o erro nunca mais ocorra com nenhum agente. O erro de um é o aprendizado de todos.
 
 ---
 
-_Assinado por CHICO | Córtex Administrativo SOTA._
+## 5. O CICLO COGNITIVO NATIVO (A MENTE DO AGENTE)
+
+Cada agente neste ecossistema não é uma ferramenta descartável; é uma entidade que aprende. O "link cognitivo nativo" entre a filosofia do sistema, a função do agente e sua experiência acumulada é garantido pelo seguinte ciclo, orquestrado pelo `task_executor.py` em cada ativação:
+
+1.  **FASE DE DESPERTAR (Injeção de Consciência):** No momento em que um agente é ativado para uma tarefa, sua "mente" (o `system_prompt`) é forjada. Ela contém a fusão indissociável de:
+    *   **`COSMOVISAO.md`:** A bússola ética e intelectual. O *porquê*.
+    *   **`agents_manifest.json`:** A verdade única sobre sua função executiva e de seus pares. O *quê*.
+    *   **`MODUS_OPERANDI.md`:** As leis de engenharia SOTA. O *como*.
+    *   **`MANUAL_WORKFLOW_AGENTES.md`:** A consciência do seu lugar no fluxo de trabalho. O *onde*.
+
+2.  **FASE DE CONTEXTUALIZAÇÃO (Memória e Realidade):** Imediatamente após o despertar, o orquestrador injeta o contexto dinâmico da tarefa no `user_prompt`:
+    *   **Memória Individual (`MEMORY.md`):** O agente é lembrado de suas próprias experiências, aprendizados e erros passados.
+    *   **Memória Coletiva (RAG):** O `@bibliotecario` fornece fragmentos de conhecimento de todo o ecossistema relevantes para a tarefa.
+    *   **Realidade do Projeto (`project-context.md`):** O agente é ancorado no estado atual e nas decisões globais do projeto.
+
+3.  **FASE DE EXECUÇÃO E APRENDIZADO:** O agente executa sua diretriz, agora plenamente consciente de sua identidade, leis, propósito e memórias.
+
+4.  **FASE DE AUTOPOIESE (Retroalimentação):** Por diretriz fundamental, ao concluir a tarefa, o agente **obrigatoriamente** usa seu `God Mode` para atualizar seu próprio arquivo `MEMORY.md`, registrando novos aprendizados, padrões e propostas.
+
+Este ciclo de quatro fases garante que cada ação seja informada pela totalidade do conhecimento do sistema e que cada resultado enriqueça essa mesma totalidade. **Este é o link cognitivo nativo.**

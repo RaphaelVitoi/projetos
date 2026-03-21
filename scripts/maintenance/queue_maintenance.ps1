@@ -1,48 +1,65 @@
-# Script de Ciclo de Manutenção - Médio Prazo
-# Operacionaliza as tarefas de documentação e health check do Relatório Sentinela 2026-03-12
+# Script de Ciclo de Manutencao - Medio Prazo
+# Operacionaliza as tarefas de documentacao e health check do Relatorio Sentinela 2026-03-12
 
-$KernelPath = Join-Path $PSScriptRoot "Agent-TaskManager.psm1"
-Import-Module $KernelPath -Force
+# [REMOVIDO] Agent-TaskManager.psm1 nao existe mais
+# $KernelPath = Join-Path $PSScriptRoot "Agent-TaskManager.psm1"
+# Import-Module $KernelPath -Force
 
-Write-Host "=== INICIANDO CICLO DE MANUTENÇÃO (MÉDIO PRAZO) ===" -ForegroundColor Cyan
+$ProjectRoot = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
+$PyScript = Join-Path $ProjectRoot "task_executor.py"
+$PythonCmd = if (Test-Path "$ProjectRoot\.venv\Scripts\python.exe") { "$ProjectRoot\.venv\Scripts\python.exe" } else { "python" }
 
-# Tarefa 1: Consolidar Documentação
+#Validate python path
+if (!(Test-Path $PyScript)) { Write-Error "task_executor.py nao encontrado"; exit 1 }
+
+Write-Host "=== INICIANDO CICLO DE MANUTENCAO (MEDIO PRAZO) ===" -ForegroundColor Cyan
+
+# Tarefa 1: Consolidar Documentacao
 $task1 = [ordered]@{
     id          = "MAINT-20260313-DOCS"
-    description = "Consolidar documentação do sistema. Unificar 'project-context.md' e 'MANUAL_WORKFLOW_AGENTES.md' para eliminar redundâncias e alinhar com a realidade operacional v5.1."
+    description = "Consolidar documentacao do sistema. Unificar 'project-context.md' e 'MANUAL_WORKFLOW_AGENTES.md' para eliminar redundancias e alinhar com a realidade operacional v5.1."
     status      = "pending"
     timestamp   = (Get-Date -Format "o")
     agent       = "@organizador"
     priority    = "medium"
     type        = "maintenance"
 }
-Add-AgentTask -NewTask $task1
-Write-Host "[QUEUE] Tarefa agendada: Consolidação Documental (@organizador)" -ForegroundColor Green
+$taskJson = $task1 | ConvertTo-Json -Depth 10 -Compress:$true
+$taskB64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($taskJson))
+& $PythonCmd $PyScript db-add $taskB64 | Out-Null
 
-# Tarefa 2: Índice de Referências Cruzadas
+Write-Host "[QUEUE] Tarefa agendada: Consolidacao Documental (@organizador)" -ForegroundColor Green
+
+# Tarefa 2: Indice de Referencias Cruzadas
 $task2 = [ordered]@{
     id          = "MAINT-20260313-INDEX"
-    description = "Criar índice mestre de referências cruzadas. Mapear dependências entre Agentes, Scripts (PS1) e Documentos (MD) para facilitar navegação e onboarding."
+    description = "Criar indice mestre de referencias cruzadas. Mapear dependencias entre Agentes, Scripts (PS1) e Documentos (MD) para facilitar navegacao e onboarding."
     status      = "pending"
     timestamp   = (Get-Date -Format "o")
     agent       = "@organizador"
     priority    = "low"
     type        = "documentation"
 }
-Add-AgentTask -NewTask $task2
-Write-Host "[QUEUE] Tarefa agendada: Índice Cruzado (@organizador)" -ForegroundColor Green
+$taskJson = $task2 | ConvertTo-Json -Depth 10 -Compress:$true
+$taskB64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($taskJson))
+& $PythonCmd $PyScript db-add $taskB64 | Out-Null
+
+Write-Host "[QUEUE] Tarefa agendada: Indice Cruzado (@organizador)" -ForegroundColor Green
 
 # Tarefa 3: Health Check Geral
 $task3 = [ordered]@{
     id          = "MAINT-20260313-HEALTH"
-    description = "Executar Health Check completo. Validar consistência dos 14 arquivos MEMORY.md, verificar integridade dos logs e sugerir correções de entropia."
+    description = "Executar Health Check completo. Validar consistencia dos 14 arquivos MEMORY.md, verificar integridade dos logs e sugerir correcoes de entropia."
     status      = "pending"
     timestamp   = (Get-Date -Format "o")
     agent       = "@organizador"
     priority    = "high"
     type        = "audit"
 }
-Add-AgentTask -NewTask $task3
+$taskJson = $task3 | ConvertTo-Json -Depth 10 -Compress:$true
+$taskB64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($taskJson))
+& $PythonCmd $PyScript db-add $taskB64 | Out-Null
+
 Write-Host "[QUEUE] Tarefa agendada: Health Check (@organizador)" -ForegroundColor Green
 
 Write-Host "---"

@@ -23,7 +23,7 @@ else {
         $listener.Prefixes.Add("http://localhost:5500/")
         $listener.Start()
         
-        Write-Host "✅ Server running at http://localhost:5500/" -ForegroundColor Green
+        Write-Host " Server running at http://localhost:5500/" -ForegroundColor Green
         Write-Host "Press Ctrl+C to stop." -ForegroundColor Gray
         
         # Abre o navegador automaticamente
@@ -37,8 +37,8 @@ else {
             $path = if ($req.Url.LocalPath -eq "/") { "index.html" } else { $req.Url.LocalPath.TrimStart('/') }
             $filePath = Join-Path $PSScriptRoot $path
             
-            # BLINDAGEM DE SEGURANÇA: Path Traversal Check
-            # Resolve o caminho absoluto e verifica se ainda está dentro da raiz
+            # BLINDAGEM DE SEGURANCA: Path Traversal Check
+            # Resolve o caminho absoluto e verifica se ainda esta dentro da raiz
             $fullPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($filePath)
             $rootPath = $PSScriptRoot + [System.IO.Path]::DirectorySeparatorChar
             
@@ -49,7 +49,7 @@ else {
                 $bytes = [System.IO.File]::ReadAllBytes($fullPath)
                 $res.ContentLength64 = $bytes.Length
                 
-                # MIME Types básicos
+                # MIME Types basicos
                 if ($fullPath -match '\.html$') { $res.ContentType = "text/html; charset=utf-8" }
                 elseif ($fullPath -match '\.js$') { $res.ContentType = "application/javascript" }
                 elseif ($fullPath -match '\.css$') { $res.ContentType = "text/css" }

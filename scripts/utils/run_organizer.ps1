@@ -1,8 +1,9 @@
-# Simulação de Execução de Agente: @organizador
+# Simulacao de Execucao de Agente: @organizador
 # Tarefa: 20260312-124500-777 (Validar MEMORY.md - Regra 4)
 
-$KernelPath = Join-Path $PSScriptRoot "Agent-TaskManager.psm1"
-Import-Module $KernelPath -Force
+# [REMOVIDO] Agent-TaskManager.psm1 nao existe mais
+# $KernelPath = Join-Path $PSScriptRoot "Agent-TaskManager.psm1"
+# Import-Module $KernelPath -Force
 
 $TaskId = "20260312-124500-777"
 $Agents = @("dispatcher", "pesquisador", "prompter", "planner", "auditor", "implementor", "verifier", "validador", "organizador", "securitychief", "skillmaster", "sequenciador")
@@ -21,30 +22,30 @@ $runningTask = [ordered]@{
 Write-Host "[ORGANIZADOR] Iniciando tarefa $TaskId..." -ForegroundColor Yellow
 Add-AgentTask -NewTask $runningTask
 
-# 2. Executar Lógica (Criação Fractal de Memória)
+# 2. Executar Logica (Criacao Fractal de Memoria)
 foreach ($agent in $Agents) {
     $agentDir = Join-Path $MemoryBase $agent
     $memoryFile = Join-Path $agentDir "MEMORY.md"
     
-    # Garante diretório
+    # Garante diretorio
     if (-not (Test-Path $agentDir)) {
         New-Item -ItemType Directory -Path $agentDir -Force | Out-Null
-        Write-Host "[ORGANIZADOR] Criado diretório para @$agent" -ForegroundColor Gray
+        Write-Host "[ORGANIZADOR] Criado diretorio para @$agent" -ForegroundColor Gray
     }
     
     # Garante arquivo MEMORY.md (Regra 4)
     if (-not (Test-Path $memoryFile)) {
         $template = @"
-# Memória do Agente: @$agent
+# Memoria do Agente: @$agent
 
 > Criado automaticamente por @organizador em $(Get-Date -Format 'yyyy-MM-dd')
 
-## Ações Realizadas
-- Inicialização do sistema de memória conforme Regra 4 (Fractalidade).
+## Acoes Realizadas
+- Inicializacao do sistema de memoria conforme Regra 4 (Fractalidade).
 
-## Padrões Observados
+## Padroes Observados
 
-## Referências
+## Referencias
 "@
         [System.IO.File]::WriteAllText($memoryFile, $template, [System.Text.Encoding]::UTF8)
         Write-Host "[ORGANIZADOR] + Criado MEMORY.md para @$agent" -ForegroundColor Green
@@ -61,4 +62,4 @@ $runningTask.completedAt = (Get-Date -Format "o")
 
 Add-AgentTask -NewTask $runningTask
 
-Write-Host "[ORGANIZADOR] Tarefa concluída com sucesso." -ForegroundColor Cyan
+Write-Host "[ORGANIZADOR] Tarefa concluida com sucesso." -ForegroundColor Cyan

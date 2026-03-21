@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Dispara uma rajada de tarefas curtas via do.ps1 para testar fluxo e notificações.
+    Dispara uma rajada de tarefas curtas via do.ps1 para testar fluxo e notificacoes.
 #>
 
 Write-Host "=== IGNIFICANDO RAJADA DE TESTES ===" -ForegroundColor Magenta

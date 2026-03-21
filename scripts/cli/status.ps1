@@ -13,7 +13,7 @@ $queuePath = if ($Global:AgentPaths) { $Global:AgentPaths.Queue } else { Join-Pa
 try {
     # Ler a fila de tarefas
     if (-not (Test-Path $queuePath)) {
-        Write-Output "O sistema está vazio. Nenhuma tarefa encontrada em '$queuePath'."
+        Write-Output "O sistema esta vazio. Nenhuma tarefa encontrada em '$queuePath'."
         return
     }
 
@@ -25,7 +25,7 @@ try {
     }
     catch {
         Write-Error "[ERRO] Arquivo de fila JSON corrompido em '$queuePath'. Detalhes: $_"
-        Write-Warning "Backup disponível em: $queuePath.backup"
+        Write-Warning "Backup disponivel em: $queuePath.backup"
         return
     }
     
@@ -42,9 +42,9 @@ try {
         if ($tasks.Count -eq 0) {
             Write-Output "Nenhuma tarefa na fila."
             Write-Output "`nMetadados da fila:"
-            Write-Output "  Versão: $($queueObj.version)"
+            Write-Output "  Versao: $($queueObj.version)"
             Write-Output "  Criada em: $($queueObj.createdAt)"
-            Write-Output "  Última modificação: $($queueObj.lastModified)"
+            Write-Output "  Ultima modificacao: $($queueObj.lastModified)"
         }
         else {
             Write-Output "Status de todas as tarefas na fila ($($tasks.Count) tarefas):"
@@ -61,21 +61,21 @@ try {
             $tasks | Format-Table -Property Id, Status, @{Expression = { 
                     $desc = if ($_.description) { $_.description } else { $_.prompt }
                     if ($desc) { $desc.Substring(0, [Math]::Min(50, $desc.Length)) } else { "" }
-                }; Label                                             = "Descrição" 
+                }; Label                                             = "Descricao" 
             } -AutoSize
             
             Write-Output "`nMetadados da fila:"
-            Write-Output "  Versão: $($queueObj.version)"
+            Write-Output "  Versao: $($queueObj.version)"
             
-            if ($queueObj.updatedAt) { Write-Output "  Última modificação: $($queueObj.updatedAt)" }
-            elseif ($queueObj.lastModified) { Write-Output "  Última modificação: $($queueObj.lastModified)" }
+            if ($queueObj.updatedAt) { Write-Output "  Ultima modificacao: $($queueObj.updatedAt)" }
+            elseif ($queueObj.lastModified) { Write-Output "  Ultima modificacao: $($queueObj.lastModified)" }
 
             if ($queueObj.checksum) { Write-Output "  Checksum: $($queueObj.checksum.Substring(0, 16))..." }
             if ($queueObj.metadata.maxRetries) { Write-Output "  Max Retries: $($queueObj.metadata.maxRetries)" }
         }
     }
     else {
-        # ID fornecido, buscar tarefa específica
+        # ID fornecido, buscar tarefa especifica
         $task = $tasks | Where-Object { $_.id -eq $TaskId }
         
         if ($task) {
@@ -83,7 +83,7 @@ try {
             Write-Output ""
             Write-Output "  ID: $($task.id)"
             Write-Output "  Status: $($task.status)"
-            if ($task.description) { Write-Output "  Descrição: $($task.description)" }
+            if ($task.description) { Write-Output "  Descricao: $($task.description)" }
             elseif ($task.prompt) { Write-Output "  Prompt: $($task.prompt)" }
             Write-Output "  Criada em: $($task.createdAt)"
             Write-Output "  Timestamp: $($task.timestamp)"
@@ -101,3 +101,4 @@ try {
 catch {
     Write-Error "Falha ao processar a fila de tarefas ou logs. Detalhes: $_"
 }
+
