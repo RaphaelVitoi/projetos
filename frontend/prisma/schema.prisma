@@ -20,16 +20,20 @@ model Post {
   excerpt   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  // Relacionamento com Categoria (1:N)
-  categoryId String?
-  category   Category? @relation(fields: [categoryId], references: [id])
 }
 
-model Category {
-  id          String   @id @default(cuid())
+// --- [SOTA] MOTOR UNIVERSAL DE CONTEUDO ---
+model Content {
+  id          String   @id @default(uuid())
   slug        String   @unique
-  name        String
+  category    String   // 'biblioteca', 'aulas', 'artigos'
+  title       String
   description String?
-  posts       Post[]
+  body        String   // Markdown ou HTML
+  authorId    String?
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category, slug])
 }

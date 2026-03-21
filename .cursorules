@@ -2,11 +2,11 @@
 
 # Framework Padrão-Ouro: Orquestração de Agentes e Resiliência Sistémica
 
-# Escopo: Determinismo, Recuperação de Falhas, Zero Entropia Documental
+# Escopo: Fricção Zero, Motor SQLite (Python SOTA), Autopoiese
 
-# Data: 2026-03-12
+# Data: 2026-03-20
 
-# Referência: Teoria de Sistemas + Análise Bayesiana de Risco
+# Referência: Arquitetura de Cérebro Híbrido + Teoria de Sistemas SOTA
 
 ---
 
@@ -49,12 +49,12 @@ A duplicação de informações contextuais é **terminantemente proibida**.
 
 Cada agente escreve APENAS em seu contexto designado:
 
-| Contexto | Localização | Quem Escreve | Frequência |
-|----------|-----------|------------|----------|
-| Memória Operacional | `.claude/agent-memory/<agente>/MEMORY.md` | Respectivo agente | Apó cada tarefa |
-| Auditoria | `logs/task_log.md` | Agent-TaskManager.psm1 (automático) | Real-time |
-| Decisões Globais | `.claude/project-context.md` | @pesquisador (apenas) | Após decisão confirmada |
-| Handoff Entre Agentes | `.claude/project-context.md` Handoff Log | Todos agentes (append-only) | Ao final de execução |
+| Contexto              | Localização                               | Quem Escreve                        | Frequência              |
+| --------------------- | ----------------------------------------- | ----------------------------------- | ----------------------- |
+| Memória Operacional   | `.claude/agent-memory/<agente>/MEMORY.md` | Respectivo agente                   | Apó cada tarefa         |
+| Auditoria             | `logs/task_log.md`                        | task_executor.py (automatico)       | Real-time               |
+| Decisões Globais      | `.claude/project-context.md`              | @pesquisador (apenas)               | Após decisão confirmada |
+| Handoff Entre Agentes | `.claude/project-context.md` Handoff Log  | Todos agentes (append-only)         | Ao final de execução    |
 
 **Regra de Ouro:** Se você precisa ESCREVER informação estrutural (decisão, padrão, protocolo),
 escreva SOMENTE em seu MEMORY.md. A síntese global é responsabilidade exclusiva do @pesquisador.
@@ -67,48 +67,41 @@ escreva SOMENTE em seu MEMORY.md. A síntese global é responsabilidade exclusiv
 
 **Proibido:**
 
-```powershell
+```python
 # ❌ NÃO FAÇA ISTO
-$queue = Get-Content queue\tasks.json | ConvertFrom-Json
-$queue.tasks += @{ ... }
-$queue | ConvertTo-Json | Set-Content queue\tasks.json
+import sqlite3
+conn = sqlite3.connect('queue/tasks.db')
+conn.execute("INSERT INTO tasks...") # Escrita manual direta corrompe a fila
 ```
 
 **Obrigatório:**
 
-```powershell
-# ✅ SEMPRE USE O MÓDULO
-Import-Module .\Agent-TaskManager.psm1
-Add-AgentTask -TaskId "20260312-120000-001" -Description "Processar dados" -Status "pending"
+```python
+# ✅ SEMPRE USE A API DO ORQUESTRADOR PYTHON SOTA
+python task_executor.py add '{"id": "TASK-123", "description": "Criar API", "agent": "@implementor", "timestamp": "..."}'
 ```
 
 ### 2.2 Operações Atómicas Garantidas
 
-O módulo `Agent-TaskManager.psm1` garante:
+O orquestrador `task_executor.py` garante:
 
-1. **Validação de Schema (Pre-Flight)** - Nenhuma tarefa malformada entra na fila
-2. **Escrita Atómica (Atomic Swap)** - Temp → Move (operação indivisível)
-3. **Auditoria Automática** - Cada operação fica registada em task_log.md
-4. **Rollback em Falha** - Se escrita falhar, ficheiro anterior é restaurado
+1. **Validacao de Schema (Pre-Flight)** - Nenhuma tarefa malformada entra na fila
+2. **Escrita Atomica (Atomic Swap)** - Temp -> Move (operacao indivisivel)
+3. **Auditoria Automatica** - Cada operacao fica registrada em task_log.md
+4. **Rollback em Falha** - Se escrita falhar, arquivo anterior e restaurado
 
 ### 2.3 Exemplos de Uso
 
-```powershell
+```bash
 # Enfileirar tarefa
-Add-AgentTask `
-  -TaskId "20260312-143000-987" `
-  -Description "Pesquisa sobre ICM em torneios KO" `
-  -Status "pending" `
-  -Agent "@pesquisador" `
-  -Metadata @{ domain = "poker"; priority = "high" }
+python task_executor.py add '{"id": "TASK-20260312-143000", "description": "Pesquisa sobre ICM em torneios KO", "agent": "@pesquisador", "status": "pending"}'
 
 # Consultar status
-Get-AgentTaskStatus                    # Resumo
-Get-AgentTaskStatus -TaskId "20260312-143000-987"
-Get-AgentTaskStatus -Status "completed"
+python task_executor.py status
+python task_executor.py status --task-id "TASK-20260312-143000"
 
-# Limpeza automática
-Invoke-TaskCleanup -DaysToKeep 30 -MaxActive 50
+# Processar proxima tarefa
+python task_executor.py next
 ```
 
 ---
@@ -252,11 +245,11 @@ Verify-AgentEnvironment
 
 ### 7.1 Cenários de Falha Previstos
 
-| Cenário | Sintoma | Recuperação |
-|---------|---------|------------|
-| Corrupção JSON | ConvertFrom-Json falha | Restaurar backup anterior |
-| Escrita incompleta | Ficheiro .tmp permanece | Limpar .tmp + rollback |
-| Memory.md desatualizada | Inconsistência de padrão | Re-sync via @skillmaster |
+| Cenário                 | Sintoma                  | Recuperação                     |
+| ----------------------- | ------------------------ | ------------------------------- |
+| Corrupção JSON          | ConvertFrom-Json falha   | Restaurar backup anterior       |
+| Escrita incompleta      | Ficheiro .tmp permanece  | Limpar .tmp + rollback          |
+| Memory.md desatualizada | Inconsistência de padrão | Re-sync via @skillmaster        |
 | Loop infinito de agente | Tarefa > 1h em "running" | @sequenciador cancela + timeout |
 
 ### 7.2 Protocolo de Recuperação
@@ -272,14 +265,14 @@ Verify-AgentEnvironment
 
 Quando em dúvida, responda:
 
-| Pergunta | Resposta | Ação |
-|----------|----------|------|
-| Preciso ler contexto? | Sim | Abra `.claude/project-context.md` |
-| Preciso consultar sintaxe? | Sim | Abra `docs/MANUAL_WORKFLOW_AGENTES.md` |
-| Qualquer tarefa nova? | Sim | Adicione via `Add-AgentTask` (Agent-TaskManager) |
-| Preciso escrever descoberta? | Sim | Escreva em `.claude/agent-memory/<agente>/MEMORY.md` |
-| Redundância documentada? | Sim | Consulte `.claude/DISTRIBUTION_MATRIX.md` antes |
-| Tenho certeza de claim? | Não | Declare "Não é possível ter certeza" + cite evidência parcial |
+| Pergunta                     | Resposta | Ação                                                          |
+| ---------------------------- | -------- | ------------------------------------------------------------- |
+| Preciso ler contexto?        | Sim      | Abra `.claude/project-context.md`                             |
+| Preciso consultar sintaxe?   | Sim      | Abra `docs/MANUAL_WORKFLOW_AGENTES.md`                        |
+| Qualquer tarefa nova?        | Sim      | Adicione via `task_executor.py add`                           |
+| Preciso escrever descoberta? | Sim      | Escreva em `.claude/agent-memory/<agente>/MEMORY.md`          |
+| Redundância documentada?     | Sim      | Consulte `.claude/DISTRIBUTION_MATRIX.md` antes               |
+| Tenho certeza de claim?      | Não      | Declare "Não é possível ter certeza" + cite evidência parcial |
 
 ---
 
@@ -296,9 +289,9 @@ Quando em dúvida, responda:
 
 ## 10. VERSÃO E HISTÓRICO
 
-| Versão | Data | Mudanças |
-|--------|------|----------|
-| 1.0 | 2026-03-12 | Criação inicial - Framework Padrão-Ouro |
+| Versão | Data       | Mudanças                                |
+| ------ | ---------- | --------------------------------------- |
+| 1.0    | 2026-03-12 | Criação inicial - Framework Padrão-Ouro |
 
 ---
 
