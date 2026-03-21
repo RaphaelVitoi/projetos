@@ -15,36 +15,36 @@ interface QuizEngineProps {
   quiz?: Quiz | Quiz[];
 }
 
-const MOCK_QUIZ: any[] = [
+const MOCK_QUIZ: Quiz[] = [
   {
     question: 'Qual é o impacto do Risk Premium (RP) em uma situação de Death Zone (RP ≥ 40%)?',
     options: [
-      { id: 'A', text: 'O MDF do defensor aumenta para compensar a pressão.', correct: false },
-      { id: 'B', text: 'Ambos ignoram o ICM e jogam ChipEV.', correct: false },
-      { id: 'C', text: 'Ocorre um colapso nas frequências de defesa, forçando overfolds.', correct: true },
-      { id: 'D', text: 'A agressão (Alpha) é reduzida a zero.', correct: false }
+      { id: 'A', text: 'O MDF do defensor aumenta para compensar a pressão.', isCorrect: false },
+      { id: 'B', text: 'Ambos ignoram o ICM e jogam ChipEV.', isCorrect: false },
+      { id: 'C', text: 'Ocorre um colapso nas frequências de defesa, forçando overfolds.', isCorrect: true },
+      { id: 'D', text: 'A agressão (Alpha) é reduzida a zero.', isCorrect: false }
     ],
     explanation: 'Na Death Zone, o risco de eliminação é tão extremo que o Defensor é forçado a um overfold cirúrgico. O Agressor explora essa assimetria aumentando o Alpha.'
   },
   {
     question: 'O que o "Bubble Factor" (BF) representa matematicamente?',
     options: [
-      { id: 'A', text: 'A quantidade de fichas necessárias para o ITM.', correct: false },
-      { id: 'B', text: 'O multiplicador de dor: quanto você arrisca (Custo) para ganhar $1.00 (Recompensa).', correct: true },
-      { id: 'C', text: 'A proporção direta de jogadores restantes no torneio.', correct: false },
-      { id: 'D', text: 'A equidade base dividida pelo tamanho do pote.', correct: false }
+      { id: 'A', text: 'A quantidade de fichas necessárias para o ITM.', isCorrect: false },
+      { id: 'B', text: 'O multiplicador de dor: quanto você arrisca (Custo) para ganhar $1.00 (Recompensa).', isCorrect: true },
+      { id: 'C', text: 'A proporção direta de jogadores restantes no torneio.', isCorrect: false },
+      { id: 'D', text: 'A equidade base dividida pelo tamanho do pote.', isCorrect: false }
     ],
     explanation: 'O Bubble Factor (BF) quantifica a assimetria do risco. Um BF de 2.0x significa que a ficha que você perde vale o dobro da ficha que você ganha.'
   }
 ];
 
 export default function QuizEngine({ quiz }: Readonly<QuizEngineProps>) {
-  const normalizeQuiz = (q: any) => {
+  const normalizeQuiz = (q?: Quiz | Quiz[]): Quiz[] | undefined => {
     if (!q) return undefined;
     return Array.isArray(q) ? q : [q];
   };
 
-  const [activeQuiz, setActiveQuiz] = useState<any[] | undefined>(normalizeQuiz(quiz));
+  const [activeQuiz, setActiveQuiz] = useState<Quiz[] | undefined>(normalizeQuiz(quiz));
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0);
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
@@ -161,11 +161,11 @@ export default function QuizEngine({ quiz }: Readonly<QuizEngineProps>) {
       </h4>
 
       <div className={styles.quizOptions}>
-        {currentQuestion.options.map((option: any, index: number) => {
+        {currentQuestion.options.map((option, index: number) => {
           // Fallback para IDs caso não existam no payload (A, B, C...)
           const optionId = option.id || String.fromCharCode(65 + index);
           const isSelected = selectedOptionId === optionId;
-          const isCorrect = option.isCorrect !== undefined ? option.isCorrect : option.correct;
+          const isCorrect = option.isCorrect !== undefined ? option.isCorrect : (option as any).correct;
 
           let stateClass = '';
           if (selectedOptionId !== null) {
@@ -228,14 +228,7 @@ export default function QuizEngine({ quiz }: Readonly<QuizEngineProps>) {
               boxShadow: '0 4px 12px rgba(99, 102, 241, 0.3)',
               transition: 'transform 0.2s, box-shadow 0.2s',
             }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 6px 16px rgba(99, 102, 241, 0.4)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(99, 102, 241, 0.3)';
-            }}
+            className={styles.aiSubmitButton}
           >
             {currentQuestionIdx < activeQuiz.length - 1 ? 'Próxima Questão' : 'Ver Resultados'} <i className="fa-solid fa-arrow-right" />
           </button>

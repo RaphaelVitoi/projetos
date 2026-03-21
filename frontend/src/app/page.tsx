@@ -6,8 +6,6 @@
  */
 
 import Link from 'next/link';
-import SimuladorICM from '@/components/SimuladorICM';
-
 export const metadata = {
   title: 'Poker Racional | Raphael Vitoi',
   description: 'ICM Pos-Flop, Risk Premium e a Nova Fronteira do Edge no Poker. Masterclass, Simuladores e Teoria dos Jogos.',
@@ -266,10 +264,6 @@ export default function HomePage() {
             <p>O Manifesto. Educador, Estrategista e Especialista em Sistemas Complexos.</p>
             <span className="card-cta">Conhecer &rarr;</span>
           </Link>
-          <div className="hub-card">
-            <SimuladorICM />
-          </div>
-
         </div>
       </section>
     </main>

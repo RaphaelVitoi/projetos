@@ -25,8 +25,10 @@ const HandSimulator = lazy(() => import('./panels/HandSimulator'));
 const ComparisonRadar = lazy(() => import('./panels/ComparisonRadar'));
 const PayoutsPanel = lazy(() => import('./panels/PayoutsPanel'));
 const MatchupSelector = lazy(() => import('./panels/MatchupSelector'));
+const AICoachPanel = lazy(() => import('./panels/AICoachPanel'));
+const RangeMatrix = lazy(() => import('./panels/RangeMatrix'));
 
-type ActiveTool = 'scenario' | 'calculator' | 'comparison' | 'handSim' | 'payouts' | 'matchup';
+type ActiveTool = 'scenario' | 'calculator' | 'comparison' | 'handSim' | 'payouts' | 'matchup' | 'aiCoach' | 'range';
 
 const TOOL_BUTTONS: { id: ActiveTool; label: string; icon: string }[] = [
   { id: 'scenario',   label: 'Cenário',    icon: 'fa-microscope' },
@@ -35,6 +37,8 @@ const TOOL_BUTTONS: { id: ActiveTool; label: string; icon: string }[] = [
   { id: 'comparison', label: 'Comparação',  icon: 'fa-chart-radar' },
   { id: 'handSim',    label: 'Mão',         icon: 'fa-hand' },
   { id: 'payouts',    label: 'Payouts',     icon: 'fa-trophy' },
+  { id: 'range',      label: 'Range',       icon: 'fa-table-cells' },
+  { id: 'aiCoach',    label: 'Oráculo AI',  icon: 'fa-brain' },
 ];
 
 function LoadingFallback() {
@@ -276,6 +280,22 @@ export default function MasterSimulator() {
           {activeTool === 'matchup' && (
             <Suspense fallback={<LoadingFallback />}>
               <MatchupSelector />
+            </Suspense>
+          )}
+
+          {activeTool === 'range' && (
+            <Suspense fallback={<LoadingFallback />}>
+              <RangeMatrix
+                ipRp={scenario.ipRp}
+                oopRp={scenario.oopRp}
+                scenarioId={scenario.id}
+              />
+            </Suspense>
+          )}
+
+          {activeTool === 'aiCoach' && (
+            <Suspense fallback={<LoadingFallback />}>
+              <AICoachPanel scenario={scenario} nash={nash} />
             </Suspense>
           )}
         </main>

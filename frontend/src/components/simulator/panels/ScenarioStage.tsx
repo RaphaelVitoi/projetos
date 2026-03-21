@@ -1,27 +1,18 @@
 'use client';
 
 /**
- * IDENTITY: Palco Principal do Cenário Ativo
+ * IDENTITY: Palco do Cenário SOTA
  * PATH: src/components/simulator/panels/ScenarioStage.tsx
- * ROLE: Renderizar o confronto IP vs OOP com gauges, narrativa e feedback sonoro.
- * BINDING: [engine/types.ts, ui/RiskGauge.tsx, hooks/useAudioFeedback.ts, simulator.module.css]
+ * ROLE: Exibe a narrativa do cenário atual e os medidores de risco visceral (Risk Gauges).
  */
 
 import React, { useEffect, useRef } from 'react';
-import type { Scenario } from '../engine/types';
 import RiskGauge from '../ui/RiskGauge';
 import { useAudioFeedback } from '../hooks/useAudioFeedback';
 import styles from '../simulator.module.css';
 
-interface ScenarioStageProps {
-  /** Cenário ativo */
-  scenario: Scenario;
-}
-
-export default function ScenarioStage({
-  scenario,
-}: Readonly<ScenarioStageProps>) {
-  const { playDeathZone, playPredatorZone } = useAudioFeedback();
+export default function ScenarioStage({ scenario }: { scenario: any }) {
+  const { isMuted, playDeathZone, playPredatorZone } = useAudioFeedback();
   const prevScenarioRef = useRef<string>(scenario.id);
 
   // Feedback sonoro quando RP >= 40 (Death Zone / Predator Zone)
@@ -126,16 +117,12 @@ export default function ScenarioStage({
           <RiskGauge
             value={scenario.ipRp}
             label="Agressor (IP)"
+            pos={scenario.ipPos}
+            stack={scenario.ipMorph}
             color="indigo"
+            opponentValue={scenario.oopRp}
+            isMuted={isMuted}
           />
-          {/* Pos + Stack */}
-          <p className={styles.dataMono} style={{ fontSize: '0.72rem', color: '#818cf8', marginTop: '0.4rem', fontWeight: 700 }}>
-            {scenario.ipPos} · {scenario.stacks[0]}bb
-          </p>
-          {/* Morph */}
-          <p style={{ fontSize: '0.6rem', color: '#64748b', margin: '0.15rem 0 0', fontStyle: 'italic' }}>
-            {scenario.ipMorph}
-          </p>
           {/* Bubble Factor */}
           <p className={styles.dataMono} style={{ fontSize: '0.6rem', color: '#475569', margin: '0.2rem 0 0' }}>
             BF = {calcBF(scenario.ipRp)}×
@@ -147,16 +134,12 @@ export default function ScenarioStage({
           <RiskGauge
             value={scenario.oopRp}
             label="Defensor (OOP)"
-            color="rose"
+            pos={scenario.oopPos}
+            stack={scenario.oopMorph}
+            color="pink"
+            opponentValue={scenario.ipRp}
+            isMuted={isMuted}
           />
-          {/* Pos + Stack */}
-          <p className={styles.dataMono} style={{ fontSize: '0.72rem', color: '#f43f5e', marginTop: '0.4rem', fontWeight: 700 }}>
-            {scenario.oopPos} · {scenario.stacks[1]}bb
-          </p>
-          {/* Morph */}
-          <p style={{ fontSize: '0.6rem', color: '#64748b', margin: '0.15rem 0 0', fontStyle: 'italic' }}>
-            {scenario.oopMorph}
-          </p>
           {/* Bubble Factor */}
           <p className={styles.dataMono} style={{ fontSize: '0.6rem', color: '#475569', margin: '0.2rem 0 0' }}>
             BF = {calcBF(scenario.oopRp)}×

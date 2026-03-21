@@ -13,8 +13,10 @@ export interface SprStage {
 
 // Opção individual de quiz
 export interface QuizOption {
+  id?: string;
   text: string;
-  correct: boolean;
+  correct?: boolean;
+  isCorrect?: boolean;
 }
 
 // Estrutura completa de quiz
