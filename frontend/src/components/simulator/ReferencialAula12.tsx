@@ -414,7 +414,7 @@ export default function ReferencialAula12() {
                       {row.map((val, c) => {
                         const rp = RP_MATRIX[r][c];
                         // Thresholds calibrados ao range real da matriz (max ~22.6%)
-                        const bfTextColor = val === 0 ? 'transparent' : val >= 2.0 ? '#fca5a5' : val >= 1.6 ? '#fde68a' : '#94a3b8';
+                        const bfTextColor = val === 0 ? 'transparent' : val >= 2.0 ? '#fca5a5' : val >= 1.6 ? '#fbbf24' : val >= 1.3 ? '#facc15' : '#4ade80';
                         const rpTextColor = rp >= 18 ? '#fca5a5' : rp >= 12 ? '#fde68a' : rp >= 6 ? '#94a3b8' : '#475569';
                         return (
                           <td key={c} style={{
@@ -426,7 +426,7 @@ export default function ReferencialAula12() {
                           }}>
                             {val === 0 ? '' : (
                               <>
-                                <div style={{ color: bfTextColor, fontWeight: val >= 1.6 ? 700 : 500, fontSize: '0.62rem' }}>{val.toFixed(2)}</div>
+                                <div style={{ color: bfTextColor, fontWeight: val >= 1.6 ? 700 : 600, fontSize: '0.62rem' }}>{val.toFixed(2)}</div>
                                 <div style={{
                                   color: rpTextColor,
                                   fontSize: '0.55rem',
