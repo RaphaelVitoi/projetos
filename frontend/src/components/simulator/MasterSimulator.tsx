@@ -8,14 +8,14 @@
  * BINDING: [hooks/*, panels/*, ui/*, engine/*, simulator.module.css]
  */
 
-import React, { useState, useCallback, lazy, Suspense } from 'react';
+import React, { useState, useCallback, useMemo, lazy, Suspense } from 'react';
 import { useScenario } from './hooks/useScenario';
-import { useNashSolver } from './hooks/useNashSolver';
+import { solveNash } from './engine/nashSolver';
 import ScenarioSelector from './ui/ScenarioSelector';
 import ScenarioStage from './panels/ScenarioStage';
 import NashPanel from './panels/NashPanel';
 import TheoryPanel from './panels/TheoryPanel';
-import type { ChipEvFreqs } from './engine/types';
+import type { ChipEvFreqs, StreetChipEvFreqs } from './engine/types';
 import styles from './simulator.module.css';
 
 // Lazy load para painéis secundários (performance)
@@ -49,19 +49,55 @@ function LoadingFallback() {
 export default function MasterSimulator() {
   const { scenario, setScenario, scenarios } = useScenario();
   const [aggressionFactor, setAggressionFactor] = useState(1);
-  const [chipEvFreqs, setChipEvFreqs] = useState<ChipEvFreqs>(scenario.defaultChipEvFreqs);
+  const [streetFreqs, setStreetFreqs] = useState<StreetChipEvFreqs>(scenario.defaultStreetFreqs);
   const [activeTool, setActiveTool] = useState<ActiveTool>('scenario');
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  const nash = useNashSolver(scenario.ipRp, scenario.oopRp, chipEvFreqs, aggressionFactor);
+  // Escalonamento de RP por street via sprData
+  // A fórmula: rpStreet = rpBase * (sprData[street].rpValue / sprData['PRE'].rpValue)
+  const sprPre   = scenario.sprData.find(s => s.name === 'PRE');
+  const sprFlop  = scenario.sprData.find(s => s.name === 'FLOP');
+  const sprTurn  = scenario.sprData.find(s => s.name === 'TURN');
+  const sprRiver = scenario.sprData.find(s => s.name === 'RIVER');
+
+  const preRp      = sprPre?.rpValue ?? 1;
+  const flopScale  = preRp > 0 ? (sprFlop?.rpValue  ?? preRp)       / preRp : 1;
+  const turnScale  = preRp > 0 ? (sprTurn?.rpValue  ?? preRp * 0.5) / preRp : 0.5;
+  const riverScale = preRp > 0 ? (sprRiver?.rpValue ?? preRp * 0.2) / preRp : 0.2;
+
+  const ipRpFlop   = scenario.ipRp  * flopScale;
+  const oopRpFlop  = scenario.oopRp * flopScale;
+  const ipRpTurn   = scenario.ipRp  * turnScale;
+  const oopRpTurn  = scenario.oopRp * turnScale;
+  const ipRpRiver  = scenario.ipRp  * riverScale;
+  const oopRpRiver = scenario.oopRp * riverScale;
+
+  // Calcula Nash para as três streets em paralelo; só recalcula quando dependências mudam
+  const { nashFlop, nashTurn, nashRiver } = useMemo(() => ({
+    nashFlop:  solveNash(ipRpFlop,  oopRpFlop,  streetFreqs.flop,  aggressionFactor),
+    nashTurn:  solveNash(ipRpTurn,  oopRpTurn,  streetFreqs.turn,  aggressionFactor),
+    nashRiver: solveNash(ipRpRiver, oopRpRiver, streetFreqs.river, aggressionFactor),
+  }), [ipRpFlop, oopRpFlop, ipRpTurn, oopRpTurn, ipRpRiver, oopRpRiver, streetFreqs, aggressionFactor]);
+
+  // Mapa de RPs por street — passado ao NashPanel para exibir nos tabs
+  const streetRps = {
+    flop:  { ip: ipRpFlop,  oop: oopRpFlop  },
+    turn:  { ip: ipRpTurn,  oop: oopRpTurn  },
+    river: { ip: ipRpRiver, oop: oopRpRiver },
+  };
 
   const handleScenarioSelect = useCallback((id: string) => {
     setScenario(id);
     setActiveTool('scenario');
-    // Resetar ChipEV freqs para o padrão do novo cenário
+    // Resetar freqs por street para o padrão do novo cenário
     const next = scenarios.find(s => s.id === id);
-    if (next) setChipEvFreqs(next.defaultChipEvFreqs);
+    if (next) setStreetFreqs(next.defaultStreetFreqs);
   }, [setScenario, scenarios]);
+
+  // Handler tipado que atualiza apenas a street modificada
+  const handleStreetFreqChange = useCallback((street: keyof StreetChipEvFreqs, freqs: ChipEvFreqs) => {
+    setStreetFreqs(prev => ({ ...prev, [street]: freqs }));
+  }, []);
 
   return (
     <div style={{
@@ -231,10 +267,13 @@ export default function MasterSimulator() {
             <>
               <ScenarioStage scenario={scenario} />
               <NashPanel
-                nash={nash}
-                chipEvFreqs={chipEvFreqs}
+                nashFlop={nashFlop}
+                nashTurn={nashTurn}
+                nashRiver={nashRiver}
+                streetFreqs={streetFreqs}
+                streetRps={streetRps}
                 aggressionFactor={aggressionFactor}
-                onChipEvChange={setChipEvFreqs}
+                onStreetFreqChange={handleStreetFreqChange}
                 onAggressionChange={setAggressionFactor}
               />
               <TheoryPanel scenario={scenario} />

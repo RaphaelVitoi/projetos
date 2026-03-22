@@ -546,13 +546,32 @@ export const SCENARIOS: Scenario[] = [
       { name: 'RIVER', potSize: 20,   rpValue: 4.2 },
     ],
     // Estimativa didática — BTN CL na bolha, blinds em zona de pressão máxima
-    defaultChipEvFreqs: {
-      ip_check:     15,
-      ip_bet_small: 30,
-      ip_bet_large: 55,
-      oop_call:     45,
-      oop_fold:     47,
-      oop_raise:    8,
+    // Turn e river: agressão escalona; defensor paralisa conforme pot cresce
+    defaultStreetFreqs: {
+      flop: {
+        ip_check:     15,
+        ip_bet_small: 30,
+        ip_bet_large: 55,
+        oop_call:     45,
+        oop_fold:     47,
+        oop_raise:    8,
+      },
+      turn: {
+        ip_check:     10,
+        ip_bet_small: 20,
+        ip_bet_large: 70,
+        oop_call:     55,
+        oop_fold:     38,
+        oop_raise:    7,
+      },
+      river: {
+        ip_check:     10,
+        ip_bet_small: 5,
+        ip_bet_large: 85,
+        oop_call:     65,
+        oop_fold:     28,
+        oop_raise:    7,
+      },
     },
     quiz: {
       question: 'Na bolha do ITM, por que o BTN com 80bb pode agredir desproporcional contra os blinds de 20bb?',
@@ -600,13 +619,32 @@ export const SCENARIOS: Scenario[] = [
       { name: 'RIVER', potSize: 25,   rpValue: 1.2 },
     ],
     // Estimativa didática — CL vs Vice, pressão estrutural de hegemonia
-    defaultChipEvFreqs: {
-      ip_check:     25,
-      ip_bet_small: 40,
-      ip_bet_large: 35,
-      oop_call:     50,
-      oop_fold:     38,
-      oop_raise:    12,
+    // Turn e river: bleff-polar cresce; Vice encolhe conforme pot cresce
+    defaultStreetFreqs: {
+      flop: {
+        ip_check:     25,
+        ip_bet_small: 40,
+        ip_bet_large: 35,
+        oop_call:     50,
+        oop_fold:     38,
+        oop_raise:    12,
+      },
+      turn: {
+        ip_check:     20,
+        ip_bet_small: 30,
+        ip_bet_large: 50,
+        oop_call:     55,
+        oop_fold:     35,
+        oop_raise:    10,
+      },
+      river: {
+        ip_check:     15,
+        ip_bet_small: 10,
+        ip_bet_large: 75,
+        oop_call:     65,
+        oop_fold:     28,
+        oop_raise:    7,
+      },
     },
     quiz: {
       question: 'Sendo imune à eliminação direta, por que o Chip Leader colossal sofre uma punição utilitária considerável contra o 2o classificado?',

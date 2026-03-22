@@ -1,10 +1,10 @@
 'use client';
 
 /**
- * IDENTITY: Painel de Frequências ICM Pós-Flop (Opção B)
+ * IDENTITY: Painel de Frequências ICM Pós-Flop (multi-street)
  * PATH: src/components/simulator/panels/NashPanel.tsx
- * ROLE: Editar ChipEV freqs e visualizar distorção ICM por ação.
- *       6 ações: center% ± spread e delta vs ChipEV.
+ * ROLE: Exibe distorção ICM por ação em flop/turn/river via seletor de street.
+ *       Tabs mostram o RP escalado por street; action rows refletem a street ativa.
  * BINDING: [engine/types.ts, engine/nashSolver.ts, simulator.module.css]
  *
  * ESTILOS: todas as cores usam var(--sim-*) do simulator.module.css,
@@ -14,15 +14,22 @@
 
 import React, { useState, useRef } from 'react';
 import ReactDOM from 'react-dom';
-import type { NashResult, ChipEvFreqs, FreqResult } from '../engine/types';
+import type { NashResult, ChipEvFreqs, FreqResult, StreetChipEvFreqs } from '../engine/types';
 import AnimatedNumber from '../ui/AnimatedNumber';
 import styles from '../simulator.module.css';
 
 interface NashPanelProps {
-  nash: NashResult;
-  chipEvFreqs: ChipEvFreqs;
+  nashFlop: NashResult;
+  nashTurn: NashResult;
+  nashRiver: NashResult;
+  streetFreqs: StreetChipEvFreqs;
+  streetRps: {
+    flop:  { ip: number; oop: number };
+    turn:  { ip: number; oop: number };
+    river: { ip: number; oop: number };
+  };
   aggressionFactor: number;
-  onChipEvChange: (freqs: ChipEvFreqs) => void;
+  onStreetFreqChange: (street: keyof StreetChipEvFreqs, freqs: ChipEvFreqs) => void;
   onAggressionChange: (value: number) => void;
 }
 
@@ -130,7 +137,7 @@ function FreqInput({
   );
 }
 
-// Linha de ação: label | chipEv input | → ICM (center ± spread) | delta
+// Linha de ação: label | chipEv input | seta | ICM (center ± spread) | delta
 function ActionRow({
   label,
   labelTooltip,
@@ -214,15 +221,29 @@ function ActionRow({
 }
 
 export default function NashPanel({
-  nash,
-  chipEvFreqs,
+  nashFlop,
+  nashTurn,
+  nashRiver,
+  streetFreqs,
+  streetRps,
   aggressionFactor,
-  onChipEvChange,
+  onStreetFreqChange,
   onAggressionChange,
 }: Readonly<NashPanelProps>) {
-  const { deltaRp, bExponent } = nash;
+  // Street ativa — controla qual conjunto de dados é exibido nas action rows
+  const [activeStreet, setActiveStreet] = useState<'flop' | 'turn' | 'river'>('flop');
 
-  const deltaSign = deltaRp >= 0 ? '+' : '';
+  // Mapa de dados por street — evita if/else espalhados pelo JSX
+  const streetData = {
+    flop:  { nash: nashFlop,  freqs: streetFreqs.flop,  rps: streetRps.flop,  label: 'FLOP',  color: '#818cf8' },
+    turn:  { nash: nashTurn,  freqs: streetFreqs.turn,  rps: streetRps.turn,  label: 'TURN',  color: '#34d399' },
+    river: { nash: nashRiver, freqs: streetFreqs.river, rps: streetRps.river, label: 'RIVER', color: '#fb7185' },
+  };
+
+  const current = streetData[activeStreet];
+  const { deltaRp, bExponent } = current.nash;
+
+  const deltaSign  = deltaRp >= 0 ? '+' : '';
   const deltaLabel = `${deltaSign}${deltaRp.toFixed(1)} p.p.`;
   const deltaLabelColor = deltaRp > 1
     ? 'var(--sim-color-amber)'
@@ -252,7 +273,7 @@ export default function NashPanel({
               textTransform: 'uppercase',
               letterSpacing: '0.15em',
             }}>
-              Frequências ICM
+              Frequências ICM por Street
             </h3>
             <p style={{
               margin: '0.25rem 0 0',
@@ -260,11 +281,11 @@ export default function NashPanel({
               color: '#64748b',
               lineHeight: 1.45,
             }}>
-              Como o ICM desloca cada ação em relação ao equilíbrio GTO base.
+              Como o ICM distorce cada ação em relação ao equilíbrio GTO base — por flop, turn e river.
             </p>
           </div>
 
-          {/* Parâmetros do modelo */}
+          {/* Parâmetros do modelo da street ativa */}
           <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center', flexShrink: 0 }}>
             <span
               title="ΔRP = Vantagem de Risco (Risk Premium IP − OOP). Positivo = IP sob maior pressão ICM."
@@ -300,6 +321,41 @@ export default function NashPanel({
         </div>
       </div>
 
+      {/* Seletor de street — tabs compactos com RP escalado por street */}
+      <div style={{ display: 'flex', gap: '0.4rem', marginBottom: '0.75rem' }}>
+        {(['flop', 'turn', 'river'] as const).map(s => {
+          const d = streetData[s];
+          const isActive = s === activeStreet;
+          return (
+            <button
+              key={s}
+              type="button"
+              onClick={() => setActiveStreet(s)}
+              style={{
+                flex: 1,
+                padding: '0.4rem 0',
+                borderRadius: '6px',
+                border: `1px solid ${isActive ? d.color : 'rgba(255,255,255,0.06)'}`,
+                background: isActive ? `${d.color}18` : 'transparent',
+                color: isActive ? d.color : '#475569',
+                fontSize: '0.55rem',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.1em',
+                cursor: 'pointer',
+                lineHeight: 1.6,
+              }}
+            >
+              {d.label}
+              <br />
+              <span style={{ fontSize: '0.48rem', fontFamily: 'monospace', opacity: 0.8 }}>
+                IP {d.rps.ip.toFixed(1)}% · OOP {d.rps.oop.toFixed(1)}%
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
       {/* Cabeçalho das colunas */}
       <div style={{
         display: 'grid',
@@ -325,7 +381,7 @@ export default function NashPanel({
         </span>
       </div>
 
-      {/* IP: ações */}
+      {/* IP: ações da street ativa */}
       <div style={{ marginBottom: '0.5rem' }}>
         <div style={{
           fontSize: '0.5rem',
@@ -340,36 +396,36 @@ export default function NashPanel({
         </div>
         <ActionRow
           label="Check"
-          chipEv={chipEvFreqs.ip_check}
-          result={nash.ip.check}
+          chipEv={current.freqs.ip_check}
+          result={current.nash.ip.check}
           field="ip_check"
           accent="var(--sim-color-indigo-light)"
-          freqs={chipEvFreqs}
-          onChange={onChipEvChange}
+          freqs={current.freqs}
+          onChange={(f) => onStreetFreqChange(activeStreet, f)}
         />
         <ActionRow
           label="Bet S"
           labelTooltip="Sizing reduzido (ex: 33% do pote). Insira com que frequência o solver usa este tamanho de aposta neste spot. Sob ICM, este sizing resiste — diminui, mas persiste mesmo sob alta pressão."
-          chipEv={chipEvFreqs.ip_bet_small}
-          result={nash.ip.bet_small}
+          chipEv={current.freqs.ip_bet_small}
+          result={current.nash.ip.bet_small}
           field="ip_bet_small"
           accent="var(--sim-color-indigo-light)"
-          freqs={chipEvFreqs}
-          onChange={onChipEvChange}
+          freqs={current.freqs}
+          onChange={(f) => onStreetFreqChange(activeStreet, f)}
         />
         <ActionRow
           label="Bet L"
           labelTooltip="Sizing elevado (ex: 75–100% do pote). Insira com que frequência o solver usa este tamanho de aposta neste spot. Sob ICM, este sizing colapsa primeiro — o modelo o suprime muito mais do que o Bet S. Se o solver não oferece dois sizings neste spot, deixe em 0."
-          chipEv={chipEvFreqs.ip_bet_large}
-          result={nash.ip.bet_large}
+          chipEv={current.freqs.ip_bet_large}
+          result={current.nash.ip.bet_large}
           field="ip_bet_large"
           accent="var(--sim-color-indigo-light)"
-          freqs={chipEvFreqs}
-          onChange={onChipEvChange}
+          freqs={current.freqs}
+          onChange={(f) => onStreetFreqChange(activeStreet, f)}
         />
       </div>
 
-      {/* OOP: ações */}
+      {/* OOP: ações da street ativa */}
       <div style={{ marginBottom: '1.1rem' }}>
         <div style={{
           fontSize: '0.5rem',
@@ -384,30 +440,30 @@ export default function NashPanel({
         </div>
         <ActionRow
           label="Call"
-          chipEv={chipEvFreqs.oop_call}
-          result={nash.oop.call}
+          chipEv={current.freqs.oop_call}
+          result={current.nash.oop.call}
           field="oop_call"
           accent="var(--sim-color-rose-light)"
-          freqs={chipEvFreqs}
-          onChange={onChipEvChange}
+          freqs={current.freqs}
+          onChange={(f) => onStreetFreqChange(activeStreet, f)}
         />
         <ActionRow
           label="Fold"
-          chipEv={chipEvFreqs.oop_fold}
-          result={nash.oop.fold}
+          chipEv={current.freqs.oop_fold}
+          result={current.nash.oop.fold}
           field="oop_fold"
           accent="var(--sim-color-rose-light)"
-          freqs={chipEvFreqs}
-          onChange={onChipEvChange}
+          freqs={current.freqs}
+          onChange={(f) => onStreetFreqChange(activeStreet, f)}
         />
         <ActionRow
           label="Raise"
-          chipEv={chipEvFreqs.oop_raise}
-          result={nash.oop.raise}
+          chipEv={current.freqs.oop_raise}
+          result={current.nash.oop.raise}
           field="oop_raise"
           accent="var(--sim-color-rose-light)"
-          freqs={chipEvFreqs}
-          onChange={onChipEvChange}
+          freqs={current.freqs}
+          onChange={(f) => onStreetFreqChange(activeStreet, f)}
         />
       </div>
 
@@ -447,6 +503,7 @@ export default function NashPanel({
           max="1.5"
           step="0.1"
           value={aggressionFactor}
+          aria-label="Fator de Agressividade"
           onChange={(e) => onAggressionChange(parseFloat(e.target.value))}
           style={{ width: '100%', accentColor: 'var(--sim-color-indigo)' }}
         />
