@@ -77,7 +77,7 @@ function InfoTooltip({ text }: { text: string }) {
       onMouseEnter={handleEnter}
       onMouseLeave={() => setPos(null)}
     >
-      <span style={{ fontSize: '0.55rem', color: '#475569', lineHeight: 1 }}>ⓘ</span>
+      <span style={{ fontSize: '0.62rem', color: '#64748b', lineHeight: 1 }}>ⓘ</span>
       {tooltipEl}
     </span>
   );
@@ -132,7 +132,7 @@ function FreqInput({
           outline: 'none',
         }}
       />
-      <span style={{ fontSize: '0.52rem', color: 'var(--sim-text-dim)' }}>% freq</span>
+      <span style={{ fontSize: '0.58rem', color: '#475569' }}>% freq</span>
     </div>
   );
 }
@@ -348,7 +348,7 @@ export default function NashPanel({
             >
               {d.label}
               <br />
-              <span style={{ fontSize: '0.48rem', fontFamily: 'monospace', opacity: 0.8 }}>
+              <span style={{ fontSize: '0.55rem', fontFamily: 'monospace', color: 'rgba(148,163,184,0.75)' }}>
                 IP {d.rps.ip.toFixed(1)}% · OOP {d.rps.oop.toFixed(1)}%
               </span>
             </button>
@@ -365,17 +365,17 @@ export default function NashPanel({
         paddingBottom: '0.4rem',
         borderBottom: '1px solid rgba(255,255,255,0.05)',
       }}>
-        <span style={{ fontSize: '0.5rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Ação</span>
-        <span style={{ fontSize: '0.5rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'flex', alignItems: 'center' }}>
+        <span style={{ fontSize: '0.56rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Ação</span>
+        <span style={{ fontSize: '0.56rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'flex', alignItems: 'center' }}>
           Freq. GTO Base
           <InfoTooltip text="Com que frequência o solver usa essa ação neste spot, sem ICM. Não é o tamanho da aposta — é de quantas mãos você a executa. Insira os valores do seu solver." />
         </span>
         <span />
-        <span style={{ fontSize: '0.5rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'flex', alignItems: 'center' }}>
+        <span style={{ fontSize: '0.56rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'flex', alignItems: 'center' }}>
           Com ICM ±margem
           <InfoTooltip text="Estimativa de quanto você deveria executar essa ação levando o ICM em conta. A margem (±) indica que o modelo não é exato: use como referência direcional, não como número absoluto." />
         </span>
-        <span style={{ fontSize: '0.5rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', textAlign: 'right', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+        <span style={{ fontSize: '0.56rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', textAlign: 'right', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
           Δ p.p.
           <InfoTooltip text="1 p.p. = 1% de frequência dessa ação. Δ = −15: a ação encolhe 15% — ex., de 60% para 45%. Os 15% de combos mais fracos saem primeiro: bluffs mais pobres, valor mais thin. Positivo: a ação expande — combos que o solver descartava passam a ser viáveis." />
         </span>
@@ -384,7 +384,7 @@ export default function NashPanel({
       {/* IP: ações da street ativa */}
       <div style={{ marginBottom: '0.5rem' }}>
         <div style={{
-          fontSize: '0.5rem',
+          fontSize: '0.58rem',
           fontWeight: 700,
           color: '#818cf8',
           textTransform: 'uppercase',
