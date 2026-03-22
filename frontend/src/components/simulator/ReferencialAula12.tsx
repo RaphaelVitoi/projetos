@@ -72,23 +72,23 @@ function RangeGrid({ freqs, color, title, pct }: {
   const accentColor = color === 'indigo' ? '#818cf8' : '#34d399';
   return (
     <div>
-      <p style={{ margin: '0 0 0.4rem', fontSize: '0.62rem', fontWeight: 700, color: accentColor, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+      <p style={{ margin: '0 0 0.4rem', fontSize: '0.65rem', fontWeight: 700, color: accentColor, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
         {title} <span style={{ color: '#475569', fontWeight: 400 }}>— {pct}</span>
       </p>
       <div style={{ overflowX: 'auto' }}>
-        <table style={{ borderCollapse: 'collapse', fontSize: '0.5rem' }}>
+        <table style={{ borderCollapse: 'collapse', fontSize: '0.58rem' }}>
           <thead>
             <tr>
               <th style={{ width: '18px' }} />
               {RANKS.map(r => (
-                <th key={r} style={{ width: '36px', padding: '1px', textAlign: 'center', color: '#334155', fontWeight: 600, fontSize: '0.5rem' }}>{r}</th>
+                <th key={r} style={{ width: '36px', padding: '1px', textAlign: 'center', color: '#475569', fontWeight: 700, fontSize: '0.58rem' }}>{r}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {RANKS.map((rowRank, r) => (
               <tr key={rowRank}>
-                <td style={{ padding: '1px 3px 1px 0', color: '#334155', fontWeight: 600, fontSize: '0.5rem', textAlign: 'right' }}>{rowRank}</td>
+                <td style={{ padding: '1px 3px 1px 0', color: '#475569', fontWeight: 700, fontSize: '0.58rem', textAlign: 'right' }}>{rowRank}</td>
                 {RANKS.map((_, c) => {
                   const freq = freqs[r][c];
                   const label = getHandLabel(r, c);
@@ -102,7 +102,7 @@ function RangeGrid({ freqs, color, title, pct }: {
                       background: cellBg(freq, color),
                       border: isPair ? `1px solid ${accentColor}44` : '1px solid rgba(255,255,255,0.03)',
                       color: cellText(freq),
-                      fontSize: '0.48rem',
+                      fontSize: '0.58rem',
                       lineHeight: 1.1,
                       whiteSpace: 'nowrap',
                       fontWeight: isPair ? 700 : 400,
@@ -129,13 +129,6 @@ const PRIZES = [
 ];
 const TOTAL_PRIZES = PRIZES.reduce((s, p) => s + p.val, 0);
 
-// Fichas pré-flop: SB obrigatório + BB obrigatório + antes coletivos + raise BTN
-const CHIPS = [
-  { id: 'SB',  fill: 'rgba(245,158,11,0.75)',  stroke: '#f59e0b', label: '#fde68a', amt: '0.5bb',  dx: -45 },
-  { id: 'BB',  fill: 'rgba(16,185,129,0.75)',   stroke: '#10b981', label: '#6ee7b7', amt: '1bb',    dx: -15 },
-  { id: 'ANTE', fill: 'rgba(100,116,139,0.75)', stroke: '#94a3b8', label: '#cbd5e1', amt: '1.125', dx:  15 },
-  { id: 'BTN', fill: 'rgba(99,102,241,0.75)',   stroke: '#6366f1', label: '#c7d2fe', amt: '2bb',    dx:  45 },
-];
 
 // Bubble Factor matrix (9x9) — valores da imagem Aula 1.2
 const BF_PLAYERS = ['UTG','EP','MP1','MP2','HJ','CO','BU','SB','BB'];
@@ -211,11 +204,11 @@ export default function ReferencialAula12() {
           gap: '0.5rem', padding: '0.9rem 0', fontSize: '0.68rem', color: '#475569',
           fontWeight: 600, letterSpacing: '0.06em', userSelect: 'none',
         }}>
-          <span style={{ fontSize: '0.52rem', textTransform: 'uppercase', letterSpacing: '0.12em' }}>▶ Referencial</span>
+          <span style={{ fontSize: '0.58rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>▶ Referencial</span>
           <span style={{ fontWeight: 400, color: '#334155' }}>— Âncora Empírica (Aula 1.2) · KJT-2-3 · BTN 21.4% RP vs BB 12.9% RP</span>
         </summary>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem', paddingBottom: '2rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', paddingBottom: '2rem' }}>
 
           {/* Board + RP */}
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'flex-start' }}>
@@ -288,15 +281,37 @@ export default function ReferencialAula12() {
                 <ellipse cx={cx} cy={cy} rx={rx} ry={ry} fill="rgba(22,101,52,0.35)" stroke="rgba(34,197,94,0.2)" strokeWidth="2" />
                 <ellipse cx={cx} cy={cy} rx={rx - 10} ry={ry - 8} fill="none" stroke="rgba(34,197,94,0.08)" strokeWidth="1" />
                 {/* Pot */}
-                <text x={cx} y={cy - 14} textAnchor="middle" fill="#475569" fontSize="9" fontWeight="600">Pot: 5.63bb</text>
-                {/* Fichas: SB | BB | ANTE (coletivo 9x) | BTN open */}
-                {CHIPS.map(({ id, fill, stroke, label, amt, dx }) => (
-                  <g key={id}>
-                    <circle cx={cx + dx} cy={cy + 4} r={10} fill={fill} stroke={stroke} strokeWidth="1.2" />
-                    <text x={cx + dx} y={cy + 8} textAnchor="middle" fill="white" fontSize="6" fontWeight="800">{id}</text>
-                    <text x={cx + dx} y={cy + 20} textAnchor="middle" fill={label} fontSize="5.5">{amt}</text>
-                  </g>
-                ))}
+                <text x={cx} y={cy - 30} textAnchor="middle" fill="#475569" fontSize="9" fontWeight="600">Pot: 5.63bb</text>
+                {/* Fichas: ANTE (centro) + SB/BB/BTN em frente às posições angulares */}
+                {(() => {
+                  const r = 9;
+                  const iRx = 58; const iRy = 40;
+                  const sbX = cx + iRx * Math.cos(toRad(-15));
+                  const sbY = cy + iRy * Math.sin(toRad(-15));
+                  const bbX = cx + iRx * Math.cos(toRad(20));
+                  const bbY = cy + iRy * Math.sin(toRad(20));
+                  const btnX = cx + iRx * Math.cos(toRad(-50));
+                  const btnY = cy + iRy * Math.sin(toRad(-50));
+                  return (
+                    <>
+                      {/* SB — meia ficha (curva voltada ao centro) */}
+                      <path d={`M ${sbX} ${sbY - r} A ${r} ${r} 0 0 0 ${sbX} ${sbY + r} Z`}
+                        fill="rgba(245,158,11,0.85)" stroke="#f59e0b" strokeWidth="1.2" />
+                      <line x1={sbX} y1={sbY - r} x2={sbX} y2={sbY + r} stroke="#f59e0b" strokeWidth="0.8" strokeDasharray="2,1.5" />
+                      <text x={sbX - 4.5} y={sbY + 3.5} textAnchor="middle" fill="white" fontSize="5" fontWeight="900">SB</text>
+                      {/* BB — 1 ficha */}
+                      <circle cx={bbX} cy={bbY} r={r} fill="rgba(16,185,129,0.8)" stroke="#10b981" strokeWidth="1.2" />
+                      <text x={bbX} y={bbY + 3.5} textAnchor="middle" fill="white" fontSize="5" fontWeight="900">BB</text>
+                      {/* ANTE — dead money no centro */}
+                      <circle cx={cx} cy={cy + 10} r={r} fill="rgba(100,116,139,0.8)" stroke="#94a3b8" strokeWidth="1.2" />
+                      <text x={cx} y={cy + 13} textAnchor="middle" fill="white" fontSize="4.5" fontWeight="900">ANTE</text>
+                      {/* BTN — 2 fichas (open) */}
+                      <circle cx={btnX - 5} cy={btnY} r={r} fill="rgba(99,102,241,0.45)" stroke="#6366f1" strokeWidth="1" />
+                      <circle cx={btnX + 5} cy={btnY} r={r} fill="rgba(99,102,241,0.85)" stroke="#6366f1" strokeWidth="1.2" />
+                      <text x={btnX} y={btnY + 3.5} textAnchor="middle" fill="white" fontSize="4.5" fontWeight="900">BTN</text>
+                    </>
+                  );
+                })()}
                 {/* Players */}
                 {TABLE_PLAYERS.map(({ name, stack, angle, highlight }) => {
                   const rad = toRad(angle);
@@ -314,6 +329,21 @@ export default function ReferencialAula12() {
                   );
                 })}
               </svg>
+              {/* Legenda chips */}
+              <div style={{ display: 'flex', gap: '0.3rem 1rem', flexWrap: 'wrap', marginTop: '0.4rem' }}>
+                {([
+                  { id: 'SB',   color: '#f59e0b', text: '0.5bb · obrig.' },
+                  { id: 'BB',   color: '#10b981', text: '1bb · obrig.' },
+                  { id: 'ANTE', color: '#94a3b8', text: '1.125bb · dead' },
+                  { id: 'BTN',  color: '#818cf8', text: '2bb · open' },
+                ] as const).map(({ id, color, text }) => (
+                  <div key={id} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: color, display: 'inline-block', flexShrink: 0 }} />
+                    <span style={{ fontSize: '0.58rem', fontWeight: 700, color }}>{id}</span>
+                    <span style={{ fontSize: '0.58rem', color: '#475569' }}>{text}</span>
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* Prêmios */}
@@ -340,34 +370,17 @@ export default function ReferencialAula12() {
                 })}
               </div>
 
-              {/* Legenda: tipos de estrutura */}
-              <div style={{ marginTop: '0.6rem', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                {[
-                  {
-                    tag: 'TOP-HEAVY',
-                    color: '#fbbf24',
-                    bg: 'rgba(245,158,11,0.08)',
-                    border: 'rgba(245,158,11,0.2)',
-                    text: '1º concentra >20% da pool. Queda abrupta entre posições. BF extremo para shorts — cada eliminação vale muito. ICM domina do início ao fim.',
-                  },
-                  {
-                    tag: 'FLAT',
-                    color: '#94a3b8',
-                    bg: 'rgba(148,163,184,0.06)',
-                    border: 'rgba(148,163,184,0.15)',
-                    text: 'Prêmios decrescem linearmente. Diferença pequena entre posições adjacentes. BF próximo de 1 — jogo se aproxima do ChipEV. Agressão mais viável.',
-                  },
-                  {
-                    tag: 'HÍBRIDA',
-                    color: '#c4b5fd',
-                    bg: 'rgba(139,92,246,0.07)',
-                    border: 'rgba(139,92,246,0.18)',
-                    text: 'Top 3 inflado, restante com queda suave. ICM alto nas bolhas de lugar mas moderado no campo médio. Esta estrutura ($11 MTT) é híbrida: razão 1º/9º = 6.5×, queda abrupta no topo, cauda gradual.',
-                  },
-                ].map(({ tag, color, bg, border, text }) => (
-                  <div key={tag} style={{ padding: '4px 6px', borderRadius: '5px', background: bg, border: `1px solid ${border}` }}>
-                    <span style={{ fontSize: '0.48rem', fontWeight: 900, color, textTransform: 'uppercase', letterSpacing: '0.1em', marginRight: '4px' }}>{tag}</span>
-                    <span style={{ fontSize: '0.52rem', color: '#475569', lineHeight: 1.45 }}>{text}</span>
+              {/* Legenda: tipos de estrutura — flex-row compacto */}
+              <div style={{ marginTop: '0.5rem', display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+                {([
+                  { tag: 'TOP-HEAVY', icon: '▲', color: '#fbbf24', text: '1º >20% · BF extremo' },
+                  { tag: 'FLAT',      icon: '▬', color: '#94a3b8', text: 'linear · BF≈1' },
+                  { tag: 'HÍBRIDA',   icon: '◆', color: '#c4b5fd', text: 'top inflado · cauda gradual · esta estrutura' },
+                ] as const).map(({ tag, icon, color, text }) => (
+                  <div key={tag} style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '3px 8px', borderRadius: '4px', background: `${color}12`, border: `1px solid ${color}30` }}>
+                    <span style={{ fontSize: '0.65rem', color, lineHeight: 1 }}>{icon}</span>
+                    <span style={{ fontSize: '0.58rem', fontWeight: 800, color, textTransform: 'uppercase', letterSpacing: '0.07em' }}>{tag}</span>
+                    <span style={{ fontSize: '0.58rem', color: '#475569' }}>{text}</span>
                   </div>
                 ))}
               </div>
@@ -392,21 +405,21 @@ export default function ReferencialAula12() {
               {/* Definições */}
               <div style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap' }}>
                 <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'flex-start', flex: 1, minWidth: '220px' }}>
-                  <span style={{ fontSize: '0.52rem', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.12em', marginTop: '2px', whiteSpace: 'nowrap' }}>BF</span>
-                  <span style={{ fontSize: '0.57rem', color: '#475569', lineHeight: 1.55 }}>
-                    Multiplicador ICM. Pelo quanto os pot odds crescem sob risco de eliminação. <span style={{ color: '#64748b', fontFamily: 'monospace', fontSize: '0.54rem' }}>BF = 1/(1−RP)</span>. Cor de fundo indica a intensidade.
+                  <span style={{ fontSize: '0.58rem', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.12em', marginTop: '1px', whiteSpace: 'nowrap' }}>BF</span>
+                  <span style={{ fontSize: '0.62rem', color: '#475569', lineHeight: 1.5 }}>
+                    Multiplicador ICM: quanto os pot odds crescem sob risco de eliminação. <span style={{ color: '#64748b', fontFamily: 'monospace', fontSize: '0.58rem' }}>BF = 1/(1−RP)</span>. Cor indica intensidade.
                   </span>
                 </div>
                 <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'flex-start', flex: 1, minWidth: '220px' }}>
-                  <span style={{ fontSize: '0.52rem', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.12em', marginTop: '2px', whiteSpace: 'nowrap' }}>RP</span>
-                  <span style={{ fontSize: '0.57rem', color: '#475569', lineHeight: 1.55 }}>
-                    Equity adicional (%) acima dos pot odds para justificar um call. Exibido abaixo do BF — linha = quem chama, coluna = quem apostou.
+                  <span style={{ fontSize: '0.58rem', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.12em', marginTop: '1px', whiteSpace: 'nowrap' }}>RP</span>
+                  <span style={{ fontSize: '0.62rem', color: '#475569', lineHeight: 1.5 }}>
+                    Equity adicional (%) acima dos pot odds para justificar um call. Linha = quem chama · coluna = quem apostou.
                   </span>
                 </div>
               </div>
               {/* Escala de cor unificada — BF determina o nível; RP herda a mesma cor */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
-                <span style={{ fontSize: '0.52rem', fontWeight: 700, color: '#334155', textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>Nível ICM</span>
+                <span style={{ fontSize: '0.58rem', fontWeight: 700, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>Nível ICM</span>
                 <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
                   {[
                     { bg: 'rgba(239,68,68,0.55)',  color: '#fca5a5', label: 'BF > 2.0',   desc: 'crítico'  },
@@ -416,12 +429,12 @@ export default function ReferencialAula12() {
                   ].map(({ bg, color, label, desc }) => (
                     <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                       <span style={{ width: '8px', height: '8px', borderRadius: '2px', background: bg, border: `1px solid ${color}`, flexShrink: 0, display: 'inline-block' }} />
-                      <span style={{ fontSize: '0.55rem', color, fontWeight: 600, whiteSpace: 'nowrap' }}>{label}</span>
-                      <span style={{ fontSize: '0.52rem', color: '#334155', whiteSpace: 'nowrap' }}>{desc}</span>
+                      <span style={{ fontSize: '0.58rem', color, fontWeight: 600, whiteSpace: 'nowrap' }}>{label}</span>
+                      <span style={{ fontSize: '0.58rem', color: '#475569', whiteSpace: 'nowrap' }}>{desc}</span>
                     </div>
                   ))}
                 </div>
-                <span style={{ fontSize: '0.52rem', color: '#334155', fontStyle: 'italic' }}>— BF e RP</span>
+                <span style={{ fontSize: '0.58rem', color: '#475569', fontStyle: 'italic' }}>— BF e RP</span>
               </div>
             </div>
 
@@ -429,9 +442,9 @@ export default function ReferencialAula12() {
               <table style={{ borderCollapse: 'collapse', fontSize: '0.6rem' }}>
                 <thead>
                   <tr>
-                    <th style={{ padding: '3px 5px', color: '#334155', fontSize: '0.55rem', textAlign: 'left' }} />
+                    <th style={{ padding: '3px 5px', color: '#334155', fontSize: '0.58rem', textAlign: 'left' }} />
                     {BF_PLAYERS.map((p, i) => (
-                      <th key={p} style={{ padding: '3px 4px', color: '#475569', fontWeight: 700, fontSize: '0.55rem', textAlign: 'center', whiteSpace: 'nowrap' }}>
+                      <th key={p} style={{ padding: '3px 4px', color: '#475569', fontWeight: 700, fontSize: '0.58rem', textAlign: 'center', whiteSpace: 'nowrap' }}>
                         {p}<br /><span style={{ color: '#334155', fontWeight: 400 }}>{BF_STACKS[i]}</span>
                       </th>
                     ))}
@@ -440,7 +453,7 @@ export default function ReferencialAula12() {
                 <tbody>
                   {BF_MATRIX.map((row, r) => (
                     <tr key={r}>
-                      <td style={{ padding: '2px 5px', color: '#475569', fontWeight: 700, fontSize: '0.55rem', whiteSpace: 'nowrap' }}>
+                      <td style={{ padding: '2px 5px', color: '#475569', fontWeight: 700, fontSize: '0.58rem', whiteSpace: 'nowrap' }}>
                         {BF_PLAYERS[r]}<br /><span style={{ color: '#334155', fontWeight: 400 }}>{BF_STACKS[r]}</span>
                       </td>
                       {row.map((val, c) => {
@@ -461,7 +474,7 @@ export default function ReferencialAula12() {
                                 <div style={{ color: bfTextColor, fontWeight: val >= 1.6 ? 700 : 600, fontSize: '0.62rem' }}>{val.toFixed(2)}</div>
                                 <div style={{
                                   color: rpTextColor,
-                                  fontSize: '0.55rem',
+                                  fontSize: '0.58rem',
                                   fontWeight: 600,
                                   marginTop: '2px',
                                   borderTop: '1px solid rgba(255,255,255,0.06)',
@@ -496,24 +509,24 @@ export default function ReferencialAula12() {
               {[
                 {
                   term: 'Toy game',
-                  def: 'Modelo simplificado que isola uma variável de interesse — aqui, o ΔRP — para demonstrar seu efeito sobre frequências de equilíbrio. Não representa spots reais; funciona como lente didática de causa e efeito.',
+                  def: 'Modelo simplificado que isola o ΔRP para demonstrar seu efeito sobre frequências de equilíbrio. Lente didática de causa e efeito — não representa spots reais.',
                 },
                 {
                   term: 'Baseline GTO (TG0)',
-                  def: 'Frequências de equilíbrio sem distorção ICM: RP = 0% para ambos os jogadores. Bluff IP = 33% · Def OOP = 50% (MDF padrão). Referência para medir todos os desvios.',
+                  def: 'Equilíbrio sem distorção ICM: RP = 0% para ambos. Bluff IP = 33% · Def OOP = 50% (MDF). Referência para medir todos os desvios.',
                 },
                 {
                   term: 'ΔRP = IP_RP − OOP_RP',
-                  def: 'Eixo central do framework. Positivo → IP está mais constringido (bluffs menores, OOP defende mais). Negativo → IP tem vantagem de agressão (bluffs crescem, OOP cede frequência).',
+                  def: 'Eixo central. Positivo → IP mais constringido (bluffs menores, OOP defende mais). Negativo → IP com vantagem de agressão.',
                 },
                 {
                   term: '⊘ teto / ⊘ max',
-                  def: 'Saturação de frequência: teto = defesa OOP congelada pelo RP (fold máximo sustentável). max = bluff IP no limite superior imposto pelo BF. Além desses pontos, qualquer ajuste é EV-negativo.',
+                  def: 'Saturação: teto = defesa OOP congelada pelo RP. max = bluff IP no limite do BF. Além desses pontos qualquer ajuste é EV−.',
                 },
               ].map(({ term, def }) => (
                 <div key={term} style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start' }}>
-                  <span style={{ fontSize: '0.55rem', fontWeight: 800, color: '#818cf8', whiteSpace: 'nowrap', marginTop: '1px', minWidth: '120px' }}>{term}</span>
-                  <span style={{ fontSize: '0.55rem', color: '#475569', lineHeight: 1.6 }}>{def}</span>
+                  <span style={{ fontSize: '0.58rem', fontWeight: 800, color: '#818cf8', whiteSpace: 'nowrap', marginTop: '1px', minWidth: '110px' }}>{term}</span>
+                  <span style={{ fontSize: '0.62rem', color: '#475569', lineHeight: 1.5 }}>{def}</span>
                 </div>
               ))}
             </div>
@@ -521,13 +534,13 @@ export default function ReferencialAula12() {
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.68rem', color: '#94a3b8' }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-                    <th style={{ padding: '0.35rem 0.6rem', textAlign: 'left', fontWeight: 700, color: '#475569', fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>Nó</th>
-                    <th style={{ padding: '0.35rem 0.6rem', textAlign: 'right', fontWeight: 700, color: '#818cf8', fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>RP IP</th>
-                    <th style={{ padding: '0.35rem 0.6rem', textAlign: 'right', fontWeight: 700, color: '#f43f5e', fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>RP OOP</th>
-                    <th style={{ padding: '0.35rem 0.6rem', textAlign: 'right', fontWeight: 700, color: '#10b981', fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>ΔRP</th>
-                    <th style={{ padding: '0.35rem 0.6rem', textAlign: 'right', fontWeight: 700, color: '#64748b', fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>Bluff IP</th>
-                    <th style={{ padding: '0.35rem 0.6rem', textAlign: 'right', fontWeight: 700, color: '#64748b', fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>Def OOP</th>
-                    <th style={{ padding: '0.35rem 0.6rem', textAlign: 'left', fontWeight: 700, color: '#475569', fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Efeito</th>
+                    <th style={{ padding: '0.35rem 0.6rem', textAlign: 'left', fontWeight: 700, color: '#475569', fontSize: '0.58rem', textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>Nó</th>
+                    <th style={{ padding: '0.35rem 0.6rem', textAlign: 'right', fontWeight: 700, color: '#818cf8', fontSize: '0.58rem', textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>RP IP</th>
+                    <th style={{ padding: '0.35rem 0.6rem', textAlign: 'right', fontWeight: 700, color: '#f43f5e', fontSize: '0.58rem', textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>RP OOP</th>
+                    <th style={{ padding: '0.35rem 0.6rem', textAlign: 'right', fontWeight: 700, color: '#10b981', fontSize: '0.58rem', textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>ΔRP</th>
+                    <th style={{ padding: '0.35rem 0.6rem', textAlign: 'right', fontWeight: 700, color: '#64748b', fontSize: '0.58rem', textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>Bluff IP</th>
+                    <th style={{ padding: '0.35rem 0.6rem', textAlign: 'right', fontWeight: 700, color: '#64748b', fontSize: '0.58rem', textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>Def OOP</th>
+                    <th style={{ padding: '0.35rem 0.6rem', textAlign: 'left', fontWeight: 700, color: '#475569', fontSize: '0.58rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Efeito</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -582,13 +595,13 @@ export default function ReferencialAula12() {
                 { sym: 'ΔRP',     desc: 'IP_RP − OOP_RP · positivo = IP mais constringido'          },
               ].map(({ sym, desc }) => (
                 <div key={sym} style={{ display: 'flex', alignItems: 'baseline', gap: '5px' }}>
-                  <span style={{ fontSize: '0.58rem', fontWeight: 700, color: '#64748b', fontFamily: 'monospace', whiteSpace: 'nowrap' }}>{sym}</span>
-                  <span style={{ fontSize: '0.55rem', color: '#334155' }}>{desc}</span>
+                  <span style={{ fontSize: '0.62rem', fontWeight: 700, color: '#64748b', fontFamily: 'monospace', whiteSpace: 'nowrap' }}>{sym}</span>
+                  <span style={{ fontSize: '0.58rem', color: '#475569' }}>{desc}</span>
                 </div>
               ))}
             </div>
 
-            <p style={{ fontSize: '0.58rem', color: '#334155', margin: '0', lineHeight: 1.55 }}>
+            <p style={{ fontSize: '0.58rem', color: '#475569', margin: '0', lineHeight: 1.55 }}>
               ★ Âncora empírica: 93 nodes HRC vs GTO Wizard, Raphael Vitoi 2024 &nbsp;·&nbsp; Downward Drift: O&apos;Kearney &amp; Carter, <em>PKO Poker Strategy</em>, D&amp;B Poker 2023
             </p>
           </div>
