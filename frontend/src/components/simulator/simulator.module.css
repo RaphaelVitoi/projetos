@@ -10,34 +10,55 @@
    ============================================== */
 
 :root {
-  --sim-color-indigo: #6366f1;
-  --sim-color-indigo-light: #818cf8;
-  --sim-color-rose: #e11d48;
-  --sim-color-rose-light: #f43f5e;
-  --sim-color-emerald: #10b981;
-  --sim-color-amber: #f59e0b;
-  --sim-bg-dark: #020617;
-  --sim-bg-panel: rgba(15, 23, 42, 0.75);
-  --sim-border: rgba(255, 255, 255, 0.06);
+  /*
+   * Cores primárias — cascateiam das vars globais (globals.css).
+   * Fallback garante funcionamento mesmo sem globals carregado.
+   * Se o site mudar a paleta, atualizar globals.css é suficiente.
+   */
+  --sim-color-indigo:       var(--accent-primary,   #6366f1);
+  --sim-color-indigo-light: var(--accent-indigo,    #818cf8);
+  --sim-color-rose:         var(--accent-secondary, #e11d48);
+  --sim-color-rose-light:   var(--accent-rose,      #f43f5e);
+  --sim-color-emerald:      var(--accent-emerald,   #10b981);
+  --sim-color-amber:        var(--accent-amber,     #f59e0b);
+
+  /* Fundos */
+  --sim-bg-dark:     var(--bg-base,  #020617);
+  --sim-bg-panel:    var(--bg-card,  rgba(15, 23, 42, 0.6));
+  --sim-bg-subpanel: rgba(15, 23, 42, 0.6);
+
+  /* Bordas */
+  --sim-border:       var(--border-color, rgba(255, 255, 255, 0.06));
+  --sim-border-light: rgba(255, 255, 255, 0.05);
+
+  /* Raios */
   --sim-radius-lg: 24px;
   --sim-radius-md: 12px;
 
-  /* Variaveis para o TheoryPanel (Preparacao para Temas) */
-  --sim-bg-subpanel: rgba(15, 23, 42, 0.6);
-  --sim-border-light: rgba(255, 255, 255, 0.05);
-  --sim-card-ip-bg: rgba(99, 102, 241, 0.1);
-  --sim-card-ip-border: rgba(99, 102, 241, 0.2);
-  --sim-card-oop-bg: rgba(225, 29, 72, 0.1);
-  --sim-card-oop-border: rgba(225, 29, 72, 0.2);
-  --sim-exploit-bg: rgba(16, 185, 129, 0.08);
-  --sim-exploit-border: rgba(16, 185, 129, 0.2);
+  /* Hierarquia de texto */
+  --sim-text-main:   var(--text-main,  #f8fafc);
+  --sim-text-muted:  var(--text-muted, #94a3b8);
+  --sim-text-subtle: #64748b;  /* slate-500 */
+  --sim-text-faint:  #475569;  /* slate-600 */
+  --sim-text-dim:    #334155;  /* slate-700 */
 
-  /* Variaveis para a RangeMatrix */
-  --sim-range-core: rgba(16, 185, 129, 0.8);
+  /* Fonte mono */
+  --sim-font-mono: var(--font-mono, 'JetBrains Mono', monospace);
+
+  /* Cards IP/OOP (TheoryPanel) — rgba depende da cor base */
+  --sim-card-ip-bg:      rgba(99, 102, 241, 0.1);
+  --sim-card-ip-border:  rgba(99, 102, 241, 0.2);
+  --sim-card-oop-bg:     rgba(225, 29, 72, 0.1);
+  --sim-card-oop-border: rgba(225, 29, 72, 0.2);
+  --sim-exploit-bg:      rgba(16, 185, 129, 0.08);
+  --sim-exploit-border:  rgba(16, 185, 129, 0.2);
+
+  /* RangeMatrix */
+  --sim-range-core:     rgba(16, 185, 129, 0.8);
   --sim-range-marginal: rgba(245, 158, 11, 0.8);
-  --sim-range-bluff: rgba(99, 102, 241, 0.8);
-  --sim-range-death: rgba(225, 29, 72, 0.5);
-  --sim-range-fold: rgba(30, 41, 59, 0.4);
+  --sim-range-bluff:    rgba(99, 102, 241, 0.8);
+  --sim-range-death:    rgba(225, 29, 72, 0.5);
+  --sim-range-fold:     rgba(30, 41, 59, 0.4);
 }
 
 /* ==============================================
@@ -394,7 +415,7 @@
 }
 
 .scenarioBtnSub {
-  font-size: 0.58rem;
+  font-size: 0.55rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;

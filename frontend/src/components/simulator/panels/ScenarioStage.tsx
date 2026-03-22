@@ -6,43 +6,40 @@
  * ROLE: Exibe a narrativa do cenário atual e os medidores de risco visceral (Risk Gauges).
  */
 
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import RiskGauge from '../ui/RiskGauge';
-import { useAudioFeedback } from '../hooks/useAudioFeedback';
 import styles from '../simulator.module.css';
 
+// Tooltips explicativos para cada morph — exibidos ao hover no RiskGauge
+const MORPH_TOOLTIPS: Record<string, string> = {
+  // IP
+  'Valor Estrito':       'Aposta quase exclusivamente por valor — sem equity suficiente para blefar economicamente. O RP alto torna blefes EV-negativo.',
+  'Especulativo':        'Calls pré-flop inflados para especular implied odds no pós-flop, evitando o all-in direto. Range misto, sem polarização clara.',
+  'Polar Máximo':        'Apenas nuts e blefes no range — sem mãos médias. Resultado de pressão de shove total, que elimina sizings intermediários.',
+  'Polar Extremo':       'Polarização máxima por pot-sized bet: o IP só aposta com mãos extremas (topo ou blefe puro). Mãos médias checam.',
+  'Push Estendido':      'Range de shove mais amplo que o equilíbrio ChipEV indica. A Fold Equity acumulada torna lucrativo incluir mãos marginais.',
+  'Modo Predador':       'RP próprio baixo + oponente em zona crítica. A Esperança Matemática favorece agressão máxima — o custo de perder é marginal.',
+  'Polar Controlado':    'Polarização gerenciada: nuts e blefes selecionados, mas frequência total controlada para não fortalecer um rival (proteção de Perspectiva).',
+  'Polar Perfeito':      'Equilíbrio Nash sem distorção ICM — blefes e valor em proporção exata. Gerado quando RP = 0 (ChipEV puro).',
+  // OOP
+  'Condensado':          'Range formado majoritariamente por mãos médias sem polarização — bom para realizar equity, mas incapaz de aplicar pressão. ICM aumenta a passividade.',
+  'Flat Call Massivo':   'Calls pré-flop com range muito mais amplo que o equilíbrio ChipEV indicaria — especulação de implied odds sem expor a stack ao all-in direto.',
+  'Bluffcatcher':        'Range composto quase só por mãos que batem blefes — sem bloqueadores, sem equity para re-aplicar pressão. Só pode call ou fold.',
+  'Condensado Extremo':  'Range condensado sob pressão máxima: cada call cede chips irrecuperáveis. O ICM transforma cada confronto num sangramento de Perspectiva.',
+  'Call Seletivo':       'O OOP chama apenas com mãos que cobrem o RP. Fora disso, folda — mesmo contra ranges inclinados ao blefe.',
+  'Zona de Paralisia':   'RP > 40%: zona onde o custo matemático de qualquer confronto supera o ganho de chips. O OOP folda ranges que em ChipEV pagariam automaticamente.',
+  'Inelástico':          'Resiste à pressão sem conseguir devolvê-la: calls seletivos com as melhores mãos, fold no resto. A posição impede re-aplicar pressão.',
+  'Defesa Base':         'Frequência de defesa de equilíbrio em ChipEV puro — sem distorção ICM. MDF opera normalmente.',
+};
+
+// Bubble Factor: BF = 100 / (100 - rp)
+const calcBF = (rp: number): string => {
+  if (rp >= 100) return '∞';
+  if (rp === 0) return '1.00';
+  return (100 / (100 - rp)).toFixed(2);
+};
+
 export default function ScenarioStage({ scenario }: { scenario: any }) {
-  const { isMuted, playDeathZone, playPredatorZone } = useAudioFeedback();
-  const prevScenarioRef = useRef<string>(scenario.id);
-
-  // Feedback sonoro quando RP >= 40 (Death Zone / Predator Zone)
-  useEffect(() => {
-    if (prevScenarioRef.current !== scenario.id) {
-      prevScenarioRef.current = scenario.id;
-
-      if (scenario.oopRp >= 40) {
-        playDeathZone(scenario.oopRp);
-      }
-      if (scenario.ipRp >= 40) {
-        playDeathZone(scenario.ipRp);
-      }
-      // Se o oponente está na Death Zone, ativa Predator Mode
-      if (scenario.oopRp >= 40 && scenario.ipRp < 40) {
-        playPredatorZone(scenario.oopRp);
-      }
-      if (scenario.ipRp >= 40 && scenario.oopRp < 40) {
-        playPredatorZone(scenario.ipRp);
-      }
-    }
-  }, [scenario.id, scenario.ipRp, scenario.oopRp, playDeathZone, playPredatorZone]);
-
-  // Bubble Factor: BF = 100 / (100 - rp). Mede o quanto ICM inflaciona o custo relativo de uma decisão.
-  const calcBF = (rp: number): string => {
-    if (rp >= 100) return '∞';
-    if (rp === 0) return '1.00';
-    return (100 / (100 - rp)).toFixed(2);
-  };
-
   return (
     <div className={`${styles.glassPanel} ${styles.animateFadeUp}`} style={{ padding: '1.75rem' }}>
       {/* Narrativa + Verdict */}
@@ -119,13 +116,12 @@ export default function ScenarioStage({ scenario }: { scenario: any }) {
             label="Agressor (IP)"
             pos={scenario.ipPos}
             stack={scenario.ipMorph}
+            stackTooltip={MORPH_TOOLTIPS[scenario.ipMorph]}
             color="indigo"
             opponentValue={scenario.oopRp}
-            isMuted={isMuted}
           />
-          {/* Bubble Factor */}
           <p className={styles.dataMono} style={{ fontSize: '0.6rem', color: '#475569', margin: '0.2rem 0 0' }}>
-            BF = {calcBF(scenario.ipRp)}×
+            RP {scenario.ipRp.toFixed(1)}% · BF {calcBF(scenario.ipRp)}×
           </p>
         </div>
 
@@ -136,13 +132,12 @@ export default function ScenarioStage({ scenario }: { scenario: any }) {
             label="Defensor (OOP)"
             pos={scenario.oopPos}
             stack={scenario.oopMorph}
+            stackTooltip={MORPH_TOOLTIPS[scenario.oopMorph]}
             color="pink"
             opponentValue={scenario.ipRp}
-            isMuted={isMuted}
           />
-          {/* Bubble Factor */}
           <p className={styles.dataMono} style={{ fontSize: '0.6rem', color: '#475569', margin: '0.2rem 0 0' }}>
-            BF = {calcBF(scenario.oopRp)}×
+            RP {scenario.oopRp.toFixed(1)}% · BF {calcBF(scenario.oopRp)}×
           </p>
         </div>
       </div>

@@ -19,7 +19,6 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import type { Scenario } from '../engine/types';
-import { solveNash } from '../engine/nashSolver';
 import styles from '../simulator.module.css';
 
 interface ComparisonRadarProps {
@@ -27,14 +26,13 @@ interface ComparisonRadarProps {
   currentId: string;
 }
 
-// 5 eixos do radar
+// 5 eixos do radar (standby: nash fields pendentes de atualização para Opção B)
 function buildRadarData(scenario: Scenario) {
-  const nash = solveNash(scenario.ipRp, scenario.oopRp);
   return {
     rpIp: scenario.ipRp,
     rpOop: scenario.oopRp,
-    bluff: nash.bluffFreq,
-    defense: nash.defenseFreq,
+    bluff: 0,    // pendente: atualizar para nova interface NashResult
+    defense: 0,  // pendente: atualizar para nova interface NashResult
     sprDecay: scenario.sprData.length > 0
       ? ((scenario.sprData[0].rpValue - (scenario.sprData.at(-1)?.rpValue ?? 0)) / Math.max(1, scenario.sprData[0].rpValue)) * 100
       : 0,

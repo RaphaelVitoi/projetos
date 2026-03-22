@@ -22,9 +22,9 @@ interface ScenarioSelectorProps {
 
 // Labels e ordem das categorias
 const CATEGORY_META: Record<string, { label: string; order: number }> = {
-  clinical: { label: 'Matrizes Clínicas', order: 0 },
+  clinical: { label: 'Cenários Clínicos', order: 0 },
   baseline: { label: 'Linha Base (ChipEV)', order: 1 },
-  toyGame: { label: 'Toy Games (Predator Mode)', order: 2 },
+  toyGame:  { label: 'Toy Games', order: 2 },
 };
 
 // Ícones de categoria como Unicode direto (evita dangerouslySetInnerHTML)
@@ -82,6 +82,7 @@ export default function ScenarioSelector({
                   onClick={() => onSelect(sc.id)}
                   className={`${styles.scenarioBtn} ${isActive ? styles.scenarioBtnActive : ''}`}
                   aria-pressed={isActive}
+                  title={`${sc.name} — ${sc.narrativeSubtitle}`}
                 >
                   <div
                     className={`${styles.scenarioIconBox} ${isActive ? styles.scenarioIconBoxActive : ''}`}

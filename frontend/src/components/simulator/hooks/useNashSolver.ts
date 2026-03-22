@@ -1,9 +1,15 @@
 import { useMemo } from 'react';
 import { solveNash } from '../engine/nashSolver';
-import type { NashResult } from '../engine/types';
+import type { NashResult, ChipEvFreqs } from '../engine/types';
 
-export function useNashSolver(ipRp: number, oopRp: number, aggressionFactor: number = 1.0): NashResult {
-  return useMemo(() => {
-    return solveNash(ipRp, oopRp, aggressionFactor);
-  }, [ipRp, oopRp, aggressionFactor]);
+export function useNashSolver(
+  ipRp: number,
+  oopRp: number,
+  chipEvFreqs: ChipEvFreqs,
+  aggressionFactor = 1,
+): NashResult {
+  return useMemo(
+    () => solveNash(ipRp, oopRp, chipEvFreqs, aggressionFactor),
+    [ipRp, oopRp, chipEvFreqs, aggressionFactor],
+  );
 }

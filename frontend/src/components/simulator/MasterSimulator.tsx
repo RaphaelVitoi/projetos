@@ -11,34 +11,24 @@
 import React, { useState, useCallback, lazy, Suspense } from 'react';
 import { useScenario } from './hooks/useScenario';
 import { useNashSolver } from './hooks/useNashSolver';
-import { useAudioFeedback } from './hooks/useAudioFeedback';
 import ScenarioSelector from './ui/ScenarioSelector';
-import AxiomTicker from './ui/AxiomTicker';
 import ScenarioStage from './panels/ScenarioStage';
 import NashPanel from './panels/NashPanel';
 import TheoryPanel from './panels/TheoryPanel';
+import type { ChipEvFreqs } from './engine/types';
 import styles from './simulator.module.css';
 
 // Lazy load para painéis secundários (performance)
 const EquityCalculator = lazy(() => import('./panels/EquityCalculator'));
-const HandSimulator = lazy(() => import('./panels/HandSimulator'));
-const ComparisonRadar = lazy(() => import('./panels/ComparisonRadar'));
-const PayoutsPanel = lazy(() => import('./panels/PayoutsPanel'));
-const MatchupSelector = lazy(() => import('./panels/MatchupSelector'));
-const AICoachPanel = lazy(() => import('./panels/AICoachPanel'));
-const RangeMatrix = lazy(() => import('./panels/RangeMatrix'));
 
-type ActiveTool = 'scenario' | 'calculator' | 'comparison' | 'handSim' | 'payouts' | 'matchup' | 'aiCoach' | 'range';
+// Standby: ComparisonRadar, MatchupSelector, PayoutsPanel, RangeMatrix
+// Eliminados: AICoachPanel, HandSimulator, AxiomTicker, useAudioFeedback
+
+type ActiveTool = 'scenario' | 'calculator';
 
 const TOOL_BUTTONS: { id: ActiveTool; label: string; icon: string }[] = [
   { id: 'scenario',   label: 'Cenário',    icon: 'fa-microscope' },
-  { id: 'calculator', label: 'Calculadora', icon: 'fa-calculator' },
-  { id: 'matchup',    label: 'Matchup FT',  icon: 'fa-users' },
-  { id: 'comparison', label: 'Comparação',  icon: 'fa-chart-radar' },
-  { id: 'handSim',    label: 'Mão',         icon: 'fa-hand' },
-  { id: 'payouts',    label: 'Payouts',     icon: 'fa-trophy' },
-  { id: 'range',      label: 'Range',       icon: 'fa-table-cells' },
-  { id: 'aiCoach',    label: 'Oráculo AI',  icon: 'fa-brain' },
+  { id: 'calculator', label: 'Calculadora ICM', icon: 'fa-calculator' },
 ];
 
 function LoadingFallback() {
@@ -58,17 +48,20 @@ function LoadingFallback() {
 
 export default function MasterSimulator() {
   const { scenario, setScenario, scenarios } = useScenario();
-  const [aggressionFactor, setAggressionFactor] = useState(1.0);
+  const [aggressionFactor, setAggressionFactor] = useState(1);
+  const [chipEvFreqs, setChipEvFreqs] = useState<ChipEvFreqs>(scenario.defaultChipEvFreqs);
   const [activeTool, setActiveTool] = useState<ActiveTool>('scenario');
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const { isMuted, toggleMute } = useAudioFeedback();
 
-  const nash = useNashSolver(scenario.ipRp, scenario.oopRp, aggressionFactor);
+  const nash = useNashSolver(scenario.ipRp, scenario.oopRp, chipEvFreqs, aggressionFactor);
 
   const handleScenarioSelect = useCallback((id: string) => {
     setScenario(id);
     setActiveTool('scenario');
-  }, [setScenario]);
+    // Resetar ChipEV freqs para o padrão do novo cenário
+    const next = scenarios.find(s => s.id === id);
+    if (next) setChipEvFreqs(next.defaultChipEvFreqs);
+  }, [setScenario, scenarios]);
 
   return (
     <div style={{
@@ -77,9 +70,6 @@ export default function MasterSimulator() {
       color: '#e2e8f0',
       overflowX: 'hidden',
     }}>
-      {/* Ticker */}
-      <AxiomTicker />
-
       {/* Header */}
       <div style={{
         maxWidth: '1200px',
@@ -143,23 +133,10 @@ export default function MasterSimulator() {
           {/* Controles */}
           <div style={{ display: 'flex', gap: '0.5rem' }}>
             <button
-              onClick={toggleMute}
-              style={{
-                padding: '0.4rem 0.6rem',
-                borderRadius: '8px',
-                background: 'rgba(30, 41, 59, 0.6)',
-                border: '1px solid rgba(255, 255, 255, 0.06)',
-                color: isMuted ? '#e11d48' : '#94a3b8',
-                fontSize: '0.7rem',
-                cursor: 'pointer',
-              }}
-              title={isMuted ? 'Ativar áudio' : 'Silenciar áudio'}
-            >
-              <i className={`fa-solid ${isMuted ? 'fa-volume-xmark' : 'fa-volume-high'}`} />
-            </button>
-            <button
+              type="button"
               onClick={() => setSidebarOpen(!sidebarOpen)}
               className="md:hidden"
+              title={sidebarOpen ? 'Fechar menu' : 'Abrir menu'}
               style={{
                 padding: '0.4rem 0.6rem',
                 borderRadius: '8px',
@@ -170,7 +147,7 @@ export default function MasterSimulator() {
                 cursor: 'pointer',
               }}
             >
-              <i className={`fa-solid ${sidebarOpen ? 'fa-xmark' : 'fa-bars'}`} />
+              <i className={`fa-solid ${sidebarOpen ? 'fa-xmark' : 'fa-bars'}`} aria-hidden="true" />
             </button>
           </div>
         </div>
@@ -246,7 +223,9 @@ export default function MasterSimulator() {
               <ScenarioStage scenario={scenario} />
               <NashPanel
                 nash={nash}
+                chipEvFreqs={chipEvFreqs}
                 aggressionFactor={aggressionFactor}
+                onChipEvChange={setChipEvFreqs}
                 onAggressionChange={setAggressionFactor}
               />
               <TheoryPanel scenario={scenario} />
@@ -256,46 +235,6 @@ export default function MasterSimulator() {
           {activeTool === 'calculator' && (
             <Suspense fallback={<LoadingFallback />}>
               <EquityCalculator />
-            </Suspense>
-          )}
-
-          {activeTool === 'comparison' && (
-            <Suspense fallback={<LoadingFallback />}>
-              <ComparisonRadar scenarios={scenarios} currentId={scenario.id} />
-            </Suspense>
-          )}
-
-          {activeTool === 'handSim' && (
-            <Suspense fallback={<LoadingFallback />}>
-              <HandSimulator oopRp={scenario.oopRp} />
-            </Suspense>
-          )}
-
-          {activeTool === 'payouts' && (
-            <Suspense fallback={<LoadingFallback />}>
-              <PayoutsPanel />
-            </Suspense>
-          )}
-
-          {activeTool === 'matchup' && (
-            <Suspense fallback={<LoadingFallback />}>
-              <MatchupSelector />
-            </Suspense>
-          )}
-
-          {activeTool === 'range' && (
-            <Suspense fallback={<LoadingFallback />}>
-              <RangeMatrix
-                ipRp={scenario.ipRp}
-                oopRp={scenario.oopRp}
-                scenarioId={scenario.id}
-              />
-            </Suspense>
-          )}
-
-          {activeTool === 'aiCoach' && (
-            <Suspense fallback={<LoadingFallback />}>
-              <AICoachPanel scenario={scenario} nash={nash} />
             </Suspense>
           )}
         </main>

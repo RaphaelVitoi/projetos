@@ -417,7 +417,7 @@ export default function LeituraICM() {
 
             <nav className="article-nav">
                 <Link href="/aula-icm">&larr; Voltar para a Aula</Link>
-                <Link href="/artigos/estado-da-arte">Estado da Arte ICM 2025 &rarr;</Link>
+                <Link href="/conceitos-icm">Glossário Formal &rarr;</Link>
             </nav>
         </main>
     );

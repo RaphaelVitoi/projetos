@@ -1,142 +1,173 @@
 /**
- * IDENTITY: Motor Nash ICM (Port TypeScript)
+ * IDENTITY: Motor ICM pós-flop
  * PATH: src/components/simulator/engine/nashSolver.ts
- * ROLE: Calcular equilíbrio Nash ajustado pelo Risk Premium.
- *       Heurística calibrada contra outputs de HRC/ICMizer para cenários clínicos.
- * BINDING: [engine/types.ts]
+ * ROLE: Calcular distorção ICM sobre frequências ChipEV via equação côncava.
  *
- * MODELO CONCEITUAL:
- * - Defensor (OOP): MDF colapsa conforme seu RP sobe (custo de eliminação > lucro do call).
- *   Ganha leve incentivo se IP também está sob pressão (ambos evitam confronto).
- * - Agressor (IP): Pode explorar o overfold do OOP com mais bluffs,
- *   MAS seu próprio RP reduz bluffs com peso maior (preservação > exploit).
- *   Quando IP RP > 0, o custo de fracasso (armar o rival, perder laddering)
- *   é multiplicado pela Elasticidade do Bubble Factor.
+ * EQUAÇÃO CENTRAL:
+ *   freq_ICM(A) = freq_ChipEV(A) + k_A × |ΔRP|^b × sign(ΔRP)
  *
- * COEFICIENTES:
- * - Defesa: -1.4 * oopRp (o RP do defensor é dominante) + 0.2 * ipRp (alívio se IP pressionado)
- * - Bluff:  +0.8 * oopRp (exploit do overfold) - 1.3 * ipRp (custo de fracasso amplificado)
- *   O IP RP pesa 1.625x mais que o exploit do OOP RP, refletindo que o custo
- *   de armar o rival ou perder posição supera o lucro de roubar blinds.
+ * Onde:
+ *   ΔRP = RP_ip − RP_oop  (Risk Advantage: positivo = IP sob maior pressão ICM)
+ *   b   = 1 / (1 + avgRp / 40)  →  côncavo; diminui conforme pressão ICM cresce
+ *   k_A = coeficiente por ação (positivo = ação cresce com |ΔRP|, negativo = cai)
+ *
+ * ÂNCORA EMPÍRICA (único ponto calibrado com dados reais):
+ *   Spot: BTN 39bb (RP 21.4%) vs BB 54bb (RP 12.9%), ΔRP = +8.5pp
+ *   Fonte: 93 nodes HRC vs GTO Wizard, Aula 1.2 (board KJT-2-3)
+ *   Distorções observadas:
+ *     ip_check:     +40pp  →  resíduo (100 - betSmall - betLarge); sem k próprio
+ *     oop_call:     +23pp  →  k calibrado
+ *     oop_fold:     −15pp  →  k calibrado (resíduo de call + raise)
+ *     ip_bet_large: ~some  →  k estimado (qualitativo)
+ *     ip_bet_small: migra  →  k estimado (qualitativo)
+ *     oop_raise:    ~zereia →  k estimado (qualitativo)
+ *
+ * AGRESSION FACTOR:
+ *   Modula frequências de aposta do IP e raise do OOP para refletir que o
+ *   oponente real pode desviar do equilíbrio ICM teórico. O RP precifica o
+ *   risco de colisão — não assume que ela ocorre, mas que o jogador está
+ *   exposto a ela. Na prática, jogadores são mais passivos ou mais agressivos
+ *   do que o equilíbrio prevê. Check/fold recalculados como resíduo.
+ *
+ * LIMITAÇÕES HONESTAS:
+ *   - Um único ponto de calibração empírica (ΔRP = +8.5pp)
+ *   - RP por street não é quantificável sem variáveis adicionais
+ *   - Output são distribuições, não certezas
+ *   - Spread cresce para configurações além da âncora
  */
 
-import type { NashResult } from './types';
+import type { NashResult, ChipEvFreqs, FreqResult } from './types';
 
-// Baseline para Pot Size Bet (PSB)
-// Alpha (Bluff) = 33.3% | MDF (Defesa) = 50.0%
-// Equity Call (ChipEV) = 33.3% (1/(1+2))
-const BASELINE = {
-  ALPHA: 33.33,
-  MDF: 50,
-  EQUITY: 33.33,
+// === ÂNCORA EMPÍRICA ===
+const ANCHOR_DELTA_RP = 8.5;
+
+// === COEFICIENTES k_A ===
+// Positivo: ação cresce quando IP tem mais RP (ΔRP > 0)
+// Negativo: ação cai quando IP tem mais RP (ΔRP > 0)
+// Calibrados (c) = derivados dos 93 nodes na âncora
+// Estimados  (e) = derivados qualitativamente da teoria
+const K = {
+  ip_bet_small: -3.5,   // (e) sizing migra, não desaparece
+  ip_bet_large: -12,    // (e) some quase completamente
+  oop_call:      7.3,   // (c) +23pp @ âncora
+  oop_fold:     -4.7,   // (c) −15pp @ âncora
+  oop_raise:    -9,     // (e) quase zereia — aplicado sobre |ΔRP| (sem sign)
 } as const;
 
-/**
- * Coeficientes do modelo Nash ICM.
- * Calibrados contra outputs do Hold'em Resource Calculator (HRC) v3.x
- * para os 9 cenários clínicos. Validados em 2026-03-16.
- */
-export const NASH_COEFFICIENTS = {
-  /** Peso do RP do defensor na redução de MDF. Dominante: eliminar-se é catastrófico. */
-  DEFENSE_OOP_WEIGHT: 1.4,
-  /** Alívio na defesa quando o agressor também está sob pressão. */
-  DEFENSE_IP_RELIEF: 0.3,
-  /** Multiplicador do exploit pelo overfold do defensor. */
-  BLUFF_OOP_EXPLOIT: 1.1,
-  /** Penalidade no bluff pelo risco de eliminação do agressor. */
-  BLUFF_IP_PENALTY: 0.8,
-  /** Limiar de RP OOP que ativa o modo Any Two Cards (ATC). */
-  DEATH_ZONE_THRESHOLD: 40,
-} as const;
+// === INCERTEZA ===
+const BASE_SPREAD  = 3;   // pp de incerteza mínima (mesmo na âncora)
+const SPREAD_RATE  = 0.6; // pp de spread por pp de desvio da âncora
 
 /**
- * Classifica o veredito do solver baseado nas frequências resultantes.
- * Hierarquia: Death Zone > Exploit Máximo > Overfold > Agressão Contida > Overbluff > GTO
+ * Expoente b da curva côncava.
+ * b → 1 quando avgRp → 0 (ChipEV puro, sem distorção).
+ * b → 0 conforme pressão ICM média cresce (curva mais côncava).
  */
-function getVerdict(defense: number, bluff: number): string {
-  // Defesa colapsou completamente (Death Zone do defensor)
-  if (defense < 10) return 'Death Zone (Defesa Colapsou)';
-  // Combinação letal: defensor overfoldando E agressor overbluffando
-  if (defense < 35 && bluff > 40) return 'Exploit Máximo (ICM Dominante)';
-  // Defensor overfoldando significativamente
-  if (defense < 35) return 'Overfold Massivo (Exploitável)';
-  // Agressor extremamente contido (proteção de stack)
-  if (bluff < 20) return 'Agressão Contida (Preservação)';
-  // Agressor ultrapassando o limiar de bluff
-  if (bluff > 45) return 'Overbluff (Risco Utilitário)';
-  // Nenhum desvio significativo do baseline
-  return 'Equilíbrio GTO Padrão';
+function calcB(ipRp: number, oopRp: number): number {
+  return 1 / (1 + (ipRp + oopRp) / 2 / 40);
 }
 
 /**
- * Calcula o equilíbrio Nash ajustado pelo Risk Premium de ambos os jogadores.
+ * Spread de incerteza proporcional ao desvio da âncora empírica.
+ */
+function calcSpread(deltaRp: number): number {
+  return BASE_SPREAD + SPREAD_RATE * Math.abs(deltaRp - ANCHOR_DELTA_RP);
+}
+
+/**
+ * Aplica distorção ICM sobre uma frequência ChipEV, respeitando sign(ΔRP).
+ */
+function applyDistortion(
+  chipEvFreq: number,
+  k: number,
+  deltaRp: number,
+  b: number,
+  spread: number,
+): FreqResult {
+  const distortion = k * Math.pow(Math.abs(deltaRp), b) * Math.sign(deltaRp || 1);
+  const center = Math.max(0, Math.min(100, chipEvFreq + distortion));
+  return { center, spread, delta: center - chipEvFreq };
+}
+
+/**
+ * Aplica distorção ICM sobre |ΔRP| sem considerar o sinal.
+ * Usado para ações que se comprimem independente de qual lado tem mais RP.
+ */
+function applyDistortionAbsolute(
+  chipEvFreq: number,
+  k: number,
+  deltaRp: number,
+  b: number,
+  spread: number,
+): FreqResult {
+  const distortion = k * Math.pow(Math.abs(deltaRp), b);
+  const center = Math.max(0, Math.min(100, chipEvFreq + distortion));
+  return { center, spread, delta: center - chipEvFreq };
+}
+
+/**
+ * Calcula frequências ICM pós-flop a partir de RPs e frequências ChipEV.
  *
- * @param ipRp - Risk Premium do Agressor (IP), 0-100
- * @param oopRp - Risk Premium do Defensor (OOP), 0-100
- * @param aggressionFactor - Fator de agressividade comportamental (0.5-1.5, padrão 1.0)
+ * @param ipRp           - Risk Premium do IP (0–100), via Malmuth-Harville
+ * @param oopRp          - Risk Premium do OOP (0–100), via Malmuth-Harville
+ * @param chipEvFreqs    - Frequências ChipEV do spot (GTO Wizard ou equivalente)
+ * @param aggressionFactor - Desvio comportamental real do oponente vs equilíbrio ICM
+ *                           (0.5 = passivo · 1.0 = equilíbrio · 1.5 = agressivo)
  */
 export function solveNash(
   ipRp: number,
   oopRp: number,
-  aggressionFactor = 1
+  chipEvFreqs: ChipEvFreqs,
+  aggressionFactor = 1,
 ): NashResult {
-  // Sanitização de inputs (garante estabilidade do motor)
-  const safeIpRp = Math.max(0, Number.parseFloat(String(ipRp)) || 0);
-  const safeOopRp = Math.max(0, Number.parseFloat(String(oopRp)) || 0);
-  const safeFactor = Math.max(0.1, Math.min(3, Number.parseFloat(String(aggressionFactor)) || 1));
+  const safeIp  = Math.max(0, Math.min(100, Number(ipRp)  || 0));
+  const safeOop = Math.max(0, Math.min(100, Number(oopRp) || 0));
+  const safeFactor = Math.max(0.1, Math.min(3, Number(aggressionFactor) || 1));
 
-  // === DEFESA (MDF ajustado por ICM) ===
-  // O RP do defensor é o fator dominante: quanto maior, mais ele overfoldará.
-  // Se o IP também está pressionado, o defensor ganha leve alívio (ambos evitam confronto).
-  let defense = BASELINE.MDF - (safeOopRp * 1.4) + (safeIpRp * 0.3);
+  const deltaRp = safeIp - safeOop;
+  const b       = calcB(safeIp, safeOop);
+  const spread  = calcSpread(deltaRp);
 
-  // === BLUFF (Alpha ajustado por ICM) ===
-  // O OOP RP alto cria oportunidade de exploit (overfold = bluffs lucrativos).
-  // O IP RP alto REDUZ bluffs proporcionalmente:
-  //   - Armar o rival (dobrar o vice) destrói hegemonia
-  //   - Perder laddering contra shorts é catastrófico
-  //
-  // DEATH ZONE (oopRp >= 40): Defensor colapsou completamente.
-  // Agressor entra em modo "Any Two Cards" (ATC): bluffar com 100% da mãos.
-  let bluff = safeOopRp >= 40
-    ? 100  // Death Zone: ATC
-    : BASELINE.ALPHA + (safeOopRp * 1.1) - (safeIpRp * 0.8);
+  // Frequências de aposta moduladas pelo aggressionFactor (comportamento real)
+  const rawBetSmall = applyDistortion(chipEvFreqs.ip_bet_small, K.ip_bet_small, deltaRp, b, spread);
+  const rawBetLarge = applyDistortion(chipEvFreqs.ip_bet_large, K.ip_bet_large, deltaRp, b, spread);
 
-  // Aplica o fator de agressividade (modulação comportamental do vilão)
-  bluff = bluff * safeFactor;
+  const betSmallCenter = Math.max(0, Math.min(100, rawBetSmall.center * safeFactor));
+  const betLargeCenter = Math.max(0, Math.min(100, rawBetLarge.center * safeFactor));
 
-  // Clamping (limites físicos 0% a 100%)
-  defense = Math.max(0, Math.min(100, defense));
-  bluff = Math.max(0, Math.min(100, bluff));
+  // Check do IP = resíduo das apostas (consistência interna)
+  const checkCenter = Math.max(0, 100 - betSmallCenter - betLargeCenter);
 
-  return {
-    bluffFreq: bluff,
-    defenseFreq: defense,
-    verdict: getVerdict(defense, bluff),
-    rawData: {
-      ipRp: safeIpRp,
-      oopRp: safeOopRp,
-      aggressionFactor: safeFactor,
-    },
+  const ipCheck: FreqResult = {
+    center: checkCenter,
+    spread,
+    delta: checkCenter - chipEvFreqs.ip_check,
   };
-}
+  const ipBetSmall: FreqResult = { ...rawBetSmall, center: betSmallCenter };
+  const ipBetLarge: FreqResult = { ...rawBetLarge, center: betLargeCenter };
 
-/**
- * Simula a decisão ótima para uma mão específica dado o RP contexto.
- *
- * @param handEquity - Equidade bruta da mão (0-100)
- * @param requiredEquity - Equidade necessária calculada pelo ICM
- * @returns Decisão (CALL/FOLD), margem e se está no limiar
- */
-export function simulateHand(
-  handEquity: number,
-  requiredEquity: number
-): { decision: string; ev: number } {
-  const diff = handEquity - requiredEquity;
-  const isCall = diff >= 0;
+  // OOP raise modulado pelo aggressionFactor (ação de pressão)
+  const rawRaise = applyDistortionAbsolute(chipEvFreqs.oop_raise, K.oop_raise, deltaRp, b, spread);
+  const raiseCenter = Math.max(0, Math.min(100, rawRaise.center * safeFactor));
+
+  const rawCall = applyDistortion(chipEvFreqs.oop_call, K.oop_call, deltaRp, b, spread);
+
+  // Fold do OOP = resíduo de call + raise (consistência interna)
+  const foldCenter = Math.max(0, 100 - rawCall.center - raiseCenter);
+
+  const oopCall: FreqResult  = rawCall;
+  const oopFold: FreqResult  = {
+    center: foldCenter,
+    spread,
+    delta: foldCenter - chipEvFreqs.oop_fold,
+  };
+  const oopRaise: FreqResult = { ...rawRaise, center: raiseCenter };
 
   return {
-    decision: isCall ? 'CALL' : 'FOLD',
-    ev: Number.parseFloat(diff.toFixed(1)),
+    ip:  { check: ipCheck, bet_small: ipBetSmall, bet_large: ipBetLarge },
+    oop: { call: oopCall,  fold: oopFold,         raise: oopRaise },
+    deltaRp,
+    bExponent: b,
+    rawData: { ipRp: safeIp, oopRp: safeOop, chipEvFreqs },
   };
 }

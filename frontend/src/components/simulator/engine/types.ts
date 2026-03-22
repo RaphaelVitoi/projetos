@@ -8,7 +8,7 @@
 export interface SprStage {
   name: string;
   potSize: number;
-  rpValue: number;  // RP residual nesta street (% do oopRp inicial)
+  rpValue: number;
 }
 
 // Opção individual de quiz
@@ -30,6 +30,50 @@ export interface Quiz {
 export type ScenarioColor = 'indigo' | 'rose' | 'emerald' | 'sky' | 'amber' | 'fuchsia' | 'slate';
 export type ScenarioCategory = 'clinical' | 'baseline' | 'toyGame';
 
+// Frequências ChipEV do spot — fornecidas pelo usuário via GTO Wizard ou equivalente.
+// O motor aplica a distorção ICM sobre esses valores.
+export interface ChipEvFreqs {
+  ip_check: number;
+  ip_bet_small: number;
+  ip_bet_large: number;
+  oop_call: number;
+  oop_fold: number;
+  oop_raise: number;
+}
+
+// Resultado de uma frequência individual: centro da distribuição + incerteza + delta
+export interface FreqResult {
+  /** Frequência ICM estimada — centro da distribuição */
+  center: number;
+  /** Spread de incerteza: cresce para configurações além da âncora empírica */
+  spread: number;
+  /** Distorção em relação ao ChipEV fornecido (positivo = ação aumentou) */
+  delta: number;
+}
+
+// Resultado do motor ICM pós-flop
+export interface NashResult {
+  ip: {
+    check: FreqResult;
+    bet_small: FreqResult;
+    bet_large: FreqResult;
+  };
+  oop: {
+    call: FreqResult;
+    fold: FreqResult;
+    raise: FreqResult;
+  };
+  /** Risk Advantage: RP_ip - RP_oop. Positivo = IP sob maior pressão */
+  deltaRp: number;
+  /** Expoente b da curva côncava — transparência do modelo */
+  bExponent: number;
+  rawData: {
+    ipRp: number;
+    oopRp: number;
+    chipEvFreqs: ChipEvFreqs;
+  };
+}
+
 // Cenário completo do simulador
 export interface Scenario {
   id: string;
@@ -38,15 +82,10 @@ export interface Scenario {
   stacks: number[];
   ipRp: number;
   oopRp: number;
-  /** Posição do jogador IP (ex: "BTN", "SB (CL)") */
   ipPos: string;
-  /** Arquétipo de range do IP (ex: "Inelástico (Valor Estrito)") */
   ipMorph: string;
-  /** Posição do jogador OOP (ex: "BB (CL)", "Vice") */
   oopPos: string;
-  /** Arquétipo de range do OOP (ex: "Defensivo Condensado") */
   oopMorph: string;
-  /** Rótulo narrativo do confronto (ex: "Agressão Estrangulada") */
   verdict: string;
   narrativeTitle: string;
   narrativeSubtitle: string;
@@ -55,17 +94,7 @@ export interface Scenario {
   theory: string;
   exploit: string[];
   sprData: SprStage[];
+  /** Frequências ChipEV de referência para este cenário (exemplo didático) */
+  defaultChipEvFreqs: ChipEvFreqs;
   quiz: Quiz;
-}
-
-// Resultado do solver Nash ajustado por ICM
-export interface NashResult {
-  bluffFreq: number;
-  defenseFreq: number;
-  verdict: string;
-  rawData: {
-    ipRp: number;
-    oopRp: number;
-    aggressionFactor: number;
-  };
 }

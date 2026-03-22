@@ -1,10 +1,12 @@
 /**
  * IDENTITY: Risk Gauge SOTA (Didática Visceral)
  * PATH: src/components/simulator/ui/RiskGauge.tsx
- * ROLE: Visualização tátil e auditiva do Risk Premium. Reage a limiares críticos.
+ * ROLE: Visualização do Risk Premium. Reage a limiares críticos.
  */
 
-import React, { useEffect, useRef, useMemo } from 'react';
+'use client';
+
+import React, { useEffect, useRef, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 
 export interface RiskGaugeProps {
@@ -12,64 +14,24 @@ export interface RiskGaugeProps {
   label?: string;
   pos?: string;
   stack?: string;
+  stackTooltip?: string;
   color?: 'pink' | 'indigo';
   threshold?: number;
   opponentValue?: number;
-  isMuted?: boolean;
 }
-
-// Sintetizador de Áudio Minimalista (Web Audio API)
-const playTone = (type: 'predator' | 'death', intensity: number = 40, isMuted: boolean) => {
-  if (isMuted || typeof window === 'undefined') return;
-
-  try {
-    const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
-    if (!AudioContext) return;
-
-    const ctx = new AudioContext();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-
-    if (type === 'predator') {
-      // Radar Ping: Lock-on cibernético (agudo e urgente)
-      const freq = 1200 + ((intensity - 40) * 25);
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(freq, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(freq * 0.5, ctx.currentTime + 0.15);
-      gain.gain.setValueAtTime(0.05, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.15);
-    } else if (type === 'death') {
-      // Radiation Hazard: Alerta Geiger instável (grave e denso)
-      const freq = Math.max(40, 80 - ((intensity - 40) * 1));
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(freq, ctx.currentTime);
-      gain.gain.setValueAtTime(0.08, ctx.currentTime);
-      gain.gain.linearRampToValueAtTime(0.001, ctx.currentTime + 0.4);
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.4);
-    }
-  } catch (e) {
-    // Silencioso em caso de bloqueio de autoplay do navegador
-  }
-};
 
 export default function RiskGauge({
   value,
   label = '--',
   pos = '--',
   stack = '--',
+  stackTooltip,
   color = 'indigo',
   threshold = 20,
   opponentValue = 0,
-  isMuted = true
 }: RiskGaugeProps) {
-  const lastState = useRef<'normal' | 'death' | 'predator'>('normal');
   const hasLoggedEasterEgg = useRef(false);
+  const [showTooltip, setShowTooltip] = useState(false);
 
   // Cálculos de Threshold SOTA
   const safeValue = isNaN(value) ? 0 : value;
@@ -89,18 +51,8 @@ export default function RiskGauge({
   // Dash array para a animação do SVG (Baseado num RP máximo prático de ~26% para o círculo fechar visualmente)
   const dash = Math.min(100, Math.max(0, (safeValue / 26) * 100));
 
-  // Efeito Colateral: Áudio e Easter Egg
+  // Easter Egg Filosófico (@maverick)
   useEffect(() => {
-    const currentState = isDeathZone ? 'death' : (isPredatorZone ? 'predator' : 'normal');
-
-    if (currentState !== lastState.current) {
-      const intensity = isDeathZone ? safeValue : safeOpponentValue;
-      if (currentState === 'predator') playTone('predator', intensity, isMuted);
-      if (currentState === 'death') playTone('death', intensity, isMuted);
-      lastState.current = currentState;
-    }
-
-    // Easter Egg Filosófico (@maverick)
     if (isDeathZone && !hasLoggedEasterEgg.current) {
       const msg = [
         "%c SINGULARIDADE ICM DETECTADA (RP > 40%) ",
@@ -112,7 +64,7 @@ export default function RiskGauge({
       setTimeout(() => console.log(msg[0], msg[1], msg[2], msg[3], msg[4]), 500);
       hasLoggedEasterEgg.current = true;
     }
-  }, [isDeathZone, isPredatorZone, safeValue, safeOpponentValue, isMuted]);
+  }, [isDeathZone]);
 
   // Animações Framer Motion Dinâmicas
   const pulseAnimation = useMemo(() => {
@@ -176,7 +128,45 @@ export default function RiskGauge({
       <div className="text-center">
         <div className="text-[10px] font-bold uppercase tracking-widest text-slate-500">{label}</div>
         <div className="font-serif text-xl font-bold text-white mt-1">{pos}</div>
-        <div className="font-mono text-xs text-slate-400 mt-1">{stack}</div>
+        <div
+          className="font-mono text-xs text-slate-400 mt-1"
+          style={{
+            position: 'relative',
+            display: 'inline-block',
+            cursor: stackTooltip ? 'help' : 'default',
+            textDecoration: stackTooltip ? 'underline dotted' : 'none',
+            textUnderlineOffset: '2px',
+          }}
+          onMouseEnter={() => stackTooltip && setShowTooltip(true)}
+          onMouseLeave={() => setShowTooltip(false)}
+        >
+          {stack}
+          {stackTooltip && showTooltip && (
+            <div style={{
+              position: 'absolute',
+              bottom: 'calc(100% + 6px)',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: '240px',
+              padding: '0.6rem 0.8rem',
+              background: 'rgba(2, 6, 23, 0.97)',
+              border: '1px solid rgba(99,102,241,0.25)',
+              borderRadius: '6px',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.6)',
+              fontSize: '0.65rem',
+              lineHeight: 1.55,
+              color: '#94a3b8',
+              fontFamily: 'var(--font-body, sans-serif)',
+              textAlign: 'left',
+              zIndex: 100,
+              pointerEvents: 'none',
+              fontStyle: 'normal',
+              textDecoration: 'none',
+            }}>
+              {stackTooltip}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

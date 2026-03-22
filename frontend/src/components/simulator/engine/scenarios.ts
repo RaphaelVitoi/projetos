@@ -2,8 +2,17 @@
  * IDENTITY: Base de Dados dos Cenários Clínicos de ICM
  * PATH: src/components/simulator/engine/scenarios.ts
  * ROLE: Fonte de verdade para todos os 9 cenários do Simulador Mestre.
- *       rpValue por street = oopRp × (SPR × potSize) / eff_stack
  * BINDING: [engine/types.ts]
+ *
+ * NOTA sobre sprData (rpValue por street):
+ *   Valores ilustrativos com direção correta (RP sempre decresce por street).
+ *   RP pós-flop não é quantificável com precisão sem variáveis adicionais
+ *   (range atual, board, histórico de ação, stacks dinâmicas). Use como
+ *   referência direcional, não como dado exato.
+ *
+ * NOTA sobre defaultChipEvFreqs:
+ *   Cenário "paradoxo": valores calibrados pelos 93 nodes HRC vs GTO Wizard (Aula 1.2).
+ *   Demais cenários: estimativas didáticas — substitua pelos dados do seu solver.
  */
 
 import type { Scenario } from './types';
@@ -20,12 +29,12 @@ export const SCENARIOS: Scenario[] = [
     ipRp: 21.4,
     oopRp: 12.9,
     ipPos: 'BTN',
-    ipMorph: 'Inelástico (Valor Estrito)',
+    ipMorph: 'Valor Estrito',
     oopPos: 'BB (CL)',
-    oopMorph: 'Defensivo Condensado',
+    oopMorph: 'Condensado',
     verdict: 'Agressão Estrangulada',
     narrativeTitle: 'O Instinto Traído pela Matemática',
-    narrativeSubtitle: 'Estrutura Padrão (Mid vs Big)',
+    narrativeSubtitle: 'Mid vs Big Stack',
     icon: 'fa-scale-unbalanced',
     color: 'rose',
     theory: `
@@ -36,14 +45,22 @@ export const SCENARIOS: Scenario[] = [
     exploit: [
       'Puxar o Freio de Mão: Contraia severamente os seus bluffs. Aceite que a equidade natural exigida para engajar num pote deste calibre é altíssima.',
     ],
-    // RP residual por street: oopRp × (remaining_stack / eff_stack)
-    // eff=40; remaining = SPR × pot; PRE=12.9×40/40=12.9, FLOP=12.9×32.25/40=10.4, TURN=12.9×18/40=5.8, RIVER=12.9×8/40=2.6
+    // RP residual por street: ilustrativo, decrescente. Não quantificável com precisão.
     sprData: [
       { name: 'PRE',   potSize: 2.5,  rpValue: 12.9 },
       { name: 'FLOP',  potSize: 7.5,  rpValue: 10.4 },
       { name: 'TURN',  potSize: 22.5, rpValue: 5.8 },
       { name: 'RIVER', potSize: 40,   rpValue: 2.6 },
     ],
+    // Calibrado pelos 93 nodes HRC vs GTO Wizard (Aula 1.2, board KJT-2-3)
+    defaultChipEvFreqs: {
+      ip_check:     2,
+      ip_bet_small: 65,
+      ip_bet_large: 33,
+      oop_call:     45,
+      oop_fold:     40,
+      oop_raise:    15,
+    },
     quiz: {
       question: 'Por que o BTN (40bb), tendo uma stack gigante, sofre uma punição utilitária (RP) muito maior que o BB (55bb)?',
       options: [
@@ -62,7 +79,7 @@ export const SCENARIOS: Scenario[] = [
     ipRp: 24.5,
     oopRp: 23.5,
     ipPos: 'Vice CL',
-    ipMorph: 'Linear Especulativo',
+    ipMorph: 'Especulativo',
     oopPos: 'CL',
     oopMorph: 'Flat Call Massivo',
     verdict: 'Evitação de Ruína',
@@ -78,13 +95,22 @@ export const SCENARIOS: Scenario[] = [
     exploit: [
       'Negação de Ação Barata: Jogue impiedosamente polarizado. Negue a ele o showdown pacífico pós-agressão. Se for para o chão, vá com o topo.',
     ],
-    // RP residual: eff=65; PRE=23.5, FLOP=23.5×60.8/65=22.0, TURN=23.5×40.8/65=14.7, RIVER=23.5×32.5/65=11.8
+    // RP residual por street: ilustrativo, decrescente. Não quantificável com precisão.
     sprData: [
       { name: 'PRE',   potSize: 2.5,  rpValue: 23.5 },
       { name: 'FLOP',  potSize: 8,    rpValue: 22 },
       { name: 'TURN',  potSize: 24,   rpValue: 14.7 },
       { name: 'RIVER', potSize: 65,   rpValue: 11.8 },
     ],
+    // Estimativa didática — dois big stacks se enfrentando, ChipEV equilibrado
+    defaultChipEvFreqs: {
+      ip_check:     35,
+      ip_bet_small: 40,
+      ip_bet_large: 25,
+      oop_call:     50,
+      oop_fold:     35,
+      oop_raise:    15,
+    },
     quiz: {
       question: 'Como as frequências reconfiguram o jogo pré-flop num "Pacto Silencioso"?',
       options: [
@@ -102,10 +128,10 @@ export const SCENARIOS: Scenario[] = [
     stacks: [25, 20],
     ipRp: 15,
     oopRp: 19.5,
-    ipPos: 'UTG (Shove)',
+    ipPos: 'UTG',
     ipMorph: 'Polar Máximo',
     oopPos: 'BB (Call)',
-    oopMorph: 'Bluffcatcher Rígido',
+    oopMorph: 'Bluffcatcher',
     verdict: 'Transferência de Fardo',
     narrativeTitle: 'O Peso de Agir Primeiro',
     narrativeSubtitle: 'A Dinâmica do Shove',
@@ -119,13 +145,22 @@ export const SCENARIOS: Scenario[] = [
     exploit: [
       'Expandir Zonas de Shove: Contra adversários aterrorizados pela bolha, alargue os shoves (aumente o Alpha) nos spots onde a transferência da pressão é letal para eles.',
     ],
-    // RP residual: eff=20; PRE=19.5, FLOP=19.5×13.3/20=13.0, TURN=19.5×5.6/20=5.5, RIVER=19.5×2/20=1.9
+    // RP residual por street: ilustrativo, decrescente. Não quantificável com precisão.
     sprData: [
       { name: 'PRE',   potSize: 2.5,  rpValue: 19.5 },
       { name: 'FLOP',  potSize: 7,    rpValue: 13 },
       { name: 'TURN',  potSize: 14,   rpValue: 5.5 },
       { name: 'RIVER', potSize: 20,   rpValue: 1.9 },
     ],
+    // Estimativa didática — spot de shove/call, decisão binária pré-flop
+    defaultChipEvFreqs: {
+      ip_check:     0,
+      ip_bet_small: 0,
+      ip_bet_large: 100,
+      oop_call:     40,
+      oop_fold:     60,
+      oop_raise:    0,
+    },
     quiz: {
       question: 'O que caracteriza o "Efeito Batata Quente" na aplicação de um shove em ICM?',
       options: [
@@ -143,13 +178,13 @@ export const SCENARIOS: Scenario[] = [
     stacks: [80, 30],
     ipRp: 4.5,
     oopRp: 22,
-    ipPos: 'CL (Pot Bet)',
-    ipMorph: 'Polar Extremado',
+    ipPos: 'CL',
+    ipMorph: 'Polar Extremo',
     oopPos: 'Mid (Call)',
-    oopMorph: 'Condensado Sangrante',
+    oopMorph: 'Condensado Extremo',
     verdict: 'MDF Quebrado',
     narrativeTitle: 'O Colapso do MDF',
-    narrativeSubtitle: 'Teto do MDF (Condensado vs Polar)',
+    narrativeSubtitle: 'Condensado vs Polar',
     icon: 'fa-heart-crack',
     color: 'sky',
     theory: `
@@ -160,13 +195,22 @@ export const SCENARIOS: Scenario[] = [
     exploit: [
       'Overbluff Sistemático: Sabendo que o bluffcatcher não suporta o peso financeiro da eliminação contínua nas streets, expanda os bluffs e aplique triple barrels levianos.',
     ],
-    // RP residual: eff=30; PRE=22.0, FLOP=22×22.4/30=16.4, TURN=22×7.2/30=5.3, RIVER=22×3/30=2.2
+    // RP residual por street: ilustrativo, decrescente. Não quantificável com precisão.
     sprData: [
       { name: 'PRE',   potSize: 2.5,  rpValue: 22 },
       { name: 'FLOP',  potSize: 8,    rpValue: 16.4 },
       { name: 'TURN',  potSize: 24,   rpValue: 5.3 },
       { name: 'RIVER', potSize: 30,   rpValue: 2.2 },
     ],
+    // Estimativa didática — CL betting polar, OOP condensado como bluffcatcher
+    defaultChipEvFreqs: {
+      ip_check:     20,
+      ip_bet_small: 30,
+      ip_bet_large: 50,
+      oop_call:     50,
+      oop_fold:     40,
+      oop_raise:    10,
+    },
     quiz: {
       question: 'Por que o jogador com alto RP não consegue defender a sua porção de MDF teórica num post-flop contra o CL?',
       options: [
@@ -190,7 +234,7 @@ export const SCENARIOS: Scenario[] = [
     oopMorph: 'Call Seletivo',
     verdict: 'Fome de Laddering',
     narrativeTitle: 'O Minitorneio de Sobrevivência',
-    narrativeSubtitle: 'Micro vs Micro (Escada)',
+    narrativeSubtitle: 'Micro vs Micro (Laddering)',
     icon: 'fa-person-falling-burst',
     color: 'emerald',
     theory: `
@@ -201,13 +245,22 @@ export const SCENARIOS: Scenario[] = [
     exploit: [
       'Aumente a Variância: Se o vilão sofre de aversão cega ao risco para garantir um payjump (overfold), a matemática exige que você roube os blinds para construir uma base para o pódio real.',
     ],
-    // RP residual: eff=10; PRE=7.5, FLOP=7.5×6/10=4.5, TURN=7.5×2/10=1.5, RIVER=7.5×1.2/10=0.9
+    // RP residual por street: ilustrativo, decrescente. Não quantificável com precisão.
     sprData: [
       { name: 'PRE',   potSize: 2.5,  rpValue: 7.5 },
       { name: 'FLOP',  potSize: 6,    rpValue: 4.5 },
       { name: 'TURN',  potSize: 10,   rpValue: 1.5 },
       { name: 'RIVER', potSize: 12,   rpValue: 0.9 },
     ],
+    // Estimativa didática — micro stacks, quase ChipEV
+    defaultChipEvFreqs: {
+      ip_check:     40,
+      ip_bet_small: 35,
+      ip_bet_large: 25,
+      oop_call:     50,
+      oop_fold:     38,
+      oop_raise:    12,
+    },
     quiz: {
       question: 'Por que o Risk Premium entre dois micro-stacks não desce para o zero absoluto (ChipEV)?',
       options: [
@@ -235,7 +288,7 @@ export const SCENARIOS: Scenario[] = [
     oopMorph: 'Defesa Base',
     verdict: 'MDF Perfeito',
     narrativeTitle: 'O Equilíbrio Linear',
-    narrativeSubtitle: 'Sem Payjumps (ChipEV Puro)',
+    narrativeSubtitle: 'ChipEV Puro',
     icon: 'fa-gear',
     color: 'slate',
     theory: `
@@ -253,6 +306,15 @@ export const SCENARIOS: Scenario[] = [
       { name: 'TURN',  potSize: 22.5, rpValue: 0 },
       { name: 'RIVER', potSize: 67.5, rpValue: 0 },
     ],
+    // ChipEV puro: frequências de equilíbrio Nash sem distorção ICM
+    defaultChipEvFreqs: {
+      ip_check:     40,
+      ip_bet_small: 35,
+      ip_bet_large: 25,
+      oop_call:     50,
+      oop_fold:     40,
+      oop_raise:    10,
+    },
     quiz: {
       question: 'Por que num vácuo matemático (ChipEV) o desvio da frequência de bluff (Alpha) é punido imediatamente por um GTO perfeito?',
       options: [
@@ -275,9 +337,9 @@ export const SCENARIOS: Scenario[] = [
     ipRp: 12,
     oopRp: 45,
     ipPos: 'SB (CL)',
-    ipMorph: 'Predator Mode',
+    ipMorph: 'Modo Predador',
     oopPos: 'BB',
-    oopMorph: 'Death Zone Paralisado',
+    oopMorph: 'Zona de Paralisia',
     verdict: 'Paralisia Extrema',
     narrativeTitle: 'Licença para Matar',
     narrativeSubtitle: 'Blind War: SB (Hero) vs BB',
@@ -292,13 +354,22 @@ export const SCENARIOS: Scenario[] = [
       'Shove Any Two Cards (ATC): O RP do vilão é tão alto que qualquer agressão é lucrativa. O defensor está matematicamente paralisado.',
       'Isole o alvo: Foque a pressão no jogador com maior RP. Os stacks de 8bb e 9bb são seus aliados involuntários.',
     ],
-    // RP residual: eff=12; PRE=45, FLOP=45×8/12=30, TURN=45×4/12=15, RIVER=45×2.4/12=9
+    // RP residual por street: ilustrativo, decrescente. Não quantificável com precisão.
     sprData: [
       { name: 'PRE',   potSize: 1.5,  rpValue: 45 },
       { name: 'FLOP',  potSize: 4,    rpValue: 30 },
       { name: 'TURN',  potSize: 8,    rpValue: 15 },
       { name: 'RIVER', potSize: 12,   rpValue: 9 },
     ],
+    // Estimativa didática — CL agressivo vs BB em zona de pressão extrema
+    defaultChipEvFreqs: {
+      ip_check:     10,
+      ip_bet_small: 30,
+      ip_bet_large: 60,
+      oop_call:     45,
+      oop_fold:     45,
+      oop_raise:    10,
+    },
     quiz: {
       question: 'Por que o SB (Chipleader) pode shovar 100% das mãos contra o BB com 12bb nesta configuração?',
       options: [
@@ -317,12 +388,12 @@ export const SCENARIOS: Scenario[] = [
     ipRp: 5,
     oopRp: 42,
     ipPos: 'BTN (CL)',
-    ipMorph: 'Predator Mode',
+    ipMorph: 'Modo Predador',
     oopPos: 'Blinds',
-    oopMorph: 'Death Zone Paralisado',
+    oopMorph: 'Zona de Paralisia',
     verdict: 'Agressão Impune',
     narrativeTitle: 'Agressão Impune',
-    narrativeSubtitle: 'Bolha do ITM: BTN vs Blinds',
+    narrativeSubtitle: 'Bolha do ITM',
     icon: 'fa-skull-crossbones',
     color: 'rose',
     theory: `
@@ -334,13 +405,22 @@ export const SCENARIOS: Scenario[] = [
       'Oprima sem piedade: Com RP de 5%, o custo de perder um all-in é mínimo para você. Para eles, é catastrófico.',
       'Alterne sizes: Varie entre min-raise e shove para maximizar a desorientação do defensor paralisado.',
     ],
-    // RP residual: eff=20; PRE=42, FLOP=42×15/20=31.5, TURN=42×4.5/20=9.5, RIVER=42×2/20=4.2
+    // RP residual por street: ilustrativo, decrescente. Não quantificável com precisão.
     sprData: [
       { name: 'PRE',   potSize: 1.5,  rpValue: 42 },
       { name: 'FLOP',  potSize: 5,    rpValue: 31.5 },
       { name: 'TURN',  potSize: 15,   rpValue: 9.5 },
       { name: 'RIVER', potSize: 20,   rpValue: 4.2 },
     ],
+    // Estimativa didática — BTN CL na bolha, blinds em zona de pressão máxima
+    defaultChipEvFreqs: {
+      ip_check:     15,
+      ip_bet_small: 30,
+      ip_bet_large: 55,
+      oop_call:     45,
+      oop_fold:     47,
+      oop_raise:    8,
+    },
     quiz: {
       question: 'Na bolha do ITM, por que o BTN com 80bb pode agredir desproporcional contra os blinds de 20bb?',
       options: [
@@ -362,13 +442,13 @@ export const SCENARIOS: Scenario[] = [
     stacks: [90, 25],
     ipRp: 12,
     oopRp: 21,
-    ipPos: 'God Mode (CL)',
+    ipPos: 'CL',
     ipMorph: 'Polar Controlado',
     oopPos: 'Vice',
-    oopMorph: 'Inelástico Defensivo',
+    oopMorph: 'Inelástico',
     verdict: 'Criação de Monstros',
-    narrativeTitle: 'O Limite do God Mode',
-    narrativeSubtitle: 'Dominância Absoluta (God Mode)',
+    narrativeTitle: 'O Limite do Chip Leader',
+    narrativeSubtitle: 'Dominância Absoluta',
     icon: 'fa-crown',
     color: 'fuchsia',
     theory: `
@@ -379,13 +459,22 @@ export const SCENARIOS: Scenario[] = [
     exploit: [
       'Morte da Fold Equity: Expurgue os overbluffs. A fold equity não atua sobre quem joga puramente pelas cartas ignorando a morte. Mude a marcha inteiramente para Thin Value.',
     ],
-    // RP residual: eff=25; PRE=21, FLOP=21×17.25/25=14.5, TURN=21×2.25/25=1.9, RIVER=21×2.5/25=2.1
+    // RP residual por street: ilustrativo, decrescente. Não quantificável com precisão.
     sprData: [
       { name: 'PRE',   potSize: 2.5,  rpValue: 21 },
       { name: 'FLOP',  potSize: 7.5,  rpValue: 14.5 },
       { name: 'TURN',  potSize: 22.5, rpValue: 1.9 },
-      { name: 'RIVER', potSize: 25,   rpValue: 2.1 },
+      { name: 'RIVER', potSize: 25,   rpValue: 1.2 },
     ],
+    // Estimativa didática — CL vs Vice, pressão estrutural de hegemonia
+    defaultChipEvFreqs: {
+      ip_check:     25,
+      ip_bet_small: 40,
+      ip_bet_large: 35,
+      oop_call:     50,
+      oop_fold:     38,
+      oop_raise:    12,
+    },
     quiz: {
       question: 'Sendo imune à eliminação direta, por que o Chip Leader colossal sofre uma punição utilitária considerável contra o 2o classificado?',
       options: [

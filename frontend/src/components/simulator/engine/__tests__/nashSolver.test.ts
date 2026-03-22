@@ -1,74 +1,188 @@
 /**
- * TESTE DE VALIDAÇÃO: NashSolver contra HRC
+ * TESTE DE VALIDAÇÃO: NashSolver — Motor ICM pós-flop
  * PATH: src/components/simulator/engine/__tests__/nashSolver.test.ts
  *
- * Valida que os coeficientes originais (0.3, 1.1, 0.8) geram
- * resultados consistentes com os cenários clínicos.
+ * Valida propriedades estruturais e comportamentais do motor.
+ * Âncora empírica: BTN 39bb (RP 21.4%) vs BB 54bb (RP 12.9%), ΔRP = +8.5pp
+ * Fonte: 93 nodes HRC vs GTO Wizard, Aula 1.2 (board KJT-2-3)
  */
 
 import { solveNash } from '../nashSolver';
+import type { ChipEvFreqs } from '../types';
 
-describe('NashSolver - Validação contra HRC', () => {
+// Frequências ChipEV da âncora empírica (calibração real)
+const ANCORA: ChipEvFreqs = {
+  ip_check: 2,
+  ip_bet_small: 65,
+  ip_bet_large: 33,
+  oop_call: 45,
+  oop_fold: 40,
+  oop_raise: 15,
+};
 
-  test('Baseline (ChipEV): RP=0,0 deve retornar 33.3% bluff, 50% defense', () => {
-    const result = solveNash(0, 0, 1.0);
-    expect(result.bluffFreq).toBeCloseTo(33.3, 1);
-    expect(result.defenseFreq).toBeCloseTo(50.0, 1);
-    expect(result.verdict).toBe('Equilíbrio GTO Padrão');
+// Frequências ChipEV genéricas para testes de comportamento
+const NEUTRO: ChipEvFreqs = {
+  ip_check: 30,
+  ip_bet_small: 40,
+  ip_bet_large: 30,
+  oop_call: 50,
+  oop_fold: 35,
+  oop_raise: 15,
+};
+
+// === CONSERVAÇÃO ===
+describe('Conservação de frequências', () => {
+  test('IP: check + bet_small + bet_large = 100 sempre', () => {
+    const result = solveNash(21.4, 12.9, ANCORA, 1.0);
+    const sum = result.ip.check.center + result.ip.bet_small.center + result.ip.bet_large.center;
+    expect(sum).toBeCloseTo(100, 5);
   });
 
-  test('Paradoxo: ipRp=21.4, oopRp=12.9 deve ter bluff < 40%', () => {
-    // BTN sofre muito (ipRp alto), deve blefar menos
-    const result = solveNash(21.4, 12.9, 1.0);
-    expect(result.bluffFreq).toBeLessThan(40);
-    expect(result.defenseFreq).toBeGreaterThan(30);
-    expect(result.verdict).toMatch(/Agressão Contida|GTO/);
+  test('OOP: call + fold + raise = 100 sempre', () => {
+    const result = solveNash(21.4, 12.9, ANCORA, 1.0);
+    const sum = result.oop.call.center + result.oop.fold.center + result.oop.raise.center;
+    expect(sum).toBeCloseTo(100, 5);
   });
 
-  test('Sniper (Death Zone): ipRp=12, oopRp=45 deve ter defense < 10% e bluff = 100%', () => {
-    // OOP em Death Zone (oopRp >= 40), agressor entra em modo ATC (Any Two Cards)
-    const result = solveNash(12.0, 45.0, 1.0);
-    expect(result.defenseFreq).toBeLessThan(10);
-    expect(result.bluffFreq).toEqual(100); // Death Zone: ATC
-    expect(result.verdict).toMatch(/Death Zone/);
+  test('Conservação com aggressionFactor 1.5x', () => {
+    const result = solveNash(15, 10, NEUTRO, 1.5);
+    const ip  = result.ip.check.center + result.ip.bet_small.center + result.ip.bet_large.center;
+    const oop = result.oop.call.center + result.oop.fold.center + result.oop.raise.center;
+    expect(ip).toBeCloseTo(100, 5);
+    expect(oop).toBeCloseTo(100, 5);
   });
 
-  test('Pacto: ipRp=24.5, oopRp=23.5 deve ter ambos RP altos (evitação)', () => {
-    // Ambos sofrem, ambos overfold
-    const result = solveNash(24.5, 23.5, 1.0);
-    expect(result.defenseFreq).toBeLessThan(40);
-    expect(result.bluffFreq).toBeGreaterThan(30);
-    expect(result.verdict).toMatch(/Overfold|Exploit/);
+  test('Conservação com RPs extremos', () => {
+    const result = solveNash(24, 1, ANCORA, 3.0);
+    const ip  = result.ip.check.center + result.ip.bet_small.center + result.ip.bet_large.center;
+    const oop = result.oop.call.center + result.oop.fold.center + result.oop.raise.center;
+    expect(ip).toBeCloseTo(100, 5);
+    expect(oop).toBeCloseTo(100, 5);
+  });
+});
+
+// === DISTORÇÃO ZERO (ΔRP = 0) ===
+describe('ΔRP = 0: sem distorção nas apostas', () => {
+  test('IP bet_small e bet_large correspondem ao ChipEV', () => {
+    const result = solveNash(10, 10, NEUTRO, 1.0);
+    expect(result.deltaRp).toBe(0);
+    expect(result.ip.bet_small.center).toBeCloseTo(NEUTRO.ip_bet_small, 1);
+    expect(result.ip.bet_large.center).toBeCloseTo(NEUTRO.ip_bet_large, 1);
   });
 
-  test('Batata: ipRp=15, oopRp=19.5 deve ter defense reduzido', () => {
-    // OOP sofre mais (shove), deve defender menos
-    const result = solveNash(15.0, 19.5, 1.0);
-    expect(result.defenseFreq).toBeLessThan(45);
-    expect(result.bluffFreq).toBeGreaterThan(25);
+  test('OOP call e raise correspondem ao ChipEV', () => {
+    const result = solveNash(10, 10, NEUTRO, 1.0);
+    expect(result.oop.call.center).toBeCloseTo(NEUTRO.oop_call, 1);
+    expect(result.oop.raise.center).toBeCloseTo(NEUTRO.oop_raise, 1);
+  });
+});
+
+// === DIREÇÃO DAS DISTORÇÕES ===
+describe('Direção das distorções ICM', () => {
+  test('ΔRP positivo (IP sob mais pressão): apostas IP caem, check sobe', () => {
+    // k_bet_small = -3.5, k_bet_large = -12: ambos negativos → bets caem quando ΔRP > 0
+    const base     = solveNash(10, 10, NEUTRO, 1.0);
+    const pressured = solveNash(20, 10, NEUTRO, 1.0);
+    expect(pressured.ip.bet_small.center).toBeLessThan(base.ip.bet_small.center);
+    expect(pressured.ip.bet_large.center).toBeLessThanOrEqual(base.ip.bet_large.center);
+    expect(pressured.ip.check.center).toBeGreaterThan(base.ip.check.center);
   });
 
-  test('Agonia: ipRp=4.5, oopRp=22 - IP pode blefar mais contra condensado', () => {
-    // IP tem RP baixo, OOP tem RP altíssimo (bluffcatcher)
-    const result = solveNash(4.5, 22.0, 1.0);
-    expect(result.bluffFreq).toBeGreaterThan(45);
-    expect(result.defenseFreq).toBeLessThan(35);
-    expect(result.verdict).toMatch(/Exploit Máximo|Overbluff/);
+  test('ΔRP positivo: OOP call aumenta (k_oop_call = +7.3)', () => {
+    const base     = solveNash(10, 10, NEUTRO, 1.0);
+    const pressured = solveNash(20, 10, NEUTRO, 1.0);
+    expect(pressured.oop.call.center).toBeGreaterThan(base.oop.call.center);
   });
 
-  test('Agressividade: 1.5x deve aumentar bluff, 0.5x deve reduzir', () => {
-    const base = solveNash(15, 20, 1.0);
-    const agg = solveNash(15, 20, 1.5);
-    const pass = solveNash(15, 20, 0.5);
-
-    expect(agg.bluffFreq).toBeGreaterThan(base.bluffFreq);
-    expect(pass.bluffFreq).toBeLessThan(base.bluffFreq);
-    expect(agg.defenseFreq).toEqual(base.defenseFreq); // Defense não muda
+  test('ΔRP negativo (OOP sob mais pressão): apostas IP sobem', () => {
+    // k negativo × sinal negativo = efeito positivo → bets aumentam
+    const base     = solveNash(10, 10, NEUTRO, 1.0);
+    const pressured = solveNash(10, 20, NEUTRO, 1.0);
+    expect(pressured.ip.bet_small.center).toBeGreaterThan(base.ip.bet_small.center);
   });
 
-  test('Clamping: valores > 100 devem ser limitados', () => {
-    const result = solveNash(100, 100, 1.0);
-    expect(result.bluffFreq).toBeLessThanOrEqual(100);
-    expect(result.defenseFreq).toBeLessThanOrEqual(100);
+  test('oop_raise usa |ΔRP| sem sign (comprime em ambas as direções)', () => {
+    // Em ambos os lados, oop_raise deve cair com |ΔRP| crescente (k = -9)
+    const base    = solveNash(10, 10, NEUTRO, 1.0);
+    const ipOver  = solveNash(20, 10, NEUTRO, 1.0);
+    const oopOver = solveNash(10, 20, NEUTRO, 1.0);
+    expect(ipOver.oop.raise.center).toBeLessThan(base.oop.raise.center);
+    expect(oopOver.oop.raise.center).toBeLessThan(base.oop.raise.center);
+  });
+});
+
+// === AGGRESSION FACTOR ===
+describe('aggressionFactor', () => {
+  test('1.5x: apostas IP aumentam, check cai como resíduo', () => {
+    const gto = solveNash(15, 10, NEUTRO, 1.0);
+    const agg = solveNash(15, 10, NEUTRO, 1.5);
+    expect(agg.ip.bet_small.center).toBeGreaterThanOrEqual(gto.ip.bet_small.center);
+    expect(agg.ip.check.center).toBeLessThanOrEqual(gto.ip.check.center);
+  });
+
+  test('0.5x: apostas IP caem, check sobe como resíduo', () => {
+    const gto  = solveNash(15, 10, NEUTRO, 1.0);
+    const pass = solveNash(15, 10, NEUTRO, 0.5);
+    expect(pass.ip.bet_small.center).toBeLessThanOrEqual(gto.ip.bet_small.center);
+    expect(pass.ip.check.center).toBeGreaterThanOrEqual(gto.ip.check.center);
+  });
+
+  test('aggressionFactor não afeta OOP call (apenas raise)', () => {
+    const gto = solveNash(15, 10, NEUTRO, 1.0);
+    const agg = solveNash(15, 10, NEUTRO, 1.5);
+    // oop_call é calculado sem multiplicar por aggressionFactor
+    expect(agg.oop.call.center).toBeCloseTo(gto.oop.call.center, 5);
+  });
+});
+
+// === EXPOENTE b (CURVA CÔNCAVA) ===
+describe('Expoente b (curva côncava)', () => {
+  test('b decresce com maior pressão ICM (avgRp maior)', () => {
+    const low  = solveNash(5, 5, NEUTRO, 1.0);
+    const high = solveNash(20, 20, NEUTRO, 1.0);
+    expect(high.bExponent).toBeLessThan(low.bExponent);
+  });
+
+  test('b → 1 quando RPs → 0 (ChipEV puro)', () => {
+    const result = solveNash(0, 0, NEUTRO, 1.0);
+    expect(result.bExponent).toBeCloseTo(1.0, 3);
+  });
+
+  test('b > 0 sempre (nunca colapsa)', () => {
+    const result = solveNash(24, 24, NEUTRO, 1.0);
+    expect(result.bExponent).toBeGreaterThan(0);
+  });
+});
+
+// === CLAMPING E SANITIZAÇÃO ===
+describe('Clamping e sanitização de inputs', () => {
+  test('Todas as frequências ficam entre 0 e 100', () => {
+    const result = solveNash(100, 100, ANCORA, 3.0);
+    const freqs = [
+      result.ip.check.center, result.ip.bet_small.center, result.ip.bet_large.center,
+      result.oop.call.center, result.oop.fold.center, result.oop.raise.center,
+    ];
+    freqs.forEach(f => {
+      expect(f).toBeGreaterThanOrEqual(0);
+      expect(f).toBeLessThanOrEqual(100);
+    });
+  });
+
+  test('deltaRp calculado corretamente na âncora', () => {
+    const result = solveNash(21.4, 12.9, ANCORA, 1.0);
+    expect(result.deltaRp).toBeCloseTo(8.5, 1);
+  });
+
+  test('rawData preserva inputs originais', () => {
+    const result = solveNash(21.4, 12.9, ANCORA, 1.0);
+    expect(result.rawData.ipRp).toBeCloseTo(21.4, 1);
+    expect(result.rawData.oopRp).toBeCloseTo(12.9, 1);
+    expect(result.rawData.chipEvFreqs).toEqual(ANCORA);
+  });
+
+  test('spread sempre positivo', () => {
+    const result = solveNash(21.4, 12.9, ANCORA, 1.0);
+    expect(result.ip.check.spread).toBeGreaterThan(0);
+    expect(result.oop.call.spread).toBeGreaterThan(0);
   });
 });

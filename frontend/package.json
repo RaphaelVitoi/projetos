@@ -2,7 +2,7 @@
     "name": "frontend",
     "version": "1.0.0",
     "scripts": {
-        "prebuild": "node -e \"const{execSync}=require('child_process');try{execSync('cmd /c rmdir /s /q .next',{stdio:'ignore'})}catch{}\"",
+        "prebuild": "node -e \"const{execSync}=require('child_process');try{execSync('cmd /c rmdir /s /q .next-build',{stdio:'ignore'})}catch{}\"",
         "build": "next build",
         "dev": "next dev --turbo",
         "seed": "ts-node prisma/seed.ts",
@@ -19,13 +19,16 @@
         "recharts": "^3.8.0"
     },
     "devDependencies": {
+        "@types/jest": "^30.0.0",
         "@types/node": "^25.5.0",
         "@types/react": "^19.2.14",
         "@types/react-dom": "^19.2.3",
         "autoprefixer": "^10.4.27",
+        "jest": "^30.3.0",
         "postcss": "^8.5.8",
         "prisma": "^5.22.0",
         "tailwindcss": "^4.2.2",
+        "ts-jest": "^29.4.6",
         "ts-node": "^10.9.2",
         "typescript": "^5.9.3"
     }
