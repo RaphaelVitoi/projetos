@@ -290,28 +290,39 @@ export default function MasterSimulator() {
 
       {/* Nota metodológica + Assinatura */}
       <footer style={{
-        textAlign: 'center',
-        padding: '2rem 1.5rem',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: '2.5rem 2rem',
         borderTop: '1px solid rgba(255, 255, 255, 0.04)',
+        gap: '1.25rem',
       }}>
         <p style={{
-          fontSize: '0.72rem',
+          fontSize: '0.7rem',
           color: '#475569',
-          lineHeight: 1.65,
-          maxWidth: '560px',
-          margin: '0 auto 1.25rem',
-        }}>
-          Os valores de Risk Premium e as frequências padrão são estimativas derivadas de um framework teórico calibrado contra um único ponto empírico: 93 nodes HRC vs GTO Wizard (board KJT-2-3, Aula 1.2). Demais cenários são extrapolações didáticas — não outputs de solver. Este motor demonstra o mecanismo da distorção ICM, não produz frequências exatas para spots específicos.
-        </p>
-        <p style={{
-          fontSize: '0.6rem',
-          color: '#334155',
-          fontWeight: 600,
-          textTransform: 'uppercase',
-          letterSpacing: '0.15em',
+          lineHeight: 1.7,
+          maxWidth: '520px',
           margin: 0,
+          textAlign: 'center',
         }}>
-          Motor ICM por Raphael Vitoi
+          Os valores de Risk Premium e as frequências padrão são estimativas derivadas de um framework teórico calibrado contra um único ponto empírico: 93 nodes HRC vs GTO Wizard (board KJT-2-3, Aula 1.2). Demais cenários são extrapolações didáticas — não outputs de solver.
+        </p>
+        <span style={{
+          display: 'block',
+          width: '32px',
+          height: '1px',
+          background: 'rgba(255,255,255,0.06)',
+        }} />
+        <p style={{
+          fontSize: '0.55rem',
+          color: '#334155',
+          fontWeight: 700,
+          textTransform: 'uppercase',
+          letterSpacing: '0.2em',
+          margin: 0,
+          textAlign: 'center',
+        }}>
+          Motor ICM · Raphael Vitoi
         </p>
       </footer>
     </div>

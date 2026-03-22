@@ -389,41 +389,53 @@ export default function ReferencialAula12() {
 
           {/* Toy Games */}
           <div>
-            <p style={{ margin: '0 0 0.5rem', fontSize: '0.58rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Toy Games — Framework Teórico</p>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem', marginBottom: '0.75rem' }}>
+              <p style={{ margin: 0, fontSize: '0.58rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Toy Games</p>
+              <p style={{ margin: 0, fontSize: '0.58rem', color: '#334155' }}>Framework Teórico — ΔRP como eixo de distorção</p>
+            </div>
             <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.7rem', color: '#94a3b8' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.68rem', color: '#94a3b8' }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-                    {['Nó','RP IP','RP OOP','Bluff IP','Defesa OOP','Comportamento'].map(h => (
-                      <th key={h} style={{ padding: '0.4rem 0.5rem', textAlign: 'left', fontWeight: 600, color: '#64748b', fontSize: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.08em', whiteSpace: 'nowrap' }}>{h}</th>
-                    ))}
+                    <th style={{ padding: '0.35rem 0.6rem', textAlign: 'left', fontWeight: 700, color: '#475569', fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>Nó</th>
+                    <th style={{ padding: '0.35rem 0.6rem', textAlign: 'right', fontWeight: 700, color: '#818cf8', fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>RP IP</th>
+                    <th style={{ padding: '0.35rem 0.6rem', textAlign: 'right', fontWeight: 700, color: '#f43f5e', fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>RP OOP</th>
+                    <th style={{ padding: '0.35rem 0.6rem', textAlign: 'right', fontWeight: 700, color: '#64748b', fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>Bluff IP</th>
+                    <th style={{ padding: '0.35rem 0.6rem', textAlign: 'right', fontWeight: 700, color: '#64748b', fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>Def OOP</th>
+                    <th style={{ padding: '0.35rem 0.6rem', textAlign: 'left', fontWeight: 700, color: '#475569', fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Comportamento</th>
                   </tr>
                 </thead>
                 <tbody>
                   {[
-                    { no:'TG0',   rpIp:'0%',  rpOop:'0%',  bluff:'33%',    def:'50%',     desc:'ChipEV puro — baseline MDF' },
-                    { no:'TG1',   rpIp:'3%',  rpOop:'6%',  bluff:'↑ ~40%', def:'↓ ~44%',  desc:'OOP começa a ceder' },
-                    { no:'TG2',   rpIp:'3%',  rpOop:'9%',  bluff:'↑ ~50%', def:'teto RP', desc:'OOP atinge o teto' },
-                    { no:'TG3',   rpIp:'3%',  rpOop:'18%', bluff:'↑↑',     def:'teto RP', desc:'IP overbluffa; OOP congela' },
-                    { no:'TG4',   rpIp:'3%',  rpOop:'24%', bluff:'max',    def:'teto RP', desc:'Pressão IP máxima' },
-                    { no:'TG5',   rpIp:'9%',  rpOop:'3%',  bluff:'~33%',   def:'↓ ~43%',  desc:'IP preserva; OOP cede' },
-                    { no:'TG6',   rpIp:'18%', rpOop:'3%',  bluff:'↓ ~17%', def:'↓↓',      desc:'IP contém bluffs' },
-                    { no:'TG7 ★', rpIp:'21%', rpOop:'3%',  bluff:'~13%',   def:'~20%',    desc:'OOP 80% fold — âncora KJT-2-3' },
+                    { no:'TG0',   rpIp:'0%',  rpOop:'0%',  bluff:'33%',    def:'50%',     desc:'ChipEV puro — baseline MDF', anchor: false },
+                    { no:'TG1',   rpIp:'3%',  rpOop:'6%',  bluff:'↑ ~40%', def:'↓ ~44%',  desc:'OOP começa a ceder',          anchor: false },
+                    { no:'TG2',   rpIp:'3%',  rpOop:'9%',  bluff:'↑ ~50%', def:'teto RP', desc:'OOP atinge o teto',           anchor: false },
+                    { no:'TG3',   rpIp:'3%',  rpOop:'18%', bluff:'↑↑',     def:'teto RP', desc:'IP overbluffa; OOP congela',  anchor: false },
+                    { no:'TG4',   rpIp:'3%',  rpOop:'24%', bluff:'max',    def:'teto RP', desc:'Pressão IP máxima',           anchor: false },
+                    { no:'TG5',   rpIp:'9%',  rpOop:'3%',  bluff:'~33%',   def:'↓ ~43%',  desc:'IP preserva; OOP cede',      anchor: false },
+                    { no:'TG6',   rpIp:'18%', rpOop:'3%',  bluff:'↓ ~17%', def:'↓↓',      desc:'IP contém bluffs',           anchor: false },
+                    { no:'TG7',   rpIp:'21%', rpOop:'3%',  bluff:'~13%',   def:'~20%',    desc:'OOP 80% fold — âncora KJT-2-3', anchor: true },
                   ].map((row, i) => (
-                    <tr key={i} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)', background: row.no.includes('★') ? 'rgba(99,102,241,0.06)' : 'transparent' }}>
-                      <td style={{ padding: '0.4rem 0.5rem', fontWeight: 600, color: row.no.includes('★') ? '#818cf8' : '#64748b', whiteSpace: 'nowrap' }}>{row.no}</td>
-                      <td style={{ padding: '0.4rem 0.5rem', whiteSpace: 'nowrap' }}>{row.rpIp}</td>
-                      <td style={{ padding: '0.4rem 0.5rem', whiteSpace: 'nowrap' }}>{row.rpOop}</td>
-                      <td style={{ padding: '0.4rem 0.5rem', whiteSpace: 'nowrap' }}>{row.bluff}</td>
-                      <td style={{ padding: '0.4rem 0.5rem', whiteSpace: 'nowrap' }}>{row.def}</td>
-                      <td style={{ padding: '0.4rem 0.5rem', color: '#64748b' }}>{row.desc}</td>
+                    <tr key={i} style={{
+                      borderBottom: '1px solid rgba(255,255,255,0.04)',
+                      borderLeft: row.anchor ? '2px solid rgba(99,102,241,0.5)' : '2px solid transparent',
+                      background: row.anchor ? 'rgba(99,102,241,0.06)' : i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.01)',
+                    }}>
+                      <td style={{ padding: '0.4rem 0.6rem', fontWeight: 700, color: row.anchor ? '#818cf8' : '#475569', whiteSpace: 'nowrap', fontFamily: 'monospace' }}>
+                        {row.no}{row.anchor && <span style={{ color: '#818cf8', marginLeft: '4px' }}>★</span>}
+                      </td>
+                      <td style={{ padding: '0.4rem 0.6rem', textAlign: 'right', color: '#818cf8', fontWeight: 600, whiteSpace: 'nowrap' }}>{row.rpIp}</td>
+                      <td style={{ padding: '0.4rem 0.6rem', textAlign: 'right', color: '#f43f5e', fontWeight: 600, whiteSpace: 'nowrap' }}>{row.rpOop}</td>
+                      <td style={{ padding: '0.4rem 0.6rem', textAlign: 'right', color: row.bluff.includes('↑') ? '#10b981' : row.bluff.includes('↓') ? '#f59e0b' : '#94a3b8', whiteSpace: 'nowrap' }}>{row.bluff}</td>
+                      <td style={{ padding: '0.4rem 0.6rem', textAlign: 'right', color: row.def.includes('↓') ? '#f59e0b' : row.def === 'teto RP' ? '#f43f5e' : '#94a3b8', whiteSpace: 'nowrap' }}>{row.def}</td>
+                      <td style={{ padding: '0.4rem 0.6rem', color: row.anchor ? '#a5b4fc' : '#64748b', fontSize: '0.66rem' }}>{row.desc}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            <p style={{ fontSize: '0.6rem', color: '#334155', margin: '0.75rem 0 0' }}>
-              ★ Âncora empírica: 93 nodes HRC vs GTO Wizard. Raphael Vitoi, 2024. Downward Drift: O&apos;Kearney &amp; Carter, <em>PKO Poker Strategy</em>, D&amp;B Poker, 2023.
+            <p style={{ fontSize: '0.58rem', color: '#334155', margin: '0.6rem 0 0', lineHeight: 1.55 }}>
+              ★ Âncora empírica: 93 nodes HRC vs GTO Wizard, Raphael Vitoi 2024 &nbsp;·&nbsp; Downward Drift: O&apos;Kearney &amp; Carter, <em>PKO Poker Strategy</em>, D&amp;B Poker 2023
             </p>
           </div>
 
