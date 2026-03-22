@@ -429,9 +429,41 @@ export default function ReferencialAula12() {
 
           {/* Toy Games */}
           <div>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem', marginBottom: '0.75rem' }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem', marginBottom: '0.6rem' }}>
               <p style={{ margin: 0, fontSize: '0.58rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Toy Games</p>
               <p style={{ margin: 0, fontSize: '0.58rem', color: '#334155' }}>Framework Teórico — ΔRP como eixo de distorção</p>
+            </div>
+
+            {/* Legenda conceitual */}
+            <div style={{
+              display: 'flex', flexDirection: 'column', gap: '0.35rem',
+              marginBottom: '0.75rem', padding: '0.65rem 0.75rem',
+              background: 'rgba(15,23,42,0.5)', borderRadius: '6px',
+              borderLeft: '2px solid rgba(99,102,241,0.3)',
+            }}>
+              {[
+                {
+                  term: 'Toy game',
+                  def: 'Modelo simplificado que isola uma variável de interesse — aqui, o ΔRP — para demonstrar seu efeito sobre frequências de equilíbrio. Não representa spots reais; funciona como lente didática de causa e efeito.',
+                },
+                {
+                  term: 'Baseline GTO (TG0)',
+                  def: 'Frequências de equilíbrio sem distorção ICM: RP = 0% para ambos os jogadores. Bluff IP = 33% · Def OOP = 50% (MDF padrão). Referência para medir todos os desvios.',
+                },
+                {
+                  term: 'ΔRP = IP_RP − OOP_RP',
+                  def: 'Eixo central do framework. Positivo → IP está mais constringido (bluffs menores, OOP defende mais). Negativo → IP tem vantagem de agressão (bluffs crescem, OOP cede frequência).',
+                },
+                {
+                  term: '⊘ teto / ⊘ max',
+                  def: 'Saturação de frequência: teto = defesa OOP congelada pelo RP (fold máximo sustentável). max = bluff IP no limite superior imposto pelo BF. Além desses pontos, qualquer ajuste é EV-negativo.',
+                },
+              ].map(({ term, def }) => (
+                <div key={term} style={{ display: 'flex', gap: '0.5rem', alignItems: 'flex-start' }}>
+                  <span style={{ fontSize: '0.55rem', fontWeight: 800, color: '#818cf8', whiteSpace: 'nowrap', marginTop: '1px', minWidth: '120px' }}>{term}</span>
+                  <span style={{ fontSize: '0.55rem', color: '#475569', lineHeight: 1.6 }}>{def}</span>
+                </div>
+              ))}
             </div>
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.68rem', color: '#94a3b8' }}>

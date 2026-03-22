@@ -94,7 +94,7 @@ export default function RiskGauge({
 
   return (
     <div className="flex flex-col items-center font-sans">
-      <div className="relative w-full max-w-[140px] aspect-square mx-auto mb-4">
+      <div className="relative w-full max-w-[140px] aspect-square mx-auto mb-2">
         <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
           <path
             className="fill-none stroke-slate-800"
@@ -111,17 +111,32 @@ export default function RiskGauge({
           />
         </svg>
 
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <div className="absolute inset-0 flex flex-col items-center justify-center" style={{ gap: '3px' }}>
           {isDeathZone ? (
-            <motion.i animate={{ scale: [1, 1.2, 1], opacity: [0.8, 1, 0.8] }} transition={{ duration: 2, repeat: Infinity }} className="fa-solid fa-biohazard text-2xl mb-1" style={{ color: strokeColor }}></motion.i>
+            <>
+              <motion.i animate={{ scale: [1, 1.2, 1], opacity: [0.8, 1, 0.8] }} transition={{ duration: 2, repeat: Infinity }} className="fa-solid fa-biohazard text-2xl" style={{ color: strokeColor }} />
+              <span style={{ fontSize: '0.5rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: strokeColor }}>CRITICAL</span>
+            </>
           ) : isPredatorZone ? (
-            <motion.i animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 3, repeat: Infinity }} className="fa-solid fa-crosshairs text-2xl mb-1" style={{ color: strokeColor }}></motion.i>
+            <>
+              <motion.i animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 3, repeat: Infinity }} className="fa-solid fa-crosshairs text-2xl" style={{ color: strokeColor }} />
+              <span style={{ fontSize: '0.5rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: strokeColor }}>ATTACK</span>
+            </>
           ) : (
-            <span className="font-mono text-3xl font-bold text-white tracking-tighter" style={{ color: isCritical ? '#ef4444' : 'white' }}>{safeValue.toFixed(1)}%</span>
+            <>
+              <div style={{ display: 'flex', alignItems: 'baseline', lineHeight: 1 }}>
+                <span style={{ fontFamily: 'monospace', fontSize: '1.55rem', fontWeight: 900, letterSpacing: '-0.04em', lineHeight: 1, color: isCritical ? '#ef4444' : '#f8fafc' }}>
+                  {safeValue.toFixed(1)}
+                </span>
+                <span style={{ fontFamily: 'monospace', fontSize: '0.75rem', fontWeight: 700, lineHeight: 1, marginLeft: '1px', color: isCritical ? '#ef4444' : '#94a3b8' }}>
+                  %
+                </span>
+              </div>
+              <span style={{ fontSize: '0.48rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: strokeColor }}>
+                RP
+              </span>
+            </>
           )}
-          <span className="text-[9px] font-bold uppercase tracking-[0.1em] mt-1" style={{ color: strokeColor }}>
-            {isDeathZone ? 'CRITICAL' : isPredatorZone ? 'ATTACK' : 'RP'}
-          </span>
         </div>
       </div>
 
