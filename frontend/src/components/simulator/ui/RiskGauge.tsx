@@ -141,10 +141,10 @@ export default function RiskGauge({
       </div>
 
       <div className="text-center">
-        <div className="text-[10px] font-bold uppercase tracking-widest text-slate-500">{label}</div>
+        <div className="text-[11px] font-bold uppercase tracking-widest text-slate-400">{label}</div>
         <div className="font-serif text-xl font-bold text-white mt-1">{pos}</div>
         <div
-          className="font-mono text-xs text-slate-400 mt-1"
+          className="font-mono text-xs text-slate-300 mt-1"
           style={{
             position: 'relative',
             display: 'inline-block',

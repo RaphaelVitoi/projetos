@@ -120,7 +120,7 @@ export default function ScenarioStage({ scenario }: { scenario: any }) {
             color="indigo"
             opponentValue={scenario.oopRp}
           />
-          <p className={styles.dataMono} style={{ fontSize: '0.6rem', color: '#475569', margin: '0.2rem 0 0' }}>
+          <p className={styles.dataMono} style={{ fontSize: '0.65rem', color: '#64748b', margin: '0.3rem 0 0', letterSpacing: '0.03em' }}>
             RP {scenario.ipRp.toFixed(1)}% · BF {calcBF(scenario.ipRp)}×
           </p>
         </div>
@@ -136,7 +136,7 @@ export default function ScenarioStage({ scenario }: { scenario: any }) {
             color="pink"
             opponentValue={scenario.ipRp}
           />
-          <p className={styles.dataMono} style={{ fontSize: '0.6rem', color: '#475569', margin: '0.2rem 0 0' }}>
+          <p className={styles.dataMono} style={{ fontSize: '0.65rem', color: '#64748b', margin: '0.3rem 0 0', letterSpacing: '0.03em' }}>
             RP {scenario.oopRp.toFixed(1)}% · BF {calcBF(scenario.oopRp)}×
           </p>
         </div>
