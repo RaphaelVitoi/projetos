@@ -45,6 +45,8 @@ export const SCENARIOS: Scenario[] = [
     `,
     exploit: [
       'Puxar o Freio de Mão: Contraia severamente os seus bluffs. Aceite que a equidade natural exigida para engajar num pote deste calibre é altíssima.',
+      'Capitalize o thin value: Hero-bluffs são proibidos pelo seu RP, mas thin value bets funcionam — o BB ainda defende 82.9% do range vs BTN, garantindo pagamento em mãos médias e fortes.',
+      'Explore o ΔRP+8.5% invertido: O BTN tem MAIS RP que o BB — fenômeno do paradoxo. O OOP sabe disso. Hands em que o BTN representa valor polarizado são mais credivelmente defendidas pelo BB.',
     ],
     // RP residual por street: ilustrativo, decrescente. Não quantificável com precisão.
     sprData: [
@@ -84,9 +86,9 @@ export const SCENARIOS: Scenario[] = [
     quiz: {
       question: 'Por que o BTN (40bb), tendo uma stack gigante, sofre uma punição utilitária (RP) muito maior que o BB (55bb)?',
       options: [
-        { text: 'Porque perder o all-in destrói o BTN, retirando sua alavancagem e garantias de payjump. O BB, porém, sobrevive ao golpe.', correct: true },
-        { text: 'Porque estar em posição (IP) gera uma penalidade padrão no solver para compensar a realização de equidade pós-flop.', correct: false },
-        { text: 'A premissa está errada. O BTN tem um RP menor porque ele domina o range do BB.', correct: false },
+        { id: 'A', text: 'Porque perder o all-in destrói o BTN, retirando sua alavancagem e garantias de payjump. O BB, porém, sobrevive ao golpe.', isCorrect: true },
+        { id: 'B', text: 'Porque estar em posição (IP) gera uma penalidade padrão no solver para compensar a realização de equidade pós-flop.', isCorrect: false },
+        { id: 'C', text: 'A premissa está errada. O BTN tem um RP menor porque ele domina o range do BB.', isCorrect: false },
       ],
       explanation: 'A Assimetria de Dor: O BTN põe em risco a sua sobrevivência. O BB arrisca apenas a liderança.',
     },
@@ -114,6 +116,8 @@ export const SCENARIOS: Scenario[] = [
     `,
     exploit: [
       'Negação de Ação Barata: Jogue impiedosamente polarizado. Negue a ele o showdown pacífico pós-agressão. Se for para o chão, vá com o topo.',
+      'Aproveite os implied odds do flat call: Se o range de flat inflou massivamente, entre com mãos especulativas (suited connectors, PPs médios) para realizar equity pós-flop com potencial de monsterizar.',
+      'Foque a agressão nos shorts, não no igual: A destruição mútua não serve a nenhum dos dois grandes. Isole os curtos sempre que possível — isso é EV positivo sem o risco existencial.',
     ],
     // RP residual por street: ilustrativo, decrescente. Não quantificável com precisão.
     sprData: [
@@ -153,9 +157,9 @@ export const SCENARIOS: Scenario[] = [
     quiz: {
       question: 'Como as frequências reconfiguram o jogo pré-flop num "Pacto Silencioso"?',
       options: [
-        { text: 'A 3-bet encolhe a um mínimo polarizado, e o flat call infla massivamente para especular sem explodir o SPR.', correct: true },
-        { text: 'Eles entram em modo push/fold agressivo para submeter psicologicamente a mesa.', correct: false },
-        { text: 'Eles foldam quase 100% das mãos um contra o outro.', correct: false },
+        { id: 'A', text: 'A 3-bet encolhe a um mínimo polarizado, e o flat call infla massivamente para especular sem explodir o SPR.', isCorrect: true },
+        { id: 'B', text: 'Eles entram em modo push/fold agressivo para submeter psicologicamente a mesa.', isCorrect: false },
+        { id: 'C', text: 'Eles foldam quase 100% das mãos um contra o outro.', isCorrect: false },
       ],
       explanation: 'O choque direto aniquila a Esperança Matemática. Transfere-se a decisão para o pós-flop onde o risco inicial é menor.',
     },
@@ -183,6 +187,8 @@ export const SCENARIOS: Scenario[] = [
     `,
     exploit: [
       'Expandir Zonas de Shove: Contra adversários aterrorizados pela bolha, alargue os shoves (aumente o Alpha) nos spots onde a transferência da pressão é letal para eles.',
+      'Calibre o shove range pelo Alpha real: Alpha = (fold_equity) / (1 + fold_equity). Com o BB paralisado pelo RP e shorts na mesa, o fold_equity sobe — expanda o shove range até o threshold matemático exato.',
+      'Identifique os aliados passivos: Quanto mais micro-stacks inativos no pote, maior o EV do fold do BB. Cada short fora do pote aumenta o valor do laddering e comprime ainda mais o call range do BB.',
     ],
     // RP residual por street: ilustrativo, decrescente. Não quantificável com precisão.
     sprData: [
@@ -222,9 +228,9 @@ export const SCENARIOS: Scenario[] = [
     quiz: {
       question: 'O que caracteriza o "Efeito Batata Quente" na aplicação de um shove em ICM?',
       options: [
-        { text: 'O agressor impõe o seu RP somado à Fold Equity, removendo do defensor a capacidade de reagir e forçando a dor letal de um call definitivo.', correct: true },
-        { text: 'É a situação em que os blinds rodam muito rápido na mesa, forçando a ação.', correct: false },
-        { text: 'Ocorre quando o pote sofre re-shoves múltiplos, ignorando as odds.', correct: false },
+        { id: 'A', text: 'O agressor impõe o seu RP somado à Fold Equity, removendo do defensor a capacidade de reagir e forçando a dor letal de um call definitivo.', isCorrect: true },
+        { id: 'B', text: 'É a situação em que os blinds rodam muito rápido na mesa, forçando a ação.', isCorrect: false },
+        { id: 'C', text: 'Ocorre quando o pote sofre re-shoves múltiplos, ignorando as odds.', isCorrect: false },
       ],
       explanation: 'O agressor transfere a totalidade do fardo da decisão para o oponente, negando a realização de equidade pós-flop.',
     },
@@ -252,6 +258,8 @@ export const SCENARIOS: Scenario[] = [
     `,
     exploit: [
       'Overbluff Sistemático: Sabendo que o bluffcatcher não suporta o peso financeiro da eliminação contínua nas streets, expanda os bluffs e aplique triple barrels levianos.',
+      'Triple barrel como default estrutural: O Mid não consegue defender no Turn porque o RP permanece alto até lá. Aplique pressão contínua em todas as streets — o fold matemático do Mid é estrutural, não situacional.',
+      'Polarize ao extremo para quebrar o bluffcatcher: Range condensado perde equity contra polar. Bet grande ou check — elimine os sizings médios que dão ao Mid odds aceitáveis para continuar.',
     ],
     // RP residual por street: ilustrativo, decrescente. Não quantificável com precisão.
     sprData: [
@@ -291,9 +299,9 @@ export const SCENARIOS: Scenario[] = [
     quiz: {
       question: 'Por que o jogador com alto RP não consegue defender a sua porção de MDF teórica num post-flop contra o CL?',
       options: [
-        { text: 'Porque um range condensado (mãos médias) não consegue reter equidade suficiente ao longo das streets para cobrir o altíssimo custo (RP) de eliminação.', correct: true },
-        { text: 'Porque os bluffcatchers perdem equidade bruta nas mesas finais.', correct: false },
-        { text: 'Porque o agressor sempre terá a melhor mão no longo prazo em dinâmicas de ICM.', correct: false },
+        { id: 'A', text: 'Porque um range condensado (mãos médias) não consegue reter equidade suficiente ao longo das streets para cobrir o altíssimo custo (RP) de eliminação.', isCorrect: true },
+        { id: 'B', text: 'Porque os bluffcatchers perdem equidade bruta nas mesas finais.', isCorrect: false },
+        { id: 'C', text: 'Porque o agressor sempre terá a melhor mão no longo prazo em dinâmicas de ICM.', isCorrect: false },
       ],
       explanation: 'A relação de recompensa não fecha. A dor financeira suplanta largamente o lucro teórico de apanhar o blefe.',
     },
@@ -321,6 +329,8 @@ export const SCENARIOS: Scenario[] = [
     `,
     exploit: [
       'Aumente a Variância: Se o vilão sofre de aversão cega ao risco para garantir um payjump (overfold), a matemática exige que você roube os blinds para construir uma base para o pódio real.',
+      'Spy o payjump disponível: Conte os shorts abaixo de você. Cada um vale um payjump virtual garantido pela passividade. Decida se o EV de sobreviver supera o EV de acumular antes de engajar.',
+      'Calibre o shove range pelo RP real: Com RP ~8%, o Alpha exigido sobe apenas modestamente vs ChipEV. Shoves com mãos de 35-40% equity contra o alvo certo são lucrativos — não super-fold.',
     ],
     // RP residual por street: ilustrativo, decrescente. Não quantificável com precisão.
     sprData: [
@@ -360,9 +370,9 @@ export const SCENARIOS: Scenario[] = [
     quiz: {
       question: 'Por que o Risk Premium entre dois micro-stacks não desce para o zero absoluto (ChipEV)?',
       options: [
-        { text: 'Porque o EV de não fazer nada (fold) é positivo. A chance de "laddering" garantida pela morte alheia requer que a sua agressão compense essa diferença financeira.', correct: true },
-        { text: 'Porque os líderes forçam uma bolha secundária que dobra o RP de toda a mesa.', correct: false },
-        { text: 'Micro-stacks não sofrem ICM, o RP é sempre nulo. A afirmação é inválida.', correct: false },
+        { id: 'A', text: 'Porque o EV de não fazer nada (fold) é positivo. A chance de "laddering" garantida pela morte alheia requer que a sua agressão compense essa diferença financeira.', isCorrect: true },
+        { id: 'B', text: 'Porque os líderes forçam uma bolha secundária que dobra o RP de toda a mesa.', isCorrect: false },
+        { id: 'C', text: 'Micro-stacks não sofrem ICM, o RP é sempre nulo. A afirmação é inválida.', isCorrect: false },
       ],
       explanation: 'Cada vizinho à beira da morte é um payjump virtual garantido no seu bolso. Renunciar a esse assento seguro exige um prêmio matemático.',
     },
@@ -394,6 +404,8 @@ export const SCENARIOS: Scenario[] = [
     `,
     exploit: [
       'Punição Imediata: Se o oponente folda acima dos 50%, overbluff imprime dinheiro. Se ele paga mais do que deve, limite os bluffs a 0 e expanda as apostas de valor thin. A punição é direta.',
+      'Monitore o MDF em tempo real: Se o oponente fold > 50% vs pot-bet, incremente bluffs incrementalmente até ele ajustar. Leia a mudança de tendência e recalibra antes de ele explorar de volta.',
+      'Calibre o Alpha: Bluff frequency = 33.3% para pot-bet em ChipEV puro. Qualquer desvio gera EV imediato capturável. O jogo é recíproco — qualquer ajuste seu obriga um ajuste dele.',
     ],
     // Sem ICM: RP = 0 em todas as streets
     sprData: [
@@ -432,9 +444,9 @@ export const SCENARIOS: Scenario[] = [
     quiz: {
       question: 'Por que num vácuo matemático (ChipEV) o desvio da frequência de bluff (Alpha) é punido imediatamente por um GTO perfeito?',
       options: [
-        { text: 'Porque sem a âncora letal do ICM a forçar o "overfold", a defesa pagará exatamente conforme as pot odds. Blefar além cede EV automático.', correct: true },
-        { text: 'Porque o GTO sempre descobre as nossas cartas com base em padrões de sizes.', correct: false },
-        { text: 'Porque a agressão em ChipEV só é rentável com underbets.', correct: false },
+        { id: 'A', text: 'Porque sem a âncora letal do ICM a forçar o "overfold", a defesa pagará exatamente conforme as pot odds. Blefar além cede EV automático.', isCorrect: true },
+        { id: 'B', text: 'Porque o GTO sempre descobre as nossas cartas com base em padrões de sizes.', isCorrect: false },
+        { id: 'C', text: 'Porque a agressão em ChipEV só é rentável com underbets.', isCorrect: false },
       ],
       explanation: 'Sem a dor assimétrica de um torneio, as odds matemáticas governam absolutas. Tudo o que fuja da linha é capturado pela mecânica do Defensor.',
     },
@@ -467,6 +479,7 @@ export const SCENARIOS: Scenario[] = [
     exploit: [
       'Shove Any Two Cards (ATC): O RP do vilão é tão alto que qualquer agressão é lucrativa. O defensor está matematicamente paralisado.',
       'Isole o alvo: Foque a pressão no jogador com maior RP. Os stacks de 8bb e 9bb são seus aliados involuntários.',
+      'Prefira min-raise ao overbet/shove: O BB paralisado foldará a min-raises igualmente, preservando sua stack para pressionar os outros shorts. Gaste menos, extraia mais.',
     ],
     // RP residual por street: ilustrativo, decrescente. Não quantificável com precisão.
     sprData: [
@@ -506,9 +519,9 @@ export const SCENARIOS: Scenario[] = [
     quiz: {
       question: 'Por que o SB (Chipleader) pode shovar 100% das mãos contra o BB com 12bb nesta configuração?',
       options: [
-        { text: 'Porque o RP de 45% do BB torna qualquer call catastrófico. Morrer antes dos stacks de 8bb e 9bb destrói payjumps garantidos.', correct: true },
-        { text: 'Porque o SB sempre tem vantagem posicional no heads-up, independente dos stacks.', correct: false },
-        { text: 'Porque 12bb é automaticamente push/fold em qualquer situação de torneio.', correct: false },
+        { id: 'A', text: 'Porque o RP de 45% do BB torna qualquer call catastrófico. Morrer antes dos stacks de 8bb e 9bb destrói payjumps garantidos.', isCorrect: true },
+        { id: 'B', text: 'Porque o SB sempre tem vantagem posicional no heads-up, independente dos stacks.', isCorrect: false },
+        { id: 'C', text: 'Porque 12bb é automaticamente push/fold em qualquer situação de torneio.', isCorrect: false },
       ],
       explanation: 'A paralisia do BB é estrutural, não emocional. A existência de stacks menores na mesa cria um campo gravitacional que impede o BB de arriscar a eliminação.',
     },
@@ -537,6 +550,7 @@ export const SCENARIOS: Scenario[] = [
     exploit: [
       'Oprima sem piedade: Com RP de 5%, o custo de perder um all-in é mínimo para você. Para eles, é catastrófico.',
       'Alterne sizes: Varie entre min-raise e shove para maximizar a desorientação do defensor paralisado.',
+      'Deixe o campo gravitacional trabalhar: Sua presença no BTN já impõe pressão estrutural. Os blinds se autolimitam antes da ação. Você não precisa sempre mostrar força — basta estar lá.',
     ],
     // RP residual por street: ilustrativo, decrescente. Não quantificável com precisão.
     sprData: [
@@ -576,9 +590,9 @@ export const SCENARIOS: Scenario[] = [
     quiz: {
       question: 'Na bolha do ITM, por que o BTN com 80bb pode agredir desproporcional contra os blinds de 20bb?',
       options: [
-        { text: 'Porque a assimetria de RP (5% vs 42%) torna qualquer confronto lucrativo para o BTN e catastrófico para os blinds.', correct: true },
-        { text: 'Porque o BTN sempre tem a melhor mão estatisticamente na bolha.', correct: false },
-        { text: 'Porque os blinds não podem 3-bet na bolha por regras implícitas.', correct: false },
+        { id: 'A', text: 'Porque a assimetria de RP (5% vs 42%) torna qualquer confronto lucrativo para o BTN e catastrófico para os blinds.', isCorrect: true },
+        { id: 'B', text: 'Porque o BTN sempre tem a melhor mão estatisticamente na bolha.', isCorrect: false },
+        { id: 'C', text: 'Porque os blinds não podem 3-bet na bolha por regras implícitas.', isCorrect: false },
       ],
       explanation: 'A bolha amplifica a assimetria de risco. O BTN joga quase ChipEV enquanto os blinds jogam com o peso da eliminação. Agressão aqui é matematicamente obrigatória.',
     },
@@ -610,6 +624,8 @@ export const SCENARIOS: Scenario[] = [
     `,
     exploit: [
       'Morte da Fold Equity: Expurgue os overbluffs. A fold equity não atua sobre quem joga puramente pelas cartas ignorando a morte. Mude a marcha inteiramente para Thin Value.',
+      'Polarize para thin value, não para bluffs: Apostas de thin value extraem do range condensado do Vice enquanto ele self-restringe. Bluffs acionam resistência; thin value nunca aciona resistência raivosa.',
+      'Controle o crescimento orgânico: Cada pot que o Vice ganha sem envolver o CL é uma ameaça futura. Seja presente nos potes relevantes — interrompa o laddering passivo do Vice antes que ele chegue ao pódio.',
     ],
     // RP residual por street: ilustrativo, decrescente. Não quantificável com precisão.
     sprData: [
@@ -649,9 +665,9 @@ export const SCENARIOS: Scenario[] = [
     quiz: {
       question: 'Sendo imune à eliminação direta, por que o Chip Leader colossal sofre uma punição utilitária considerável contra o 2o classificado?',
       options: [
-        { text: 'Para defender a Hegemonia. Dobrar o Vice cria uma ameaça orgânica à liderança, mudando o balanço de poder da mesa inteira.', correct: true },
-        { text: 'Porque o HRC impõe que stacks acima de 80bb tenham taxação de risco extra para simular o rake.', correct: false },
-        { text: 'Para evitar collusion explícito na plataforma.', correct: false },
+        { id: 'A', text: 'Para defender a Hegemonia. Dobrar o Vice cria uma ameaça orgânica à liderança, mudando o balanço de poder da mesa inteira.', isCorrect: true },
+        { id: 'B', text: 'Porque o HRC impõe que stacks acima de 80bb tenham taxação de risco extra para simular o rake.', isCorrect: false },
+        { id: 'C', text: 'Para evitar collusion explícito na plataforma.', isCorrect: false },
       ],
       explanation: 'O ICM não dita apenas a morte, dita a "Esperança Matemática" global de chegar à vitória. Dobrar o seu maior rival destrói ativamente a sua maior vantagem no jogo.',
     },
