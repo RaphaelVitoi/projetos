@@ -5,20 +5,21 @@ import os
 import base64
 import re
 import subprocess
-import urllib.request
 import aiohttp
 from aiohttp import web
-import urllib.error
 import logging
 import asyncio
-import traceback
 import functools
 import aiosqlite
 import sqlite3
 from pathlib import Path
-from typing import List, Optional, Literal, Dict, Any, Annotated
+from typing import List, Optional, Literal, Dict, Any
 from pydantic import BaseModel, Field, ValidationError, field_validator
 from datetime import datetime, timedelta
+from rich.logging import RichHandler
+from rich.console import Console
+from rich.panel import Panel
+from rich.status import Status
 
 # Carregamento Lazzy do RAG para evitar overhead no db-add
 rag_engine = None
@@ -30,19 +31,29 @@ def get_rag():
     return rag_engine
 
 # Configuracao estetica e persistente de Log (Estado da Arte)
+console = Console()
 log_dir = Path(".claude/logs")
 log_dir.mkdir(parents=True, exist_ok=True)
 log_level = os.environ.get("LOG_LEVEL", "INFO").upper()
 logging.basicConfig(
     force=True, # Garante que a nossa configuração sobrescreva qualquer outra pré-existente
     level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
+    format="%(message)s",
+    datefmt="[%X]",
     handlers=[
         logging.FileHandler(log_dir / "task_executor.log", encoding="utf-8"), # Arquivo mantem utf-8
-        logging.StreamHandler(sys.stdout)
+        RichHandler(console=console, rich_tracebacks=True, markup=True, show_path=False)
     ]
 )
+
+# =================================================
+# ORCAMENTO COGNITIVO E HIBERNACAO (Logistica SOTA)
+# =================================================
+DAILY_API_BUDGET = 10 # Numero de chamadas de API gratuitas por dia
+
+class APIBudgetExhaustedError(Exception):
+    """Excecao customizada para quando o orcamento de API e esgotado."""
+    pass
 
 # =================================================
 # OTIMIZACOES DE PERFORMANCE (Cache SOTA)
@@ -123,7 +134,7 @@ VALID_AGENTS = list(INTENT_MAP.keys())
 
 SYSTEM_CONFIG = load_json_config(Path("data/system_config.json"), {})
 MODEL_ROUTING = SYSTEM_CONFIG.get("model_routing", {})
-DEEP_THINKING_MODELS = tuple(MODEL_ROUTING.get("deep_thinking", ("anthropic/claude-3.5-sonnet",)))
+DEEP_THINKING_MODELS = tuple(MODEL_ROUTING.get("deep_thinking", ("google/gemini-flash-1.5",)))
 FAST_OPERATIONS_MODELS = tuple(MODEL_ROUTING.get("fast_operations", ("google/gemini-flash-1.5",)))
 PROTECTED_AGENTS_FROM_CLEANUP = tuple(SYSTEM_CONFIG.get("protected_agents_from_cleanup", ("@maverick", "@chico")))
 HANDOFF_PIPELINE = SYSTEM_CONFIG.get("handoff_pipeline", {})
@@ -188,9 +199,13 @@ class QueueManager:
         
         # Blindagem de Seguranca SOTA: Prevenir Path Traversal no construtor
         if not self._is_memory:
-            base_path = Path(__file__).parent.resolve()
-            db_resolved_path = self.db_path.resolve()
-            if not str(db_resolved_path).startswith(str(base_path)):
+            base_path = Path(__file__).parent.absolute()
+            db_resolved_path = self.db_path.absolute()
+            
+            base_path_str = os.path.normcase(str(base_path))
+            db_resolved_path_str = os.path.normcase(str(db_resolved_path))
+            
+            if not db_resolved_path_str.startswith(base_path_str):
                  logging.critical(f"[SEC] Tentativa de Path Traversal bloqueada. O banco de dados '{self.db_path}' esta fora da raiz do projeto.")
                  raise PermissionError("Database path is outside the project root.")
 
@@ -200,6 +215,11 @@ class QueueManager:
         """Fecha a conexao em memoria se for o caso."""
         if getattr(self, '_is_memory', False) and hasattr(self, '_memory_conn'):
             self._memory_conn.close()
+
+    def _get_conn(self):
+        if getattr(self, '_is_memory', False) and hasattr(self, '_memory_conn'):
+            return self._memory_conn
+        return sqlite3.connect(self.db_path)
 
     def _init_db(self):
         with self._get_conn() as conn:
@@ -246,6 +266,12 @@ class QueueManager:
                 )
             """)
             conn.commit()
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS daily_usage ( date TEXT PRIMARY KEY, call_count INTEGER NOT NULL )
+            """)
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS system_state ( key TEXT PRIMARY KEY, value TEXT )
+            """)
 
     async def add_task(self, task: Task):
         """Adiciona uma nova tarefa ao banco de dados."""
@@ -328,14 +354,27 @@ class QueueManager:
             await db.execute("DELETE FROM tasks WHERE id = ?", (task_id,))
             await db.commit()
  
-    async def get_tasks(self, status: str = None) -> List[Task]:
-        """Retorna uma lista de tarefas do banco de dados, filtrando por status."""
+    async def get_tasks(self, status: str = None, since_hours: int = None) -> List[Task]:
+        """Retorna uma lista de tarefas do banco de dados, filtrando por status e tempo."""
         async with aiosqlite.connect(self.db_path) as db:
             db.row_factory = sqlite3.Row
+            query = "SELECT * FROM tasks"
+            params = []
+            conditions = []
+            
             if status:
-                cursor = await db.execute("SELECT * FROM tasks WHERE status = ? ORDER BY timestamp DESC", (status,))
-            else:
-                cursor = await db.execute("SELECT * FROM tasks ORDER BY timestamp DESC")
+                conditions.append("status = ?")
+                params.append(status)
+            if since_hours:
+                cutoff = (datetime.now() - timedelta(hours=since_hours)).isoformat()
+                conditions.append("timestamp >= ?")
+                params.append(cutoff)
+                
+            if conditions:
+                query += " WHERE " + " AND ".join(conditions)
+                
+            query += " ORDER BY timestamp DESC"
+            cursor = await db.execute(query, params)
             rows = await cursor.fetchall()
             await cursor.close()
             return [self._row_to_task(row) for row in rows]
@@ -399,6 +438,38 @@ class QueueManager:
             """, (task_id, agent, model, provider, prompt_tokens, completion_tokens, total, timestamp))
             await db.commit()
 
+    async def check_and_increment_usage(self) -> bool:
+        """Verifica o orcamento diario de API e o incrementa. Retorna True se a chamada for permitida."""
+        today = datetime.now().strftime("%Y-%m-%d")
+        async with aiosqlite.connect(self.db_path) as db:
+            async with db.execute("SELECT call_count FROM daily_usage WHERE date = ?", (today,)) as cursor:
+                row = await cursor.fetchone()
+            
+            current_count = row[0] if row else 0
+            
+            if current_count >= DAILY_API_BUDGET:
+                return False
+            
+            await db.execute("""
+                INSERT INTO daily_usage (date, call_count) VALUES (?, 1)
+                ON CONFLICT(date) DO UPDATE SET call_count = call_count + 1
+            """, (today,))
+            await db.commit()
+            return True
+
+    async def get_system_state(self, key: str) -> Optional[str]:
+        """Obtem um valor do estado do sistema."""
+        async with aiosqlite.connect(self.db_path) as db:
+            async with db.execute("SELECT value FROM system_state WHERE key = ?", (key,)) as cursor:
+                row = await cursor.fetchone()
+                return row[0] if row else None
+
+    async def set_system_state(self, key: str, value: str):
+        """Define um valor no estado do sistema."""
+        async with aiosqlite.connect(self.db_path) as db:
+            await db.execute("INSERT OR REPLACE INTO system_state (key, value) VALUES (?, ?)", (key, value))
+            await db.commit()
+
     async def cleanup(self, days: int):
         """Remove tarefas antigas do banco de dados."""
         cutoff = (datetime.now() - timedelta(days=days)).isoformat()
@@ -459,15 +530,26 @@ class QueueManager:
             except:
                 pass
 
+        agent_name = row["agent"]
+        
+        # SOTA: Auto-cura para compatibilidade retroativa (Agentes absorvidos)
+        legacy_agents = {
+            "@planner": "@architect",
+            "@sequenciador": "@dispatcher"
+        }
+        if agent_name in legacy_agents:
+            agent_name = legacy_agents[agent_name]
+        elif agent_name not in VALID_AGENTS:
+            agent_name = "@chico" # Guardrail universal contra entropia
+
         return Task(
             id=row["id"],
             description=row["description"],
             status=row["status"],
             timestamp=row["timestamp"],
-            agent=row["agent"],
+            agent=agent_name,
             completedAt=row["completedAt"],
             metadata=metadata
-
         )
 
 # ==========================================
@@ -486,16 +568,16 @@ def get_agent_system_prompt(agent_name: str) -> str:
     if agent_name in SYSTEM_PROMPT_CACHE:
         return SYSTEM_PROMPT_CACHE[agent_name]
 
+    # OTIMIZACAO DE TOKENS: Agentes puramente tecnicos nao recebem o contexto filosofico completo.
+    TECHNICAL_AGENTS = ("@implementor", "@verifier", "@skillmaster", "@organizador")
+    is_technical_agent = agent_name in TECHNICAL_AGENTS
+
     system_prompt_parts = []
 
     def add_to_prompt(title, content):
         if content:
             system_prompt_parts.append(f"=== {title} ===\n{content}\n\n")
     agent_clean = agent_name.replace("@", "")
-
-    def add_to_prompt(title, content):
-        if content:
-            system_prompt_parts.append(f"=== {title} ===\n{content}\n\n")
 
 
     # 1. Base Global (A Alma do Sistema)
@@ -507,6 +589,13 @@ def get_agent_system_prompt(agent_name: str) -> str:
     # 2. Leis de Orquestracao e Topologia (O Manual e o Mapa)
     infra_ctx = ""
     successfully_read_files = []
+
+    philosophical_docs = {
+        "COSMOVISAO FILOSOFICA (GUIA ETICO/INTELECTUAL)",
+        "IDENTIDADE DO USUARIO",
+        "LIDERANCA E GOVERNANCA",
+        "TEMPLO DO APRENDIZADO GENERATIVO"
+    }
     for doc_name, doc_paths in [
         ("COSMOVISAO FILOSOFICA (GUIA ETICO/INTELECTUAL)", [".claude/COSMOVISAO.md"]),
         ("MANIFESTO DOS AGENTES (VERDADE UNICA DE FUNCAO EXECUTIVA)", ["data/agents_manifest.json"]),
@@ -522,6 +611,10 @@ def get_agent_system_prompt(agent_name: str) -> str:
         ("ARQUITETURA DO CEREBRO HIBRIDO", [".claude/HYBRID_BRAIN_ARCHITECTURE.md"]),
         ("MANIFESTO DE COERENCIA E HARMONIA", [".claude/COHERENCE_MANIFEST.md"])
     ]:
+        # Otimizacao Estrategica: Poda o contexto filosofico para agentes tecnicos.
+        if is_technical_agent and doc_name in philosophical_docs:
+            continue
+
         for doc_path in doc_paths:
             file_obj = Path(doc_path)
             if file_obj.exists():
@@ -900,9 +993,9 @@ async def apply_god_mode(text: str):
         filepath = match.group(1).strip()
         content = match.group(2)
         try:
-                # Refinamento SOTA: Prevencao de Path Traversal
-            base_path = Path(__file__).parent.resolve()
-            target_path = Path(filepath).resolve()
+            # Refinamento SOTA: Prevencao de Path Traversal
+            base_path = Path(__file__).parent.absolute()
+            target_path = Path(filepath).absolute()
             
             base_path_str = os.path.normcase(str(base_path))
             target_path_str = os.path.normcase(str(target_path))
@@ -969,15 +1062,10 @@ async def apply_god_mode(text: str):
             logging.error(f"[FAIL] Arritmia critica/Timeout no comando {cmd}: {e}")
             raise
 
-async def process_agent_task(task: Task, manager: QueueManager):
+async def process_agent_task(task: Task, manager: QueueManager) -> str:
     
     agent_clean = task.agent.replace("@", "")
     
-    # OTIMIZACAO DE TOKENS: Injeção de Contexto Dinamico
-    # Agentes puramente tecnicos nao recebem o contexto filosofico completo para economizar tokens.
-    TECHNICAL_AGENTS = ("@implementor", "@verifier", "@skillmaster")
-    is_technical_agent = task.agent in TECHNICAL_AGENTS
-
     # OTIMIZACAO DE TOKENS: Numero de resultados RAG dinamico (agentes que precisam de mais contexto)
     strategic_agents = ("@maverick", "@pesquisador", "@architect")
     n_rag_results = 7 if task.agent in strategic_agents else 3
@@ -1080,46 +1168,19 @@ async def process_agent_task(task: Task, manager: QueueManager):
     # Check LLM Cache
     cached_response = await manager.get_llm_cache(task.agent, user_prompt)
     if cached_response:
-        logging.info(f"[{task.agent}] Cache hit para a prompt. Usando resposta armazenada.")
+        logging.info(f"[yellow]{task.agent}[/] [dim]Cache hit. Usando sabedoria armazenada.[/]")
         return cached_response
     else:
-        logging.info(f"[{task.agent}] Cache miss para a prompt. Chamando API LLM.")
+        logging.info(f"[yellow]{task.agent}[/] [dim]Pensando (Chamando API LLM)...[/]")
     
+    # Gatekeeper do Orcamento Cognitivo
+    budget_ok = await manager.check_and_increment_usage()
+    if not budget_ok:
+        raise APIBudgetExhaustedError("O orcamento diario de chamadas a API foi esgotado.")
+
     # Call LLM API
     response_text = await call_llm_api(task, system_prompt, user_prompt, manager)
-    
-    result_dir = Path(".claude/task_results")
-    result_dir.mkdir(parents=True, exist_ok=True)
-    with open(result_dir / f"{task.id}.md", "w", encoding="utf-8") as f:
-        f.write(f"# Resposta: {task.id} ({task.agent})\n\n{response_text}")
-        
-    # Transforma pensamento em realidade física e comandos (God Mode)
-    await apply_god_mode(response_text)
-        
-    if task.agent == "@dispatcher":
-        try:
-            clean_json = response_text.replace("```json", "").replace("```", "").strip()
-            subtasks = json.loads(clean_json[clean_json.find('['):clean_json.rfind(']')+1])
-            created_ids = []
-            for i, st in enumerate(subtasks):
-                sub_id = f"{task.id}-SUB-{i+1}"
-                created_ids.append(sub_id)
-                
-                meta = task.metadata.copy() if task.metadata else {}
-                if "depends_on" in st:
-                    meta["depends_on"] = [created_ids[idx] for idx in st["depends_on"] if idx < len(created_ids)]
-                
-                new_task = Task(
-                    id=sub_id,
-                    description=st.get("description", "Sub-tarefa gerada"),
-                    agent=st.get("agent", "@implementor"),
-                    timestamp=datetime.now().isoformat(),
-                    metadata=meta
-                )
-                await manager.add_task(new_task)
-            logging.info(f"[{task.id}] Dispatcher gerou {len(subtasks)} tarefas em Grafo (DAG). Multithreading ativado.")
-        except Exception as e:
-            logging.error(f"[{task.id}] Falha ao interpretar matriz do Dispatcher: {e}")
+    return response_text
 
 # ==========================================
 # 2.6 NOTIFICAÇÃO DO SISTEMA (Windows Toast)
@@ -1202,6 +1263,24 @@ async def start_api_server(manager: QueueManager, port: int = 17042):
     finally:
         await runner.cleanup()
 
+async def _create_system_task(manager: QueueManager, task_id: str, description: str, agent: str, priority: str = "high"):
+    """Cria uma tarefa de sistema de forma robusta, com logging detalhado."""
+    try:
+        if not await manager.get_task(task_id):
+            system_task = Task(
+                id=task_id,
+                description=description,
+                agent=agent,
+                timestamp=datetime.now().isoformat(),
+                metadata={"priority": priority}
+            )
+            await manager.add_task(system_task)
+            logging.info(f"[SISTEMA IMUNOLOGICO] Tarefa de sistema '{task_id}' para {agent} criada com sucesso.")
+            return True
+    except Exception as e:
+        logging.critical(f"[SISTEMA IMUNOLOGICO] FALHA CRITICA ao criar tarefa de sistema '{task_id}': {e}")
+    return False
+
 async def execute_task_workflow(task: Task, manager: QueueManager):
     """
     Executa o workflow completo para uma unica tarefa.
@@ -1209,11 +1288,46 @@ async def execute_task_workflow(task: Task, manager: QueueManager):
     """
     manager = QueueManager()
     start_time = time.time()
+    response_text = ""
     try:
-        await process_agent_task(task, manager)
+        response_text = await process_agent_task(task, manager)
+
+        # --- Efeitos Colaterais (Materializacao) ---
+        result_dir = Path(".claude/task_results")
+        result_dir.mkdir(parents=True, exist_ok=True)
+        with open(result_dir / f"{task.id}.md", "w", encoding="utf-8") as f:
+            f.write(f"# Resposta: {task.id} ({task.agent})\n\n{response_text}")
+
+        await apply_god_mode(response_text)
+
+        if task.agent == "@dispatcher":
+            try:
+                clean_json = response_text.replace("```json", "").replace("```", "").strip()
+                subtasks = json.loads(clean_json[clean_json.find('['):clean_json.rfind(']')+1])
+                created_ids = []
+                for i, st in enumerate(subtasks):
+                    sub_id = f"{task.id}-SUB-{i+1}"
+                    created_ids.append(sub_id)
+
+                    meta = task.metadata.copy() if task.metadata else {}
+                    if "depends_on" in st:
+                        meta["depends_on"] = [created_ids[idx] for idx in st["depends_on"] if idx < len(created_ids)]
+
+                    new_task = Task(
+                        id=sub_id,
+                        description=st.get("description", "Sub-tarefa gerada"),
+                        agent=st.get("agent", "@implementor"),
+                        timestamp=datetime.now().isoformat(),
+                        metadata=meta
+                    )
+                    await manager.add_task(new_task)
+                logging.info(f"[bold blue]🔀 ESTRATÉGIA[/] [cyan]{task.id}[/] fragmentada em [bold]{len(subtasks)}[/] sub-tarefas interdependentes.")
+            except Exception as e:
+                logging.error(f"[{task.id}] Falha ao interpretar matriz do Dispatcher: {e}")
+
         # Sucesso
         await manager.update_task_status(task.id, "completed")
-        logging.info(f"[OK]  Simetria: [{task.id}] -> COMPLETED")
+        logging.info(f"[bold green]✔ SIMETRIA ALCANÇADA[/] [cyan]{task.id}[/] concluída por [yellow]{task.agent}[/]")
         
         duration = time.time() - start_time
         write_economic_log(task, duration, "COMPLETED")
@@ -1243,9 +1357,23 @@ async def execute_task_workflow(task: Task, manager: QueueManager):
                             timestamp=datetime.now().isoformat()
                         )
                         await manager.add_task(new_task)
-                        logging.info(f"[AUTO-HANDOFF] O bastao foi passado para {next_agent}.")
+                        logging.info(f"[bold magenta]➔ HANDOFF[/] O bastão foi passado para [yellow]{next_agent}[/]")
     except Exception as e:
-        logging.error(f"[FAIL] Falha: [{task.id}] -> FAILED ({traceback.format_exc()})")
+        if isinstance(e, APIBudgetExhaustedError):
+            logging.error(f"[bold red]⛔ ORÇAMENTO ESGOTADO[/] Falha na tarefa [cyan]{task.id}[/].")
+            await manager.update_task_status(task.id, "pending") # Devolve a tarefa para a fila
+            
+            now = datetime.now()
+            tomorrow = now.date() + timedelta(days=1)
+            hibernation_target = datetime.combine(tomorrow, datetime.min.time())
+            await manager.set_system_state("hibernation_until", hibernation_target.isoformat())
+            
+            notification_id = f"BUDGET-ALERT-{now.strftime('%Y%m%d')}"
+            notification_desc = "ALERTA CRITICO: O orcamento diario de API foi esgotado. O sistema entrara em hibernacao ate o proximo ciclo. Tarefas urgentes devem ser executadas manualmente via `.\\do.ps1 -Web`."
+            await _create_system_task(manager, notification_id, notification_desc, "@chico", "critical")
+            return # Nao processa o resto do bloco de falha
+
+        logging.error(f"[bold red]✖ ENTROPIA DETECTADA[/] Tarefa [cyan]{task.id}[/] falhou nas mãos de [yellow]{task.agent}[/].\n[dim]{e}[/]")
         await manager.update_task_status(task.id, "failed")
         
         duration = time.time() - start_time
@@ -1255,40 +1383,18 @@ async def execute_task_workflow(task: Task, manager: QueueManager):
         # ==========================================
         # RESSÔNANCIA FRACTAL E AUTO-CURA (Aprendizado Preditivo)
         # ==========================================
-        is_system_task = task.id.startswith("AUTOFIX-") or task.id.startswith("RESONANCE-")
+        is_system_task = task.id.startswith(("AUTOFIX-", "RESONANCE-", "HANDOFF-"))
         if not is_system_task:
             # 1. A Cura Imediata da Parte (Auto-Fix)
-            try:
-                fix_id = f"AUTOFIX-{task.id}"
-                if not await manager.get_task(fix_id):
-                    fix_task = Task(
-                        id=fix_id,
-                        description=f"[SYSTEM AUTODEBUG] A tarefa original '{task.id}' executada por {task.agent} falhou com a excecao: {e}.\n\n---\nTarefa Original:\n{task.description}\n---\n\nATENCAO: Avalie o erro ocorrido, aplique a autocorrecao tecnica necessaria sem alucinar, e re-execute o objetivo original com sucesso. Nao demande intervencao humana.",
-                        model=task.agent,
-                        agent=task.agent,
-                        timestamp=datetime.now().isoformat()
-                    )
-                    await manager.add_task(fix_task)
-                    logging.info(f"[AUTODEBUGGER] Auto-Cura acionada! Tarefa {fix_id} injetada na fila.")
-                    send_toast("Auto-Cura Acionada", "Sistema intervindo autonomamente.", "warning")
-            except Exception as debug_error:
-                logging.error(f"[FAIL] Falha fatal no Nucleo de Autodebugging: {debug_error}")
-                
+            fix_id = f"AUTOFIX-{task.id}"
+            fix_desc = f"[SYSTEM AUTODEBUG] A tarefa original '{task.id}' executada por {task.agent} falhou com a excecao: {e}.\n\n---\nTAREFA ORIGINAL:\n{task.description}\n---\nRESPOSTA QUE CAUSOU A FALHA:\n{response_text}\n---\n\nATENCAO: Avalie o erro ocorrido e a resposta que o causou. Aplique a autocorrecao tecnica necessaria sem alucinar, e re-execute o objetivo original com sucesso. Nao demande intervencao humana."
+            if await _create_system_task(manager, fix_id, fix_desc, task.agent, "critical"):
+                 logging.info(f"[bold orange3]⚕ AUTO-CURA[/] Anticorpos acionados para a tarefa [cyan]{task.id}[/]")
+
             # 2. A Evolução do Todo (Ressonância Fractal)
-            try:
-                resonance_id = f"RESONANCE-{task.id}"
-                if not await manager.get_task(resonance_id):
-                    resonance_task = Task(
-                        id=resonance_id,
-                        description=f"[AUDITORIA FRACTAL] A tarefa '{task.id}' do {task.agent} quebrou com o erro: {e}.\nDiretriz Holística: 1. Faça a antevisão da causa raiz. 2. Identifique quais OUTROS componentes e agentes podem ser afetados ou beneficiados se resolvermos este gargalo. 3. Proponha (e implemente via God Mode) uma otimização estrutural nas fundações ou no 'do.ps1' para que o ecossistema evolua e este erro nunca mais aconteça com nenhum agente. O erro de um é o aprendizado de todos.",
-                        agent="@maverick",
-                        timestamp=datetime.now().isoformat(),
-                        metadata={"priority": "high"}
-                    )
-                    await manager.add_task(resonance_task)
-                    logging.info(f"[RESSONANCIA FRACTAL] Maverick ativado. O sistema aprenderá com esse erro.")
-            except Exception as res_error:
-                logging.error(f"[FAIL] Falha ao acionar Ressonância: {res_error}")
+            resonance_id = f"RESONANCE-{task.id}"
+            resonance_desc = f"[AUDITORIA FRACTAL] A tarefa '{task.id}' do {task.agent} quebrou com o erro: {e}.\nDiretriz Holística: 1. Faça a antevisão da causa raiz. 2. Identifique quais OUTROS componentes e agentes podem ser afetados ou beneficiados se resolvermos este gargalo. 3. Proponha (e implemente via God Mode) uma otimização estrutural nas fundações ou no 'do.ps1' para que o ecossistema evolua e este erro nunca mais aconteça com nenhum agente. O erro de um é o aprendizado de todos."
+            await _create_system_task(manager, resonance_id, resonance_desc, "@maverick", "high")
 
 # ==========================================
 # 3. O PULSO (Daemon/Worker)
@@ -1307,22 +1413,33 @@ async def start_worker():
     completed = counts.get("completed", 0)
     failed    = counts.get("failed", 0)
     
-    W = "\033[97m"  # Código ANSI para Branco Brilhante
-    R = '\033[0m'  # Código ANSI para Resetar a cor
-    # 3. Força a impressão na tela (bypass de buffer)
-    print(f"{W}==========================================================={R}", flush=True)
-    print(f"{W}         CHICO SYSTEM - ORQUESTRADOR PYTHON SOTA           {R}", flush=True)
-    print(f"{W}==========================================================={R}", flush=True)
-    print(f"{W} PENDENTES: {pending} | RODANDO: {running} | COMPLETAS: {completed} | FALHAS: {failed}{R}", flush=True)
-    print(f"{W}===========================================================\n{R}", flush=True)
+    # Painel de Boas-vindas SOTA
+    header = "[bold cyan]NEXUS ORCHESTRATOR[/] | [magenta]Kernel SOTA v6.4 Ativo[/]\n"
+    header += f"[dim]A entropia morre aqui. Operando sob a lei da Cosmologia Vitoi.[/]\n\n"
+    header += f"Pendentes: [yellow]{pending}[/] | Completas: [green]{completed}[/] | Falhas: [red]{failed}[/]"
+    console.print(Panel(header, border_style="cyan", title="[bold]SISTEMA ONLINE[/]", expand=False))
     
-    logging.info("=== ORQUESTRADOR PYTHON INICIADO [MULTITHREAD] ===")
+    status_line = console.status("[cyan]Sincronizando consciência...[/]", spinner="dots")
+    status_line.start()
     
     semaphore = asyncio.Semaphore(4)
     running_tasks = set()
 
     try:
         while True:
+            hibernation_ts = await manager.get_system_state("hibernation_until")
+            if hibernation_ts:
+                try:
+                    hibernation_until = datetime.fromisoformat(hibernation_ts)
+                    if datetime.now() < hibernation_until:
+                        status_line.update(f"[red]HIBERNAÇÃO[/] Orçamento de API esgotado. Retorno às {hibernation_until.strftime('%H:%M')}.")
+                        await asyncio.sleep(60)
+                        continue
+                    else:
+                        await manager.set_system_state("hibernation_until", "") # Hibernacao terminada
+                except (ValueError, TypeError):
+                    await manager.set_system_state("hibernation_until", "") # Reseta estado invalido
+
             try:
                 counts = await manager.get_task_counts()
                 pending_count = counts.get("pending", 0)
@@ -1331,11 +1448,14 @@ async def start_worker():
                     current_time = datetime.now().strftime("%H:%M:%S")
                     ctypes.windll.kernel32.SetConsoleTitleW(f"NEXUS WORKER | Pendentes: {pending_count} | Rodando: {len(running_tasks)} | Pulso: {current_time}")
                 
+                # Atualiza a linha de status dinâmica no terminal
+                status_line.update(f"[bold]Vigília[/] | Pendentes: [yellow]{pending_count}[/] | Rodando: [magenta]{len(running_tasks)}[/] | Completas: [green]{counts.get('completed',0)}[/]")
+                
                 await semaphore.acquire()
                 task = await manager.get_next_task()
                 if task:
                     semaphore.release() # Release immediately if task found, workflow will acquire
-                    logging.info(f"[>>>] Metamorfose: [{task.id}] -> RUNNING (Agente:{task.agent})")
+                    logging.info(f"[bold magenta]▶ METAMORFOSE INICIADA[/] [cyan]{task.id}[/] entregue para [yellow]{task.agent}[/]")
                     await manager.update_task_status(task.id, "running")
                     
                     async def task_wrapper(task, manager, sem):
@@ -1347,14 +1467,15 @@ async def start_worker():
                     future.add_done_callback(running_tasks.discard)
                 else:
                     semaphore.release()
-                    pulse_time = datetime.now().strftime("%H:%M:%S")
-                    print(f"\r\033[K[{pulse_time}] [VIGILIA] Pendentes: {counts.get('pending',0)} | Rodando: {len(running_tasks)} | Concluidas: {counts.get('completed',0)} | Falhas: {counts.get('failed',0)} (Aguardando...)", end="", flush=True)
                     await asyncio.sleep(5)
             except Exception as inner_e:
-                logging.error(f"[FATAL] Erro interno no laco do worker: {inner_e}")
+                logging.error(f"[bold red]FATAL[/] Arritmia no loop central do worker: {inner_e}")
                 await asyncio.sleep(5)
     except KeyboardInterrupt:
+        status_line.stop()
         logging.info("Pulso encerrado pelo usuario. Hibernando...")
+    finally:
+        status_line.stop()
 
 async def start_worker_and_api():
     """Inicia o Worker e o Servidor de API em threads separadas para maxima performance."""
@@ -1369,7 +1490,7 @@ if __name__ == "__main__":
         cmd = sys.argv[1]
         manager = QueueManager()
         
-        if cmd =="db-init":
+        if cmd == "db-init":
             # This remains sync for simple CLI usage
             with sqlite3.connect(manager.db_path) as conn:
                 manager._init_db.__func__(manager, conn)
@@ -1391,14 +1512,36 @@ if __name__ == "__main__":
                 print(f"ERROR: Provided JSON - {task_json}")
                 print("ERROR: Certifique-se de que o JSON é válido e adere ao schema correto.")
                 sys.exit(1)            
-            except Exception as e :
+            except Exception as e:
                 print(f"ERROR: {e}")
                 sys.exit(1)
         elif cmd == "db-get":
             status = sys.argv[2] if len(sys.argv) > 2 else None
-            if status == "all": status = None
-            tasks = asyncio.run(manager.get_tasks(status))
-            print(json.dumps([t.model_dump() for t in tasks]))
+            
+            since_hours = None
+            if "--since" in sys.argv:
+                idx = sys.argv.index("--since")
+                if len(sys.argv) > idx + 1:
+                    val = sys.argv[idx+1]
+                    since_hours = int(val[:-1]) if val.endswith('h') else int(val)
+
+            if status == "counts":
+                counts = asyncio.run(manager.get_task_counts())
+                print(json.dumps(counts))
+            elif status == "budget":
+                today = datetime.now().strftime("%Y-%m-%d")
+                async def get_budget():
+                    async with aiosqlite.connect(manager.db_path) as db:
+                        async with db.execute("SELECT call_count FROM daily_usage WHERE date = ?", (today,)) as cursor:
+                            row = await cursor.fetchone()
+                            current_count = row[0] if row else 0
+                            return {"used": current_count, "total": DAILY_API_BUDGET}
+                budget = asyncio.run(get_budget())
+                print(json.dumps(budget))
+            else:
+                if status in ("all", "--since"): status = None
+                tasks = asyncio.run(manager.get_tasks(status, since_hours))
+                print(json.dumps([t.model_dump() for t in tasks]))
         elif cmd == "db-stats":
             stats = asyncio.run(manager.get_performance_history())
             print(json.dumps(stats))

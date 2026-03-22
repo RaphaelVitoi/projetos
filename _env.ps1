@@ -1,11 +1,11 @@
 # Arquivo de Variaveis de Ambiente (Ignorado pelo Git)
 # Mantenha suas chaves aqui. O task_executor.py le este arquivo diretamente.
 
-$env:GEMINI_API_KEY_1 = "AIzaSyCD4L5DorD6vibrTNX0LBtaQSG393s_S1s"
-$env:GEMINI_API_KEY_2 = "AIzaSyCWX1S0uUmpwtsr3UwIBr0gXNLFRRDpwV8"
-$env:GEMINI_API_KEY_3 = "AIzaSyDA0no50LW1yIRyA8l6OfgARetORjt3n-w"
-$env:GEMINI_API_KEY_4 = "AIzaSyCkG-wnu8rNp-c4txCo_GbMGiR22hyOwP8"
-$env:GEMINI_API_KEY_5 = "AIzaSyA6YBpRL2N3oJwX4v0AfGRddyBe7VeAUEM"
+$env:GEMINI_API_KEY_1 = "AIzaSyDFktXyW_cveB3haq142oRb_ZmlbVJzyUM"
+$env:GEMINI_API_KEY_2 = "AIzaSyAdz8D5TeIEsb0r1yAFWHVVh2zYPkc4yp0"
+$env:GEMINI_API_KEY_3 = "AIzaSyBvA13O7jiNSRp1HHZFcnKsXvqTP4VgtOQ"
+$env:GEMINI_API_KEY_4 = "AIzaSyBtzrUbwwMxEpSp8NCUby_ZmNrl_boNZyk"
+$env:GEMINI_API_KEY_5 = "AIzaSyAvHXVafIlj7LUe63fE3wROaT8IqsMsi9w"
 
 $env:OPENROUTER_API_KEY = "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"
 $env:OPENROUTER_API_KEY = "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"

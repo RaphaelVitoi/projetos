@@ -464,10 +464,12 @@
     flex-direction: column;
     align-items: center;
   }
+
   .stateOfArtSection,
   .timelineSection {
     padding: 1.5rem;
   }
+
   .timelineSection {
     grid-template-columns: 1fr;
   }

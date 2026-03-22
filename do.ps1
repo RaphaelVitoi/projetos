@@ -34,7 +34,8 @@ param (
     [ValidateSet('low', 'medium', 'high', 'gto')]
     [string]$Intensity = 'low',
     [ValidateSet('worker', 'frontend')]
-    [string]$Target = 'worker'
+    [string]$Target = 'worker',
+    [switch]$Setup
 )
 
 # Constantes e Configuracoes (PURE ASCII, sem UTF-8)
@@ -105,6 +106,15 @@ $ProjectContext
 
 
 # --- Logica Principal ---
+
+# Tratamento para o parametro -Setup (Instalacao/Atualizacao do Ecossistema)
+if ($Setup) {
+    Write-Host "=== [SISTEMA] INICIANDO PROTOCOLO DE INSTALACAO/ATUALIZACAO DO PERFIL NEXUS ===" -ForegroundColor Magenta
+    $SetupScript = Join-Path $ScriptDirectory "scripts\setup\Setup-NexusProfile.ps1"
+    & $SetupScript
+    Write-Host "[ALERTA] A instalacao foi concluida. Para que os comandos globais funcionem, voce DEVE fechar este terminal e abrir um novo." -ForegroundColor Yellow
+    exit 0
+}
 
 # Tratamento para o parametro -Chaos (Engenharia SOTA)
 if ($Chaos) {
@@ -208,23 +218,41 @@ if ($Execute) {
 
 # Tratamento para o parametro -Description (Enfileirar tarefa)
 if ($Description) {
+    # Roteamento Absoluto SOTA: Detecta se o usuario forcou um agente especifico
+    $TargetAgent = "@dispatcher"
+    if ($Description -match '(?s)^(@[a-zA-Z0-9_-]+)\s+(.*)') {
+        $TargetAgent = $Matches[1]
+        $Description = $Matches[2]
+    }
+
     $NewTask = [ordered]@{
         id          = "TASK-$(Get-Date -Format 'yyyyMMdd-HHmmss')"
         description = $Description
         status      = "pending"
         timestamp   = (Get-Date -Format "o")
-        agent       = "@dispatcher"
+        agent       = $TargetAgent
     }
+    $taskJson = $NewTask | ConvertTo-Json -Depth 10 -Compress
     try {
-        $taskJson = $NewTask | ConvertTo-Json -Depth 10 -Compress
         $apiUrl = "http://127.0.0.1:17042/add"
         $headers = @{ "Content-Type" = "application/json" }
-        Invoke-WebRequest -Uri $apiUrl -Method Post -Body $taskJson -Headers $headers -UseBasicParsing | Out-Null
+        Invoke-WebRequest -Uri $apiUrl -Method Post -Body $taskJson -Headers $headers -UseBasicParsing -TimeoutSec 2 | Out-Null
 
         Write-Host "[TAREFA ENFILEIRADA SOTA] ID: $($NewTask.id) (API Sincronizado)" -ForegroundColor Green
     }
     catch {
-        Write-Error "Falha critica ao injetar tarefa no Kernel (API): $_. Certifique-se que o worker esta rodando com 'python task_executor.py worker-api'."
+        Write-Host "[AVISO] API de alta velocidade offline. Acionando Fallback para insercao direta no DAL (SQLite)..." -ForegroundColor Yellow
+        $taskB64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($taskJson))
+        $PyScript = Join-Path $ScriptDirectory "task_executor.py"
+        $PythonCmd = if (Test-Path "$ScriptDirectory\.venv\Scripts\python.exe") { "$ScriptDirectory\.venv\Scripts\python.exe" } else { "python" }
+            
+        $output = & $PythonCmd $PyScript db-add $taskB64
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "[TAREFA ENFILEIRADA SOTA] ID: $($NewTask.id) (DAL Sincronizado)" -ForegroundColor Green
+        }
+        else {
+            Write-Error "Falha critica ao injetar tarefa no Kernel (DAL): $output"
+        }
     }
     exit 0
 }

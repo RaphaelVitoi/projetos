@@ -94,6 +94,15 @@ export default function MasterSimulator() {
             }}>
               Motor ICM
             </h1>
+            <p style={{
+              margin: '0.3rem 0 0',
+              fontSize: '0.62rem',
+              color: '#64748b',
+              lineHeight: 1.4,
+              maxWidth: '480px',
+            }}>
+              Escolha um cenário de torneio e veja como o ICM distorce as frequências de equilíbrio GTO — editando os valores base para refletir o seu spot.
+            </p>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.4rem' }}>
               <span style={{
                 display: 'inline-flex',

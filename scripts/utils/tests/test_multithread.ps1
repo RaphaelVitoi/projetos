@@ -11,10 +11,9 @@ $Tasks = @(
 )
 
 foreach ($t in $Tasks) {
-    # A Membrana entende o Roteamento Absoluto
-    .\do.ps1 -InputString $t -Force
+    # A Membrana SOTA entende o Roteamento Absoluto via Regex
+    .\do.ps1 -Description $t -Force
     Start-Sleep -Milliseconds 500
 }
 
 Write-Host "`n[NEXUS] 3 tarefas injetadas simultaneamente. Abra o 'dashboard' ou 'monitor' e veja todas sendo processadas em paralelo!" -ForegroundColor Green
-

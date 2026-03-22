@@ -6,7 +6,7 @@
 Write-Host "=== ELEVANDO SISTEMA AO ESTADO DA ARTE (CLI GLOBAL) ===" -ForegroundColor Cyan
 
 $ProfilePath = $PROFILE
-$NexusDir = $PSScriptRoot
+$ProjectRoot = (Get-Item $PSScriptRoot).parent.parent.FullName
 
 # Cria o arquivo de profile global do usuario se nao existir
 if (-not (Test-Path $ProfilePath)) {
@@ -14,62 +14,76 @@ if (-not (Test-Path $ProfilePath)) {
     New-Item -ItemType File -Path $ProfilePath -Force | Out-Null
 }
 
-$ProfileContent = Get-Content $ProfilePath -Raw -ErrorAction SilentlyContinue
+# ==========================================
+# PROTOCOLO DE ANIQUILACAO (GOD MODE)
+# ==========================================
+# Backup de seguranca caso o perfil tivesse algo importante
+if (Test-Path $ProfilePath) { Copy-Item -Path $ProfilePath -Destination "$ProfilePath.bak" -Force }
 
-# AUTO-UPDATE: Se o bloco ja existe, remove-o de forma limpa para injetar a versao atualizada
-if ($ProfileContent -match "# NEXUS SYSTEM ENVIRONMENT") {
-    $Pattern = "(?ms)`n# ==========================================.*?# NEXUS SYSTEM ENVIRONMENT.*?# =========================================="
-    $ProfileContent = $ProfileContent -replace $Pattern, ""
-    Set-Content -Path $ProfilePath -Value $ProfileContent -Encoding UTF8
-}
+# Obliteracao total do perfil corrompido. Fim da entropia.
+Clear-Content -Path $ProfilePath -Force -ErrorAction SilentlyContinue
 
 $Injection = @"
 
-# ==========================================
-# NEXUS SYSTEM ENVIRONMENT (Auto-Generated)
-# ==========================================
-`$NexusDir = "$NexusDir"
+# === START NEXUS SYSTEM ENVIRONMENT ===
+`$Global:NexusProjectRoot = "$ProjectRoot"
+`$Global:NexusPythonExe = if (Test-Path "$ProjectRoot\.venv\Scripts\python.exe") { "$ProjectRoot\.venv\Scripts\python.exe" } else { "python.exe" }
 
-# Atalhos Operacionais (Fim do uso de .\ e .ps1)
-Set-Alias -Name dashboard -Value "`$NexusDir\dashboard_queue.ps1" -Scope Global -ErrorAction SilentlyContinue
-Set-Alias -Name start-worker -Value "`$NexusDir\start_worker.ps1" -Scope Global -ErrorAction SilentlyContinue
-Set-Alias -Name stop-worker -Value "`$NexusDir\stop_worker.ps1" -Scope Global -ErrorAction SilentlyContinue
-Set-Alias -Name monitor -Value "`$NexusDir\monitor_worker.ps1" -Scope Global -ErrorAction SilentlyContinue
-Set-Alias -Name ask -Value "`$NexusDir\ask.ps1" -Scope Global -ErrorAction SilentlyContinue
-Set-Alias -Name nexus-status -Value "`$NexusDir\nexus_status.ps1" -Scope Global -ErrorAction SilentlyContinue
-Set-Alias -Name nexus_status -Value "`$NexusDir\nexus_status.ps1" -Scope Global -ErrorAction SilentlyContinue
-Set-Alias -Name nexus-read -Value "`$NexusDir\nexus_read.ps1" -Scope Global -ErrorAction SilentlyContinue
-Set-Alias -Name nexus_read -Value "`$NexusDir\nexus_read.ps1" -Scope Global -ErrorAction SilentlyContinue
-Set-Alias -Name nexus-backup -Value "`$NexusDir\nexus_backup.ps1" -Scope Global -ErrorAction SilentlyContinue
-Set-Alias -Name nexus_backup -Value "`$NexusDir\nexus_backup.ps1" -Scope Global -ErrorAction SilentlyContinue
-Set-Alias -Name autonomy-full -Value "`$NexusDir\autonomy_full.ps1" -Scope Global -ErrorAction SilentlyContinue
-Set-Alias -Name autonomy-partial -Value "`$NexusDir\autonomy_partial.ps1" -Scope Global -ErrorAction SilentlyContinue
-Set-Alias -Name autonomy-off -Value "`$NexusDir\autonomy_off.ps1" -Scope Global -ErrorAction SilentlyContinue
-Set-Alias -Name nexus-hub -Value "`$NexusDir\nexus_hub.ps1" -Scope Global -ErrorAction SilentlyContinue
-Set-Alias -Name nexus-help -Value "`$NexusDir\nexus_hub.ps1" -Scope Global -ErrorAction SilentlyContinue
+# --- Comandos Core do Ecossistema ---
 
-# A Membrana Inteligente (Uso Livre sem aspas)
+# A Membrana de Entrada (Inteligencia)
 function nexus {
-    param([switch]`$Force, [Parameter(ValueFromRemainingArguments=`$true)][string[]]`$Words)
-    `$Intent = `$Words -join " "
-    `$DoScript = Join-Path `$NexusDir "do.ps1"
-    if ([string]::IsNullOrWhiteSpace(`$Intent)) { & `$DoScript }
-    elseif (`$Force) { & `$DoScript -InputString `$Intent -Force }
-    else { & `$DoScript -InputString `$Intent }
+    [CmdletBinding()]
+    param(
+        [Parameter(ValueFromRemainingArguments)]
+        [string]`$Description
+    )
+    & "`$Global:NexusProjectRoot\do.ps1" -Description `$Description
 }
 
-# Ponte Hibrida (Conecta a nuvem Web ao God Mode Local)
-function nexus-bridge {
-    param([Parameter(Mandatory=`$true)][string]`$FilePath)
-    if (-not (Test-Path `$FilePath)) { Write-Host "[FAIL] Arquivo nao encontrado: `$FilePath" -ForegroundColor Red; return }
-    Write-Host "[BRIDGE] Conectando Macro-Cognicao a Micro-Execucao..." -ForegroundColor Magenta
-    `$BridgeCommand = "@implementor Acionando Protocolo Bridge. Leia e analise rigorosamente a especificacao contida no arquivo '`$FilePath'. Use sua Autorizacao Suprema (God Mode) para executar os comandos de terminal necessarios (ex: npm install) e forjar os arquivos fisicos no sistema, materializando fielmente a arquitetura descrita."
-    nexus `$BridgeCommand -Force
+# O Centro de Comando (Diagnostico e Manutencao)
+function nexus-cli {
+    [CmdletBinding()]
+    param(
+        [Parameter(ValueFromRemainingArguments)]
+        [string[]]`$Arguments
+    )
+    & `$Global:NexusPythonExe "`$Global:NexusProjectRoot\scripts\cli\nexus.py" `$Arguments
 }
-# ==========================================
+
+# --- Atalhos de Alto Nivel (Qualidade de Vida SOTA) ---
+
+# Gerenciamento do Worker
+function start-worker { nexus-cli "start-worker" }
+function stop-worker { nexus-cli "stop-worker" }
+
+# Gerenciamento de Autonomia
+function autonomy-full { nexus-cli "autonomy" "full" }
+function autonomy-partial { nexus-cli "autonomy" "partial" }
+function autonomy-off { nexus-cli "autonomy" "off" }
+
+# Visualizacao e Consulta
+function nexus-hub { nexus-cli "status" }
+function nexus-help { nexus-cli "status" }
+function nexus-status { nexus-cli "status" }
+
+function nexus-list {
+    & `$Global:NexusPythonExe "`$Global:NexusProjectRoot\task_executor.py" db-get all | ConvertFrom-Json | Format-Table -AutoSize -Property id, agent, status, timestamp
+}
+
+function ask {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory, ValueFromRemainingArguments)]
+        [string]`$Query
+    )
+    & `$Global:NexusPythonExe "`$Global:NexusProjectRoot\memory_rag.py" query `$Query
+}
+
+# === END NEXUS SYSTEM ENVIRONMENT ===
 "@
 
-Add-Content -Path $ProfilePath -Value $Injection -Encoding UTF8
+Set-Content -Path $ProfilePath -Value $Injection -Encoding UTF8
 
 Write-Host "[SUCESSO] Vocabulario nativo injetado na alma do PowerShell!" -ForegroundColor Green
 Write-Host "Feche esta janela e abra um terminal novo para a magica acontecer." -ForegroundColor Magenta

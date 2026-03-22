@@ -1,4 +1,4 @@
-﻿﻿{
+﻿﻿﻿﻿{
   "deep_thinking": [
     "claude-3-7-sonnet-20250219",
     "gemini-2.5-pro",
@@ -13,7 +13,6 @@
   "agent_map": {
     "@maverick": "deep_thinking",
     "@architect": "deep_thinking",
-    "@planner": "deep_thinking",
     "@auditor": "deep_thinking",
     "@implementor": "deep_thinking",
     "@verifier": "deep_thinking",
@@ -26,7 +25,6 @@
     "@pesquisador": "fast_operations",
     "@organizador": "fast_operations",
     "@prompter": "fast_operations",
-    "@bibliotecario": "fast_operations",
-    "@sequenciador": "fast_operations"
+    "@bibliotecario": "fast_operations"
   }
 }

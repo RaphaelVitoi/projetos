@@ -22,7 +22,7 @@ Sua tarefa e realizar uma auditoria completa e atualiza-lo para refletir o ESTAD
 
 CHECKLIST DE VERIFICACAO OBRIGATORIA:
 1.  **Fila de Tarefas:** Confirme que a referencia e ao banco de dados `tasks.db` (SQLite) e que a mencao ao `tasks.json` foi erradicada.
-2.  **Pipeline de Ingestao:** Verifique se o protocolo `do.ps1 -Ingest` esta documentado como o metodo para fechar o loop de friccao.
+2.  **Pipeline de Ingestao:** Verifique se o protocolo `python task_executor.py ingest <arquivo>` esta documentado como o metodo para fechar o loop de friccao (O antigo do.ps1 -Ingest nao existe mais).
 3.  **Contagem de Agentes:** Valide o numero total (atualmente 16 Entidades: Raphael + 15 Agentes IA).
 4.  **Stack Tecnologica:** Assegure que a stack (Python DAL, PS1, SQLite, Next.js 16) esta corretamente descrita.
 5.  **Leis e Principios:** Garanta que o documento reflete os principios mais recentes do `MODUS_OPERANDI.md`.
@@ -39,7 +39,7 @@ $task = [ordered]@{
 }
 
 # SOTA Python DAL
-$taskJson = $task | ConvertTo-Json -Depth 10 -Compress:$true
+$taskJson = $task | ConvertTo-Json -Depth 10 -Compress
 $taskB64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($taskJson))
 $PyScript = Join-Path $ProjectRoot "task_executor.py"
 $PythonCmd = if (Test-Path "$ProjectRoot\.venv\Scripts\python.exe") { "$ProjectRoot\.venv\Scripts\python.exe" } else { "python" }

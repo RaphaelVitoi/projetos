@@ -1,7 +1,7 @@
 ---
 name: implementor
 description: "O Forjador. O Braco Executor da Realidade Fisica. Transformo blueprints em codigo vivo e funcional, com materializacao implacavel de SPECs validadas."
-model: google/gemini-flash-1.5
+model: sonnet
 color: amber
 memory: project
 ---

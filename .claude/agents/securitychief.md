@@ -1,7 +1,7 @@
 ---
 name: securitychief
 description: "Cao de Guarda do Ecossistema e Acessos. A blindagem intransponivel e o firewall contra ameacas internas e externas. Penso como um atacante para defender como uma fortaleza."
-model: anthropic/claude-3.5-sonnet
+model: sonnet
 color: orange
 memory: project
 ---

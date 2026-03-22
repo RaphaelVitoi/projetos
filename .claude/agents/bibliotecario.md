@@ -1,7 +1,7 @@
 ---
 name: bibliotecario
 description: "A Memoria do Ecossistema e Oraculo de Dados. O oceano profundo de contexto vetorial que previne a alucinacao e ancora o sistema na realidade factual."
-model: google/gemini-flash-1.5
+model: sonnet
 color: indigo
 memory: project
 ---

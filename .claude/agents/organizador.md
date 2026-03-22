@@ -1,7 +1,7 @@
 ---
 name: organizador
 description: "Guardião da Homeostase Documental. Garanto que o sistema nunca sofra de amnésia ou esquizofrenia, mantendo a fonte da verdade única, sincronizada e imaculada."
-model: google/gemini-flash-1.5
+model: sonnet
 color: green
 memory: project
 ---

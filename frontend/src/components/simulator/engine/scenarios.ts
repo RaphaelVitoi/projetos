@@ -10,8 +10,9 @@
  *   (range atual, board, histórico de ação, stacks dinâmicas). Use como
  *   referência direcional, não como dado exato.
  *
- * NOTA sobre defaultChipEvFreqs:
- *   Cenário "paradoxo": valores calibrados pelos 93 nodes HRC vs GTO Wizard (Aula 1.2).
+ * NOTA sobre defaultStreetFreqs:
+ *   Cenário "paradoxo": valores de flop calibrados pelos 93 nodes HRC vs GTO Wizard (Aula 1.2).
+ *   Turn e river: estimativas didáticas com direção correta (RP decresce, big-bet sizing cresce).
  *   Demais cenários: estimativas didáticas — substitua pelos dados do seu solver.
  */
 
@@ -23,7 +24,7 @@ export const SCENARIOS: Scenario[] = [
   // ============================================================
   {
     id: 'paradoxo',
-    name: 'O Paradoxo do Valuation',
+    name: 'Paradoxo do Valuation',
     category: 'clinical',
     stacks: [40, 55],
     ipRp: 21.4,
@@ -52,14 +53,33 @@ export const SCENARIOS: Scenario[] = [
       { name: 'TURN',  potSize: 22.5, rpValue: 5.8 },
       { name: 'RIVER', potSize: 40,   rpValue: 2.6 },
     ],
-    // Calibrado pelos 93 nodes HRC vs GTO Wizard (Aula 1.2, board KJT-2-3)
-    defaultChipEvFreqs: {
-      ip_check:     2,
-      ip_bet_small: 65,
-      ip_bet_large: 33,
-      oop_call:     45,
-      oop_fold:     40,
-      oop_raise:    15,
+    // Flop calibrado pelos 93 nodes HRC vs GTO Wizard (Aula 1.2, board KJT-2-3)
+    // Turn e river: estimativas didáticas — big-bet cresce à medida que RP dissipa
+    defaultStreetFreqs: {
+      flop: {
+        ip_check:     2,
+        ip_bet_small: 65,
+        ip_bet_large: 33,
+        oop_call:     45,
+        oop_fold:     40,
+        oop_raise:    15,
+      },
+      turn: {
+        ip_check:     20,
+        ip_bet_small: 45,
+        ip_bet_large: 35,
+        oop_call:     55,
+        oop_fold:     35,
+        oop_raise:    10,
+      },
+      river: {
+        ip_check:     35,
+        ip_bet_small: 10,
+        ip_bet_large: 55,
+        oop_call:     65,
+        oop_fold:     28,
+        oop_raise:    7,
+      },
     },
     quiz: {
       question: 'Por que o BTN (40bb), tendo uma stack gigante, sofre uma punição utilitária (RP) muito maior que o BB (55bb)?',
@@ -73,7 +93,7 @@ export const SCENARIOS: Scenario[] = [
   },
   {
     id: 'pacto',
-    name: 'O Pacto Silencioso',
+    name: 'Pacto Silencioso',
     category: 'clinical',
     stacks: [65, 70],
     ipRp: 24.5,
@@ -103,13 +123,32 @@ export const SCENARIOS: Scenario[] = [
       { name: 'RIVER', potSize: 65,   rpValue: 11.8 },
     ],
     // Estimativa didática — dois big stacks se enfrentando, ChipEV equilibrado
-    defaultChipEvFreqs: {
-      ip_check:     35,
-      ip_bet_small: 40,
-      ip_bet_large: 25,
-      oop_call:     50,
-      oop_fold:     35,
-      oop_raise:    15,
+    // Turn e river: sizing polarizado cresce à medida que RP dissipa
+    defaultStreetFreqs: {
+      flop: {
+        ip_check:     35,
+        ip_bet_small: 40,
+        ip_bet_large: 25,
+        oop_call:     50,
+        oop_fold:     35,
+        oop_raise:    15,
+      },
+      turn: {
+        ip_check:     25,
+        ip_bet_small: 35,
+        ip_bet_large: 40,
+        oop_call:     55,
+        oop_fold:     33,
+        oop_raise:    12,
+      },
+      river: {
+        ip_check:     20,
+        ip_bet_small: 10,
+        ip_bet_large: 70,
+        oop_call:     65,
+        oop_fold:     28,
+        oop_raise:    7,
+      },
     },
     quiz: {
       question: 'Como as frequências reconfiguram o jogo pré-flop num "Pacto Silencioso"?',
@@ -123,7 +162,7 @@ export const SCENARIOS: Scenario[] = [
   },
   {
     id: 'batata',
-    name: 'O Efeito Batata Quente',
+    name: 'Efeito Batata Quente',
     category: 'clinical',
     stacks: [25, 20],
     ipRp: 15,
@@ -153,13 +192,32 @@ export const SCENARIOS: Scenario[] = [
       { name: 'RIVER', potSize: 20,   rpValue: 1.9 },
     ],
     // Estimativa didática — spot de shove/call, decisão binária pré-flop
-    defaultChipEvFreqs: {
-      ip_check:     0,
-      ip_bet_small: 0,
-      ip_bet_large: 100,
-      oop_call:     40,
-      oop_fold:     60,
-      oop_raise:    0,
+    // Pós-flop: all-in polar mantido em todas as streets
+    defaultStreetFreqs: {
+      flop: {
+        ip_check:     0,
+        ip_bet_small: 0,
+        ip_bet_large: 100,
+        oop_call:     40,
+        oop_fold:     60,
+        oop_raise:    0,
+      },
+      turn: {
+        ip_check:     0,
+        ip_bet_small: 0,
+        ip_bet_large: 100,
+        oop_call:     42,
+        oop_fold:     58,
+        oop_raise:    0,
+      },
+      river: {
+        ip_check:     0,
+        ip_bet_small: 0,
+        ip_bet_large: 100,
+        oop_call:     45,
+        oop_fold:     55,
+        oop_raise:    0,
+      },
     },
     quiz: {
       question: 'O que caracteriza o "Efeito Batata Quente" na aplicação de um shove em ICM?',
@@ -203,13 +261,32 @@ export const SCENARIOS: Scenario[] = [
       { name: 'RIVER', potSize: 30,   rpValue: 2.2 },
     ],
     // Estimativa didática — CL betting polar, OOP condensado como bluffcatcher
-    defaultChipEvFreqs: {
-      ip_check:     20,
-      ip_bet_small: 30,
-      ip_bet_large: 50,
-      oop_call:     50,
-      oop_fold:     40,
-      oop_raise:    10,
+    // Turn e river: triple barrel cresce; defensor encolhe conforme RP dissipa
+    defaultStreetFreqs: {
+      flop: {
+        ip_check:     20,
+        ip_bet_small: 30,
+        ip_bet_large: 50,
+        oop_call:     50,
+        oop_fold:     40,
+        oop_raise:    10,
+      },
+      turn: {
+        ip_check:     15,
+        ip_bet_small: 20,
+        ip_bet_large: 65,
+        oop_call:     60,
+        oop_fold:     33,
+        oop_raise:    7,
+      },
+      river: {
+        ip_check:     10,
+        ip_bet_small: 5,
+        ip_bet_large: 85,
+        oop_call:     72,
+        oop_fold:     22,
+        oop_raise:    6,
+      },
     },
     quiz: {
       question: 'Por que o jogador com alto RP não consegue defender a sua porção de MDF teórica num post-flop contra o CL?',
@@ -253,13 +330,32 @@ export const SCENARIOS: Scenario[] = [
       { name: 'RIVER', potSize: 12,   rpValue: 0.9 },
     ],
     // Estimativa didática — micro stacks, quase ChipEV
-    defaultChipEvFreqs: {
-      ip_check:     40,
-      ip_bet_small: 35,
-      ip_bet_large: 25,
-      oop_call:     50,
-      oop_fold:     38,
-      oop_raise:    12,
+    // Turn e river: polarização cresce levemente; RP baixo permite mais agressão
+    defaultStreetFreqs: {
+      flop: {
+        ip_check:     40,
+        ip_bet_small: 35,
+        ip_bet_large: 25,
+        oop_call:     50,
+        oop_fold:     38,
+        oop_raise:    12,
+      },
+      turn: {
+        ip_check:     35,
+        ip_bet_small: 30,
+        ip_bet_large: 35,
+        oop_call:     55,
+        oop_fold:     35,
+        oop_raise:    10,
+      },
+      river: {
+        ip_check:     30,
+        ip_bet_small: 10,
+        ip_bet_large: 60,
+        oop_call:     65,
+        oop_fold:     28,
+        oop_raise:    7,
+      },
     },
     quiz: {
       question: 'Por que o Risk Premium entre dois micro-stacks não desce para o zero absoluto (ChipEV)?',
@@ -277,7 +373,7 @@ export const SCENARIOS: Scenario[] = [
   // ============================================================
   {
     id: 'chipev',
-    name: 'O Vácuo Matemático',
+    name: 'Vácuo Matemático',
     category: 'baseline',
     stacks: [100, 100],
     ipRp: 0,
@@ -306,14 +402,32 @@ export const SCENARIOS: Scenario[] = [
       { name: 'TURN',  potSize: 22.5, rpValue: 0 },
       { name: 'RIVER', potSize: 67.5, rpValue: 0 },
     ],
-    // ChipEV puro: frequências de equilíbrio Nash sem distorção ICM
-    defaultChipEvFreqs: {
-      ip_check:     40,
-      ip_bet_small: 35,
-      ip_bet_large: 25,
-      oop_call:     50,
-      oop_fold:     40,
-      oop_raise:    10,
+    // ChipEV puro: frequências de equilíbrio Nash sem distorção ICM em todas as streets
+    defaultStreetFreqs: {
+      flop: {
+        ip_check:     40,
+        ip_bet_small: 35,
+        ip_bet_large: 25,
+        oop_call:     50,
+        oop_fold:     40,
+        oop_raise:    10,
+      },
+      turn: {
+        ip_check:     35,
+        ip_bet_small: 30,
+        ip_bet_large: 35,
+        oop_call:     55,
+        oop_fold:     35,
+        oop_raise:    10,
+      },
+      river: {
+        ip_check:     30,
+        ip_bet_small: 10,
+        ip_bet_large: 60,
+        oop_call:     65,
+        oop_fold:     28,
+        oop_raise:    7,
+      },
     },
     quiz: {
       question: 'Por que num vácuo matemático (ChipEV) o desvio da frequência de bluff (Alpha) é punido imediatamente por um GTO perfeito?',
@@ -331,7 +445,7 @@ export const SCENARIOS: Scenario[] = [
   // ============================================================
   {
     id: 'sniper',
-    name: 'O Franco-Atirador',
+    name: 'Franco-Atirador',
     category: 'toyGame',
     stacks: [50, 12, 8, 9],
     ipRp: 12,
@@ -362,13 +476,32 @@ export const SCENARIOS: Scenario[] = [
       { name: 'RIVER', potSize: 12,   rpValue: 9 },
     ],
     // Estimativa didática — CL agressivo vs BB em zona de pressão extrema
-    defaultChipEvFreqs: {
-      ip_check:     10,
-      ip_bet_small: 30,
-      ip_bet_large: 60,
-      oop_call:     45,
-      oop_fold:     45,
-      oop_raise:    10,
+    // Turn e river: sizing big escalona; defensor paralisa progressivamente
+    defaultStreetFreqs: {
+      flop: {
+        ip_check:     10,
+        ip_bet_small: 30,
+        ip_bet_large: 60,
+        oop_call:     45,
+        oop_fold:     45,
+        oop_raise:    10,
+      },
+      turn: {
+        ip_check:     5,
+        ip_bet_small: 20,
+        ip_bet_large: 75,
+        oop_call:     55,
+        oop_fold:     38,
+        oop_raise:    7,
+      },
+      river: {
+        ip_check:     5,
+        ip_bet_small: 5,
+        ip_bet_large: 90,
+        oop_call:     65,
+        oop_fold:     28,
+        oop_raise:    7,
+      },
     },
     quiz: {
       question: 'Por que o SB (Chipleader) pode shovar 100% das mãos contra o BB com 12bb nesta configuração?',
@@ -382,7 +515,7 @@ export const SCENARIOS: Scenario[] = [
   },
   {
     id: 'bully',
-    name: 'O Bully do Botão',
+    name: 'Bully do Botão',
     category: 'toyGame',
     stacks: [80, 20, 18],
     ipRp: 5,
@@ -437,7 +570,7 @@ export const SCENARIOS: Scenario[] = [
   // ============================================================
   {
     id: 'ameaca',
-    name: 'A Ameaça Orgânica',
+    name: 'Ameaça Orgânica',
     category: 'clinical',
     stacks: [90, 25],
     ipRp: 12,

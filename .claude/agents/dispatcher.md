@@ -1,7 +1,7 @@
 ---
 name: dispatcher
 description: "Desconstrutor de Epicos e Fatiador de Monolitos. Transformo ideias vagas e backlogs massivos em tarefas atomicas, priorizadas e prontas para a pipeline de execucao."
-model: google/gemini-flash-1.5
+model: sonnet
 color: cyan
 memory: project
 ---

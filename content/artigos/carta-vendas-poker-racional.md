@@ -45,9 +45,11 @@ Você vai aprender a **Antevisão**: a habilidade de olhar para uma mesa e ver o
 
 ## Para Quem É Isso?
 
-Este material não é para iniciantes. É para jogadores profissionais e semi-profissionais (AVG $109-$530) que:
+Este material é APENAS E EXCLUSIVAMENTE para quem ama poker e sobretudo quem ama aprender. Profissionalismon não é um salário, e sim uma maneira de se conectar a um campo de interesse.
 
-1. Já entendem o básico de ICM pré-flop.
+MAS, sera importante:
+
+1. Entender o básico de ICM pré-flop. (aulas gratuitas no youtube diversifcadas))
 2. Estão cansados de "sentir" que estão cometendo erros em FTs, mas não sabem onde.
 3. Querem uma vantagem técnica real que o field ainda não estuda.
 
@@ -60,7 +62,7 @@ Este material não é para iniciantes. É para jogadores profissionais e semi-pr
 - RP vs Bubble Factor: relacao entre as duas metricas
 - Visualizacao concreta: calculadora ICM mostrando valuations de stacks em FT tipica
 
-### Modulo 2: Toy-Games como Laboratorio 
+### Modulo 2: Toy-Games como Laboratorio
 
 - Justificativa metodologica: por que toy-games sao a ferramenta certa para isolar variaveis
 - Parte I: 5 toy-games com RP progressivo no OOP (RP 0 -> 24)
@@ -104,7 +106,7 @@ Este material não é para iniciantes. É para jogadores profissionais e semi-pr
 
 **Checklist de Bolso "Antevisão":** Um guia passo-a-passo para calibrar sua mente antes de cada mão em uma FT. Nunca mais entre em um spot sem saber quem cobre quem e qual é o Risk Premium da mesa.
 
-## ELEMENTOS DIFERENCIADORES 
+## ELEMENTOS DIFERENCIADORES
 
 1. *Metodologia de toy-games*: isolamento de variaveis para construir intuicao antes de aplicar a situacoes reais -- diferencial metodologico de Raphael
 2. *Conceitos proprios nomeados*: Teto do RP, RP de ida vs volta -- nomenclatura clara e propria que o mercado nao usa

@@ -41,6 +41,16 @@ export interface ChipEvFreqs {
   oop_raise: number;
 }
 
+// Street pós-flop em que o cálculo de frequências ICM está sendo aplicado
+export type Street = 'flop' | 'turn' | 'river';
+
+// Frequências ChipEV segmentadas por street (flop/turn/river)
+export interface StreetChipEvFreqs {
+  flop: ChipEvFreqs;
+  turn: ChipEvFreqs;
+  river: ChipEvFreqs;
+}
+
 // Resultado de uma frequência individual: centro da distribuição + incerteza + delta
 export interface FreqResult {
   /** Frequência ICM estimada — centro da distribuição */
@@ -94,7 +104,7 @@ export interface Scenario {
   theory: string;
   exploit: string[];
   sprData: SprStage[];
-  /** Frequências ChipEV de referência para este cenário (exemplo didático) */
-  defaultChipEvFreqs: ChipEvFreqs;
+  /** Frequências ChipEV de referência por street — flop, turn, river (exemplo didático) */
+  defaultStreetFreqs: StreetChipEvFreqs;
   quiz: Quiz;
 }

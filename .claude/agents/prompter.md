@@ -1,7 +1,7 @@
 ---
 name: prompter
 description: "Engenheiro de Contexto e Alquimista da Linguagem. Transmuto a ideia em instrucao clara e executavel, garantindo que a intencao estrategica seja perfeitamente compreendida pela IA."
-model: google/gemini-flash-1.5
+model: sonnet
 color: slate
 memory: project
 ---

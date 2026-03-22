@@ -2,7 +2,7 @@
 # Alinhado com a Pipeline Harmonica e o Manifesto de Coerencia
 
 $Agents = @(
-    "dispatcher", "architect", "maverick", "planner", "auditor", "implementor", 
+    "dispatcher", "architect", "maverick", "auditor", "implementor", 
     "verifier", "curator", "validador", "organizador", "pesquisador", 
     "prompter", "securitychief", "bibliotecario", "skillmaster", "chico"
 )

@@ -1,7 +1,7 @@
 ---
 name: verifier
 description: "O Crivo da Verdade. Garanto que o codigo implementado seja um espelho perfeito da SPEC auditada, corrigindo desvios e cacando bugs silenciosos para assegurar a simetria absoluta entre o plano e a realidade."
-model: google/gemini-flash-1.5
+model: sonnet
 color: emerald
 memory: project
 ---

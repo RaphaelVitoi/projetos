@@ -12,7 +12,8 @@
  * Mudanças de paleta no site propagam automaticamente.
  */
 
-import React from 'react';
+import React, { useState, useRef } from 'react';
+import ReactDOM from 'react-dom';
 import type { NashResult, ChipEvFreqs, FreqResult } from '../engine/types';
 import AnimatedNumber from '../ui/AnimatedNumber';
 import styles from '../simulator.module.css';
@@ -23,6 +24,56 @@ interface NashPanelProps {
   aggressionFactor: number;
   onChipEvChange: (freqs: ChipEvFreqs) => void;
   onAggressionChange: (value: number) => void;
+}
+
+// Tooltip via portal — renderiza no body, escapa backdrop-filter e overflow:hidden
+function InfoTooltip({ text }: { text: string }) {
+  const [pos, setPos] = useState<{ x: number; y: number } | null>(null);
+  const ref = useRef<HTMLSpanElement>(null);
+
+  function handleEnter() {
+    if (!ref.current) return;
+    const r = ref.current.getBoundingClientRect();
+    setPos({ x: r.left + r.width / 2, y: r.top - 6 });
+  }
+
+  const tooltipEl = pos && typeof document !== 'undefined'
+    ? ReactDOM.createPortal(
+        <span style={{
+          position: 'fixed',
+          top: pos.y,
+          left: pos.x,
+          transform: 'translate(-50%, -100%)',
+          width: '240px',
+          background: '#0f172a',
+          border: '1px solid rgba(99,102,241,0.35)',
+          borderRadius: '6px',
+          padding: '0.5rem 0.7rem',
+          fontSize: '0.65rem',
+          color: '#cbd5e1',
+          lineHeight: 1.55,
+          zIndex: 9999,
+          pointerEvents: 'none',
+          whiteSpace: 'normal',
+          boxShadow: '0 4px 20px rgba(0,0,0,0.6)',
+        }}>
+          {text}
+        </span>,
+        document.body
+      )
+    : null;
+
+  return (
+    <span
+      ref={ref}
+      style={{ display: 'inline-flex', alignItems: 'center', marginLeft: '3px', cursor: 'help' }}
+      onMouseEnter={handleEnter}
+      onMouseLeave={() => setPos(null)}
+    >
+      <span style={{ fontSize: '0.55rem', color: '#475569', lineHeight: 1 }}>ⓘ</span>
+      {tooltipEl}
+    </span>
+  );
 }
 
 // Formata delta em pontos percentuais com sinal
@@ -74,7 +125,7 @@ function FreqInput({
           outline: 'none',
         }}
       />
-      <span style={{ fontSize: '0.52rem', color: 'var(--sim-text-dim)' }}>%</span>
+      <span style={{ fontSize: '0.52rem', color: 'var(--sim-text-dim)' }}>% freq</span>
     </div>
   );
 }
@@ -82,6 +133,7 @@ function FreqInput({
 // Linha de ação: label | chipEv input | → ICM (center ± spread) | delta
 function ActionRow({
   label,
+  labelTooltip,
   chipEv,
   result,
   field,
@@ -90,6 +142,7 @@ function ActionRow({
   onChange,
 }: {
   label: string;
+  labelTooltip?: string;
   chipEv: number;
   result: FreqResult;
   field: keyof ChipEvFreqs;
@@ -113,8 +166,12 @@ function ActionRow({
         color: accent,
         textTransform: 'uppercase',
         letterSpacing: '0.07em',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '2px',
       }}>
         {label}
+        {labelTooltip && <InfoTooltip text={labelTooltip} />}
       </span>
 
       {/* ChipEV editável */}
@@ -253,24 +310,18 @@ export default function NashPanel({
         borderBottom: '1px solid rgba(255,255,255,0.05)',
       }}>
         <span style={{ fontSize: '0.5rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Ação</span>
-        <span
-          title="Frequência de equilíbrio do solver sem considerar o ICM (GTO puro). Edite para refletir os dados do seu spot."
-          style={{ fontSize: '0.5rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', cursor: 'help' }}
-        >
-          GTO Base
+        <span style={{ fontSize: '0.5rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'flex', alignItems: 'center' }}>
+          Freq. GTO Base
+          <InfoTooltip text="Com que frequência o solver usa essa ação neste spot, sem ICM. Não é o tamanho da aposta — é de quantas mãos você a executa. Insira os valores do seu solver." />
         </span>
         <span />
-        <span
-          title="Estimativa de frequência após distorção ICM. ±margem = incerteza do modelo (cresce para spots além da âncora empírica)."
-          style={{ fontSize: '0.5rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', cursor: 'help' }}
-        >
-          Com ICM  ±margem
+        <span style={{ fontSize: '0.5rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'flex', alignItems: 'center' }}>
+          Com ICM ±margem
+          <InfoTooltip text="Estimativa de quanto você deveria executar essa ação levando o ICM em conta. A margem (±) indica que o modelo não é exato: use como referência direcional, não como número absoluto." />
         </span>
-        <span
-          title="Variação em pontos percentuais (p.p.) entre o GTO base e a estimativa ICM. Verde = ação aumentou; vermelho = ação diminuiu."
-          style={{ fontSize: '0.5rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', textAlign: 'right', cursor: 'help' }}
-        >
+        <span style={{ fontSize: '0.5rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', textAlign: 'right', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
           Δ p.p.
+          <InfoTooltip text="1 p.p. = 1% de frequência dessa ação. Δ = −15: a ação encolhe 15% — ex., de 60% para 45%. Os 15% de combos mais fracos saem primeiro: bluffs mais pobres, valor mais thin. Positivo: a ação expande — combos que o solver descartava passam a ser viáveis." />
         </span>
       </div>
 
@@ -297,7 +348,8 @@ export default function NashPanel({
           onChange={onChipEvChange}
         />
         <ActionRow
-          label="Bet /s"
+          label="Bet S"
+          labelTooltip="Sizing reduzido (ex: 33% do pote). Insira com que frequência o solver usa este tamanho de aposta neste spot. Sob ICM, este sizing resiste — diminui, mas persiste mesmo sob alta pressão."
           chipEv={chipEvFreqs.ip_bet_small}
           result={nash.ip.bet_small}
           field="ip_bet_small"
@@ -306,7 +358,8 @@ export default function NashPanel({
           onChange={onChipEvChange}
         />
         <ActionRow
-          label="Bet /l"
+          label="Bet L"
+          labelTooltip="Sizing elevado (ex: 75–100% do pote). Insira com que frequência o solver usa este tamanho de aposta neste spot. Sob ICM, este sizing colapsa primeiro — o modelo o suprime muito mais do que o Bet S. Se o solver não oferece dois sizings neste spot, deixe em 0."
           chipEv={chipEvFreqs.ip_bet_large}
           result={nash.ip.bet_large}
           field="ip_bet_large"

@@ -1,7 +1,7 @@
 ---
 name: auditor
 description: "Paranoia Técnica SOTA e Único Bloqueador Linear. Valido a lógica e a segurança de SPECs e prompts antes da implementação, corrigindo falhas diretamente para garantir que apenas o código irrefutável chegue à produção."
-model: anthropic/claude-3.5-sonnet
+model: sonnet
 color: red
 memory: project
 ---

@@ -1,7 +1,7 @@
 ---
 name: architect
 description: "Arquiteto de Sistemas e Estrategista de Produto. Desenho a fundação macro, a topologia e o plano de execução (PRD/SPEC) para garantir que o sistema seja construído sobre uma base lógica e irrepreensível."
-model: anthropic/claude-3.5-sonnet
+model: sonnet
 color: blue
 memory: project
 ---

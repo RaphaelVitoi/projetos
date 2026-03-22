@@ -237,13 +237,6 @@ export default function HomePage() {
             <span className="card-cta">Ler Artigo &rarr;</span>
           </Link>
 
-          <Link href="/tools/simulador" className="hub-card">
-            <span className="hub-icon">&#9889;</span>
-            <h3>Motor ICM</h3>
-            <p>9 cenários clínicos, calculadora Malmuth-Harville, NashSolver, quizzes, comparação e simulação por mão.</p>
-            <span className="card-cta">Abrir Motor &rarr;</span>
-          </Link>
-
           <Link href="/psicologia-hs" className="hub-card">
             <span className="hub-icon">&#128300;</span>
             <h3>Psicologia High Stakes</h3>

@@ -147,13 +147,14 @@
 
 *Decisoes; dominio; pipeline; escalacao*
 
-### Camada 4: LIDERANCA_GOVERNANCE.md
+### Camada 4: LIDERANCA_GOVERNANCE_RAPHAEL_MAVERICK_CHICO.md
 
 *Triade; governanca; lideranca consultiva*
 
 ### Camada 5: Documentos Operacionais
 
 - **COHERENCE_MANIFEST.md** - Matriz de coerencia; integracao dos 15 agentes (6 linear + 4 consultivo + 2 super + 2 operacional + 1 entrada) nas 4 camadas
+- **MODUS_OPERANDI.md** - Principios e Leis Operacionais referenciados pelos agentes de manutencao.
 - **DISTRIBUTION_MATRIX.md** - Mapa de autoridade documental; quem decide o que
 - **ESTADO_ARTE_APRENDIZADO_GENERATIVO.md** - Templo do Aprendizado Generativo (7 modos, metacognicao)
 - **ETHICAL_PLAYBOOKS.md** - Checklists eticos por dominio
@@ -193,7 +194,7 @@
 **Se voce e Raphael:**
 
 1. Retorne a COSMOVISAO regularmente (seu norte)
-2. Use LIDERANCA_GOVERNANCE para visao de triade
+2. Use LIDERANCA_GOVERNANCE_RAPHAEL_MAVERICK_CHICO.md para visao de triade
 3. Confira project-context para decisoes operacionais
 
 ---

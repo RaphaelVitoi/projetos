@@ -11,20 +11,14 @@ $CurrentTaskID = $TaskId
 $BaseDir = Join-Path $PSScriptRoot ".claude"
 $MemoryDir = Join-Path $BaseDir "agent-memory"
 $ReportPath = Join-Path $PSScriptRoot "docs\reports\RELATORIO_SENTINELA_$(Get-Date -Format 'yyyy-MM-dd').md"
+$ProjectRoot = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
 $DocsDir = Split-Path $ReportPath
 
 Write-Host "=== [MAVERICK] SENTINELA INICIADO ===" -ForegroundColor Magenta
 
-# 1. Marcar tarefa atual como RUNNING
-$task = [ordered]@{
-    id          = $CurrentTaskID
-    description = "Maverick, assuma o posto de sentinela e realize a primeira varredura sistêmica em busca de pontos cegos."
-    status      = "running"
-    timestamp   = (Get-Date -Format "o")
-    agent       = "@maverick"
-}
-Write-Host "[SENTINELA] Varredura sistemica em andamento..." -ForegroundColor Yellow
-Write-Host "[SENTINELA] Analisando hashtags de memoria..." -ForegroundColor DarkCyan
+# 1. Iniciar varredura
+# O orquestrador 'task_executor.py' é responsável por gerenciar o estado da tarefa (running, completed).
+Write-Host "[SENTINELA] Varredura sistemica para a tarefa '$CurrentTaskID' em andamento..." -ForegroundColor Yellow
 
 # 2. Coleta de Insights via Tags (Simulação de Escaneamento)
 if (-not (Test-Path $DocsDir)) { New-Item -ItemType Directory -Path $DocsDir -Force | Out-Null }
@@ -35,6 +29,7 @@ $Insights = @{
     Etica    = @()
 }
 
+Write-Host "[SENTINELA] Analisando hashtags de memoria nos agentes..." -ForegroundColor DarkCyan
 # Busca heurística nas memórias dos agentes
 Get-ChildItem -Path $MemoryDir -Filter "MEMORY.md" -Recurse | ForEach-Object {
     $Content = Get-Content $_.FullName
@@ -61,6 +56,7 @@ O organismo agora respira sem conflitos de encoding.
 ### 3. Antevisao de Eventos (Mitigacao)
 - **Risco Detectado:** A tabela `tasks` no banco de dados SQLite (`tasks.db`) pode crescer indefinidamente, levando a uma potencial degradacao de performance em queries de `get_next_task` e `get_tasks`.
 - **Correcao Proposta:** A rotina `db-cleanup` ja existe e e a mitigacao correta. O @skillmaster deve garantir que esta rotina seja executada periodicamente para arquivar tarefas antigas e manter a tabela principal enxuta e performatica.
+- **Status da Mitigacao:** Acao de mitigacao (`db-cleanup`) e uma tarefa recorrente sob a governanca do @skillmaster, executada via `run_skillmaster_cron.ps1`. O sistema imunologico esta operando de forma proativa.
 
 ### 4. A Inovacao Necessaria
 Continuar expandindo os laboratorios interativos visuais (Next.js) que se conectam ao orquestrador em background.
@@ -72,4 +68,5 @@ Continuar expandindo os laboratorios interativos visuais (Next.js) que se conect
 
 [System.IO.File]::WriteAllText($ReportPath, $ReportContent, [System.Text.Encoding]::UTF8)
 Write-Host "[SENTINELA] Relatorio consolidado gerado em: $ReportPath" -ForegroundColor Green
+
 Write-Host "[SENTINELA] Ciclo completo." -ForegroundColor Cyan

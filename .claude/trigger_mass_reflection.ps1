@@ -32,7 +32,7 @@ foreach ($agent in $Agents) {
 
     $task = [ordered]@{ id = $taskId; description = $taskDesc; status = "pending"; timestamp = (Get-Date -Format "o"); agent = $agentId }
     
-    $taskJson = $task | ConvertTo-Json -Depth 10 -Compress:$true
+    $taskJson = $task | ConvertTo-Json -Depth 10 -Compress
     $taskB64 = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes($taskJson))
     
     $output = & $PythonCmd $PyScript db-add $taskB64

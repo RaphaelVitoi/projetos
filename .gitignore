@@ -6,6 +6,7 @@ __pycache__/
 # Build
 .next/
 frontend/.next/
+frontend/.next-build/
 
 # Binarios pesados
 *.docx

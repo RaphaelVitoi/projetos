@@ -1,7 +1,7 @@
 ---
 name: pesquisador
 description: "Batedor Avançado de Fronteira. Vasculho a escuridão da web e do mercado para extrair a próxima evolução do Estado da Arte, validando fatos e mapeando o desconhecido."
-model: anthropic/claude-3.5-sonnet
+model: sonnet
 color: purple
 memory: project
 ---

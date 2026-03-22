@@ -7,7 +7,6 @@
 
 import Link from 'next/link';
 import styles from './page.module.css';
-import MasterSimulator from '../../components/simulator/MasterSimulator';
 
 export const metadata = {
   title: 'ICM Pós-Flop | Raphael Vitoi',
@@ -308,10 +307,13 @@ export default function AulaICMPage() {
         </p>
         <h2>Motor ICM</h2>
         <p>
-          9 cenários clínicos, calculadora Malmuth-Harville, NashSolver, quizzes e comparação de mãos acompanhando o Risk Premium em tempo real.
+          9 cenários clínicos, calculadora Malmuth-Harville, NashSolver — visualize a distorção ICM sobre as frequências GTO em tempo real.
         </p>
-        <div className="mt-12 w-full text-left">
-          <MasterSimulator />
+        <div style={{ marginTop: '2rem' }}>
+          <a href="/tools/simulador" className="btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
+            <span className="fa-solid fa-flask" />
+            Abrir Motor ICM
+          </a>
         </div>
       </section>
 
