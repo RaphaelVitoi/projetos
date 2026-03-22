@@ -127,6 +127,15 @@ const PRIZES = [
   { pos: '7º', val: 59.92  }, { pos: '8º', val: 47.56  },
   { pos: '9º', val: 36.47  },
 ];
+const TOTAL_PRIZES = PRIZES.reduce((s, p) => s + p.val, 0);
+
+// Fichas pré-flop: SB obrigatório + BB obrigatório + antes coletivos + raise BTN
+const CHIPS = [
+  { id: 'SB',  fill: 'rgba(245,158,11,0.75)',  stroke: '#f59e0b', label: '#fde68a', amt: '0.5bb',  dx: -45 },
+  { id: 'BB',  fill: 'rgba(16,185,129,0.75)',   stroke: '#10b981', label: '#6ee7b7', amt: '1bb',    dx: -15 },
+  { id: 'ANTE', fill: 'rgba(100,116,139,0.75)', stroke: '#94a3b8', label: '#cbd5e1', amt: '1.125', dx:  15 },
+  { id: 'BTN', fill: 'rgba(99,102,241,0.75)',   stroke: '#6366f1', label: '#c7d2fe', amt: '2bb',    dx:  45 },
+];
 
 // Bubble Factor matrix (9x9) — valores da imagem Aula 1.2
 const BF_PLAYERS = ['UTG','EP','MP1','MP2','HJ','CO','BU','SB','BB'];
@@ -190,7 +199,7 @@ const TABLE_PLAYERS = [
 function toRad(deg: number) { return (deg * Math.PI) / 180; }
 
 export default function ReferencialAula12() {
-  const W = 300; const H = 180;
+  const W = 300; const H = 200;
   const rx = 110; const ry = 64;
   const cx = W / 2; const cy = H / 2;
 
@@ -279,7 +288,15 @@ export default function ReferencialAula12() {
                 <ellipse cx={cx} cy={cy} rx={rx} ry={ry} fill="rgba(22,101,52,0.35)" stroke="rgba(34,197,94,0.2)" strokeWidth="2" />
                 <ellipse cx={cx} cy={cy} rx={rx - 10} ry={ry - 8} fill="none" stroke="rgba(34,197,94,0.08)" strokeWidth="1" />
                 {/* Pot */}
-                <text x={cx} y={cy + 4} textAnchor="middle" fill="#475569" fontSize="9" fontWeight="600">Pot: 5.63bb</text>
+                <text x={cx} y={cy - 14} textAnchor="middle" fill="#475569" fontSize="9" fontWeight="600">Pot: 5.63bb</text>
+                {/* Fichas: SB | BB | ANTE (coletivo 9x) | BTN open */}
+                {CHIPS.map(({ id, fill, stroke, label, amt, dx }) => (
+                  <g key={id}>
+                    <circle cx={cx + dx} cy={cy + 4} r={10} fill={fill} stroke={stroke} strokeWidth="1.2" />
+                    <text x={cx + dx} y={cy + 8} textAnchor="middle" fill="white" fontSize="6" fontWeight="800">{id}</text>
+                    <text x={cx + dx} y={cy + 20} textAnchor="middle" fill={label} fontSize="5.5">{amt}</text>
+                  </g>
+                ))}
                 {/* Players */}
                 {TABLE_PLAYERS.map(({ name, stack, angle, highlight }) => {
                   const rad = toRad(angle);
@@ -303,21 +320,24 @@ export default function ReferencialAula12() {
             <div style={{ flex: 1, minWidth: '180px' }}>
               <p style={{ margin: '0 0 0.4rem', fontSize: '0.58rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Estrutura de Prêmios — MTT $11 · 126 entradas</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
-                {PRIZES.map(({ pos, val }, i) => (
-                  <div key={pos} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <span style={{ fontSize: '0.58rem', color: '#475569', width: '20px', textAlign: 'right', flexShrink: 0 }}>{pos}</span>
-                    <div style={{ flex: 1, height: '5px', borderRadius: '3px', background: 'rgba(255,255,255,0.05)', overflow: 'hidden' }}>
-                      <div style={{
-                        width: `${(val / 237.34) * 100}%`, height: '100%', borderRadius: '3px',
-                        background: i === 0 ? 'linear-gradient(to right,#fbbf24,#f59e0b)'
-                                  : i === 1 ? 'linear-gradient(to right,#94a3b8,#64748b)'
-                                  : i === 2 ? 'linear-gradient(to right,#a78bfa,#8b5cf6)'
-                                  : 'rgba(99,102,241,0.35)',
-                      }} />
+                {PRIZES.map(({ pos, val }, i) => {
+                  const pct = (val / TOTAL_PRIZES) * 100;
+                  const barBg = i === 0 ? 'linear-gradient(to right,#fbbf24,#f59e0b)'
+                              : i === 1 ? 'linear-gradient(to right,#cbd5e1,#94a3b8)'
+                              : i === 2 ? 'linear-gradient(to right,#c4b5fd,#8b5cf6)'
+                              : i <= 5  ? `rgba(99,102,241,${(0.5 - i * 0.06).toFixed(2)})`
+                              : `rgba(71,85,105,${(0.42 - (i - 6) * 0.08).toFixed(2)})`;
+                  const valColor = i === 0 ? '#fbbf24' : i === 1 ? '#94a3b8' : i === 2 ? '#c4b5fd' : '#64748b';
+                  return (
+                    <div key={pos} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span style={{ fontSize: '0.58rem', color: '#475569', width: '20px', textAlign: 'right', flexShrink: 0 }}>{pos}</span>
+                      <div style={{ flex: 1, height: '5px', borderRadius: '3px', background: 'rgba(255,255,255,0.05)', overflow: 'hidden' }}>
+                        <div style={{ width: `${pct}%`, height: '100%', borderRadius: '3px', background: barBg }} />
+                      </div>
+                      <span style={{ fontSize: '0.6rem', color: valColor, width: '42px', textAlign: 'right', flexShrink: 0, fontWeight: i < 3 ? 700 : 400 }}>${val}</span>
                     </div>
-                    <span style={{ fontSize: '0.6rem', color: '#64748b', width: '42px', textAlign: 'right', flexShrink: 0 }}>${val}</span>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>
