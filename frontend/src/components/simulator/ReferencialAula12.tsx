@@ -359,10 +359,10 @@ export default function ReferencialAula12() {
                   <span style={{ fontSize: '0.52rem', fontWeight: 700, color: '#334155', textTransform: 'uppercase', letterSpacing: '0.1em', width: '22px', flexShrink: 0 }}>BF</span>
                   <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
                     {[
-                      { bg: 'rgba(239,68,68,0.55)',   color: 'rgba(239,68,68,0.85)',   label: '> 2.0',   desc: 'crítico'  },
-                      { bg: 'rgba(245,158,11,0.45)',  color: 'rgba(245,158,11,0.85)',  label: '1.6–2.0', desc: 'elevado'  },
-                      { bg: 'rgba(6,182,212,0.18)',   color: 'rgba(6,182,212,0.75)',   label: '1.3–1.6', desc: 'moderado' },
-                      { bg: 'rgba(34,197,94,0.2)',    color: 'rgba(34,197,94,0.65)',   label: '< 1.3',   desc: 'baixo'    },
+                      { bg: 'rgba(239,68,68,0.55)',   color: '#fca5a5', label: '> 2.0',   desc: 'crítico'  },
+                      { bg: 'rgba(245,158,11,0.45)',  color: '#fde68a', label: '1.6–2.0', desc: 'elevado'  },
+                      { bg: 'rgba(6,182,212,0.18)',   color: '#67e8f9', label: '1.3–1.6', desc: 'moderado' },
+                      { bg: 'rgba(34,197,94,0.2)',    color: '#4ade80', label: '< 1.3',   desc: 'baixo'    },
                     ].map(({ bg, color, label, desc }) => (
                       <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                         <span style={{ width: '8px', height: '8px', borderRadius: '2px', background: bg, border: `1px solid ${color}`, flexShrink: 0, display: 'inline-block' }} />
@@ -380,7 +380,7 @@ export default function ReferencialAula12() {
                       { color: '#fca5a5', label: '≥ 18%',   desc: 'crítico'  },
                       { color: '#fde68a', label: '12–18%',  desc: 'elevado'  },
                       { color: '#67e8f9', label: '6–12%',   desc: 'moderado' },
-                      { color: '#475569', label: '< 6%',    desc: 'baixo'    },
+                      { color: '#4ade80', label: '< 6%',    desc: 'baixo'    },
                     ].map(({ color, label, desc }) => (
                       <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                         <span style={{ width: '8px', height: '8px', borderRadius: '2px', background: color, flexShrink: 0, display: 'inline-block' }} />
@@ -414,8 +414,8 @@ export default function ReferencialAula12() {
                       {row.map((val, c) => {
                         const rp = RP_MATRIX[r][c];
                         // Thresholds calibrados ao range real da matriz (max ~22.6%)
-                        const bfTextColor = val === 0 ? 'transparent' : val >= 2.0 ? '#fca5a5' : val >= 1.6 ? '#fbbf24' : val >= 1.3 ? '#67e8f9' : '#4ade80';
-                        const rpTextColor = rp >= 18 ? '#fca5a5' : rp >= 12 ? '#fde68a' : rp >= 6 ? '#67e8f9' : '#475569';
+                        const bfTextColor = val === 0 ? 'transparent' : val >= 2.0 ? '#fca5a5' : val >= 1.6 ? '#fde68a' : val >= 1.3 ? '#67e8f9' : '#4ade80';
+                        const rpTextColor = rp >= 18 ? '#fca5a5' : rp >= 12 ? '#fde68a' : rp >= 6 ? '#67e8f9' : '#4ade80';
                         return (
                           <td key={c} style={{
                             padding: '5px 4px', textAlign: 'center', minWidth: '50px',
