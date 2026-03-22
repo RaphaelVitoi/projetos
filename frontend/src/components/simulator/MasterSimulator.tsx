@@ -210,6 +210,7 @@ export default function MasterSimulator() {
             return (
               <button
                 key={tool.id}
+                type="button"
                 onClick={() => setActiveTool(tool.id)}
                 style={{
                   padding: '0.45rem 1rem',
@@ -288,14 +289,16 @@ export default function MasterSimulator() {
         </main>
       </div>
 
-      {/* Nota metodológica + Assinatura */}
-      <footer style={{
+      {/* Nota metodológica + Assinatura — alinhada ao container do simulador */}
+      <footer style={{ borderTop: '1px solid rgba(255, 255, 255, 0.04)' }}>
+      <div style={{
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: '2rem 1.5rem',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        padding: '2.5rem 2rem',
-        borderTop: '1px solid rgba(255, 255, 255, 0.04)',
-        gap: '1.25rem',
+        alignItems: 'flex-start',
+        gap: '1rem',
       }}>
         <p style={{
           fontSize: '0.7rem',
@@ -303,16 +306,9 @@ export default function MasterSimulator() {
           lineHeight: 1.7,
           maxWidth: '520px',
           margin: 0,
-          textAlign: 'center',
         }}>
           Os valores de Risk Premium e as frequências padrão são estimativas derivadas de um framework teórico calibrado contra um único ponto empírico: 93 nodes HRC vs GTO Wizard (board KJT-2-3, Aula 1.2). Demais cenários são extrapolações didáticas — não outputs de solver.
         </p>
-        <span style={{
-          display: 'block',
-          width: '32px',
-          height: '1px',
-          background: 'rgba(255,255,255,0.06)',
-        }} />
         <p style={{
           fontSize: '0.55rem',
           color: '#334155',
@@ -320,10 +316,10 @@ export default function MasterSimulator() {
           textTransform: 'uppercase',
           letterSpacing: '0.2em',
           margin: 0,
-          textAlign: 'center',
         }}>
           Motor ICM · Raphael Vitoi
         </p>
+        </div>
       </footer>
     </div>
   );
