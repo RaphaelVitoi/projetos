@@ -19,8 +19,11 @@ interface RangeMatrixProps {
     scenarioId: string;
 }
 
+type Perspective = 'ip' | 'oop';
+
 export default function RangeMatrix({ ipRp, oopRp, scenarioId }: Readonly<RangeMatrixProps>) {
     const [overrides, setOverrides] = useState<Record<string, string>>({});
+    const [perspective, setPerspective] = useState<Perspective>('ip');
 
     // Carrega as edições persistidas isoladas por cenário
     useEffect(() => {
@@ -55,6 +58,9 @@ export default function RangeMatrix({ ipRp, oopRp, scenarioId }: Readonly<RangeM
         localStorage.removeItem(storageKey);
     };
 
+    // RP ativo conforme perspectiva selecionada
+    const activeRp = perspective === 'ip' ? ipRp : oopRp;
+
     // Função heurística para determinar o status da mão com base no Risk Premium
     const getHandStatus = (row: number, col: number, hand: string) => {
         if (overrides[hand]) return overrides[hand]; // Prioridade para modificação manual
@@ -65,17 +71,15 @@ export default function RangeMatrix({ ipRp, oopRp, scenarioId }: Readonly<RangeM
         // Valor bruto da mão (A=14, K=13... 2=2) -> max 28 (AA), min 4 (22)
         const rankValue = (14 - row) + (14 - col);
 
-        // O "Teto" aumenta conforme a pressão do Bubble Factor/RP. 
-        // Se o RP for alto, mãos marginais viram fold.
-        const maxRp = Math.max(ipRp, oopRp);
-        const threshold = 15 + (maxRp * 0.25);
+        // Threshold cresce com o RP da perspectiva ativa — mãos marginais viram fold sob pressão
+        const threshold = 15 + (activeRp * 0.25);
 
-        if (rankValue >= threshold + 5) return 'core'; // Shove/Call obrigatório (Verde)
-        if (rankValue >= threshold) return 'marginal'; // Marginal/Misto (Amarelo)
-        if (rankValue >= threshold - 3 && (isSuited || isPair)) return 'bluff'; // Suited Bloqueadores/Blefes (Índigo)
-        if (maxRp >= 40 && rankValue < threshold + 2) return 'death'; // Death Zone Folds sob pressão
+        if (rankValue >= threshold + 5) return 'core';
+        if (rankValue >= threshold) return 'marginal';
+        if (rankValue >= threshold - 3 && (isSuited || isPair)) return 'bluff';
+        if (activeRp >= 40 && rankValue < threshold + 2) return 'death';
 
-        return 'fold'; // Fold padrão (Cinza escuro)
+        return 'fold';
     };
 
     const getColor = (status: string) => {
@@ -88,16 +92,48 @@ export default function RangeMatrix({ ipRp, oopRp, scenarioId }: Readonly<RangeM
         }
     };
 
+    const ipColor  = '#818cf8'; // índigo
+    const oopColor = '#f43f5e'; // rose
+
     return (
         <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            {/* Header: título + toggle IP/OOP */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                     <h4 style={{ fontSize: '0.65rem', fontWeight: 900, color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.15em', margin: 0 }}>
-                        Colapso do Range (RP Máximo: {Math.max(ipRp, oopRp).toFixed(1)}%)
+                        Colapso do Range
                     </h4>
+                    {/* Toggle IP / OOP */}
+                    <div style={{ display: 'flex', borderRadius: '6px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.07)' }}>
+                        {(['ip', 'oop'] as Perspective[]).map((p) => {
+                            const isActive = perspective === p;
+                            const color = p === 'ip' ? ipColor : oopColor;
+                            return (
+                                <button
+                                    key={p}
+                                    type="button"
+                                    onClick={() => setPerspective(p)}
+                                    style={{
+                                        padding: '3px 10px',
+                                        fontSize: '0.58rem',
+                                        fontWeight: 800,
+                                        textTransform: 'uppercase',
+                                        letterSpacing: '0.08em',
+                                        cursor: 'pointer',
+                                        border: 'none',
+                                        background: isActive ? `${color}22` : 'transparent',
+                                        color: isActive ? color : '#475569',
+                                        transition: 'all 0.2s',
+                                    }}
+                                >
+                                    {p.toUpperCase()} · {(p === 'ip' ? ipRp : oopRp).toFixed(1)}%
+                                </button>
+                            );
+                        })}
+                    </div>
                     {Object.keys(overrides).length > 0 && (
-                        <button onClick={resetOverrides} style={{ background: 'transparent', border: '1px solid #475569', color: '#94a3b8', fontSize: '0.55rem', padding: '2px 8px', borderRadius: '4px', cursor: 'pointer', transition: 'all 0.2s' }}>
-                            Resetar Edições
+                        <button onClick={resetOverrides} style={{ background: 'transparent', border: '1px solid #475569', color: '#94a3b8', fontSize: '0.55rem', padding: '2px 8px', borderRadius: '4px', cursor: 'pointer' }}>
+                            Resetar
                         </button>
                     )}
                 </div>
@@ -107,7 +143,7 @@ export default function RangeMatrix({ ipRp, oopRp, scenarioId }: Readonly<RangeM
                     <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><span style={{ width: 8, height: 8, background: getColor('core'), borderRadius: 2 }}></span> Core</span>
                     <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><span style={{ width: 8, height: 8, background: getColor('marginal'), borderRadius: 2 }}></span> Misto</span>
                     <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><span style={{ width: 8, height: 8, background: getColor('bluff'), borderRadius: 2 }}></span> Bluff/Float</span>
-                    {Math.max(ipRp, oopRp) >= 40 && (
+                    {activeRp >= 40 && (
                         <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#f43f5e' }}><span style={{ width: 8, height: 8, background: getColor('death'), borderRadius: 2 }}></span> Death Fold</span>
                     )}
                 </div>
