@@ -339,6 +339,38 @@ export default function ReferencialAula12() {
                   );
                 })}
               </div>
+
+              {/* Legenda: tipos de estrutura */}
+              <div style={{ marginTop: '0.6rem', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                {[
+                  {
+                    tag: 'TOP-HEAVY',
+                    color: '#fbbf24',
+                    bg: 'rgba(245,158,11,0.08)',
+                    border: 'rgba(245,158,11,0.2)',
+                    text: '1º concentra >20% da pool. Queda abrupta entre posições. BF extremo para shorts — cada eliminação vale muito. ICM domina do início ao fim.',
+                  },
+                  {
+                    tag: 'FLAT',
+                    color: '#94a3b8',
+                    bg: 'rgba(148,163,184,0.06)',
+                    border: 'rgba(148,163,184,0.15)',
+                    text: 'Prêmios decrescem linearmente. Diferença pequena entre posições adjacentes. BF próximo de 1 — jogo se aproxima do ChipEV. Agressão mais viável.',
+                  },
+                  {
+                    tag: 'HÍBRIDA',
+                    color: '#c4b5fd',
+                    bg: 'rgba(139,92,246,0.07)',
+                    border: 'rgba(139,92,246,0.18)',
+                    text: 'Top 3 inflado, restante com queda suave. ICM alto nas bolhas de lugar mas moderado no campo médio. Esta estrutura ($11 MTT) é híbrida: razão 1º/9º = 6.5×, queda abrupta no topo, cauda gradual.',
+                  },
+                ].map(({ tag, color, bg, border, text }) => (
+                  <div key={tag} style={{ padding: '4px 6px', borderRadius: '5px', background: bg, border: `1px solid ${border}` }}>
+                    <span style={{ fontSize: '0.48rem', fontWeight: 900, color, textTransform: 'uppercase', letterSpacing: '0.1em', marginRight: '4px' }}>{tag}</span>
+                    <span style={{ fontSize: '0.52rem', color: '#475569', lineHeight: 1.45 }}>{text}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
