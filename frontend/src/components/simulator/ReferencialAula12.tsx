@@ -330,18 +330,69 @@ export default function ReferencialAula12() {
 
           {/* Bubble Factors + Risk Premium (unificados) */}
           <div>
-            <p style={{ margin: '0 0 0.25rem', fontSize: '0.58rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+            {/* Título */}
+            <p style={{ margin: '0 0 0.6rem', fontSize: '0.58rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
               Bubble Factors — FT BTN 40 BB 55
-              <span style={{ fontWeight: 400, marginLeft: '0.5rem' }}>
-                <span style={{ color: 'rgba(239,68,68,0.8)' }}>■</span> {'>'} 2.0
-                <span style={{ color: 'rgba(245,158,11,0.8)', marginLeft: '6px' }}>■</span> 1.6–2.0
-                <span style={{ color: 'rgba(234,179,8,0.7)', marginLeft: '6px' }}>■</span> 1.3–1.6
-                <span style={{ color: 'rgba(34,197,94,0.6)', marginLeft: '6px' }}>■</span> {'<'} 1.3
-              </span>
             </p>
-            <p style={{ margin: '0 0 0.5rem', fontSize: '0.55rem', color: '#334155' }}>
-              RP = (BF−1)/BF — mostrado abaixo do BF em cada célula
-            </p>
+
+            {/* Legenda BF + RP */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.55rem', marginBottom: '0.7rem' }}>
+              {/* Definições */}
+              <div style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'flex-start', flex: 1, minWidth: '220px' }}>
+                  <span style={{ fontSize: '0.52rem', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.12em', marginTop: '2px', whiteSpace: 'nowrap' }}>BF</span>
+                  <span style={{ fontSize: '0.57rem', color: '#475569', lineHeight: 1.55 }}>
+                    Multiplicador ICM. Pelo quanto os pot odds crescem sob risco de eliminação. <span style={{ color: '#64748b', fontFamily: 'monospace', fontSize: '0.54rem' }}>BF = 1/(1−RP)</span>. Cor de fundo indica a intensidade.
+                  </span>
+                </div>
+                <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'flex-start', flex: 1, minWidth: '220px' }}>
+                  <span style={{ fontSize: '0.52rem', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.12em', marginTop: '2px', whiteSpace: 'nowrap' }}>RP</span>
+                  <span style={{ fontSize: '0.57rem', color: '#475569', lineHeight: 1.55 }}>
+                    Equity adicional (%) acima dos pot odds para justificar um call. Exibido abaixo do BF — linha = quem chama, coluna = quem apostou.
+                  </span>
+                </div>
+              </div>
+              {/* Escalas de cor — BF e RP lado a lado */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+                {/* BF */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+                  <span style={{ fontSize: '0.52rem', fontWeight: 700, color: '#334155', textTransform: 'uppercase', letterSpacing: '0.1em', width: '22px', flexShrink: 0 }}>BF</span>
+                  <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
+                    {[
+                      { bg: 'rgba(239,68,68,0.55)',   color: 'rgba(239,68,68,0.85)',   label: '> 2.0',   desc: 'crítico'  },
+                      { bg: 'rgba(245,158,11,0.45)',  color: 'rgba(245,158,11,0.85)',  label: '1.6–2.0', desc: 'elevado'  },
+                      { bg: 'rgba(234,179,8,0.25)',   color: 'rgba(234,179,8,0.75)',   label: '1.3–1.6', desc: 'moderado' },
+                      { bg: 'rgba(34,197,94,0.2)',    color: 'rgba(34,197,94,0.65)',   label: '< 1.3',   desc: 'baixo'    },
+                    ].map(({ bg, color, label, desc }) => (
+                      <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <span style={{ width: '8px', height: '8px', borderRadius: '2px', background: bg, border: `1px solid ${color}`, flexShrink: 0, display: 'inline-block' }} />
+                        <span style={{ fontSize: '0.55rem', color, fontWeight: 600, whiteSpace: 'nowrap' }}>{label}</span>
+                        <span style={{ fontSize: '0.52rem', color: '#334155', whiteSpace: 'nowrap' }}>{desc}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                {/* RP */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+                  <span style={{ fontSize: '0.52rem', fontWeight: 700, color: '#334155', textTransform: 'uppercase', letterSpacing: '0.1em', width: '22px', flexShrink: 0 }}>RP</span>
+                  <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
+                    {[
+                      { color: '#fca5a5', label: '≥ 18%',   desc: 'crítico'  },
+                      { color: '#fde68a', label: '12–18%',  desc: 'elevado'  },
+                      { color: '#94a3b8', label: '6–12%',   desc: 'moderado' },
+                      { color: '#475569', label: '< 6%',    desc: 'baixo'    },
+                    ].map(({ color, label, desc }) => (
+                      <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <span style={{ width: '8px', height: '8px', borderRadius: '2px', background: color, flexShrink: 0, display: 'inline-block' }} />
+                        <span style={{ fontSize: '0.55rem', color, fontWeight: 600, whiteSpace: 'nowrap' }}>{label}</span>
+                        <span style={{ fontSize: '0.52rem', color: '#334155', whiteSpace: 'nowrap' }}>{desc}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div style={{ overflowX: 'auto' }}>
               <table style={{ borderCollapse: 'collapse', fontSize: '0.6rem' }}>
                 <thead>
@@ -362,19 +413,28 @@ export default function ReferencialAula12() {
                       </td>
                       {row.map((val, c) => {
                         const rp = RP_MATRIX[r][c];
+                        // Thresholds calibrados ao range real da matriz (max ~22.6%)
                         const bfTextColor = val === 0 ? 'transparent' : val >= 2.0 ? '#fca5a5' : val >= 1.6 ? '#fde68a' : '#94a3b8';
-                        const rpTextColor = rp >= 50 ? '#fca5a5' : rp >= 35 ? '#fde68a' : '#64748b';
+                        const rpTextColor = rp >= 18 ? '#fca5a5' : rp >= 12 ? '#fde68a' : rp >= 6 ? '#94a3b8' : '#475569';
                         return (
                           <td key={c} style={{
-                            padding: '4px 5px', textAlign: 'center', minWidth: '46px',
+                            padding: '5px 4px', textAlign: 'center', minWidth: '50px',
                             background: bfColor(val),
                             border: '1px solid rgba(255,255,255,0.04)',
-                            lineHeight: 1.2,
+                            lineHeight: 1.3,
+                            verticalAlign: 'middle',
                           }}>
                             {val === 0 ? '' : (
                               <>
-                                <div style={{ color: bfTextColor, fontWeight: val >= 2.0 ? 700 : 400, fontSize: '0.6rem' }}>{val.toFixed(2)}</div>
-                                <div style={{ color: rpTextColor, fontSize: '0.5rem', marginTop: '1px' }}>+{rp}%</div>
+                                <div style={{ color: bfTextColor, fontWeight: val >= 1.6 ? 700 : 500, fontSize: '0.62rem' }}>{val.toFixed(2)}</div>
+                                <div style={{
+                                  color: rpTextColor,
+                                  fontSize: '0.55rem',
+                                  fontWeight: 600,
+                                  marginTop: '2px',
+                                  borderTop: '1px solid rgba(255,255,255,0.06)',
+                                  paddingTop: '2px',
+                                }}>{rp}%</div>
                               </>
                             )}
                           </td>
@@ -400,41 +460,71 @@ export default function ReferencialAula12() {
                     <th style={{ padding: '0.35rem 0.6rem', textAlign: 'left', fontWeight: 700, color: '#475569', fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>Nó</th>
                     <th style={{ padding: '0.35rem 0.6rem', textAlign: 'right', fontWeight: 700, color: '#818cf8', fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>RP IP</th>
                     <th style={{ padding: '0.35rem 0.6rem', textAlign: 'right', fontWeight: 700, color: '#f43f5e', fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>RP OOP</th>
+                    <th style={{ padding: '0.35rem 0.6rem', textAlign: 'right', fontWeight: 700, color: '#10b981', fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>ΔRP</th>
                     <th style={{ padding: '0.35rem 0.6rem', textAlign: 'right', fontWeight: 700, color: '#64748b', fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>Bluff IP</th>
                     <th style={{ padding: '0.35rem 0.6rem', textAlign: 'right', fontWeight: 700, color: '#64748b', fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em', whiteSpace: 'nowrap' }}>Def OOP</th>
-                    <th style={{ padding: '0.35rem 0.6rem', textAlign: 'left', fontWeight: 700, color: '#475569', fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Comportamento</th>
+                    <th style={{ padding: '0.35rem 0.6rem', textAlign: 'left', fontWeight: 700, color: '#475569', fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Efeito</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {[
-                    { no:'TG0',   rpIp:'0%',  rpOop:'0%',  bluff:'33%',    def:'50%',     desc:'ChipEV puro — baseline MDF', anchor: false },
-                    { no:'TG1',   rpIp:'3%',  rpOop:'6%',  bluff:'↑ ~40%', def:'↓ ~44%',  desc:'OOP começa a ceder',          anchor: false },
-                    { no:'TG2',   rpIp:'3%',  rpOop:'9%',  bluff:'↑ ~50%', def:'teto RP', desc:'OOP atinge o teto',           anchor: false },
-                    { no:'TG3',   rpIp:'3%',  rpOop:'18%', bluff:'↑↑',     def:'teto RP', desc:'IP overbluffa; OOP congela',  anchor: false },
-                    { no:'TG4',   rpIp:'3%',  rpOop:'24%', bluff:'max',    def:'teto RP', desc:'Pressão IP máxima',           anchor: false },
-                    { no:'TG5',   rpIp:'9%',  rpOop:'3%',  bluff:'~33%',   def:'↓ ~43%',  desc:'IP preserva; OOP cede',      anchor: false },
-                    { no:'TG6',   rpIp:'18%', rpOop:'3%',  bluff:'↓ ~17%', def:'↓↓',      desc:'IP contém bluffs',           anchor: false },
-                    { no:'TG7',   rpIp:'21%', rpOop:'3%',  bluff:'~13%',   def:'~20%',    desc:'OOP 80% fold — âncora KJT-2-3', anchor: true },
-                  ].map((row, i) => (
-                    <tr key={i} style={{
-                      borderBottom: '1px solid rgba(255,255,255,0.04)',
-                      borderLeft: row.anchor ? '2px solid rgba(99,102,241,0.5)' : '2px solid transparent',
-                      background: row.anchor ? 'rgba(99,102,241,0.06)' : i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.01)',
-                    }}>
-                      <td style={{ padding: '0.4rem 0.6rem', fontWeight: 700, color: row.anchor ? '#818cf8' : '#475569', whiteSpace: 'nowrap', fontFamily: 'monospace' }}>
-                        {row.no}{row.anchor && <span style={{ color: '#818cf8', marginLeft: '4px' }}>★</span>}
-                      </td>
-                      <td style={{ padding: '0.4rem 0.6rem', textAlign: 'right', color: '#818cf8', fontWeight: 600, whiteSpace: 'nowrap' }}>{row.rpIp}</td>
-                      <td style={{ padding: '0.4rem 0.6rem', textAlign: 'right', color: '#f43f5e', fontWeight: 600, whiteSpace: 'nowrap' }}>{row.rpOop}</td>
-                      <td style={{ padding: '0.4rem 0.6rem', textAlign: 'right', color: row.bluff.includes('↑') ? '#10b981' : row.bluff.includes('↓') ? '#f59e0b' : '#94a3b8', whiteSpace: 'nowrap' }}>{row.bluff}</td>
-                      <td style={{ padding: '0.4rem 0.6rem', textAlign: 'right', color: row.def.includes('↓') ? '#f59e0b' : row.def === 'teto RP' ? '#f43f5e' : '#94a3b8', whiteSpace: 'nowrap' }}>{row.def}</td>
-                      <td style={{ padding: '0.4rem 0.6rem', color: row.anchor ? '#a5b4fc' : '#64748b', fontSize: '0.66rem' }}>{row.desc}</td>
-                    </tr>
-                  ))}
+                  {([
+                    { no:'TG0', rpIp: 0,  rpOop: 0,  bluff:'33%',   def:'50%',    desc:'Baseline GTO — ChipEV puro',         anchor: false },
+                    { no:'TG1', rpIp: 3,  rpOop: 6,  bluff:'↑ 40%', def:'↓ 44%',  desc:'OOP restrito — IP explora',          anchor: false },
+                    { no:'TG2', rpIp: 3,  rpOop: 9,  bluff:'↑ 50%', def:'⊘ teto', desc:'OOP congela no limite do RP',        anchor: false },
+                    { no:'TG3', rpIp: 3,  rpOop: 18, bluff:'↑↑',    def:'⊘ teto', desc:'IP satura bluffs; OOP imobilizado',  anchor: false },
+                    { no:'TG4', rpIp: 3,  rpOop: 24, bluff:'⊘ max', def:'⊘ teto', desc:'Ambos saturam — pressão extrema',    anchor: false },
+                    { no:'TG5', rpIp: 9,  rpOop: 3,  bluff:'~33%',  def:'↓ 43%',  desc:'IP preserva; OOP cede levemente',    anchor: false },
+                    { no:'TG6', rpIp: 18, rpOop: 3,  bluff:'↓ 17%', def:'↓↓',     desc:'IP contém bluffs ativamente',        anchor: false },
+                    { no:'TG7', rpIp: 21, rpOop: 3,  bluff:'↓ 13%', def:'↓ 20%',  desc:'OOP 80% fold — âncora KJT-2-3',    anchor: true  },
+                  ] as const).map((row, i) => {
+                    const delta = row.rpIp - row.rpOop;
+                    const deltaStr = delta === 0 ? '0' : delta > 0 ? `+${delta}` : `${delta}`;
+                    const deltaColor = delta > 0 ? '#f87171' : delta < 0 ? '#34d399' : '#475569';
+                    const bluffColor = row.bluff.startsWith('↑') ? '#34d399'
+                      : row.bluff.startsWith('↓') ? '#f59e0b'
+                      : row.bluff.startsWith('⊘') ? '#818cf8'
+                      : '#94a3b8';
+                    const defColor = row.def.startsWith('↓') ? '#f59e0b'
+                      : row.def.startsWith('⊘') ? '#f87171'
+                      : '#94a3b8';
+                    return (
+                      <tr key={i} style={{
+                        borderBottom: '1px solid rgba(255,255,255,0.04)',
+                        borderLeft: row.anchor ? '2px solid rgba(99,102,241,0.5)' : '2px solid transparent',
+                        background: row.anchor ? 'rgba(99,102,241,0.06)' : i % 2 === 0 ? 'transparent' : 'rgba(255,255,255,0.01)',
+                      }}>
+                        <td style={{ padding: '0.4rem 0.6rem', fontWeight: 700, color: row.anchor ? '#818cf8' : '#475569', whiteSpace: 'nowrap', fontFamily: 'monospace' }}>
+                          {row.no}{row.anchor && <span style={{ color: '#818cf8', marginLeft: '4px' }}>★</span>}
+                        </td>
+                        <td style={{ padding: '0.4rem 0.6rem', textAlign: 'right', color: '#818cf8', fontWeight: 600, whiteSpace: 'nowrap' }}>{row.rpIp}%</td>
+                        <td style={{ padding: '0.4rem 0.6rem', textAlign: 'right', color: '#f43f5e', fontWeight: 600, whiteSpace: 'nowrap' }}>{row.rpOop}%</td>
+                        <td style={{ padding: '0.4rem 0.6rem', textAlign: 'right', color: deltaColor, fontWeight: 700, whiteSpace: 'nowrap', fontFamily: 'monospace', fontSize: '0.62rem' }}>{deltaStr}</td>
+                        <td style={{ padding: '0.4rem 0.6rem', textAlign: 'right', color: bluffColor, fontWeight: 600, whiteSpace: 'nowrap' }}>{row.bluff}</td>
+                        <td style={{ padding: '0.4rem 0.6rem', textAlign: 'right', color: defColor, fontWeight: 600, whiteSpace: 'nowrap' }}>{row.def}</td>
+                        <td style={{ padding: '0.4rem 0.6rem', color: row.anchor ? '#a5b4fc' : '#64748b', fontSize: '0.65rem' }}>{row.desc}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
-            <p style={{ fontSize: '0.58rem', color: '#334155', margin: '0.6rem 0 0', lineHeight: 1.55 }}>
+            {/* Glossário de símbolos */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem 1.25rem', margin: '0.6rem 0 0.5rem', paddingTop: '0.5rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+              {[
+                { sym: '↑ / ↓',   desc: 'acima / abaixo do baseline GTO (33% bluff · 50% def)' },
+                { sym: '↑↑ / ↓↓', desc: 'desvio acentuado — dinâmica dominante'                  },
+                { sym: '⊘ teto',  desc: 'defesa congelada pelo RP do OOP — fold máximo sustentável' },
+                { sym: '⊘ max',   desc: 'bluff IP saturado — limite superior imposto pelo BF'       },
+                { sym: 'ΔRP',     desc: 'IP_RP − OOP_RP · positivo = IP mais constringido'          },
+              ].map(({ sym, desc }) => (
+                <div key={sym} style={{ display: 'flex', alignItems: 'baseline', gap: '5px' }}>
+                  <span style={{ fontSize: '0.58rem', fontWeight: 700, color: '#64748b', fontFamily: 'monospace', whiteSpace: 'nowrap' }}>{sym}</span>
+                  <span style={{ fontSize: '0.55rem', color: '#334155' }}>{desc}</span>
+                </div>
+              ))}
+            </div>
+
+            <p style={{ fontSize: '0.58rem', color: '#334155', margin: '0', lineHeight: 1.55 }}>
               ★ Âncora empírica: 93 nodes HRC vs GTO Wizard, Raphael Vitoi 2024 &nbsp;·&nbsp; Downward Drift: O&apos;Kearney &amp; Carter, <em>PKO Poker Strategy</em>, D&amp;B Poker 2023
             </p>
           </div>
