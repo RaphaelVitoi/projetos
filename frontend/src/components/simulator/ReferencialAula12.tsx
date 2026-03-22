@@ -162,7 +162,7 @@ function bfColor(v: number): string {
   if (v === 0)   return 'rgba(15,23,42,0.5)';
   if (v >= 2.0)  return 'rgba(239,68,68,0.55)';
   if (v >= 1.6)  return 'rgba(245,158,11,0.45)';
-  if (v >= 1.3)  return 'rgba(234,179,8,0.25)';
+  if (v >= 1.3)  return 'rgba(6,182,212,0.18)';
   return 'rgba(34,197,94,0.2)';
 }
 
@@ -361,7 +361,7 @@ export default function ReferencialAula12() {
                     {[
                       { bg: 'rgba(239,68,68,0.55)',   color: 'rgba(239,68,68,0.85)',   label: '> 2.0',   desc: 'crítico'  },
                       { bg: 'rgba(245,158,11,0.45)',  color: 'rgba(245,158,11,0.85)',  label: '1.6–2.0', desc: 'elevado'  },
-                      { bg: 'rgba(234,179,8,0.25)',   color: 'rgba(234,179,8,0.75)',   label: '1.3–1.6', desc: 'moderado' },
+                      { bg: 'rgba(6,182,212,0.18)',   color: 'rgba(6,182,212,0.75)',   label: '1.3–1.6', desc: 'moderado' },
                       { bg: 'rgba(34,197,94,0.2)',    color: 'rgba(34,197,94,0.65)',   label: '< 1.3',   desc: 'baixo'    },
                     ].map(({ bg, color, label, desc }) => (
                       <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -379,7 +379,7 @@ export default function ReferencialAula12() {
                     {[
                       { color: '#fca5a5', label: '≥ 18%',   desc: 'crítico'  },
                       { color: '#fde68a', label: '12–18%',  desc: 'elevado'  },
-                      { color: '#94a3b8', label: '6–12%',   desc: 'moderado' },
+                      { color: '#67e8f9', label: '6–12%',   desc: 'moderado' },
                       { color: '#475569', label: '< 6%',    desc: 'baixo'    },
                     ].map(({ color, label, desc }) => (
                       <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -414,8 +414,8 @@ export default function ReferencialAula12() {
                       {row.map((val, c) => {
                         const rp = RP_MATRIX[r][c];
                         // Thresholds calibrados ao range real da matriz (max ~22.6%)
-                        const bfTextColor = val === 0 ? 'transparent' : val >= 2.0 ? '#fca5a5' : val >= 1.6 ? '#fbbf24' : val >= 1.3 ? '#facc15' : '#4ade80';
-                        const rpTextColor = rp >= 18 ? '#fca5a5' : rp >= 12 ? '#fde68a' : rp >= 6 ? '#94a3b8' : '#475569';
+                        const bfTextColor = val === 0 ? 'transparent' : val >= 2.0 ? '#fca5a5' : val >= 1.6 ? '#fbbf24' : val >= 1.3 ? '#67e8f9' : '#4ade80';
+                        const rpTextColor = rp >= 18 ? '#fca5a5' : rp >= 12 ? '#fde68a' : rp >= 6 ? '#67e8f9' : '#475569';
                         return (
                           <td key={c} style={{
                             padding: '5px 4px', textAlign: 'center', minWidth: '50px',
