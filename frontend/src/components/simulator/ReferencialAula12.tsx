@@ -1,0 +1,434 @@
+/**
+ * IDENTITY: Referencial Visual — Âncora Empírica Aula 1.2
+ * PATH: src/components/simulator/ReferencialAula12.tsx
+ * ROLE: Seção colapsável com representação visual dos dados de calibração do motor ICM.
+ */
+
+const RANKS = ['A','K','Q','J','T','9','8','7','6','5','4','3','2'];
+
+// BTN range — dados exatos da imagem (Aula 1.2)
+// [row][col]: upper-tri=suited, diagonal=pair, lower-tri=offsuit
+const BTN_FREQS = [
+  [100,100,100,100,100,100,100,100,100,100,100,100,100],
+  [100,100,100,100,100,100,100,100,100,100,100,100, 57],
+  [100,100,100,100,100,100,100,100,100,100,100, 52,  5],
+  [100,100,100,100,100,100,100,100,100, 49,  0,  0,  0],
+  [100,100,100,100,100,100,100,100, 31,  0,  0,  0,  0],
+  [100, 65, 54, 41, 51,100,100, 80, 13,  0,  0,  0,  0],
+  [100, 22,  0,  0,  0,  0,100,100, 55,  0,  0,  0,  0],
+  [ 92,  0,  0,  0,  0,  0,  0,100, 69, 20,  0,  0,  0],
+  [ 54,  0,  0,  0,  0,  0,  0,  0,100, 52,  0,  0,  0],
+  [100,  0,  0,  0,  0,  0,  0,  0,  0,100, 24,  0,  0],
+  [ 46,  0,  0,  0,  0,  0,  0,  0,  0,  0, 62,  0,  0],
+  [  5,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0],
+  [  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0],
+];
+
+// BB range — defesa 82.9% vs minirraise BTN (estimativa baseada em padrão FT/ICM)
+const BB_FREQS = [
+  [100,100,100,100,100,100,100,100,100,100,100,100,100],
+  [100,100,100,100,100,100,100,100,100,100,100,100,100],
+  [100,100,100,100,100,100,100,100,100,100,100,100,100],
+  [100,100,100,100,100,100,100,100,100,100, 50,  0,  0],
+  [100,100,100,100,100,100,100,100,100, 50,  0,  0,  0],
+  [100,100,100,100,100,100,100,100,100,100, 50,  0,  0],
+  [100,100,100,100,100,100,100,100,100,100,  0,  0,  0],
+  [100,100,100,100,100,100,100,100,100,100,  0,  0,  0],
+  [100,100,100,100,100,100,100,100,100,100, 50,  0,  0],
+  [100,100,100, 50,  0,  0,  0,  0,  0,100,100, 50,  0],
+  [100,100,100,  0,  0,  0,  0,  0,  0,  0,100,100, 50],
+  [100,100, 50,  0,  0,  0,  0,  0,  0,  0,  0,100,100],
+  [100,100, 50,  0,  0,  0,  0,  0,  0,  0,  0,  0,100],
+];
+
+function getHandLabel(r: number, c: number): string {
+  if (r === c) return RANKS[r] + RANKS[r];
+  if (r < c)  return RANKS[r] + RANKS[c] + 's';
+  return RANKS[c] + RANKS[r] + 'o';
+}
+
+function cellBg(freq: number, color: 'indigo' | 'emerald'): string {
+  if (freq === 0)   return 'rgba(15,23,42,0.6)';
+  if (color === 'indigo') {
+    if (freq === 100) return 'rgba(99,102,241,0.55)';
+    if (freq >= 50)   return 'rgba(99,102,241,0.28)';
+    return 'rgba(99,102,241,0.12)';
+  }
+  if (freq === 100) return 'rgba(52,211,153,0.4)';
+  if (freq >= 50)   return 'rgba(52,211,153,0.20)';
+  return 'rgba(52,211,153,0.08)';
+}
+
+function cellText(freq: number): string {
+  return freq === 0 ? '#1e293b' : '#94a3b8';
+}
+
+function RangeGrid({ freqs, color, title, pct }: {
+  freqs: number[][];
+  color: 'indigo' | 'emerald';
+  title: string;
+  pct: string;
+}) {
+  const accentColor = color === 'indigo' ? '#818cf8' : '#34d399';
+  return (
+    <div>
+      <p style={{ margin: '0 0 0.4rem', fontSize: '0.62rem', fontWeight: 700, color: accentColor, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+        {title} <span style={{ color: '#475569', fontWeight: 400 }}>— {pct}</span>
+      </p>
+      <div style={{ overflowX: 'auto' }}>
+        <table style={{ borderCollapse: 'collapse', fontSize: '0.5rem' }}>
+          <thead>
+            <tr>
+              <th style={{ width: '18px' }} />
+              {RANKS.map(r => (
+                <th key={r} style={{ width: '36px', padding: '1px', textAlign: 'center', color: '#334155', fontWeight: 600, fontSize: '0.5rem' }}>{r}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {RANKS.map((rowRank, r) => (
+              <tr key={rowRank}>
+                <td style={{ padding: '1px 3px 1px 0', color: '#334155', fontWeight: 600, fontSize: '0.5rem', textAlign: 'right' }}>{rowRank}</td>
+                {RANKS.map((_, c) => {
+                  const freq = freqs[r][c];
+                  const label = getHandLabel(r, c);
+                  const isPair = r === c;
+                  return (
+                    <td key={c} title={`${label}: ${freq}%`} style={{
+                      width: '36px',
+                      height: '22px',
+                      padding: '1px',
+                      textAlign: 'center',
+                      background: cellBg(freq, color),
+                      border: isPair ? `1px solid ${accentColor}44` : '1px solid rgba(255,255,255,0.03)',
+                      color: cellText(freq),
+                      fontSize: '0.48rem',
+                      lineHeight: 1.1,
+                      whiteSpace: 'nowrap',
+                      fontWeight: isPair ? 700 : 400,
+                    }}>
+                      {freq > 0 ? (freq === 100 ? label : `${freq}%`) : ''}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+const PRIZES = [
+  { pos: '1º', val: 237.34 }, { pos: '2º', val: 170.96 },
+  { pos: '3º', val: 135.17 }, { pos: '4º', val: 109.99 },
+  { pos: '5º', val: 90.28  }, { pos: '6º', val: 73.95  },
+  { pos: '7º', val: 59.92  }, { pos: '8º', val: 47.56  },
+  { pos: '9º', val: 36.47  },
+];
+
+// Bubble Factor matrix (9x9) — valores da imagem Aula 1.2
+const BF_PLAYERS = ['UTG','EP','MP1','MP2','HJ','CO','BU','SB','BB'];
+const BF_STACKS  = [9.4, 52.4, 22.2, 7.0, 44.3, 24.3, 40.0, 13.4, 55.0];
+const BF_MATRIX  = [
+  [  0, 1.63, 1.53, 1.23, 1.62, 1.55, 1.61, 1.45, 1.64],
+  [1.10,   0, 1.29, 1.07, 1.96, 1.32, 1.15, 1.15, 2.64],
+  [1.21, 2.12,   0, 1.15, 2.09, 1.94, 2.06, 1.34, 2.13],
+  [1.28, 1.48, 1.41,   0, 1.47, 1.42, 1.46, 1.33, 1.48],
+  [1.12, 2.53, 1.35, 1.09,   0, 1.40, 2.06, 1.18, 2.55],
+  [1.20, 2.18, 1.78, 1.14, 2.14,   0, 2.11, 1.32, 2.19],
+  [1.13, 2.47, 1.39, 1.09, 2.41, 1.45,   0, 1.20, 2.49],
+  [1.31, 1.83, 1.69, 1.20, 1.80, 1.71, 1.79,   0, 1.83],
+  [1.10, 2.38, 1.27, 1.07, 1.86, 1.30, 1.69, 1.14,   0],
+];
+
+// Risk Premium matrix — valores exatos do HRC (vitoi.hrcz)
+// RP[row][col] = RP do jogador da linha ao enfrentar o jogador da coluna
+// Colunas: UTG, EP, MP1, MP2, HJ, CO, BU, SB, BB
+const RP_MATRIX = [
+  [  0, 12.0, 10.5,  5.2, 11.8, 10.7, 11.6,  9.2, 12.1], // UTG
+  [2.4,    0,  6.2,  1.8, 16.2,  7.0, 21.2,  3.5, 22.6], // EP
+  [4.8, 18.0,    0,  3.5, 17.6, 16.0, 17.3,  7.3, 18.1], // MP1
+  [6.1,  9.6,  8.4,    0,  9.5,  8.6,  9.7,  7.2,  9.7], // MP2
+  [2.8, 21.7,  7.4,  2.1,    0,  8.3, 17.3,  4.1, 21.8], // HJ
+  [4.5, 18.5, 15.1,  3.3, 18.1,    0, 17.8,  6.8, 18.6], // CO
+  [3.1, 13.7,  8.2,  2.3, 20.7,  9.2,    0,  4.5, 21.4], // BU
+  [6.7, 14.6, 13.0,  4.6, 14.3, 13.0, 14.2,    0, 14.7], // SB
+  [2.3, 20.4,  5.9,  1.7, 15.1,  6.6, 12.9,  3.4,    0], // BB
+];
+
+function bfColor(v: number): string {
+  if (v === 0)   return 'rgba(15,23,42,0.5)';
+  if (v >= 2.0)  return 'rgba(239,68,68,0.55)';
+  if (v >= 1.6)  return 'rgba(245,158,11,0.45)';
+  if (v >= 1.3)  return 'rgba(234,179,8,0.25)';
+  return 'rgba(34,197,94,0.2)';
+}
+
+function rpColor(v: number): string {
+  if (v === 0)   return 'rgba(15,23,42,0.5)';
+  if (v >= 50)   return 'rgba(239,68,68,0.55)';
+  if (v >= 35)   return 'rgba(245,158,11,0.45)';
+  if (v >= 20)   return 'rgba(234,179,8,0.25)';
+  return 'rgba(34,197,94,0.2)';
+}
+
+// Posições angulares da mesa (9-handed, iniciando em BTN~bottom-right)
+const TABLE_PLAYERS = [
+  { name: 'BTN', stack: '39.88', angle: -50,  highlight: true  },
+  { name: 'SB',  stack: '12.73', angle: -15,  highlight: false },
+  { name: 'BB',  stack: '53.88', angle:  20,  highlight: true  },
+  { name: 'UTG', stack: '9.25',  angle:  60,  highlight: false },
+  { name: 'EP',  stack: '52.24', angle:  100, highlight: false },
+  { name: 'MP1', stack: '22.08', angle:  140, highlight: false },
+  { name: 'MP2', stack: '6.88',  angle:  180, highlight: false },
+  { name: 'HJ',  stack: '44.16', angle:  220, highlight: false },
+  { name: 'CO',  stack: '24.16', angle:  260, highlight: false },
+];
+
+function toRad(deg: number) { return (deg * Math.PI) / 180; }
+
+export default function ReferencialAula12() {
+  const W = 300; const H = 180;
+  const rx = 110; const ry = 64;
+  const cx = W / 2; const cy = H / 2;
+
+  return (
+    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '0 1.5rem' }}>
+      <details style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <summary style={{
+          cursor: 'pointer', listStyle: 'none', display: 'flex', alignItems: 'center',
+          gap: '0.5rem', padding: '0.9rem 0', fontSize: '0.68rem', color: '#475569',
+          fontWeight: 600, letterSpacing: '0.06em', userSelect: 'none',
+        }}>
+          <span style={{ fontSize: '0.52rem', textTransform: 'uppercase', letterSpacing: '0.12em' }}>▶ Referencial</span>
+          <span style={{ fontWeight: 400, color: '#334155' }}>— Âncora Empírica (Aula 1.2) · KJT-2-3 · BTN 21.4% RP vs BB 12.9% RP</span>
+        </summary>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem', paddingBottom: '2rem' }}>
+
+          {/* Board + RP */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'flex-start' }}>
+            {/* Board cards */}
+            <div>
+              <p style={{ margin: '0 0 0.4rem', fontSize: '0.58rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Board</p>
+              <div style={{ display: 'flex', gap: '4px' }}>
+                {[
+                  { rank: 'K', suit: '♦', color: '#60a5fa' },
+                  { rank: 'J', suit: '♣', color: '#34d399' },
+                  { rank: 'T', suit: '♠', color: '#cbd5e1' },
+                  { rank: '2', suit: '♦', color: '#60a5fa' },
+                  { rank: '3', suit: '♦', color: '#60a5fa' },
+                ].map(({ rank, suit, color }, i) => (
+                  <div key={i} style={{
+                    width: '36px', height: '52px', borderRadius: '5px',
+                    background: 'rgba(15,23,42,0.9)',
+                    border: `1px solid ${color}55`,
+                    display: 'flex', flexDirection: 'column', alignItems: 'center',
+                    justifyContent: 'center', gap: '2px',
+                  }}>
+                    <span style={{ fontSize: '0.85rem', fontWeight: 900, color, lineHeight: 1 }}>{rank}</span>
+                    <span style={{ fontSize: '0.75rem', color, lineHeight: 1 }}>{suit}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* RP */}
+            <div style={{ flex: 1, minWidth: '180px' }}>
+              <p style={{ margin: '0 0 0.4rem', fontSize: '0.58rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Risk Premium</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                {[
+                  { label: 'BTN (40bb)', rp: 21.4, color: '#818cf8' },
+                  { label: 'BB  (55bb)', rp: 12.9, color: '#34d399' },
+                ].map(({ label, rp, color }) => (
+                  <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span style={{ fontSize: '0.62rem', color: '#475569', width: '70px', flexShrink: 0 }}>{label}</span>
+                    <div style={{ flex: 1, height: '6px', borderRadius: '3px', background: 'rgba(255,255,255,0.06)', overflow: 'hidden' }}>
+                      <div style={{ width: `${(rp / 30) * 100}%`, height: '100%', background: color, borderRadius: '3px' }} />
+                    </div>
+                    <span style={{ fontSize: '0.62rem', fontWeight: 700, color, width: '36px', textAlign: 'right' }}>{rp}%</span>
+                  </div>
+                ))}
+                <p style={{ margin: '4px 0 0', fontSize: '0.58rem', color: '#475569' }}>
+                  Risk Advantage BTN <strong style={{ color: '#10b981' }}>+8.5%</strong>
+                </p>
+              </div>
+            </div>
+
+            {/* Ranges pré-flop */}
+            <div style={{ minWidth: '180px' }}>
+              <p style={{ margin: '0 0 0.4rem', fontSize: '0.58rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Ranges pré-flop</p>
+              <div style={{ fontSize: '0.68rem', color: '#94a3b8', display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                <div><span style={{ color: '#818cf8', fontWeight: 700 }}>BTN</span> abre 33.6% · minirraise 2bb</div>
+                <div style={{ fontSize: '0.62rem', color: '#64748b', paddingLeft: '4px' }}>fold 66.4%</div>
+                <div style={{ marginTop: '3px' }}><span style={{ color: '#34d399', fontWeight: 700 }}>BB</span> defende 82.9%</div>
+                <div style={{ fontSize: '0.62rem', color: '#64748b', paddingLeft: '4px' }}>fold 17.1% · call 64.4% · 3bet 10.2% · shove 8.4%</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Mesa + Prêmios */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.25rem', alignItems: 'flex-start' }}>
+            {/* Mesa oval */}
+            <div style={{ flex: '0 0 auto' }}>
+              <p style={{ margin: '0 0 0.4rem', fontSize: '0.58rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Table Draw — Final Table 9P</p>
+              <svg width={W} height={H} style={{ display: 'block' }}>
+                {/* Mesa */}
+                <ellipse cx={cx} cy={cy} rx={rx} ry={ry} fill="rgba(22,101,52,0.35)" stroke="rgba(34,197,94,0.2)" strokeWidth="2" />
+                <ellipse cx={cx} cy={cy} rx={rx - 10} ry={ry - 8} fill="none" stroke="rgba(34,197,94,0.08)" strokeWidth="1" />
+                {/* Pot */}
+                <text x={cx} y={cy + 4} textAnchor="middle" fill="#475569" fontSize="9" fontWeight="600">Pot: 5.63bb</text>
+                {/* Players */}
+                {TABLE_PLAYERS.map(({ name, stack, angle, highlight }) => {
+                  const rad = toRad(angle);
+                  const px = cx + (rx + 26) * Math.cos(rad);
+                  const py = cy + (ry + 18) * Math.sin(rad);
+                  const accent = name === 'BTN' ? '#818cf8' : name === 'BB' ? '#34d399' : '#475569';
+                  return (
+                    <g key={name}>
+                      <rect x={px - 22} y={py - 12} width={44} height={24} rx={4}
+                        fill={highlight ? 'rgba(99,102,241,0.15)' : 'rgba(15,23,42,0.7)'}
+                        stroke={accent + '66'} strokeWidth="1" />
+                      <text x={px} y={py - 2} textAnchor="middle" fill={accent} fontSize="8" fontWeight="700">{name}</text>
+                      <text x={px} y={py + 8} textAnchor="middle" fill="#64748b" fontSize="7">{stack}bb</text>
+                    </g>
+                  );
+                })}
+              </svg>
+            </div>
+
+            {/* Prêmios */}
+            <div style={{ flex: 1, minWidth: '180px' }}>
+              <p style={{ margin: '0 0 0.4rem', fontSize: '0.58rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Estrutura de Prêmios — MTT $11 · 126 entradas</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                {PRIZES.map(({ pos, val }, i) => (
+                  <div key={pos} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span style={{ fontSize: '0.58rem', color: '#475569', width: '20px', textAlign: 'right', flexShrink: 0 }}>{pos}</span>
+                    <div style={{ flex: 1, height: '5px', borderRadius: '3px', background: 'rgba(255,255,255,0.05)', overflow: 'hidden' }}>
+                      <div style={{
+                        width: `${(val / 237.34) * 100}%`, height: '100%', borderRadius: '3px',
+                        background: i === 0 ? 'linear-gradient(to right,#fbbf24,#f59e0b)'
+                                  : i === 1 ? 'linear-gradient(to right,#94a3b8,#64748b)'
+                                  : i === 2 ? 'linear-gradient(to right,#a78bfa,#8b5cf6)'
+                                  : 'rgba(99,102,241,0.35)',
+                      }} />
+                    </div>
+                    <span style={{ fontSize: '0.6rem', color: '#64748b', width: '42px', textAlign: 'right', flexShrink: 0 }}>${val}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Ranges */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            <RangeGrid freqs={BTN_FREQS} color="indigo" title="BTN — Range de Abertura (RFI)" pct="33.6% open · fold 66.4%" />
+            <RangeGrid freqs={BB_FREQS}  color="emerald" title="BB — Defesa vs minirraise" pct="82.9% continue · fold 17.1%" />
+          </div>
+
+          {/* Bubble Factors + Risk Premium (unificados) */}
+          <div>
+            <p style={{ margin: '0 0 0.25rem', fontSize: '0.58rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+              Bubble Factors — FT BTN 40 BB 55
+              <span style={{ fontWeight: 400, marginLeft: '0.5rem' }}>
+                <span style={{ color: 'rgba(239,68,68,0.8)' }}>■</span> {'>'} 2.0
+                <span style={{ color: 'rgba(245,158,11,0.8)', marginLeft: '6px' }}>■</span> 1.6–2.0
+                <span style={{ color: 'rgba(234,179,8,0.7)', marginLeft: '6px' }}>■</span> 1.3–1.6
+                <span style={{ color: 'rgba(34,197,94,0.6)', marginLeft: '6px' }}>■</span> {'<'} 1.3
+              </span>
+            </p>
+            <p style={{ margin: '0 0 0.5rem', fontSize: '0.55rem', color: '#334155' }}>
+              RP = (BF−1)/BF — mostrado abaixo do BF em cada célula
+            </p>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ borderCollapse: 'collapse', fontSize: '0.6rem' }}>
+                <thead>
+                  <tr>
+                    <th style={{ padding: '3px 5px', color: '#334155', fontSize: '0.55rem', textAlign: 'left' }} />
+                    {BF_PLAYERS.map((p, i) => (
+                      <th key={p} style={{ padding: '3px 4px', color: '#475569', fontWeight: 700, fontSize: '0.55rem', textAlign: 'center', whiteSpace: 'nowrap' }}>
+                        {p}<br /><span style={{ color: '#334155', fontWeight: 400 }}>{BF_STACKS[i]}</span>
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {BF_MATRIX.map((row, r) => (
+                    <tr key={r}>
+                      <td style={{ padding: '2px 5px', color: '#475569', fontWeight: 700, fontSize: '0.55rem', whiteSpace: 'nowrap' }}>
+                        {BF_PLAYERS[r]}<br /><span style={{ color: '#334155', fontWeight: 400 }}>{BF_STACKS[r]}</span>
+                      </td>
+                      {row.map((val, c) => {
+                        const rp = RP_MATRIX[r][c];
+                        const bfTextColor = val === 0 ? 'transparent' : val >= 2.0 ? '#fca5a5' : val >= 1.6 ? '#fde68a' : '#94a3b8';
+                        const rpTextColor = rp >= 50 ? '#fca5a5' : rp >= 35 ? '#fde68a' : '#64748b';
+                        return (
+                          <td key={c} style={{
+                            padding: '4px 5px', textAlign: 'center', minWidth: '46px',
+                            background: bfColor(val),
+                            border: '1px solid rgba(255,255,255,0.04)',
+                            lineHeight: 1.2,
+                          }}>
+                            {val === 0 ? '' : (
+                              <>
+                                <div style={{ color: bfTextColor, fontWeight: val >= 2.0 ? 700 : 400, fontSize: '0.6rem' }}>{val.toFixed(2)}</div>
+                                <div style={{ color: rpTextColor, fontSize: '0.5rem', marginTop: '1px' }}>+{rp}%</div>
+                              </>
+                            )}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Toy Games */}
+          <div>
+            <p style={{ margin: '0 0 0.5rem', fontSize: '0.58rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Toy Games — Framework Teórico</p>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.7rem', color: '#94a3b8' }}>
+                <thead>
+                  <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+                    {['Nó','RP IP','RP OOP','Bluff IP','Defesa OOP','Comportamento'].map(h => (
+                      <th key={h} style={{ padding: '0.4rem 0.5rem', textAlign: 'left', fontWeight: 600, color: '#64748b', fontSize: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.08em', whiteSpace: 'nowrap' }}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { no:'TG0',   rpIp:'0%',  rpOop:'0%',  bluff:'33%',    def:'50%',     desc:'ChipEV puro — baseline MDF' },
+                    { no:'TG1',   rpIp:'3%',  rpOop:'6%',  bluff:'↑ ~40%', def:'↓ ~44%',  desc:'OOP começa a ceder' },
+                    { no:'TG2',   rpIp:'3%',  rpOop:'9%',  bluff:'↑ ~50%', def:'teto RP', desc:'OOP atinge o teto' },
+                    { no:'TG3',   rpIp:'3%',  rpOop:'18%', bluff:'↑↑',     def:'teto RP', desc:'IP overbluffa; OOP congela' },
+                    { no:'TG4',   rpIp:'3%',  rpOop:'24%', bluff:'max',    def:'teto RP', desc:'Pressão IP máxima' },
+                    { no:'TG5',   rpIp:'9%',  rpOop:'3%',  bluff:'~33%',   def:'↓ ~43%',  desc:'IP preserva; OOP cede' },
+                    { no:'TG6',   rpIp:'18%', rpOop:'3%',  bluff:'↓ ~17%', def:'↓↓',      desc:'IP contém bluffs' },
+                    { no:'TG7 ★', rpIp:'21%', rpOop:'3%',  bluff:'~13%',   def:'~20%',    desc:'OOP 80% fold — âncora KJT-2-3' },
+                  ].map((row, i) => (
+                    <tr key={i} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)', background: row.no.includes('★') ? 'rgba(99,102,241,0.06)' : 'transparent' }}>
+                      <td style={{ padding: '0.4rem 0.5rem', fontWeight: 600, color: row.no.includes('★') ? '#818cf8' : '#64748b', whiteSpace: 'nowrap' }}>{row.no}</td>
+                      <td style={{ padding: '0.4rem 0.5rem', whiteSpace: 'nowrap' }}>{row.rpIp}</td>
+                      <td style={{ padding: '0.4rem 0.5rem', whiteSpace: 'nowrap' }}>{row.rpOop}</td>
+                      <td style={{ padding: '0.4rem 0.5rem', whiteSpace: 'nowrap' }}>{row.bluff}</td>
+                      <td style={{ padding: '0.4rem 0.5rem', whiteSpace: 'nowrap' }}>{row.def}</td>
+                      <td style={{ padding: '0.4rem 0.5rem', color: '#64748b' }}>{row.desc}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p style={{ fontSize: '0.6rem', color: '#334155', margin: '0.75rem 0 0' }}>
+              ★ Âncora empírica: 93 nodes HRC vs GTO Wizard. Raphael Vitoi, 2024. Downward Drift: O&apos;Kearney &amp; Carter, <em>PKO Poker Strategy</em>, D&amp;B Poker, 2023.
+            </p>
+          </div>
+
+        </div>
+      </details>
+    </div>
+  );
+}

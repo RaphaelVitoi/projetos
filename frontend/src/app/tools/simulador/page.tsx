@@ -6,6 +6,7 @@
  */
 
 import SimuladorICM from '@/components/SimuladorICM';
+import ReferencialAula12 from '@/components/simulator/ReferencialAula12';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -94,9 +95,12 @@ export default function SimuladorPage() {
         </div>
       </header>
 
+      <ReferencialAula12 />
+
       <div className="container" style={{ marginTop: '1rem' }}>
         <SimuladorICM />
       </div>
+
     </main>
   );
 }
