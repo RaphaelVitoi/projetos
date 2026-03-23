@@ -210,177 +210,168 @@ export default function ReferencialAula12() {
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', paddingBottom: '2rem' }}>
 
-          {/* Board + RP */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'flex-start' }}>
-            {/* Board cards */}
-            <div>
-              <p style={{ margin: '0 0 0.4rem', fontSize: '0.58rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Board</p>
-              <div style={{ display: 'flex', gap: '4px' }}>
-                {[
-                  { rank: 'K', suit: '♦', color: '#60a5fa' },
-                  { rank: 'J', suit: '♣', color: '#34d399' },
-                  { rank: 'T', suit: '♠', color: '#cbd5e1' },
-                  { rank: '2', suit: '♦', color: '#60a5fa' },
-                  { rank: '3', suit: '♦', color: '#60a5fa' },
-                ].map(({ rank, suit, color }, i) => (
-                  <div key={i} style={{
-                    width: '36px', height: '52px', borderRadius: '5px',
-                    background: 'rgba(15,23,42,0.9)',
-                    border: `1px solid ${color}55`,
-                    display: 'flex', flexDirection: 'column', alignItems: 'center',
-                    justifyContent: 'center', gap: '2px',
-                  }}>
-                    <span style={{ fontSize: '0.85rem', fontWeight: 900, color, lineHeight: 1 }}>{rank}</span>
-                    <span style={{ fontSize: '0.75rem', color, lineHeight: 1 }}>{suit}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+          {/* Grid 2-col: Esquerda(Board+Mesa) | Direita(RP+Prêmios) */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '1rem 2rem', alignItems: 'start' }}>
 
-            {/* RP */}
-            <div style={{ minWidth: '200px', maxWidth: '280px' }}>
-              <p style={{ margin: '0 0 0.4rem', fontSize: '0.58rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Risk Premium</p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                {[
-                  { label: 'BTN (40bb)', rp: 21.4, color: '#818cf8' },
-                  { label: 'BB  (55bb)', rp: 12.9, color: '#34d399' },
-                ].map(({ label, rp, color }) => (
-                  <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <span style={{ fontSize: '0.62rem', color: '#475569', width: '70px', flexShrink: 0 }}>{label}</span>
-                    <div style={{ flex: 1, height: '6px', borderRadius: '3px', background: 'rgba(255,255,255,0.06)', overflow: 'hidden' }}>
-                      <div style={{ width: `${(rp / 30) * 100}%`, height: '100%', background: color, borderRadius: '3px' }} />
+            {/* ESQUERDA — Board + Mesa */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              {/* Board */}
+              <div>
+                <p style={{ margin: '0 0 0.4rem', fontSize: '0.58rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Board</p>
+                <div style={{ display: 'flex', gap: '4px' }}>
+                  {[
+                    { rank: 'K', suit: '♦', color: '#60a5fa' },
+                    { rank: 'J', suit: '♣', color: '#34d399' },
+                    { rank: 'T', suit: '♠', color: '#cbd5e1' },
+                    { rank: '2', suit: '♦', color: '#60a5fa' },
+                    { rank: '3', suit: '♦', color: '#60a5fa' },
+                  ].map(({ rank, suit, color }, i) => (
+                    <div key={i} style={{
+                      width: '36px', height: '52px', borderRadius: '5px',
+                      background: 'rgba(15,23,42,0.9)', border: `1px solid ${color}55`,
+                      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '2px',
+                    }}>
+                      <span style={{ fontSize: '0.85rem', fontWeight: 900, color, lineHeight: 1 }}>{rank}</span>
+                      <span style={{ fontSize: '0.75rem', color, lineHeight: 1 }}>{suit}</span>
                     </div>
-                    <span style={{ fontSize: '0.62rem', fontWeight: 700, color, width: '36px', textAlign: 'right' }}>{rp}%</span>
-                  </div>
-                ))}
-                <p style={{ margin: '4px 0 0', fontSize: '0.58rem', color: '#475569' }}>
-                  Risk Advantage BTN <strong style={{ color: '#10b981' }}>+8.5%</strong>
-                </p>
+                  ))}
+                </div>
+              </div>
+
+              {/* Mesa oval */}
+              <div>
+                <p style={{ margin: '0 0 0.4rem', fontSize: '0.58rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Table Draw — Final Table 9P</p>
+                <svg width={W} height={H} style={{ display: 'block' }}>
+                  <ellipse cx={cx} cy={cy} rx={rx} ry={ry} fill="rgba(22,101,52,0.35)" stroke="rgba(34,197,94,0.2)" strokeWidth="2" />
+                  <ellipse cx={cx} cy={cy} rx={rx - 10} ry={ry - 8} fill="none" stroke="rgba(34,197,94,0.08)" strokeWidth="1" />
+                  <text x={cx} y={cy - 32} textAnchor="middle" fill="#475569" fontSize="9" fontWeight="600">Pot: 5.63bb</text>
+                  {(() => {
+                    const r = 10;
+                    const iRx = 72; const iRy = 50;
+                    const sbX = cx + iRx * Math.cos(toRad(-15));
+                    const sbY = cy + iRy * Math.sin(toRad(-15));
+                    const bbX = cx + iRx * Math.cos(toRad(20));
+                    const bbY = cy + iRy * Math.sin(toRad(20));
+                    const btnX = cx + iRx * Math.cos(toRad(-50));
+                    const btnY = cy + iRy * Math.sin(toRad(-50));
+                    return (
+                      <>
+                        <circle cx={sbX} cy={sbY} r={r} fill="rgba(245,158,11,0.85)" stroke="#f59e0b" strokeWidth="1.2" />
+                        <text x={sbX} y={sbY + 2.5} textAnchor="middle" fill="white" fontSize="6" fontWeight="900">0.5</text>
+                        <circle cx={bbX} cy={bbY} r={r} fill="rgba(16,185,129,0.8)" stroke="#10b981" strokeWidth="1.2" />
+                        <text x={bbX} y={bbY + 2.5} textAnchor="middle" fill="white" fontSize="6" fontWeight="900">1</text>
+                        <circle cx={cx} cy={cy + 12} r={r} fill="rgba(100,116,139,0.8)" stroke="#94a3b8" strokeWidth="1.2" />
+                        <text x={cx} y={cy + 15} textAnchor="middle" fill="white" fontSize="5" fontWeight="900">ANTE</text>
+                        <circle cx={btnX - 6} cy={btnY} r={r} fill="rgba(99,102,241,0.65)" stroke="#6366f1" strokeWidth="1.2" />
+                        <circle cx={btnX + 6} cy={btnY} r={r} fill="rgba(99,102,241,0.9)" stroke="#6366f1" strokeWidth="1.2" />
+                        <text x={btnX} y={btnY + 2.5} textAnchor="middle" fill="white" fontSize="5.5" fontWeight="900">BTN</text>
+                      </>
+                    );
+                  })()}
+                  {TABLE_PLAYERS.map(({ name, stack, angle, highlight }) => {
+                    const rad = toRad(angle);
+                    const px = cx + (rx + 26) * Math.cos(rad);
+                    const py = cy + (ry + 18) * Math.sin(rad);
+                    const accent = name === 'BTN' ? '#818cf8' : name === 'BB' ? '#34d399' : '#475569';
+                    return (
+                      <g key={name}>
+                        <rect x={px - 22} y={py - 12} width={44} height={24} rx={4}
+                          fill={highlight ? 'rgba(99,102,241,0.15)' : 'rgba(15,23,42,0.7)'}
+                          stroke={accent + '66'} strokeWidth="1" />
+                        <text x={px} y={py - 2} textAnchor="middle" fill={accent} fontSize="8" fontWeight="700">{name}</text>
+                        <text x={px} y={py + 8} textAnchor="middle" fill="#64748b" fontSize="7">{stack}bb</text>
+                      </g>
+                    );
+                  })}
+                </svg>
+                <div style={{ display: 'flex', gap: '0.3rem 1rem', flexWrap: 'wrap', marginTop: '0.4rem' }}>
+                  {([
+                    { id: 'SB', color: '#f59e0b', text: '0.5bb · obrig.' },
+                    { id: 'BB', color: '#10b981', text: '1bb · obrig.' },
+                    { id: 'ANTE', color: '#94a3b8', text: '1.125bb · dead' },
+                    { id: 'BTN', color: '#818cf8', text: '2bb · open' },
+                  ] as const).map(({ id, color, text }) => (
+                    <div key={id} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: color, display: 'inline-block', flexShrink: 0 }} />
+                      <span style={{ fontSize: '0.58rem', fontWeight: 700, color }}>{id}</span>
+                      <span style={{ fontSize: '0.58rem', color: '#475569' }}>{text}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
-            {/* Ranges pré-flop */}
-            <div style={{ minWidth: '180px' }}>
-              <p style={{ margin: '0 0 0.4rem', fontSize: '0.58rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Ranges pré-flop</p>
-              <div style={{ fontSize: '0.68rem', color: '#94a3b8', display: 'flex', flexDirection: 'column', gap: '3px' }}>
-                <div><span style={{ color: '#818cf8', fontWeight: 700 }}>BTN</span> abre 33.6% · minirraise 2bb</div>
-                <div style={{ fontSize: '0.62rem', color: '#64748b', paddingLeft: '4px' }}>fold 66.4%</div>
-                <div style={{ marginTop: '3px' }}><span style={{ color: '#34d399', fontWeight: 700 }}>BB</span> defende 82.9%</div>
-                <div style={{ fontSize: '0.62rem', color: '#64748b', paddingLeft: '4px' }}>fold 17.1% · call 64.4% · 3bet 10.2% · shove 8.4%</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Mesa + Prêmios */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.25rem', alignItems: 'flex-start' }}>
-            {/* Mesa oval */}
-            <div style={{ flex: '0 0 auto' }}>
-              <p style={{ margin: '0 0 0.4rem', fontSize: '0.58rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Table Draw — Final Table 9P</p>
-              <svg width={W} height={H} style={{ display: 'block' }}>
-                {/* Mesa */}
-                <ellipse cx={cx} cy={cy} rx={rx} ry={ry} fill="rgba(22,101,52,0.35)" stroke="rgba(34,197,94,0.2)" strokeWidth="2" />
-                <ellipse cx={cx} cy={cy} rx={rx - 10} ry={ry - 8} fill="none" stroke="rgba(34,197,94,0.08)" strokeWidth="1" />
-                {/* Pot */}
-                <text x={cx} y={cy - 30} textAnchor="middle" fill="#475569" fontSize="9" fontWeight="600">Pot: 5.63bb</text>
-                {/* Fichas: ANTE (centro) + SB/BB/BTN em frente às posições angulares */}
-                {(() => {
-                  const r = 10;
-                  const iRx = 72; const iRy = 50;
-                  const sbX = cx + iRx * Math.cos(toRad(-15));
-                  const sbY = cy + iRy * Math.sin(toRad(-15));
-                  const bbX = cx + iRx * Math.cos(toRad(20));
-                  const bbY = cy + iRy * Math.sin(toRad(20));
-                  const btnX = cx + iRx * Math.cos(toRad(-50));
-                  const btnY = cy + iRy * Math.sin(toRad(-50));
-                  return (
-                    <>
-                      {/* SB — ficha completa com valor 0.5 */}
-                      <circle cx={sbX} cy={sbY} r={r} fill="rgba(245,158,11,0.85)" stroke="#f59e0b" strokeWidth="1.2" />
-                      <text x={sbX} y={sbY + 2.5} textAnchor="middle" fill="white" fontSize="6" fontWeight="900">0.5</text>
-                      {/* BB — 1 ficha */}
-                      <circle cx={bbX} cy={bbY} r={r} fill="rgba(16,185,129,0.8)" stroke="#10b981" strokeWidth="1.2" />
-                      <text x={bbX} y={bbY + 3.5} textAnchor="middle" fill="white" fontSize="5" fontWeight="900">BB</text>
-                      {/* ANTE — dead money no centro */}
-                      <circle cx={cx} cy={cy + 12} r={r} fill="rgba(100,116,139,0.8)" stroke="#94a3b8" strokeWidth="1.2" />
-                      <text x={cx} y={cy + 16} textAnchor="middle" fill="white" fontSize="5" fontWeight="900">ANTE</text>
-                      {/* BTN — 2 fichas (open) */}
-                      <circle cx={btnX - 5} cy={btnY} r={r} fill="rgba(99,102,241,0.45)" stroke="#6366f1" strokeWidth="1" />
-                      <circle cx={btnX + 5} cy={btnY} r={r} fill="rgba(99,102,241,0.85)" stroke="#6366f1" strokeWidth="1.2" />
-                      <text x={btnX} y={btnY + 3.5} textAnchor="middle" fill="white" fontSize="4.5" fontWeight="900">BTN</text>
-                    </>
-                  );
-                })()}
-                {/* Players */}
-                {TABLE_PLAYERS.map(({ name, stack, angle, highlight }) => {
-                  const rad = toRad(angle);
-                  const px = cx + (rx + 26) * Math.cos(rad);
-                  const py = cy + (ry + 18) * Math.sin(rad);
-                  const accent = name === 'BTN' ? '#818cf8' : name === 'BB' ? '#34d399' : '#475569';
-                  return (
-                    <g key={name}>
-                      <rect x={px - 22} y={py - 12} width={44} height={24} rx={4}
-                        fill={highlight ? 'rgba(99,102,241,0.15)' : 'rgba(15,23,42,0.7)'}
-                        stroke={accent + '66'} strokeWidth="1" />
-                      <text x={px} y={py - 2} textAnchor="middle" fill={accent} fontSize="8" fontWeight="700">{name}</text>
-                      <text x={px} y={py + 8} textAnchor="middle" fill="#64748b" fontSize="7">{stack}bb</text>
-                    </g>
-                  );
-                })}
-              </svg>
-              {/* Legenda chips */}
-              <div style={{ display: 'flex', gap: '0.3rem 1rem', flexWrap: 'wrap', marginTop: '0.4rem' }}>
-                {([
-                  { id: 'SB',   color: '#f59e0b', text: '0.5bb · obrig.' },
-                  { id: 'BB',   color: '#10b981', text: '1bb · obrig.' },
-                  { id: 'ANTE', color: '#94a3b8', text: '1.125bb · dead' },
-                  { id: 'BTN',  color: '#818cf8', text: '2bb · open' },
-                ] as const).map(({ id, color, text }) => (
-                  <div key={id} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: color, display: 'inline-block', flexShrink: 0 }} />
-                    <span style={{ fontSize: '0.58rem', fontWeight: 700, color }}>{id}</span>
-                    <span style={{ fontSize: '0.58rem', color: '#475569' }}>{text}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Prêmios */}
-            <div style={{ flex: 1, minWidth: '180px' }}>
-              <p style={{ margin: '0 0 0.4rem', fontSize: '0.58rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Estrutura de Prêmios — MTT $11 · 126 entradas</p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
-                {PRIZES.map(({ pos, val }, i) => {
-                  const pct = (val / TOTAL_PRIZES) * 100;
-                  const barBg = i === 0 ? 'linear-gradient(to right,#fbbf24,#f59e0b)'
-                              : i === 1 ? 'linear-gradient(to right,#cbd5e1,#94a3b8)'
-                              : i === 2 ? 'linear-gradient(to right,#c4b5fd,#8b5cf6)'
-                              : i <= 5  ? `rgba(99,102,241,${(0.5 - i * 0.06).toFixed(2)})`
-                              : `rgba(71,85,105,${(0.42 - (i - 6) * 0.08).toFixed(2)})`;
-                  const valColor = i === 0 ? '#fbbf24' : i === 1 ? '#94a3b8' : i === 2 ? '#c4b5fd' : '#64748b';
-                  return (
-                    <div key={pos} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <span style={{ fontSize: '0.58rem', color: '#475569', width: '20px', textAlign: 'right', flexShrink: 0 }}>{pos}</span>
-                      <div style={{ flex: 1, height: '5px', borderRadius: '3px', background: 'rgba(255,255,255,0.05)', overflow: 'hidden' }}>
-                        <div style={{ width: `${pct}%`, height: '100%', borderRadius: '3px', background: barBg }} />
+            {/* DIREITA — RP + Ranges + Prêmios (coluna alinhada) */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              {/* RP + Ranges pré-flop */}
+              <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', alignItems: 'flex-start' }}>
+                <div style={{ minWidth: '200px', maxWidth: '280px' }}>
+                  <p style={{ margin: '0 0 0.4rem', fontSize: '0.58rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Risk Premium</p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    {[
+                      { label: 'BTN (40bb)', rp: 21.4, color: '#818cf8' },
+                      { label: 'BB  (55bb)', rp: 12.9, color: '#34d399' },
+                    ].map(({ label, rp, color }) => (
+                      <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span style={{ fontSize: '0.62rem', color: '#475569', width: '70px', flexShrink: 0 }}>{label}</span>
+                        <div style={{ flex: 1, height: '6px', borderRadius: '3px', background: 'rgba(255,255,255,0.06)', overflow: 'hidden' }}>
+                          <div style={{ width: `${(rp / 30) * 100}%`, height: '100%', background: color, borderRadius: '3px' }} />
+                        </div>
+                        <span style={{ fontSize: '0.62rem', fontWeight: 700, color, width: '36px', textAlign: 'right' }}>{rp}%</span>
                       </div>
-                      <span style={{ fontSize: '0.6rem', color: valColor, width: '42px', textAlign: 'right', flexShrink: 0, fontWeight: i < 3 ? 700 : 400 }}>${val}</span>
-                    </div>
-                  );
-                })}
+                    ))}
+                    <p style={{ margin: '4px 0 0', fontSize: '0.58rem', color: '#475569' }}>
+                      Risk Advantage BTN <strong style={{ color: '#10b981' }}>+8.5%</strong>
+                    </p>
+                  </div>
+                </div>
+                <div style={{ minWidth: '180px' }}>
+                  <p style={{ margin: '0 0 0.4rem', fontSize: '0.58rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Ranges pré-flop</p>
+                  <div style={{ fontSize: '0.65rem', color: '#94a3b8', display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                    <div><span style={{ color: '#818cf8', fontWeight: 700 }}>BTN</span> abre 33.6% · minirraise 2bb</div>
+                    <div style={{ fontSize: '0.62rem', color: '#64748b', paddingLeft: '4px' }}>fold 66.4%</div>
+                    <div style={{ marginTop: '3px' }}><span style={{ color: '#34d399', fontWeight: 700 }}>BB</span> defende 82.9%</div>
+                    <div style={{ fontSize: '0.62rem', color: '#64748b', paddingLeft: '4px' }}>fold 17.1% · call 64.4% · 3bet 10.2% · shove 8.4%</div>
+                  </div>
+                </div>
               </div>
 
-              {/* Legenda: tipos de estrutura — flex-row compacto */}
-              <div style={{ marginTop: '0.5rem', display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-                {([
-                  { tag: 'TOP-HEAVY', icon: '▲', color: '#fbbf24', text: '1º >20% · BF extremo' },
-                  { tag: 'FLAT',      icon: '▬', color: '#94a3b8', text: 'decréscimo linear · BF próximo de 1 · jogo ~ChipEV' },
-                  { tag: 'HÍBRIDA',   icon: '◆', color: '#c4b5fd', text: 'top inflado · cauda gradual · esta estrutura' },
-                ] as const).map(({ tag, icon, color, text }) => (
-                  <div key={tag} style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '3px 8px', borderRadius: '4px', background: `${color}12`, border: `1px solid ${color}30` }}>
-                    <span style={{ fontSize: '0.65rem', color, lineHeight: 1 }}>{icon}</span>
-                    <span style={{ fontSize: '0.58rem', fontWeight: 800, color, textTransform: 'uppercase', letterSpacing: '0.07em' }}>{tag}</span>
-                    <span style={{ fontSize: '0.58rem', color: '#475569' }}>{text}</span>
-                  </div>
-                ))}
+              {/* Prêmios */}
+              <div>
+                <p style={{ margin: '0 0 0.4rem', fontSize: '0.58rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Estrutura de Prêmios — MTT $11 · 126 entradas</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                  {PRIZES.map(({ pos, val }, i) => {
+                    const pct = (val / TOTAL_PRIZES) * 100;
+                    const barBg = i === 0 ? 'linear-gradient(to right,#fbbf24,#f59e0b)'
+                                : i === 1 ? 'linear-gradient(to right,#cbd5e1,#94a3b8)'
+                                : i === 2 ? 'linear-gradient(to right,#c4b5fd,#8b5cf6)'
+                                : i <= 5  ? `rgba(99,102,241,${(0.5 - i * 0.06).toFixed(2)})`
+                                : `rgba(71,85,105,${(0.42 - (i - 6) * 0.08).toFixed(2)})`;
+                    const valColor = i === 0 ? '#fbbf24' : i === 1 ? '#94a3b8' : i === 2 ? '#c4b5fd' : '#64748b';
+                    return (
+                      <div key={pos} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <span style={{ fontSize: '0.58rem', color: '#475569', width: '20px', textAlign: 'right', flexShrink: 0 }}>{pos}</span>
+                        <div style={{ flex: 1, height: '5px', borderRadius: '3px', background: 'rgba(255,255,255,0.05)', overflow: 'hidden' }}>
+                          <div style={{ width: `${pct}%`, height: '100%', borderRadius: '3px', background: barBg }} />
+                        </div>
+                        <span style={{ fontSize: '0.62rem', color: valColor, width: '46px', textAlign: 'right', flexShrink: 0, fontWeight: i < 3 ? 700 : 400 }}>${val}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div style={{ marginTop: '0.5rem', display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+                  {([
+                    { tag: 'TOP-HEAVY', icon: '▲', color: '#fbbf24', text: '1º >20% · BF extremo' },
+                    { tag: 'FLAT',      icon: '▬', color: '#94a3b8', text: 'decréscimo linear · BF próximo de 1 · jogo ~ChipEV' },
+                    { tag: 'HÍBRIDA',   icon: '◆', color: '#c4b5fd', text: 'top inflado · cauda gradual · esta estrutura' },
+                  ] as const).map(({ tag, icon, color, text }) => (
+                    <div key={tag} style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '3px 8px', borderRadius: '4px', background: `${color}12`, border: `1px solid ${color}30` }}>
+                      <span style={{ fontSize: '0.65rem', color, lineHeight: 1 }}>{icon}</span>
+                      <span style={{ fontSize: '0.58rem', fontWeight: 800, color, textTransform: 'uppercase', letterSpacing: '0.07em' }}>{tag}</span>
+                      <span style={{ fontSize: '0.58rem', color: '#475569' }}>{text}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
