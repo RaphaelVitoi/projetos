@@ -53,7 +53,7 @@ export default function TheoryPanel({ scenario }: Readonly<TheoryPanelProps>) {
             onClick={() => setActiveTab(tab.id)}
             className={`${styles.tabBtn} ${activeTab === tab.id ? styles.tabBtnActive : ''}`}
           >
-            <i className={`fa-solid ${tab.icon}`} style={{ fontSize: '0.55rem' }} />
+            <i className={`fa-solid ${tab.icon}`} style={{ fontSize: '0.58rem' }} />
             <span>{tab.label}</span>
           </button>
         ))}
@@ -99,7 +99,7 @@ export default function TheoryPanel({ scenario }: Readonly<TheoryPanelProps>) {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
                 {/* IP BF Card */}
                 <div className={styles.bfCardIp}>
-                  <p style={{ fontSize: '0.55rem', color: '#818cf8', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.25rem 0', fontWeight: 800 }}>Agressor (IP) · RP {scenario.ipRp.toFixed(1)}%</p>
+                  <p style={{ fontSize: '0.58rem', color: '#818cf8', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.25rem 0', fontWeight: 800 }}>Agressor (IP) · RP {scenario.ipRp.toFixed(1)}%</p>
                   <div style={{ fontSize: '1.8rem', fontWeight: 900, color: '#c7d2fe', fontFamily: "'JetBrains Mono', monospace", lineHeight: 1 }}>
                     {ipBf.toFixed(2)}x
                   </div>
@@ -107,13 +107,13 @@ export default function TheoryPanel({ scenario }: Readonly<TheoryPanelProps>) {
                     Pot-sized call:<br />
                     <span style={{ color: '#c7d2fe', fontWeight: 700 }}>{(ipEquity * 100).toFixed(1)}% equity</span>
                     <span style={{ color: '#475569' }}> vs 33.3% ChipEV</span><br />
-                    <span style={{ color: '#f43f5e', fontSize: '0.55rem' }}>+{ipDelta}pp acima do MDF</span>
+                    <span style={{ color: '#f43f5e', fontSize: '0.58rem' }}>+{ipDelta}pp acima do MDF</span>
                   </p>
                 </div>
 
                 {/* OOP BF Card */}
                 <div className={styles.bfCardOop}>
-                  <p style={{ fontSize: '0.55rem', color: '#f43f5e', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.25rem 0', fontWeight: 800 }}>Defensor (OOP) · RP {scenario.oopRp.toFixed(1)}%</p>
+                  <p style={{ fontSize: '0.58rem', color: '#f43f5e', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 0.25rem 0', fontWeight: 800 }}>Defensor (OOP) · RP {scenario.oopRp.toFixed(1)}%</p>
                   <div style={{ fontSize: '1.8rem', fontWeight: 900, color: '#fda4af', fontFamily: "'JetBrains Mono', monospace", lineHeight: 1 }}>
                     {oopBf.toFixed(2)}x
                   </div>
@@ -121,7 +121,7 @@ export default function TheoryPanel({ scenario }: Readonly<TheoryPanelProps>) {
                     Pot-sized call:<br />
                     <span style={{ color: '#fda4af', fontWeight: 700 }}>{(oopEquity * 100).toFixed(1)}% equity</span>
                     <span style={{ color: '#475569' }}> vs 33.3% ChipEV</span><br />
-                    <span style={{ color: '#f43f5e', fontSize: '0.55rem' }}>+{oopDelta}pp acima do MDF</span>
+                    <span style={{ color: '#f43f5e', fontSize: '0.58rem' }}>+{oopDelta}pp acima do MDF</span>
                   </p>
                 </div>
               </div>
@@ -191,7 +191,7 @@ export default function TheoryPanel({ scenario }: Readonly<TheoryPanelProps>) {
               <h4 style={{ fontSize: '0.65rem', fontWeight: 900, color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.15em', margin: 0 }}>
                 Vetores de Exploit
               </h4>
-              <span style={{ fontSize: '0.52rem', fontWeight: 700, color: '#475569', background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: '4px', padding: '2px 6px' }}>
+              <span style={{ fontSize: '0.58rem', fontWeight: 700, color: '#475569', background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: '4px', padding: '2px 6px' }}>
                 {scenario.exploit.length} vetor{scenario.exploit.length !== 1 ? 'es' : ''}
               </span>
             </div>

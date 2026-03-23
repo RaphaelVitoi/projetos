@@ -2,7 +2,7 @@
  * IDENTITY: Hand History Parser (Motor de Ingestão Sintética)
  * PATH: src/lib/handParser.ts
  * ROLE: Ingerir texto bruto de trackers (Hand2Note, PokerStars) e extrair nomes e stacks via Heurística de Regex.
- * BINDING: [src/components/ICMCalculator.tsx]
+ * BINDING: [src/components/simulator/panels/EquityCalculator.tsx]
  * TELEOLOGY: Eliminar a fricção cognitiva humana da digitação manual no simulador, pavimentando o caminho para a ingestão massiva de dados (MDA) de torneios.
  */
 
@@ -19,21 +19,23 @@ import { ICMPlayer } from './icmEngine';
  */
 export function parseHandHistory(rawText: string): ICMPlayer[] {
   const players: ICMPlayer[] = [];
-  
-  // Heurística principal de varredura (Ignora case e busca o padrão de assento/chips)
-  const regex = /Seat \d+: (.*?) \((\d+)(?: in chips)?\)/gi;
+
+  // Heuristica principal: PokerStars, GGPoker, WPN, Hand2Note
+  // Captura stacks com virgulas (15,000), decimais (15000.50) e cifrao ($15,000)
+  const regex = /Seat \d+:\s*(.*?)\s*\(\s*\$?\s*([\d,]+(?:\.\d+)?)\s*(?:in chips)?\s*\)/gi;
   let match;
 
   while ((match = regex.exec(rawText)) !== null) {
     const name = match[1].trim();
-    const stack = parseInt(match[2], 10);
-    
+    // Remove virgulas antes de parsear (15,000 -> 15000)
+    const stack = parseFloat(match[2].replace(/,/g, ''));
+
     // Previne dados corrompidos
-    if (name && !isNaN(stack)) {
+    if (name && !isNaN(stack) && stack > 0) {
       players.push({
         id: Date.now().toString() + Math.random().toString(36).substring(2, 9),
         name,
-        stack
+        stack: Math.round(stack),
       });
     }
   }

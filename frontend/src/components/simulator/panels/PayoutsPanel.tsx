@@ -104,13 +104,13 @@ export default function PayoutsPanel() {
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
-              <th style={{ padding: '0.6rem 1rem', textAlign: 'left', fontSize: '0.55rem', fontWeight: 900, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
+              <th style={{ padding: '0.6rem 1rem', textAlign: 'left', fontSize: '0.58rem', fontWeight: 900, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
                 Posição
               </th>
-              <th style={{ padding: '0.6rem 1rem', textAlign: 'right', fontSize: '0.55rem', fontWeight: 900, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
+              <th style={{ padding: '0.6rem 1rem', textAlign: 'right', fontSize: '0.58rem', fontWeight: 900, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
                 Prêmio (%)
               </th>
-              <th style={{ padding: '0.6rem 1rem', textAlign: 'right', fontSize: '0.55rem', fontWeight: 900, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
+              <th style={{ padding: '0.6rem 1rem', textAlign: 'right', fontSize: '0.58rem', fontWeight: 900, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
                 Visual
               </th>
             </tr>
@@ -168,7 +168,7 @@ export default function PayoutsPanel() {
           display: 'flex',
           justifyContent: 'space-between',
         }}>
-          <span style={{ fontSize: '0.55rem', color: '#64748b' }}>
+          <span style={{ fontSize: '0.58rem', color: '#64748b' }}>
             {structure?.players} jogadores
           </span>
           <span className={styles.dataMono} style={{ fontSize: '0.6rem', color: '#10b981', fontWeight: 700 }}>

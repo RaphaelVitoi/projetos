@@ -42,6 +42,41 @@ export default function EquityCalculator() {
     [players]
   );
 
+  const totalPrizes = useMemo(
+    () => prizes.reduce((sum, p) => sum + p, 0),
+    [prizes]
+  );
+
+  // Bubble Factor range: menor e maior BF entre jogadores
+  const { bfRange, bfRangeColor } = useMemo(() => {
+    if (results.length < 2 || totalChips === 0) return { bfRange: '-', bfRangeColor: '#475569' };
+    const bfs = results.map(r => {
+      const chip = (players.find(p => p.id === r.id)?.stack ?? 0) / totalChips * 100;
+      return chip > 0 ? r.equityPercent / chip : 1;
+    });
+    const min = Math.min(...bfs);
+    const max = Math.max(...bfs);
+    const color = max > 1.3 ? '#f43f5e' : max > 1.1 ? '#f59e0b' : '#10b981';
+    return { bfRange: `${min.toFixed(2)}-${max.toFixed(2)}`, bfRangeColor: color };
+  }, [results, players, totalChips]);
+
+  // Insight: quem mais ganha/perde com ICM vs proporcional
+  const icmInsight = useMemo(() => {
+    if (results.length < 2 || totalChips === 0) return null;
+    let maxGain = { name: '', delta: -Infinity };
+    let maxLoss = { name: '', delta: Infinity };
+    for (const r of results) {
+      const chip = (players.find(p => p.id === r.id)?.stack ?? 0) / totalChips * 100;
+      const delta = r.equityPercent - chip;
+      if (delta > maxGain.delta) maxGain = { name: r.name, delta };
+      if (delta < maxLoss.delta) maxLoss = { name: r.name, delta };
+    }
+    if (Math.abs(maxGain.delta) < 0.5 && Math.abs(maxLoss.delta) < 0.5) {
+      return 'Equidade ICM proxima da proporcional - pressao ICM baixa neste spot.';
+    }
+    return `${maxGain.name} ganha +${maxGain.delta.toFixed(1)}% com ICM vs proporcional. ${maxLoss.name} perde ${maxLoss.delta.toFixed(1)}%. Short stacks acumulam equity desproporcional ao risco.`;
+  }, [results, players, totalChips]);
+
   // Adicionar jogador
   const addPlayer = useCallback(() => {
     setPlayers(prev => [
@@ -371,6 +406,37 @@ export default function EquityCalculator() {
         </div>
       </div>
 
+      {/* Resumo */}
+      <div style={{
+        display: 'flex',
+        gap: '0.75rem',
+        marginBottom: '1rem',
+        flexWrap: 'wrap',
+      }}>
+        {[
+          { label: 'Jogadores', value: String(players.length), color: '#94a3b8' },
+          { label: 'Fichas', value: String(totalChips), color: '#818cf8' },
+          { label: 'Pool', value: `${totalPrizes.toFixed(1)}%`, color: '#10b981' },
+          { label: 'BF Range', value: bfRange, color: bfRangeColor },
+        ].map((stat) => (
+          <div key={stat.label} style={{
+            flex: '1 1 80px',
+            background: 'rgba(15, 23, 42, 0.6)',
+            border: '1px solid rgba(255, 255, 255, 0.06)',
+            borderRadius: '10px',
+            padding: '0.6rem 0.75rem',
+            textAlign: 'center',
+          }}>
+            <div style={{ fontSize: '0.58rem', color: '#475569', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.2rem' }}>
+              {stat.label}
+            </div>
+            <div className={styles.dataMono} style={{ fontSize: '0.75rem', color: stat.color, fontWeight: 700 }}>
+              {stat.value}
+            </div>
+          </div>
+        ))}
+      </div>
+
       {/* Resultados */}
       <div style={{
         background: 'rgba(15, 23, 42, 0.6)',
@@ -385,36 +451,75 @@ export default function EquityCalculator() {
           const chipPercent = totalChips > 0
             ? ((players.find(p => p.id === r.id)?.stack ?? 0) / totalChips) * 100
             : 0;
+          const delta = r.equityPercent - chipPercent;
+          const deltaColor = delta > 0.5 ? '#10b981' : delta < -0.5 ? '#f43f5e' : '#475569';
+          const deltaSign = delta > 0 ? '+' : '';
           return (
             <div key={r.id} style={{ marginBottom: '0.6rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.3rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.3rem', alignItems: 'center' }}>
                 <span style={{ fontSize: '0.7rem', color: '#e2e8f0', fontWeight: 600 }}>{r.name}</span>
-                <div style={{ display: 'flex', gap: '1rem' }}>
-                  <span className={styles.dataMono} style={{ fontSize: '0.65rem', color: '#64748b' }}>
-                    Fichas: {chipPercent.toFixed(1)}%
+                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                  <span className={styles.dataMono} style={{ fontSize: '0.6rem', color: '#64748b' }}>
+                    Fichas {chipPercent.toFixed(1)}%
                   </span>
                   <span className={styles.dataMono} style={{ fontSize: '0.7rem', color: '#6366f1', fontWeight: 700 }}>
                     <AnimatedNumber value={r.equityPercent} suffix="%" />
                   </span>
+                  <span className={styles.dataMono} style={{
+                    fontSize: '0.58rem',
+                    color: deltaColor,
+                    fontWeight: 700,
+                    padding: '0.15rem 0.4rem',
+                    borderRadius: '4px',
+                    background: delta > 0.5 ? 'rgba(16,185,129,0.1)' : delta < -0.5 ? 'rgba(244,63,94,0.1)' : 'transparent',
+                  }}>
+                    {deltaSign}{delta.toFixed(1)}%
+                  </span>
                 </div>
               </div>
-              <div style={{ display: 'flex', gap: '2px', height: '4px' }}>
+              {/* Barras: cinza = fichas, indigo = ICM */}
+              <div style={{ position: 'relative', height: '6px', background: 'rgba(30, 41, 59, 0.5)', borderRadius: '3px', overflow: 'hidden' }}>
                 <div style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  height: '100%',
                   width: `${chipPercent}%`,
                   background: '#334155',
-                  borderRadius: '2px',
+                  borderRadius: '3px',
                   transition: 'width 0.8s ease',
                 }} />
                 <div style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  height: '100%',
                   width: `${r.equityPercent}%`,
-                  background: 'linear-gradient(90deg, #6366f1, #818cf8)',
-                  borderRadius: '2px',
+                  background: 'linear-gradient(90deg, rgba(99,102,241,0.6), rgba(129,140,248,0.8))',
+                  borderRadius: '3px',
                   transition: 'width 0.8s ease',
                 }} />
               </div>
             </div>
           );
         })}
+
+        {/* Insight ICM vs ChipEV */}
+        {icmInsight && (
+          <div style={{
+            marginTop: '0.75rem',
+            padding: '0.6rem 0.75rem',
+            borderRadius: '8px',
+            background: 'rgba(99, 102, 241, 0.06)',
+            border: '1px solid rgba(99, 102, 241, 0.15)',
+            fontSize: '0.6rem',
+            color: '#94a3b8',
+            lineHeight: 1.5,
+          }}>
+            <i className="fa-solid fa-lightbulb" style={{ color: '#818cf8', marginRight: '6px' }} />
+            {icmInsight}
+          </div>
+        )}
       </div>
     </div>
   );

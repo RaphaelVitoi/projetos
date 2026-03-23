@@ -132,7 +132,7 @@ export default function RiskGauge({
                   %
                 </span>
               </div>
-              <span style={{ fontSize: '0.48rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: strokeColor }}>
+              <span style={{ fontSize: '0.58rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em', color: strokeColor }}>
                 RP
               </span>
             </>

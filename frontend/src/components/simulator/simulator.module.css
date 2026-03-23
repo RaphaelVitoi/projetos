@@ -239,7 +239,7 @@
 }
 
 .gaugeLabel {
-  font-size: 0.55rem;
+  font-size: 0.58rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -415,7 +415,7 @@
 }
 
 .scenarioBtnSub {
-  font-size: 0.55rem;
+  font-size: 0.58rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -516,7 +516,7 @@
 }
 
 .sprNodeLabel {
-  font-size: 0.55rem;
+  font-size: 0.58rem;
   font-weight: 700;
   color: #94a3b8;
   margin-bottom: 1px;
@@ -1138,7 +1138,7 @@
 }
 
 .aiChatLabel {
-  font-size: 0.55rem;
+  font-size: 0.58rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: #94a3b8;
@@ -1305,7 +1305,7 @@
 
   .tabBtn {
     padding: 0.5rem 0.5rem;
-    font-size: 0.55rem;
+    font-size: 0.58rem;
     gap: 4px;
   }
 }

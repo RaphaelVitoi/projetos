@@ -5,7 +5,7 @@
  * PATH: src/components/simulator/panels/NashPanel.tsx
  * ROLE: Exibe distorção ICM por ação em flop/turn/river via seletor de street.
  *       Tabs mostram o RP escalado por street; action rows refletem a street ativa.
- * BINDING: [engine/types.ts, engine/nashSolver.ts, simulator.module.css]
+ * BINDING: [engine/types.ts (IcmDistortionResult), engine/nashSolver.ts (solveIcmDistortion), simulator.module.css]
  *
  * ESTILOS: todas as cores usam var(--sim-*) do simulator.module.css,
  * que por sua vez cascateiam de var(--global) do globals.css.
@@ -428,7 +428,7 @@ export default function NashPanel({
       {/* OOP: ações da street ativa */}
       <div style={{ marginBottom: '1.1rem' }}>
         <div style={{
-          fontSize: '0.5rem',
+          fontSize: '0.58rem',
           fontWeight: 700,
           color: '#fb7185',
           textTransform: 'uppercase',

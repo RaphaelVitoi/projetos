@@ -9,8 +9,9 @@
  */
 
 import React, { useState, useCallback, useMemo, lazy, Suspense } from 'react';
+import Link from 'next/link';
 import { useScenario } from './hooks/useScenario';
-import { solveNash } from './engine/nashSolver';
+import { solveIcmDistortion } from './engine/nashSolver';
 import ScenarioSelector from './ui/ScenarioSelector';
 import ScenarioStage from './panels/ScenarioStage';
 import NashPanel from './panels/NashPanel';
@@ -18,17 +19,20 @@ import TheoryPanel from './panels/TheoryPanel';
 import type { ChipEvFreqs, StreetChipEvFreqs } from './engine/types';
 import styles from './simulator.module.css';
 
-// Lazy load para painéis secundários (performance)
+// Lazy load para paineis secundarios (performance)
 const EquityCalculator = lazy(() => import('./panels/EquityCalculator'));
+const ComparisonRadar = lazy(() => import('./panels/ComparisonRadar'));
+const MatchupSelector = lazy(() => import('./panels/MatchupSelector'));
+const PerspectivePanel = lazy(() => import('./panels/PerspectivePanel'));
 
-// Standby: ComparisonRadar, MatchupSelector, PayoutsPanel, RangeMatrix
-// Eliminados: AICoachPanel, HandSimulator, AxiomTicker, useAudioFeedback
-
-type ActiveTool = 'scenario' | 'calculator';
+type ActiveTool = 'scenario' | 'calculator' | 'matchup' | 'comparar' | 'perspectiva';
 
 const TOOL_BUTTONS: { id: ActiveTool; label: string; icon: string }[] = [
-  { id: 'scenario',   label: 'Cenário',    icon: 'fa-microscope' },
+  { id: 'scenario', label: 'Cenário', icon: 'fa-microscope' },
   { id: 'calculator', label: 'Calculadora ICM', icon: 'fa-calculator' },
+  { id: 'matchup', label: 'Matchups FT', icon: 'fa-users' },
+  { id: 'comparar', label: 'Comparar', icon: 'fa-chart-radar' },
+  { id: 'perspectiva', label: 'Perspectiva', icon: 'fa-chart-line' },
 ];
 
 function LoadingFallback() {
@@ -55,34 +59,34 @@ export default function MasterSimulator() {
 
   // Escalonamento de RP por street via sprData
   // A fórmula: rpStreet = rpBase * (sprData[street].rpValue / sprData['PRE'].rpValue)
-  const sprPre   = scenario.sprData.find(s => s.name === 'PRE');
-  const sprFlop  = scenario.sprData.find(s => s.name === 'FLOP');
-  const sprTurn  = scenario.sprData.find(s => s.name === 'TURN');
+  const sprPre = scenario.sprData.find(s => s.name === 'PRE');
+  const sprFlop = scenario.sprData.find(s => s.name === 'FLOP');
+  const sprTurn = scenario.sprData.find(s => s.name === 'TURN');
   const sprRiver = scenario.sprData.find(s => s.name === 'RIVER');
 
-  const preRp      = sprPre?.rpValue ?? 1;
-  const flopScale  = preRp > 0 ? (sprFlop?.rpValue  ?? preRp)       / preRp : 1;
-  const turnScale  = preRp > 0 ? (sprTurn?.rpValue  ?? preRp * 0.5) / preRp : 0.5;
+  const preRp = sprPre?.rpValue ?? 1;
+  const flopScale = preRp > 0 ? (sprFlop?.rpValue ?? preRp) / preRp : 1;
+  const turnScale = preRp > 0 ? (sprTurn?.rpValue ?? preRp * 0.5) / preRp : 0.5;
   const riverScale = preRp > 0 ? (sprRiver?.rpValue ?? preRp * 0.2) / preRp : 0.2;
 
-  const ipRpFlop   = scenario.ipRp  * flopScale;
-  const oopRpFlop  = scenario.oopRp * flopScale;
-  const ipRpTurn   = scenario.ipRp  * turnScale;
-  const oopRpTurn  = scenario.oopRp * turnScale;
-  const ipRpRiver  = scenario.ipRp  * riverScale;
+  const ipRpFlop = scenario.ipRp * flopScale;
+  const oopRpFlop = scenario.oopRp * flopScale;
+  const ipRpTurn = scenario.ipRp * turnScale;
+  const oopRpTurn = scenario.oopRp * turnScale;
+  const ipRpRiver = scenario.ipRp * riverScale;
   const oopRpRiver = scenario.oopRp * riverScale;
 
-  // Calcula Nash para as três streets em paralelo; só recalcula quando dependências mudam
+  // Calcula distorcao ICM para as tres streets em paralelo; so recalcula quando dependencias mudam
   const { nashFlop, nashTurn, nashRiver } = useMemo(() => ({
-    nashFlop:  solveNash(ipRpFlop,  oopRpFlop,  streetFreqs.flop,  aggressionFactor),
-    nashTurn:  solveNash(ipRpTurn,  oopRpTurn,  streetFreqs.turn,  aggressionFactor),
-    nashRiver: solveNash(ipRpRiver, oopRpRiver, streetFreqs.river, aggressionFactor),
+    nashFlop: solveIcmDistortion(ipRpFlop, oopRpFlop, streetFreqs.flop, aggressionFactor),
+    nashTurn: solveIcmDistortion(ipRpTurn, oopRpTurn, streetFreqs.turn, aggressionFactor),
+    nashRiver: solveIcmDistortion(ipRpRiver, oopRpRiver, streetFreqs.river, aggressionFactor),
   }), [ipRpFlop, oopRpFlop, ipRpTurn, oopRpTurn, ipRpRiver, oopRpRiver, streetFreqs, aggressionFactor]);
 
   // Mapa de RPs por street — passado ao NashPanel para exibir nos tabs
   const streetRps = {
-    flop:  { ip: ipRpFlop,  oop: oopRpFlop  },
-    turn:  { ip: ipRpTurn,  oop: oopRpTurn  },
+    flop: { ip: ipRpFlop, oop: oopRpFlop },
+    turn: { ip: ipRpTurn, oop: oopRpTurn },
     river: { ip: ipRpRiver, oop: oopRpRiver },
   };
 
@@ -131,42 +135,42 @@ export default function MasterSimulator() {
               Motor ICM
             </h1>
             <p style={{
-              margin: '0.3rem 0 0',
-              fontSize: '0.62rem',
-              color: '#64748b',
-              lineHeight: 1.4,
-              maxWidth: '480px',
+              margin: '0.5rem 0 0',
+              fontSize: '0.75rem',
+              color: '#94a3b8',
+              lineHeight: 1.6,
+              maxWidth: '580px',
             }}>
               Escolha um cenário de torneio e veja como o ICM distorce as frequências de equilíbrio GTO — editando os valores base para refletir o seu spot.
             </p>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.4rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginTop: '0.8rem' }}>
               <span style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '6px',
-                padding: '0.25rem 0.6rem',
-                borderRadius: '6px',
+                padding: '0.35rem 0.75rem',
+                borderRadius: '8px',
                 background: 'rgba(99, 102, 241, 0.15)',
                 border: '1px solid rgba(99, 102, 241, 0.3)',
-                fontSize: '0.55rem',
+                fontSize: '0.65rem',
                 fontWeight: 700,
                 color: '#818cf8',
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
               }}>
-                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981' }} />
+                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 8px rgba(16,185,129,0.5)' }} />
                 Motor Ativo
               </span>
               <span style={{
-                fontSize: '0.55rem',
-                color: '#94a3b8',
+                fontSize: '0.7rem',
+                color: '#cbd5e1',
                 fontWeight: 700,
                 fontFamily: "'JetBrains Mono', monospace",
               }}>
                 {scenario.name}
               </span>
               <span style={{
-                fontSize: '0.55rem',
+                fontSize: '0.7rem',
                 color: '#475569',
                 fontWeight: 600,
               }}>
@@ -176,11 +180,29 @@ export default function MasterSimulator() {
           </div>
 
           {/* Controles */}
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+            <Link
+              href="/"
+              style={{
+                padding: '0.4rem 0.75rem',
+                borderRadius: '8px',
+                background: 'rgba(30, 41, 59, 0.6)',
+                border: '1px solid rgba(255, 255, 255, 0.06)',
+                color: '#94a3b8',
+                fontSize: '0.7rem',
+                fontWeight: 600,
+                textDecoration: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+              }}
+            >
+              <i className="fa-solid fa-arrow-left" style={{ fontSize: '0.65rem' }}></i>
+              Início
+            </Link>
             <button
               type="button"
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="md:hidden"
               title={sidebarOpen ? 'Fechar menu' : 'Abrir menu'}
               style={{
                 padding: '0.4rem 0.6rem',
@@ -286,39 +308,61 @@ export default function MasterSimulator() {
               <EquityCalculator />
             </Suspense>
           )}
+
+          {activeTool === 'matchup' && (
+            <Suspense fallback={<LoadingFallback />}>
+              <MatchupSelector />
+            </Suspense>
+          )}
+
+          {activeTool === 'comparar' && (
+            <Suspense fallback={<LoadingFallback />}>
+              <ComparisonRadar
+                scenarios={scenarios}
+                currentId={scenario.id}
+                nashFlop={nashFlop}
+              />
+            </Suspense>
+          )}
+
+          {activeTool === 'perspectiva' && (
+            <Suspense fallback={<LoadingFallback />}>
+              <PerspectivePanel />
+            </Suspense>
+          )}
         </main>
       </div>
 
       {/* Nota metodológica + Assinatura — alinhada ao container do simulador */}
       <footer style={{ borderTop: '1px solid rgba(255, 255, 255, 0.04)' }}>
-      <div style={{
-        maxWidth: '1200px',
-        margin: '0 auto',
-        padding: '2rem 1.5rem',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-        gap: '1rem',
-      }}>
-        <p style={{
-          fontSize: '0.7rem',
-          color: '#475569',
-          lineHeight: 1.7,
-          maxWidth: '520px',
-          margin: 0,
+        <div style={{
+          maxWidth: '1200px',
+          margin: '0 auto',
+          padding: '2rem 1.5rem',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          gap: '1rem',
         }}>
-          Os valores de Risk Premium e as frequências padrão são estimativas derivadas de um framework teórico calibrado contra um único ponto empírico: 93 nodes HRC vs GTO Wizard (board KJT-2-3, Aula 1.2). Demais cenários são extrapolações didáticas — não outputs de solver.
-        </p>
-        <p style={{
-          fontSize: '0.55rem',
-          color: '#334155',
-          fontWeight: 700,
-          textTransform: 'uppercase',
-          letterSpacing: '0.2em',
-          margin: 0,
-        }}>
-          Motor ICM · Raphael Vitoi
-        </p>
+          <p style={{
+            fontSize: '0.75rem',
+            color: '#64748b',
+            lineHeight: 1.6,
+            maxWidth: '580px',
+            margin: 0,
+          }}>
+            Os valores de Risk Premium e as frequências padrão são estimativas derivadas de um framework teórico calibrado contra um único ponto empírico: 93 nodes HRC vs GTO Wizard (board KJT-2-3, Aula 1.2). Demais cenários são extrapolações didáticas — não outputs de solver.
+          </p>
+          <p style={{
+            fontSize: '0.65rem',
+            color: '#475569',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            letterSpacing: '0.15em',
+            margin: 0,
+          }}>
+            Motor ICM · Raphael Vitoi
+          </p>
         </div>
       </footer>
     </div>

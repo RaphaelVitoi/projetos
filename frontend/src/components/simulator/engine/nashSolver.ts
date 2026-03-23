@@ -1,7 +1,9 @@
 /**
- * IDENTITY: Motor ICM pós-flop
+ * IDENTITY: Motor de Distorcao ICM pos-flop
  * PATH: src/components/simulator/engine/nashSolver.ts
- * ROLE: Calcular distorção ICM sobre frequências ChipEV via equação côncava.
+ * ROLE: Aplicar distorcao ICM sobre frequencias ChipEV via equacao concava.
+ *       NAO calcula equilibrio de Nash — e uma heuristica de distorcao calibrada empiricamente.
+ *       Export principal: solveIcmDistortion. solveNash = alias deprecated para retrocompatibilidade.
  *
  * EQUAÇÃO CENTRAL:
  *   freq_ICM(A) = freq_ChipEV(A) + k_A × |ΔRP|^b × sign(ΔRP)
@@ -36,7 +38,7 @@
  *   - Spread cresce para configurações além da âncora
  */
 
-import type { NashResult, ChipEvFreqs, FreqResult } from './types';
+import type { IcmDistortionResult, ChipEvFreqs, FreqResult } from './types';
 
 // === ÂNCORA EMPÍRICA ===
 const ANCHOR_DELTA_RP = 8.5;
@@ -106,20 +108,21 @@ function applyDistortionAbsolute(
 }
 
 /**
- * Calcula frequências ICM pós-flop a partir de RPs e frequências ChipEV.
+ * Aplica distorcao ICM sobre frequencias ChipEV para calcular frequencias pos-flop ajustadas.
+ * NAO e um solver de Nash — e uma heuristica de distorcao baseada em Risk Premium (RP).
  *
  * @param ipRp           - Risk Premium do IP (0–100), via Malmuth-Harville
  * @param oopRp          - Risk Premium do OOP (0–100), via Malmuth-Harville
- * @param chipEvFreqs    - Frequências ChipEV do spot (GTO Wizard ou equivalente)
- * @param aggressionFactor - Desvio comportamental real do oponente vs equilíbrio ICM
- *                           (0.5 = passivo · 1.0 = equilíbrio · 1.5 = agressivo)
+ * @param chipEvFreqs    - Frequencias ChipEV do spot (GTO Wizard ou equivalente)
+ * @param aggressionFactor - Desvio comportamental real do oponente vs equilibrio ICM
+ *                           (0.5 = passivo · 1.0 = equilibrio · 1.5 = agressivo)
  */
-export function solveNash(
+export function solveIcmDistortion(
   ipRp: number,
   oopRp: number,
   chipEvFreqs: ChipEvFreqs,
   aggressionFactor = 1,
-): NashResult {
+): IcmDistortionResult {
   const safeIp  = Math.max(0, Math.min(100, Number(ipRp)  || 0));
   const safeOop = Math.max(0, Math.min(100, Number(oopRp) || 0));
   const safeFactor = Math.max(0.1, Math.min(3, Number(aggressionFactor) || 1));
@@ -132,10 +135,15 @@ export function solveNash(
   const rawBetSmall = applyDistortion(chipEvFreqs.ip_bet_small, K.ip_bet_small, deltaRp, b, spread);
   const rawBetLarge = applyDistortion(chipEvFreqs.ip_bet_large, K.ip_bet_large, deltaRp, b, spread);
 
-  const betSmallCenter = Math.max(0, Math.min(100, rawBetSmall.center * safeFactor));
-  const betLargeCenter = Math.max(0, Math.min(100, rawBetLarge.center * safeFactor));
+  // Apostas moduladas pelo aggressionFactor; normalização garante soma = 100
+  const rawSmallModulated = Math.max(0, rawBetSmall.center * safeFactor);
+  const rawLargeModulated = Math.max(0, rawBetLarge.center * safeFactor);
+  const rawCheckModulated = Math.max(0, 100 - rawSmallModulated - rawLargeModulated);
+  const ipSum = rawSmallModulated + rawLargeModulated + rawCheckModulated;
+  const betSmallCenter = ipSum > 0 ? (rawSmallModulated / ipSum) * 100 : 0;
+  const betLargeCenter = ipSum > 0 ? (rawLargeModulated / ipSum) * 100 : 0;
 
-  // Check do IP = resíduo das apostas (consistência interna)
+  // Check do IP = resíduo das apostas normalizadas (consistência interna garantida)
   const checkCenter = Math.max(0, 100 - betSmallCenter - betLargeCenter);
 
   const ipCheck: FreqResult = {
@@ -148,14 +156,20 @@ export function solveNash(
 
   // OOP raise modulado pelo aggressionFactor (ação de pressão)
   const rawRaise = applyDistortionAbsolute(chipEvFreqs.oop_raise, K.oop_raise, deltaRp, b, spread);
-  const raiseCenter = Math.max(0, Math.min(100, rawRaise.center * safeFactor));
+  const rawCall  = applyDistortion(chipEvFreqs.oop_call, K.oop_call, deltaRp, b, spread);
 
-  const rawCall = applyDistortion(chipEvFreqs.oop_call, K.oop_call, deltaRp, b, spread);
+  // Normalização OOP: raise modulado, call ICM puro, fold como resíduo — soma = 100
+  const rawRaiseModulated = Math.max(0, rawRaise.center * safeFactor);
+  const rawCallClamped    = Math.max(0, rawCall.center);
+  const rawFoldModulated  = Math.max(0, 100 - rawCallClamped - rawRaiseModulated);
+  const oopSum = rawRaiseModulated + rawCallClamped + rawFoldModulated;
+  const raiseCenter = oopSum > 0 ? (rawRaiseModulated / oopSum) * 100 : 0;
+  const callCenter  = oopSum > 0 ? (rawCallClamped   / oopSum) * 100 : 0;
 
-  // Fold do OOP = resíduo de call + raise (consistência interna)
-  const foldCenter = Math.max(0, 100 - rawCall.center - raiseCenter);
+  // Fold do OOP = resíduo normalizado (consistência interna garantida)
+  const foldCenter = Math.max(0, 100 - callCenter - raiseCenter);
 
-  const oopCall: FreqResult  = rawCall;
+  const oopCall: FreqResult  = { ...rawCall,  center: callCenter  };
   const oopFold: FreqResult  = {
     center: foldCenter,
     spread,
@@ -171,3 +185,9 @@ export function solveNash(
     rawData: { ipRp: safeIp, oopRp: safeOop, chipEvFreqs },
   };
 }
+
+/**
+ * @deprecated Use solveIcmDistortion. Alias mantido para compatibilidade retroativa.
+ * O nome "Nash" e impreciso: o motor aplica distorcao heuristica sobre ChipEV, nao calcula equilibrio de Nash.
+ */
+export const solveNash = solveIcmDistortion;

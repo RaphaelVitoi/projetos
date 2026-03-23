@@ -1,15 +1,21 @@
+/**
+ * IDENTITY: Hook de Distorcao ICM
+ * PATH: src/components/simulator/hooks/useNashSolver.ts
+ * ROLE: Wrapper memoizado em torno de solveIcmDistortion.
+ *       Retorna IcmDistortionResult (alias NashResult mantido para retrocompatibilidade).
+ */
 import { useMemo } from 'react';
-import { solveNash } from '../engine/nashSolver';
-import type { NashResult, ChipEvFreqs } from '../engine/types';
+import { solveIcmDistortion } from '../engine/nashSolver';
+import type { IcmDistortionResult, ChipEvFreqs } from '../engine/types';
 
 export function useNashSolver(
   ipRp: number,
   oopRp: number,
   chipEvFreqs: ChipEvFreqs,
   aggressionFactor = 1,
-): NashResult {
+): IcmDistortionResult {
   return useMemo(
-    () => solveNash(ipRp, oopRp, chipEvFreqs, aggressionFactor),
+    () => solveIcmDistortion(ipRp, oopRp, chipEvFreqs, aggressionFactor),
     [ipRp, oopRp, chipEvFreqs, aggressionFactor],
   );
 }

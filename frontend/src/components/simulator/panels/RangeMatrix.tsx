@@ -132,14 +132,14 @@ export default function RangeMatrix({ ipRp, oopRp, scenarioId }: Readonly<RangeM
                         })}
                     </div>
                     {Object.keys(overrides).length > 0 && (
-                        <button onClick={resetOverrides} style={{ background: 'transparent', border: '1px solid #475569', color: '#94a3b8', fontSize: '0.55rem', padding: '2px 8px', borderRadius: '4px', cursor: 'pointer' }}>
+                        <button onClick={resetOverrides} style={{ background: 'transparent', border: '1px solid #475569', color: '#94a3b8', fontSize: '0.58rem', padding: '2px 8px', borderRadius: '4px', cursor: 'pointer' }}>
                             Resetar
                         </button>
                     )}
                 </div>
 
                 {/* Legenda */}
-                <div style={{ display: 'flex', gap: '0.5rem', fontSize: '0.55rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', gap: '0.5rem', fontSize: '0.58rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', flexWrap: 'wrap' }}>
                     <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><span style={{ width: 8, height: 8, background: getColor('core'), borderRadius: 2 }}></span> Core</span>
                     <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><span style={{ width: 8, height: 8, background: getColor('marginal'), borderRadius: 2 }}></span> Misto</span>
                     <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><span style={{ width: 8, height: 8, background: getColor('bluff'), borderRadius: 2 }}></span> Bluff/Float</span>
@@ -179,7 +179,7 @@ export default function RangeMatrix({ ipRp, oopRp, scenarioId }: Readonly<RangeM
                 )}
             </div>
 
-            <p style={{ fontSize: '0.55rem', color: '#475569', fontStyle: 'italic', margin: '0.75rem 0 0 0', textAlign: 'center' }}>
+            <p style={{ fontSize: '0.58rem', color: '#475569', fontStyle: 'italic', margin: '0.75rem 0 0 0', textAlign: 'center' }}>
                 A matriz acima reage ao Risk Premium. Clique nas células para alternar manualmente (overrides).
             </p>
         </div>

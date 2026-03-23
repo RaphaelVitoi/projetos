@@ -4,7 +4,7 @@
  * IDENTITY: Radar de Comparação Multi-Cenário
  * PATH: src/components/simulator/panels/ComparisonRadar.tsx
  * ROLE: Selecionar 2 cenários e comparar via radar chart (Recharts).
- * BINDING: [engine/types.ts, engine/nashSolver.ts, simulator.module.css]
+ * BINDING: [engine/types.ts (IcmDistortionResult), engine/nashSolver.ts (solveIcmDistortion), simulator.module.css]
  */
 
 import React, { useState, useMemo } from 'react';
@@ -18,28 +18,36 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-import type { Scenario } from '../engine/types';
+import type { Scenario, NashResult } from '../engine/types';
 import styles from '../simulator.module.css';
 
 interface ComparisonRadarProps {
   scenarios: Scenario[];
   currentId: string;
+  /** NashResult do flop do cenario ativo — usado para bluff e defense */
+  nashFlop?: NashResult;
 }
 
-// 5 eixos do radar (standby: nash fields pendentes de atualização para Opção B)
-function buildRadarData(scenario: Scenario) {
+function buildRadarData(scenario: Scenario, nash?: NashResult) {
+  // Bluff = soma das apostas IP (bet_small + bet_large)
+  const bluff = nash
+    ? nash.ip.bet_small.center + nash.ip.bet_large.center
+    : 0;
+  // Defense = call OOP
+  const defense = nash ? nash.oop.call.center : 0;
+
   return {
     rpIp: scenario.ipRp,
     rpOop: scenario.oopRp,
-    bluff: 0,    // pendente: atualizar para nova interface NashResult
-    defense: 0,  // pendente: atualizar para nova interface NashResult
+    bluff,
+    defense,
     sprDecay: scenario.sprData.length > 0
       ? ((scenario.sprData[0].rpValue - (scenario.sprData.at(-1)?.rpValue ?? 0)) / Math.max(1, scenario.sprData[0].rpValue)) * 100
       : 0,
   };
 }
 
-export default function ComparisonRadar({ scenarios, currentId }: Readonly<ComparisonRadarProps>) {
+export default function ComparisonRadar({ scenarios, currentId, nashFlop }: Readonly<ComparisonRadarProps>) {
   const [compareId, setCompareId] = useState<string>('');
 
   const currentScenario = scenarios.find(s => s.id === currentId);
@@ -47,7 +55,7 @@ export default function ComparisonRadar({ scenarios, currentId }: Readonly<Compa
 
   const radarData = useMemo(() => {
     if (!currentScenario) return [];
-    const a = buildRadarData(currentScenario);
+    const a = buildRadarData(currentScenario, nashFlop);
     const b = compareScenario ? buildRadarData(compareScenario) : null;
 
     return [
@@ -57,7 +65,7 @@ export default function ComparisonRadar({ scenarios, currentId }: Readonly<Compa
       { axis: 'Defesa%', A: a.defense, B: b?.defense ?? 0 },
       { axis: 'SPR Decay', A: a.sprDecay, B: b?.sprDecay ?? 0 },
     ];
-  }, [currentScenario, compareScenario]);
+  }, [currentScenario, compareScenario, nashFlop]);
 
   return (
     <div className={styles.glassPanel} style={{ padding: '1.5rem' }}>

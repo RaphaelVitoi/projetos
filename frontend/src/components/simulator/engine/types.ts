@@ -61,8 +61,8 @@ export interface FreqResult {
   delta: number;
 }
 
-// Resultado do motor ICM pós-flop
-export interface NashResult {
+// Resultado do motor de distorcao ICM pos-flop
+export interface IcmDistortionResult {
   ip: {
     check: FreqResult;
     bet_small: FreqResult;
@@ -73,9 +73,9 @@ export interface NashResult {
     fold: FreqResult;
     raise: FreqResult;
   };
-  /** Risk Advantage: RP_ip - RP_oop. Positivo = IP sob maior pressão */
+  /** Risk Advantage: RP_ip - RP_oop. Positivo = IP sob maior pressao ICM */
   deltaRp: number;
-  /** Expoente b da curva côncava — transparência do modelo */
+  /** Expoente b da curva concava — transparencia do modelo */
   bExponent: number;
   rawData: {
     ipRp: number;
@@ -83,6 +83,12 @@ export interface NashResult {
     chipEvFreqs: ChipEvFreqs;
   };
 }
+
+/**
+ * @deprecated Use IcmDistortionResult. Alias mantido para compatibilidade.
+ * O motor NAO calcula equilibrio de Nash — aplica heuristica de distorcao sobre ChipEV.
+ */
+export type NashResult = IcmDistortionResult;
 
 // Cenário completo do simulador
 export interface Scenario {

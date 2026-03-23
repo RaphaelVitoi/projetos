@@ -22,16 +22,28 @@ export interface ICMResult {
 
 /**
  * Calcula a equidade exata (ICM) baseada no Algoritmo de Malmuth-Harville.
- * 
- * @param players Array de jogadores com seus respectivos stacks
- * @param prizes Array de prêmios (do 1º lugar ao N-ésimo)
- * @returns Array de resultados com as equidades calculadas
+ *
+ * @param players    Array de jogadores com seus respectivos stacks
+ * @param prizes     Array de prêmios distribuídos (do 1º lugar ao N-ésimo)
+ * @param totalPool  Prize pool total do torneio (buy-ins líquidos de rake).
+ *                   Quando fornecido, equityPercent é calculado sobre o pool
+ *                   inteiro — denominador correto para classificação de
+ *                   estrutura (TOP-HEAVY / FLAT / HÍBRIDA).
+ *                   Quando omitido, usa a soma de prizes (denominador menor,
+ *                   adequado apenas para comparação entre jogadores ITM).
+ *                   LIMITAÇÃO: omitir totalPool infla equityPercent artificialmente
+ *                   porque ignora o valor já perdido por bustouts sem prêmio.
  */
-export function calculateMalmuthHarville(players: ICMPlayer[], prizes: number[]): ICMResult[] {
+export function calculateMalmuthHarville(
+  players: ICMPlayer[],
+  prizes: number[],
+  totalPool?: number,
+): ICMResult[] {
   const numPlayers = players.length;
   const numPrizes = Math.min(prizes.length, numPlayers);
   const totalChips = players.reduce((sum, p) => sum + p.stack, 0);
   const totalPrizePool = prizes.reduce((sum, p) => sum + p, 0);
+  const denominatorForPercent = totalPool != null && totalPool > 0 ? totalPool : totalPrizePool;
 
   const equities = new Array(numPlayers).fill(0);
 
@@ -89,6 +101,6 @@ export function calculateMalmuthHarville(players: ICMPlayer[], prizes: number[])
     id: p.id,
     name: p.name,
     equity: equities[i],
-    equityPercent: (equities[i] / totalPrizePool) * 100
+    equityPercent: (equities[i] / denominatorForPercent) * 100
   }));
 }
