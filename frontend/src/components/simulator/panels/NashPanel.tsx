@@ -168,7 +168,7 @@ function ActionRow({
     }}>
       {/* Label */}
       <span style={{
-        fontSize: '0.55rem',
+        fontSize: '0.58rem',
         fontWeight: 800,
         color: accent,
         textTransform: 'uppercase',
@@ -198,7 +198,7 @@ function ActionRow({
           <AnimatedNumber value={result.center} suffix="%" />
         </span>
         <span style={{
-          fontSize: '0.52rem',
+          fontSize: '0.58rem',
           color: 'var(--sim-text-dim)',
           fontFamily: 'var(--sim-font-mono)',
         }}>
@@ -287,35 +287,35 @@ export default function NashPanel({
 
           {/* Parâmetros do modelo da street ativa */}
           <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center', flexShrink: 0 }}>
-            <span
-              title="ΔRP = Vantagem de Risco (Risk Premium IP − OOP). Positivo = IP sob maior pressão ICM."
-              style={{
+            <span style={{
                 padding: '0.15rem 0.5rem',
                 borderRadius: '4px',
                 background: 'rgba(15,23,42,0.6)',
                 border: '1px solid rgba(255,255,255,0.07)',
-                fontSize: '0.55rem',
+                fontSize: '0.58rem',
                 fontWeight: 700,
                 color: deltaLabelColor,
                 fontFamily: 'var(--sim-font-mono)',
-                cursor: 'help',
+                display: 'inline-flex',
+                alignItems: 'center',
               }}>
               ΔRP {deltaLabel}
+              <InfoTooltip text="ΔRP = Vantagem de Risco (Risk Premium IP − OOP). Positivo = IP sob maior pressão ICM." />
             </span>
-            <span
-              title="Expoente da curva côncava: mede como a pressão ICM amorte conforme o RP médio aumenta. Próximo de 1 = quase linear; próximo de 0 = muito côncavo."
-              style={{
+            <span style={{
                 padding: '0.15rem 0.5rem',
                 borderRadius: '4px',
                 background: 'rgba(15,23,42,0.6)',
                 border: '1px solid rgba(255,255,255,0.07)',
-                fontSize: '0.55rem',
+                fontSize: '0.58rem',
                 fontWeight: 700,
                 color: '#475569',
                 fontFamily: 'var(--sim-font-mono)',
-                cursor: 'help',
+                display: 'inline-flex',
+                alignItems: 'center',
               }}>
               Curv. {bExponent.toFixed(2)}
+              <InfoTooltip text="Expoente da curva côncava: mede como a pressão ICM amortece conforme o RP médio aumenta. Próximo de 1 = quase linear; próximo de 0 = muito côncavo." />
             </span>
           </div>
         </div>
@@ -338,7 +338,7 @@ export default function NashPanel({
                 border: `1px solid ${isActive ? d.color : 'rgba(255,255,255,0.06)'}`,
                 background: isActive ? `${d.color}18` : 'transparent',
                 color: isActive ? d.color : '#475569',
-                fontSize: '0.55rem',
+                fontSize: '0.58rem',
                 fontWeight: 700,
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
@@ -348,7 +348,7 @@ export default function NashPanel({
             >
               {d.label}
               <br />
-              <span style={{ fontSize: '0.55rem', fontFamily: 'monospace', color: 'rgba(148,163,184,0.75)' }}>
+              <span style={{ fontSize: '0.58rem', fontFamily: 'monospace', color: 'rgba(148,163,184,0.75)' }}>
                 IP {d.rps.ip.toFixed(1)}% · OOP {d.rps.oop.toFixed(1)}%
               </span>
             </button>
@@ -365,17 +365,17 @@ export default function NashPanel({
         paddingBottom: '0.4rem',
         borderBottom: '1px solid rgba(255,255,255,0.05)',
       }}>
-        <span style={{ fontSize: '0.56rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Ação</span>
-        <span style={{ fontSize: '0.56rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'flex', alignItems: 'center' }}>
+        <span style={{ fontSize: '0.58rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Ação</span>
+        <span style={{ fontSize: '0.58rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'flex', alignItems: 'center' }}>
           Freq. GTO Base
           <InfoTooltip text="Com que frequência o solver usa essa ação neste spot, sem ICM. Não é o tamanho da aposta — é de quantas mãos você a executa. Insira os valores do seu solver." />
         </span>
         <span />
-        <span style={{ fontSize: '0.56rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'flex', alignItems: 'center' }}>
+        <span style={{ fontSize: '0.58rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'flex', alignItems: 'center' }}>
           Com ICM ±margem
           <InfoTooltip text="Estimativa de quanto você deveria executar essa ação levando o ICM em conta. A margem (±) indica que o modelo não é exato: use como referência direcional, não como número absoluto." />
         </span>
-        <span style={{ fontSize: '0.56rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', textAlign: 'right', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+        <span style={{ fontSize: '0.58rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', textAlign: 'right', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
           Δ p.p.
           <InfoTooltip text="1 p.p. = 1% de frequência dessa ação. Δ = −15: a ação encolhe 15% — ex., de 60% para 45%. Os 15% de combos mais fracos saem primeiro: bluffs mais pobres, valor mais thin. Positivo: a ação expande — combos que o solver descartava passam a ser viáveis." />
         </span>
@@ -508,9 +508,9 @@ export default function NashPanel({
           style={{ width: '100%', accentColor: 'var(--sim-color-indigo)' }}
         />
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.25rem' }}>
-          <span style={{ fontSize: '0.52rem', color: 'var(--sim-text-dim)' }}>Passivo 0.5×</span>
-          <span style={{ fontSize: '0.52rem', color: 'var(--sim-text-dim)' }}>GTO 1.0×</span>
-          <span style={{ fontSize: '0.52rem', color: 'var(--sim-text-dim)' }}>Agressivo 1.5×</span>
+          <span style={{ fontSize: '0.58rem', color: 'var(--sim-text-dim)' }}>Passivo 0.5×</span>
+          <span style={{ fontSize: '0.58rem', color: 'var(--sim-text-dim)' }}>GTO 1.0×</span>
+          <span style={{ fontSize: '0.58rem', color: 'var(--sim-text-dim)' }}>Agressivo 1.5×</span>
         </div>
       </div>
 
