@@ -360,11 +360,14 @@ export default function ReferencialAula12() {
                   })}
                 </div>
                 <div style={{ marginTop: '0.5rem', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.4rem' }}>
-                  {([
-                    { tag: 'TOP-HEAVY', icon: '▲', color: '#fbbf24', text: '1º >20% do total · BF extremo', active: false },
-                    { tag: 'FLAT',      icon: '▬', color: '#94a3b8', text: 'decréscimo linear · BF ≈ 1 · ~ChipEV', active: false },
-                    { tag: 'HÍBRIDA',   icon: '◆', color: '#c4b5fd', text: '1º desproporcional · cauda suave · BF assimétrico', active: true },
-                  ]).map(({ tag, icon, color, text, active }) => (
+                  {(() => {
+                    const pct1 = ((PRIZES[0].val / TOTAL_PRIZES) * 100).toFixed(1);
+                    return ([
+                      { tag: 'TOP-HEAVY', icon: '▲', color: '#fbbf24', text: `1º lugar > 2× share plano · BF extremo`, sub: null, active: false },
+                      { tag: 'FLAT',      icon: '▬', color: '#94a3b8', text: 'decréscimo linear · BF ≈ 1 · ~ChipEV', sub: null, active: false },
+                      { tag: 'HÍBRIDA',   icon: '◆', color: '#c4b5fd', text: `1º lugar = ${pct1}% do pool · cauda suave · BF assimétrico`, sub: null, active: true },
+                    ]);
+                  })().map(({ tag, icon, color, text, active }) => (
                     <div key={tag} style={{
                       display: 'flex', flexDirection: 'column', gap: '3px',
                       padding: '6px 8px', borderRadius: '5px',
