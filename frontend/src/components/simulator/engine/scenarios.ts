@@ -10,6 +10,11 @@
  *   (range atual, board, histórico de ação, stacks dinâmicas). Use como
  *   referência direcional, não como dado exato.
  *
+ * NOTA sobre prizes (estrutura de premios da FT):
+ *   Calibrados contra torneio HRC real: 126 jogadores, 378k chips, 23 pagos.
+ *   FT prizes: 1st=237.34, 2nd=170.96, 3rd=135.17, 4th=109.99, ..., 9th=36.47
+ *   TOTAL_POOL = 1234.80. Cada cenario usa o subconjunto correto para N jogadores restantes.
+ *
  * NOTA sobre defaultStreetFreqs:
  *   Cenário "paradoxo": valores de flop calibrados pelos 93 nodes HRC vs GTO Wizard (Aula 1.2).
  *   Turn e river: estimativas didáticas com direção correta (RP decresce, big-bet sizing cresce).
@@ -27,7 +32,7 @@ export const SCENARIOS: Scenario[] = [
     name: 'Paradoxo do Valuation',
     category: 'clinical',
     stacks: [40, 55],
-    prizes: [62, 33],
+    prizes: [237.34, 170.96],
     ipRp: 21.4,
     oopRp: 12.9,
     ipPos: 'BTN',
@@ -99,7 +104,7 @@ export const SCENARIOS: Scenario[] = [
     name: 'Pacto Silencioso',
     category: 'clinical',
     stacks: [65, 70],
-    prizes: [88, 47],
+    prizes: [237.34, 170.96],
     ipRp: 24.5,
     oopRp: 23.5,
     ipPos: 'Vice CL',
@@ -171,7 +176,7 @@ export const SCENARIOS: Scenario[] = [
     name: 'Efeito Batata Quente',
     category: 'clinical',
     stacks: [25, 20],
-    prizes: [29, 16],
+    prizes: [237.34, 170.96],
     ipRp: 15,
     oopRp: 19.5,
     ipPos: 'UTG',
@@ -243,7 +248,7 @@ export const SCENARIOS: Scenario[] = [
     name: 'Agonia do Bluffcatcher',
     category: 'clinical',
     stacks: [80, 30],
-    prizes: [72, 38],
+    prizes: [237.34, 170.96],
     ipRp: 4.5,
     oopRp: 22,
     ipPos: 'CL',
@@ -315,7 +320,7 @@ export const SCENARIOS: Scenario[] = [
     name: 'Guerra na Lama',
     category: 'clinical',
     stacks: [12, 10],
-    prizes: [14, 8],
+    prizes: [237.34, 170.96],
     ipRp: 8.5,
     oopRp: 7.5,
     ipPos: 'Micro',
@@ -391,7 +396,7 @@ export const SCENARIOS: Scenario[] = [
     name: 'Vácuo Matemático',
     category: 'baseline',
     stacks: [100, 100],
-    prizes: [200],
+    prizes: [408.30],
     ipRp: 0,
     oopRp: 0,
     ipPos: 'Qualquer IP',
@@ -466,7 +471,7 @@ export const SCENARIOS: Scenario[] = [
     name: 'Franco-Atirador',
     category: 'toyGame',
     stacks: [50, 12, 8, 9],
-    prizes: [32, 24, 16, 7],
+    prizes: [237.34, 170.96, 135.17, 109.99],
     ipRp: 12,
     oopRp: 45,
     ipPos: 'SB (CL)',
@@ -538,7 +543,7 @@ export const SCENARIOS: Scenario[] = [
     name: 'Bully do Botão',
     category: 'toyGame',
     stacks: [80, 20, 18],
-    prizes: [59, 35, 24],
+    prizes: [237.34, 170.96, 135.17],
     ipRp: 5,
     oopRp: 42,
     ipPos: 'BTN (CL)',
@@ -614,7 +619,7 @@ export const SCENARIOS: Scenario[] = [
     name: 'Ameaça Orgânica',
     category: 'clinical',
     stacks: [90, 25],
-    prizes: [75, 40],
+    prizes: [237.34, 170.96],
     ipRp: 12,
     oopRp: 21,
     ipPos: 'CL',
@@ -689,7 +694,7 @@ export const SCENARIOS: Scenario[] = [
     name: 'Especulação Assimétrica',
     category: 'clinical',
     stacks: [35, 80, 12],
-    prizes: [55, 32, 18],
+    prizes: [237.34, 170.96, 135.17],
     ipRp: 8.2,
     oopRp: 38,
     ipPos: 'CO (Mid)',
