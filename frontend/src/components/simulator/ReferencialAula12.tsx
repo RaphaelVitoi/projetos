@@ -192,12 +192,12 @@ const TABLE_PLAYERS = [
 function toRad(deg: number) { return (deg * Math.PI) / 180; }
 
 export default function ReferencialAula12() {
-  const W = 360; const H = 210;
-  const rx = 110; const ry = 64;
+  const W = 440; const H = 260;
+  const rx = 136; const ry = 80;
   const cx = W / 2; const cy = H / 2;
 
   return (
-    <div style={{ maxWidth: '1080px', padding: '0 1.5rem' }}>
+    <div style={{ maxWidth: '1080px', margin: '0 auto', padding: '0 1.5rem' }}>
       <details style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
         <summary style={{
           cursor: 'pointer', listStyle: 'none', display: 'flex', alignItems: 'center',
@@ -284,8 +284,8 @@ export default function ReferencialAula12() {
                 <text x={cx} y={cy - 30} textAnchor="middle" fill="#475569" fontSize="9" fontWeight="600">Pot: 5.63bb</text>
                 {/* Fichas: ANTE (centro) + SB/BB/BTN em frente às posições angulares */}
                 {(() => {
-                  const r = 9;
-                  const iRx = 58; const iRy = 40;
+                  const r = 10;
+                  const iRx = 72; const iRy = 50;
                   const sbX = cx + iRx * Math.cos(toRad(-15));
                   const sbY = cy + iRy * Math.sin(toRad(-15));
                   const bbX = cx + iRx * Math.cos(toRad(20));
@@ -301,8 +301,8 @@ export default function ReferencialAula12() {
                       <circle cx={bbX} cy={bbY} r={r} fill="rgba(16,185,129,0.8)" stroke="#10b981" strokeWidth="1.2" />
                       <text x={bbX} y={bbY + 3.5} textAnchor="middle" fill="white" fontSize="5" fontWeight="900">BB</text>
                       {/* ANTE — dead money no centro */}
-                      <circle cx={cx} cy={cy + 10} r={r} fill="rgba(100,116,139,0.8)" stroke="#94a3b8" strokeWidth="1.2" />
-                      <text x={cx} y={cy + 13} textAnchor="middle" fill="white" fontSize="4.5" fontWeight="900">ANTE</text>
+                      <circle cx={cx} cy={cy + 12} r={r} fill="rgba(100,116,139,0.8)" stroke="#94a3b8" strokeWidth="1.2" />
+                      <text x={cx} y={cy + 16} textAnchor="middle" fill="white" fontSize="5" fontWeight="900">ANTE</text>
                       {/* BTN — 2 fichas (open) */}
                       <circle cx={btnX - 5} cy={btnY} r={r} fill="rgba(99,102,241,0.45)" stroke="#6366f1" strokeWidth="1" />
                       <circle cx={btnX + 5} cy={btnY} r={r} fill="rgba(99,102,241,0.85)" stroke="#6366f1" strokeWidth="1.2" />
