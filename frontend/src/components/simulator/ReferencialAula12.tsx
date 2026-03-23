@@ -4,6 +4,8 @@
  * ROLE: Seção colapsável com representação visual dos dados de calibração do motor ICM.
  */
 
+import styles from './simulator.module.css';
+
 const RANKS = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'];
 
 // BTN range — dados exatos da imagem (Aula 1.2)
@@ -212,7 +214,7 @@ export default function ReferencialAula12() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem', paddingBottom: '2.5rem', paddingTop: '1rem' }}>
 
           {/* Grid 2-col: Esquerda(Board+Mesa) | Direita(RP+Prêmios) */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '2rem 3rem', alignItems: 'start' }}>
+          <div className={styles.refGrid2Col}>
 
             {/* ESQUERDA — Board + Mesa */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>

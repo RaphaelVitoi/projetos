@@ -1233,7 +1233,31 @@
 }
 
 /* ==============================================
-   ACESSIBILIDADE E RESPONSIVIDADE (Fase 2)
+   GRIDS INTERNOS RESPONSIVOS
+   ============================================== */
+
+.refGrid2Col {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 2rem 3rem;
+  align-items: start;
+}
+
+.calcGrid2Col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.matchupGrid2Col {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) minmax(200px, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* ==============================================
+   ACESSIBILIDADE E RESPONSIVIDADE
    ============================================== */
 
 .toolButton:focus-visible,
@@ -1267,6 +1291,23 @@
     width: 100%;
     justify-content: flex-end;
   }
+
+  .refGrid2Col,
+  .calcGrid2Col,
+  .matchupGrid2Col {
+    grid-template-columns: 1fr;
+  }
+
+  .tabsContainer {
+    gap: 0.25rem;
+    padding: 4px;
+  }
+
+  .tabBtn {
+    padding: 0.5rem 0.5rem;
+    font-size: 0.55rem;
+    gap: 4px;
+  }
 }
 
 /* ==============================================
@@ -1275,18 +1316,43 @@
 @media (max-width: 600px) {
   .aiPanelWrapper {
     min-height: 60dvh;
-    /* Adapta-se ativamente ao teclado aberto (Dynamic Viewport) */
     padding: 1rem;
   }
 
   .aiPromptInput {
     font-size: 16px;
-    /* Evita o zoom automático do iOS Safari no evento de Focus */
   }
 
   .aiChatHistory {
     min-height: 160px;
-    /* Reduz a altura mínima para caber com o teclado virtual aberto */
+  }
+
+  .refGrid2Col {
+    gap: 1.5rem;
+  }
+
+  .glassPanel {
+    border-radius: 16px;
+    padding: 1rem;
+  }
+
+  .selectorPanel {
+    max-height: 400px;
+  }
+
+  .sprPipeline {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+
+  .sprNode {
+    width: 50px;
+    height: 50px;
+  }
+
+  .sprLine {
+    display: none;
   }
 }
 

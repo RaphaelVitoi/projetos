@@ -121,7 +121,7 @@ export default function EquityCalculator() {
               background: showParser ? 'rgba(99, 102, 241, 0.2)' : 'rgba(30, 41, 59, 0.6)',
               border: '1px solid rgba(255, 255, 255, 0.06)',
               color: showParser ? '#818cf8' : '#94a3b8',
-              fontSize: '0.55rem',
+              fontSize: '0.58rem',
               fontWeight: 700,
               cursor: 'pointer',
               textTransform: 'uppercase',
@@ -211,7 +211,7 @@ export default function EquityCalculator() {
               background: 'rgba(30, 41, 59, 0.5)',
               border: '1px solid rgba(255, 255, 255, 0.05)',
               color: '#94a3b8',
-              fontSize: '0.55rem',
+              fontSize: '0.58rem',
               fontWeight: 700,
               cursor: 'pointer',
             }}
@@ -222,7 +222,7 @@ export default function EquityCalculator() {
       </div>
 
       {/* Grid: Stacks | Payouts */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+      <div className={styles.calcGrid2Col} style={{ marginBottom: '1rem' }}>
         {/* Stacks */}
         <div style={{
           background: 'rgba(15, 23, 42, 0.6)',
@@ -230,7 +230,7 @@ export default function EquityCalculator() {
           borderRadius: '12px',
           padding: '0.75rem',
         }}>
-          <h4 style={{ fontSize: '0.55rem', fontWeight: 900, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.15em', margin: '0 0 0.5rem' }}>
+          <h4 style={{ fontSize: '0.58rem', fontWeight: 900, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.15em', margin: '0 0 0.5rem' }}>
             Stacks (bb)
           </h4>
           {players.map((p) => (
@@ -291,7 +291,7 @@ export default function EquityCalculator() {
               background: 'rgba(30, 41, 59, 0.5)',
               border: '1px dashed #334155',
               color: '#64748b',
-              fontSize: '0.55rem',
+              fontSize: '0.58rem',
               fontWeight: 700,
               cursor: 'pointer',
               marginTop: '0.25rem',
@@ -308,12 +308,12 @@ export default function EquityCalculator() {
           borderRadius: '12px',
           padding: '0.75rem',
         }}>
-          <h4 style={{ fontSize: '0.55rem', fontWeight: 900, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.15em', margin: '0 0 0.5rem' }}>
+          <h4 style={{ fontSize: '0.58rem', fontWeight: 900, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.15em', margin: '0 0 0.5rem' }}>
             Payouts (%)
           </h4>
           {prizes.map((prize, idx) => (
             <div key={idx} style={{ display: 'flex', gap: '0.4rem', marginBottom: '0.4rem', alignItems: 'center' }}>
-              <span style={{ fontSize: '0.55rem', color: '#64748b', width: '20px', textAlign: 'right' }}>
+              <span style={{ fontSize: '0.58rem', color: '#64748b', width: '20px', textAlign: 'right' }}>
                 {idx + 1}&ordm;
               </span>
               <input
@@ -343,7 +343,7 @@ export default function EquityCalculator() {
                 background: 'rgba(30, 41, 59, 0.5)',
                 border: '1px dashed #334155',
                 color: '#64748b',
-                fontSize: '0.55rem',
+                fontSize: '0.58rem',
                 fontWeight: 700,
                 cursor: 'pointer',
               }}
@@ -359,7 +359,7 @@ export default function EquityCalculator() {
                   background: 'rgba(225, 29, 72, 0.1)',
                   border: '1px solid rgba(225, 29, 72, 0.2)',
                   color: '#e11d48',
-                  fontSize: '0.55rem',
+                  fontSize: '0.58rem',
                   fontWeight: 700,
                   cursor: 'pointer',
                 }}
@@ -378,7 +378,7 @@ export default function EquityCalculator() {
         borderRadius: '12px',
         padding: '1rem',
       }}>
-        <h4 style={{ fontSize: '0.55rem', fontWeight: 900, color: '#818cf8', textTransform: 'uppercase', letterSpacing: '0.15em', margin: '0 0 0.75rem' }}>
+        <h4 style={{ fontSize: '0.58rem', fontWeight: 900, color: '#818cf8', textTransform: 'uppercase', letterSpacing: '0.15em', margin: '0 0 0.75rem' }}>
           Equidade ICM
         </h4>
         {results.map((r) => {

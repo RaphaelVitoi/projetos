@@ -72,7 +72,7 @@ export default function MatchupSelector() {
       {/* Header */}
       <div style={{ marginBottom: '1.5rem' }}>
         <p style={{
-          fontSize: '0.55rem',
+          fontSize: '0.58rem',
           fontWeight: 900,
           color: '#6366f1',
           textTransform: 'uppercase',
@@ -216,7 +216,7 @@ export default function MatchupSelector() {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      fontSize: '0.55rem',
+                      fontSize: '0.58rem',
                       fontWeight: 900,
                       color: isA || isD ? '#fff' : '#475569',
                       flexShrink: 0,
@@ -422,7 +422,7 @@ export default function MatchupSelector() {
                   color: '#334155',
                   fontWeight: 600,
                   padding: '3px 6px',
-                  fontSize: '0.52rem',
+                  fontSize: '0.58rem',
                   width: '52px',
                 }}>
                   A \ D
@@ -433,7 +433,7 @@ export default function MatchupSelector() {
                     color: defensor === p.id ? '#f43f5e' : '#475569',
                     fontWeight: defensor === p.id ? 900 : 700,
                     padding: '3px 2px',
-                    fontSize: '0.52rem',
+                    fontSize: '0.58rem',
                     whiteSpace: 'nowrap',
                     minWidth: '32px',
                   }}>
@@ -449,7 +449,7 @@ export default function MatchupSelector() {
                     color: agressor === rowPlayer.id ? '#818cf8' : '#64748b',
                     fontWeight: agressor === rowPlayer.id ? 900 : 700,
                     padding: '2px 6px 2px 3px',
-                    fontSize: '0.52rem',
+                    fontSize: '0.58rem',
                     whiteSpace: 'nowrap',
                   }}>
                     {rowPlayer.pos.split(' ')[0]}
