@@ -8,7 +8,8 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import type { Scenario } from '../engine/types';
+import type { Scenario, SprStage, Quiz } from '../engine/types';
+import type { QuizQuestion as NormalizedQuestion } from '@/components/quiz/types';
 import SprPipeline from '../ui/SprPipeline';
 import { QuizEngine } from '@/components/quiz/QuizEngine';
 import RangeMatrix from './RangeMatrix';
@@ -16,6 +17,8 @@ import styles from '../simulator.module.css';
 
 interface TheoryPanelProps {
   scenario: Scenario;
+  /** sprData recalculado com RP derivado (M-H). Fallback: scenario.sprData */
+  effectiveSprData?: SprStage[];
 }
 
 type TabId = 'theory' | 'ranges' | 'bubble' | 'spr' | 'exploit' | 'quiz';
@@ -29,7 +32,7 @@ const TABS: { id: TabId; label: string; icon: string }[] = [
   { id: 'quiz', label: 'Quiz', icon: 'fa-circle-question' },
 ];
 
-export default function TheoryPanel({ scenario }: Readonly<TheoryPanelProps>) {
+export default function TheoryPanel({ scenario, effectiveSprData }: Readonly<TheoryPanelProps>) {
   const [activeTab, setActiveTab] = useState<TabId>('theory');
 
   // Reset tab ao mudar cenário
@@ -43,41 +46,41 @@ export default function TheoryPanel({ scenario }: Readonly<TheoryPanelProps>) {
     return 100 / (100 - rp);
   };
 
-  // Adaptador SOTA: Transpila o formato de quiz legado para a nova matriz O(1) em tempo real
-  const normalizeQuizData = (quizData: any) => {
+  // Adaptador: transpila formato de quiz legado (Quiz de engine/types) para NormalizedQuestion[]
+  const normalizeQuizData = (quizData: Quiz | null | undefined): NormalizedQuestion[] => {
     if (!quizData) return [];
 
-    let rawList = [];
-    if (Array.isArray(quizData)) {
-      rawList = quizData;
-    } else if (quizData.questions && Array.isArray(quizData.questions)) {
-      rawList = quizData.questions;
-    } else if (quizData.question || quizData.q || quizData.text) {
-      rawList = [quizData];
-    } else if (typeof quizData === 'object') {
-      rawList = Object.values(quizData);
-    }
+    // Quiz de engine/types e um objeto unico com { question, options, explanation }
+    // Wrappa em array para processar uniformemente
+    const rawList = (Array.isArray(quizData) ? quizData : [quizData]) as Record<string, unknown>[];
 
-    return rawList.map((q: any, index: number) => {
-      if (!q) return null;
-      if (q.id && q.text && q.correctOptionId !== undefined) return q;
+    return rawList
+      .map((q: Record<string, unknown>, index: number): NormalizedQuestion | null => {
+        if (!q) return null;
 
-      const questionText = q.text || q.question || q.q || q.title || 'Pergunta não definida';
-      const rawOptions = q.options || q.choices || q.answers || q.respostas || [];
-      const correctIndex = q.correctAnswer ?? q.correct ?? q.answer ?? q.a ?? 0;
-      const explanationText = q.explanation || q.exp || q.reason || q.justification || '';
+        // Ja esta no formato normalizado
+        if (typeof q.id === 'string' && typeof q.text === 'string' && q.correctOptionId !== undefined) {
+          return q as unknown as NormalizedQuestion;
+        }
 
-      return {
-        id: `q-${scenario.id}-${index}`,
-        text: questionText,
-        options: rawOptions.map((opt: any, i: number) => ({
-          id: `opt-${i}`,
-          label: typeof opt === 'string' ? opt : (opt.label || opt.text || String(opt))
-        })),
-        correctOptionId: `opt-${correctIndex}`,
-        explanation: explanationText
-      };
-    }).filter(Boolean);
+        const questionText = (q.text || q.question || q.q || q.title || 'Pergunta nao definida') as string;
+        const rawOptions = (q.options || q.choices || q.answers || q.respostas || []) as
+          (string | { label?: string; text?: string })[];
+        const correctIndex = (q.correctAnswer ?? q.correct ?? q.answer ?? q.a ?? 0) as number;
+        const explanationText = (q.explanation || q.exp || q.reason || q.justification || '') as string;
+
+        return {
+          id: `q-${scenario.id}-${index}`,
+          text: questionText,
+          options: rawOptions.map((opt, i) => ({
+            id: `opt-${i}`,
+            label: typeof opt === 'string' ? opt : (opt.label || opt.text || String(opt)),
+          })),
+          correctOptionId: `opt-${correctIndex}`,
+          explanation: explanationText,
+        };
+      })
+      .filter((q): q is NormalizedQuestion => q !== null);
   };
 
   return (
@@ -219,7 +222,7 @@ export default function TheoryPanel({ scenario }: Readonly<TheoryPanelProps>) {
         })()}
 
         {activeTab === 'spr' && (
-          <SprPipeline stages={scenario.sprData} activeStage={0} />
+          <SprPipeline stages={effectiveSprData ?? scenario.sprData} activeStage={0} />
         )}
 
         {activeTab === 'exploit' && (

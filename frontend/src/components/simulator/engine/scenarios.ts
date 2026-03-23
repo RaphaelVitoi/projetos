@@ -681,4 +681,79 @@ export const SCENARIOS: Scenario[] = [
       explanation: 'O ICM não dita apenas a morte, dita a "Esperança Matemática" global de chegar à vitória. Dobrar o seu maior rival destrói ativamente a sua maior vantagem no jogo.',
     },
   },
+  // ============================================================
+  // CLINICAL (6): especulacao - Especulação Assimétrica
+  // ============================================================
+  {
+    id: 'especulacao',
+    name: 'Especulação Assimétrica',
+    category: 'clinical',
+    stacks: [35, 80, 12],
+    prizes: [55, 32, 18],
+    ipRp: 8.2,
+    oopRp: 38,
+    ipPos: 'CO (Mid)',
+    ipMorph: 'Especulativo Passivo',
+    oopPos: 'BB (CL)',
+    oopMorph: 'Agressor Obrigatório',
+    verdict: 'Implied Odds de ICM',
+    narrativeTitle: 'O Parasita Silencioso',
+    narrativeSubtitle: 'Mid-Stack vs Chip Leader',
+    icon: 'fa-virus',
+    color: 'fuchsia',
+    theory: `
+      <h3 class="text-white font-bold text-xl mb-4 tracking-tight">O Parasita Silencioso</h3>
+      <p class="text-slate-300 leading-relaxed mb-4 text-[15px]">A pedagogia convencional ensina: "sob ICM, jogue mais tight". Verdade para <em>shorts</em> e <em>big stacks</em>. Mas o <strong>mid-stack</strong> num spot especifico opera numa logica inversa: ele entra no pote nao por pot odds diretas, mas por <strong>implied odds de ICM</strong>.</p>
+      <p class="text-slate-300 leading-relaxed mb-4 text-[15px]">O mecanismo: o CL (80bb) e <em>obrigado</em> a agredir pela sua vantagem de Risco. O mid (35bb) absorve essa agressividade investindo pouco (flat call, small ball), aceitando a pressao sem confronto direto. Se acertar o flop ou a textura, a perspectiva matematica e a expectativa explodem.</p>
+      <p class="text-slate-300 leading-relaxed mb-6 text-[15px]">O short (12bb) e o catalisador: sua mera existencia eleva o custo de eliminacao para o mid (Efeito de Irradiacao), mas tambem garante que o fold do mid num spot ruim nao e catastrofico - o short morrera antes. O mid especula com rede de seguranca estrutural.</p>
+    `,
+    exploit: [
+      'Flat com maos especulativas contra opens do CL: suited connectors, pocket pairs medios e suited aces tem implied odds de ICM massivas. O CL nao pode sizear voce para fora sem inflar o pote alem do que o ICM dele permite.',
+      'Realize equity passivamente: check-call > check-raise na maioria das texturas. O CL bleffa por obrigacao, e voce capitaliza sem aumentar o risco de eliminacao. O river e seu aliado.',
+      'Evite confronto direto pre-flop: 3-bet so com o topo absoluto. Cada ficha investida pre tem custo de ICM para voce, mas cada ficha ganha pos-flop tem valor amplificado pela perspectiva de ultrapassar o CL.',
+    ],
+    // RP residual por street: mid-stack com RP baixo, dissipacao lenta
+    sprData: [
+      { name: 'PRE',   potSize: 2.5,  rpValue: 8.2 },
+      { name: 'FLOP',  potSize: 7,    rpValue: 6.8 },
+      { name: 'TURN',  potSize: 18,   rpValue: 3.5 },
+      { name: 'RIVER', potSize: 35,   rpValue: 1.2 },
+    ],
+    // Estimativa didatica: mid-stack especulativo, high check freq pre, call-heavy pos
+    defaultStreetFreqs: {
+      flop: {
+        ip_check:     40,
+        ip_bet_small: 45,
+        ip_bet_large: 15,
+        oop_call:     55,
+        oop_fold:     30,
+        oop_raise:    15,
+      },
+      turn: {
+        ip_check:     30,
+        ip_bet_small: 40,
+        ip_bet_large: 30,
+        oop_call:     50,
+        oop_fold:     38,
+        oop_raise:    12,
+      },
+      river: {
+        ip_check:     25,
+        ip_bet_small: 15,
+        ip_bet_large: 60,
+        oop_call:     60,
+        oop_fold:     32,
+        oop_raise:    8,
+      },
+    },
+    quiz: {
+      question: 'Por que o mid-stack (35bb) pode entrar em potes contra o CL (80bb) com maos especulativas, contradizendo a regra "tighten up sob ICM"?',
+      options: [
+        { id: 'A', text: 'Porque o CL e obrigado a agredir pela Vantagem de Risco, e o mid absorve essa agressividade com investimento minimo. Se acertar, a perspectiva matematica explode sem risco proporcional.', isCorrect: true },
+        { id: 'B', text: 'Porque o mid-stack nao sofre pressao de ICM significativa com 35bb.', isCorrect: false },
+        { id: 'C', text: 'Porque maos especulativas sempre tem equity positiva contra ranges de abertura largos.', isCorrect: false },
+      ],
+      explanation: 'Implied Odds de ICM: o mid investe pouco, absorve agressividade estrutural do CL, e realiza equity passivamente. O ganho nao e em fichas - e em perspectiva matematica de posicoes superiores.',
+    },
+  },
 ];

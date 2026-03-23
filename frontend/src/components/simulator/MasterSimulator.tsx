@@ -93,6 +93,16 @@ export default function MasterSimulator() {
   const ipRpRiver = effectiveIpRp * riverScale;
   const oopRpRiver = effectiveOopRp * riverScale;
 
+  // sprData recalculado com RP derivado (OOP = defensor = referencia para dissipacao)
+  // Preserva a curva de dissipacao original, substitui magnitude absoluta
+  const effectiveSprData = useMemo(() => {
+    if (!derivedRp || preRp <= 0) return scenario.sprData;
+    return scenario.sprData.map(stage => ({
+      ...stage,
+      rpValue: (stage.rpValue / preRp) * effectiveOopRp,
+    }));
+  }, [scenario.sprData, derivedRp, preRp, effectiveOopRp]);
+
   // Calcula distorcao ICM para as tres streets em paralelo; so recalcula quando dependencias mudam
   const { nashFlop, nashTurn, nashRiver } = useMemo(() => ({
     nashFlop: solveIcmDistortion(ipRpFlop, oopRpFlop, streetFreqs.flop, aggressionFactor),
@@ -325,7 +335,7 @@ export default function MasterSimulator() {
                 onStreetFreqChange={handleStreetFreqChange}
                 onAggressionChange={setAggressionFactor}
               />
-              <TheoryPanel scenario={scenario} />
+              <TheoryPanel scenario={scenario} effectiveSprData={effectiveSprData} />
             </>
           )}
 
