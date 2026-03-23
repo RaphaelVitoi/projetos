@@ -359,16 +359,25 @@ export default function ReferencialAula12() {
                     );
                   })}
                 </div>
-                <div style={{ marginTop: '0.5rem', display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+                <div style={{ marginTop: '0.5rem', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.4rem' }}>
                   {([
-                    { tag: 'TOP-HEAVY', icon: '▲', color: '#fbbf24', text: '1º >20% · BF extremo' },
-                    { tag: 'FLAT',      icon: '▬', color: '#94a3b8', text: 'decréscimo linear · BF próximo de 1 · jogo ~ChipEV' },
-                    { tag: 'HÍBRIDA',   icon: '◆', color: '#c4b5fd', text: 'top inflado · cauda gradual · esta estrutura' },
-                  ] as const).map(({ tag, icon, color, text }) => (
-                    <div key={tag} style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '3px 8px', borderRadius: '4px', background: `${color}12`, border: `1px solid ${color}30` }}>
-                      <span style={{ fontSize: '0.65rem', color, lineHeight: 1 }}>{icon}</span>
-                      <span style={{ fontSize: '0.58rem', fontWeight: 800, color, textTransform: 'uppercase', letterSpacing: '0.07em' }}>{tag}</span>
-                      <span style={{ fontSize: '0.58rem', color: '#475569' }}>{text}</span>
+                    { tag: 'TOP-HEAVY', icon: '▲', color: '#fbbf24', text: '1º >20% do total · BF extremo', active: false },
+                    { tag: 'FLAT',      icon: '▬', color: '#94a3b8', text: 'decréscimo linear · BF ≈ 1 · ~ChipEV', active: false },
+                    { tag: 'HÍBRIDA',   icon: '◆', color: '#c4b5fd', text: '1º desproporcional · cauda suave · BF assimétrico', active: true },
+                  ]).map(({ tag, icon, color, text, active }) => (
+                    <div key={tag} style={{
+                      display: 'flex', flexDirection: 'column', gap: '3px',
+                      padding: '6px 8px', borderRadius: '5px',
+                      background: active ? `${color}20` : `${color}0d`,
+                      border: `1px solid ${active ? `${color}70` : `${color}28`}`,
+                      boxShadow: active ? `0 0 8px ${color}22` : 'none',
+                    }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                        <span style={{ fontSize: '0.65rem', color, lineHeight: 1 }}>{icon}</span>
+                        <span style={{ fontSize: '0.58rem', fontWeight: 800, color, textTransform: 'uppercase', letterSpacing: '0.07em' }}>{tag}</span>
+                        {active && <span style={{ marginLeft: 'auto', fontSize: '0.48rem', fontWeight: 700, color, textTransform: 'uppercase', letterSpacing: '0.1em', opacity: 0.8 }}>↑ referência</span>}
+                      </div>
+                      <span style={{ fontSize: '0.58rem', color: '#64748b', lineHeight: 1.35 }}>{text}</span>
                     </div>
                   ))}
                 </div>
