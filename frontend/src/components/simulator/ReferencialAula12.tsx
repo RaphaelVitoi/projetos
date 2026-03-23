@@ -197,7 +197,7 @@ export default function ReferencialAula12() {
   const cx = W / 2; const cy = H / 2;
 
   return (
-    <div style={{ padding: '0 1.5rem' }}>
+    <div style={{ maxWidth: '1080px', padding: '0 1.5rem' }}>
       <details style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
         <summary style={{
           cursor: 'pointer', listStyle: 'none', display: 'flex', alignItems: 'center',
@@ -238,7 +238,7 @@ export default function ReferencialAula12() {
             </div>
 
             {/* RP */}
-            <div style={{ flex: 1, minWidth: '180px' }}>
+            <div style={{ minWidth: '200px', maxWidth: '280px' }}>
               <p style={{ margin: '0 0 0.4rem', fontSize: '0.58rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Risk Premium</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                 {[
