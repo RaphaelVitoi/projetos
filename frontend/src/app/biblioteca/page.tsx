@@ -26,7 +26,7 @@ interface MockArticle {
 const MOCK_ARTICLES: MockArticle[] = [
   {
     id: '1',
-    icon: '⚖️',
+    icon: 'fa-scale-balanced',
     title: 'O Paradoxo do Valuation no ICM',
     excerpt: 'Por que acumular fichas pode diminuir sua esperança matemática em spots específicos da reta final.',
     readTime: '12 min',
@@ -36,7 +36,7 @@ const MOCK_ARTICLES: MockArticle[] = [
   },
   {
     id: '2',
-    icon: '🧠',
+    icon: 'fa-brain',
     title: 'Hermenêutica do Blefe',
     excerpt: 'Lendo as intenções do oponente através da lente do excesso de gozo e da psicanálise lacaniana.',
     readTime: '15 min',
@@ -46,7 +46,7 @@ const MOCK_ARTICLES: MockArticle[] = [
   },
   {
     id: '3',
-    icon: '📉',
+    icon: 'fa-chart-line',
     title: 'O Motor de Diluição',
     excerpt: 'Como o Risk Premium afeta os ranges de call de forma não-linear.',
     readTime: '8 min',
@@ -63,7 +63,7 @@ export default function BibliotecaPage() {
       {/* Hero */}
       <header className="page-header" style={{ paddingBottom: '1rem' }}>
         <p className="page-label">
-          <span className="fa-solid fa-book-journal-whills"></span> Domínio Teórico
+          <i className="fa-solid fa-book-journal-whills" /> Domínio Teórico
         </p>
         <h1>Biblioteca Epistêmica</h1>
         <p className="page-subtitle" style={{ maxWidth: '660px' }}>
@@ -77,8 +77,8 @@ export default function BibliotecaPage() {
           const inner = (
             <>
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                <span className="hub-icon" style={{ marginBottom: 0 }}>{article.icon}</span>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.05em' }}>
+                <i className={`fa-solid ${article.icon} hub-icon`} style={{ marginBottom: 0, color: 'var(--accent-primary)' }} />
+                <span style={{ fontFamily: 'var(--font-mono)', fontVariantNumeric: 'tabular-nums', fontSize: '0.65rem', fontWeight: 700, color: 'var(--text-muted)', letterSpacing: '0.05em' }}>
                   {article.readTime}
                 </span>
               </div>
@@ -90,7 +90,7 @@ export default function BibliotecaPage() {
               <h3>{article.title}</h3>
               <p>{article.excerpt}</p>
               <span className="card-cta" style={article.status === 'em-breve' ? { opacity: 0.4, cursor: 'default' } : {}}>
-                {article.status === 'disponivel' ? 'Ler Artigo →' : 'Em breve →'}
+                {article.status === 'disponivel' ? <>Ler Artigo <i className="fa-solid fa-arrow-right" style={{ marginLeft: '4px' }} /></> : <>Em breve <i className="fa-solid fa-lock" style={{ marginLeft: '4px' }} /></>}
               </span>
             </>
           );
@@ -105,7 +105,7 @@ export default function BibliotecaPage() {
       {/* Em Desenvolvimento */}
       <section style={{ marginTop: '5rem', paddingTop: '3rem', borderTop: '1px solid var(--border-color)' }}>
         <p className="page-label" style={{ textAlign: 'center', marginBottom: '0.75rem' }}>
-          <span className="fa-solid fa-flask"></span> Em Construção
+          <i className="fa-solid fa-flask" /> Em Construção
         </p>
         <h3 style={{ textAlign: 'center', fontSize: '1.6rem', marginBottom: '2.5rem' }}>
           Próximas Adições
@@ -127,7 +127,7 @@ export default function BibliotecaPage() {
               flexDirection: 'column',
               gap: '0.75rem',
             }}>
-              <span className={`fa-solid ${icon}`} style={{ color, fontSize: '1.1rem' }}></span>
+              <i className={`fa-solid ${icon}`} style={{ color, fontSize: '1.1rem' }} />
               <strong style={{ fontSize: '0.95rem', color: 'var(--text-main)', lineHeight: 1.3 }}>{title}</strong>
               <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.65 }}>{desc}</p>
             </div>
@@ -141,15 +141,15 @@ export default function BibliotecaPage() {
           Enquanto o acervo cresce, explore o conteúdo já publicado:
         </p>
         <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <Link href="/leitura-icm" className="card-cta" style={{ fontSize: '0.85rem' }}>Whitepaper ICM &rarr;</Link>
-          <Link href="/artigos/estado-da-arte" className="card-cta" style={{ fontSize: '0.85rem' }}>Estado da Arte 2025 &rarr;</Link>
-          <Link href="/artigos/smart-sniper" className="card-cta" style={{ fontSize: '0.85rem' }}>Protocolo Smart Sniper &rarr;</Link>
+          <Link href="/leitura-icm" className="btn-secondary" style={{ fontSize: '0.75rem', padding: '0.6rem 1.5rem' }}>Whitepaper ICM <i className="fa-solid fa-arrow-right" /></Link>
+          <Link href="/artigos/estado-da-arte" className="btn-secondary" style={{ fontSize: '0.75rem', padding: '0.6rem 1.5rem' }}>Estado da Arte 2025 <i className="fa-solid fa-arrow-right" /></Link>
+          <Link href="/artigos/smart-sniper" className="btn-secondary" style={{ fontSize: '0.75rem', padding: '0.6rem 1.5rem' }}>Protocolo Smart Sniper <i className="fa-solid fa-arrow-right" /></Link>
         </div>
       </div>
 
       <nav className="article-nav" style={{ marginTop: '4rem' }}>
-        <Link href="/">&larr; Hub Central</Link>
-        <Link href="/aula-icm">Aula ICM &rarr;</Link>
+        <Link href="/"><i className="fa-solid fa-arrow-left" style={{ marginRight: '4px' }} /> Hub Central</Link>
+        <Link href="/aula-icm">Aula ICM <i className="fa-solid fa-arrow-right" style={{ marginLeft: '4px' }} /></Link>
       </nav>
     </main>
   );

@@ -56,7 +56,7 @@ export default function EquityCalculator() {
     });
     const min = Math.min(...bfs);
     const max = Math.max(...bfs);
-    const color = max > 1.3 ? '#f43f5e' : max > 1.1 ? '#f59e0b' : '#10b981';
+    const color = max > 1.3 ? 'var(--sim-color-rose)' : max > 1.1 ? 'var(--sim-color-amber)' : 'var(--sim-color-emerald)';
     return { bfRange: `${min.toFixed(2)}-${max.toFixed(2)}`, bfRangeColor: color };
   }, [results, players, totalChips]);
 
@@ -194,7 +194,8 @@ export default function EquityCalculator() {
               color: '#e2e8f0',
               padding: '0.75rem',
               fontSize: '0.75rem',
-              fontFamily: "'JetBrains Mono', monospace",
+              fontFamily: 'var(--sim-font-mono)',
+              fontVariantNumeric: 'tabular-nums',
               resize: 'vertical',
             }}
           />
@@ -296,7 +297,8 @@ export default function EquityCalculator() {
                   color: '#818cf8',
                   padding: '0.35rem 0.5rem',
                   fontSize: '0.65rem',
-                  fontFamily: "'JetBrains Mono', monospace",
+                  fontFamily: 'var(--sim-font-mono)',
+                  fontVariantNumeric: 'tabular-nums',
                   textAlign: 'right',
                 }}
               />
@@ -360,10 +362,11 @@ export default function EquityCalculator() {
                   background: '#0a0f1c',
                   border: '1px solid #334155',
                   borderRadius: '6px',
-                  color: '#10b981',
+                  color: 'var(--sim-color-emerald)',
                   padding: '0.35rem 0.5rem',
                   fontSize: '0.65rem',
-                  fontFamily: "'JetBrains Mono', monospace",
+                  fontFamily: 'var(--sim-font-mono)',
+                  fontVariantNumeric: 'tabular-nums',
                 }}
               />
             </div>
@@ -414,9 +417,9 @@ export default function EquityCalculator() {
         flexWrap: 'wrap',
       }}>
         {[
-          { label: 'Jogadores', value: String(players.length), color: '#94a3b8' },
-          { label: 'Fichas', value: String(totalChips), color: '#818cf8' },
-          { label: 'Pool', value: `${totalPrizes.toFixed(1)}%`, color: '#10b981' },
+          { label: 'Jogadores', value: String(players.length), color: 'var(--sim-text-main)' },
+          { label: 'Fichas', value: String(totalChips), color: 'var(--sim-color-indigo-light)' },
+          { label: 'Pool', value: `${totalPrizes.toFixed(1)}%`, color: 'var(--sim-color-emerald)' },
           { label: 'BF Range', value: bfRange, color: bfRangeColor },
         ].map((stat) => (
           <div key={stat.label} style={{
@@ -430,7 +433,7 @@ export default function EquityCalculator() {
             <div style={{ fontSize: '0.58rem', color: '#475569', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '0.2rem' }}>
               {stat.label}
             </div>
-            <div className={styles.dataMono} style={{ fontSize: '0.75rem', color: stat.color, fontWeight: 700 }}>
+            <div className={styles.dataMono} style={{ fontSize: '0.75rem', color: stat.color, fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>
               {stat.value}
             </div>
           </div>
@@ -452,17 +455,17 @@ export default function EquityCalculator() {
             ? ((players.find(p => p.id === r.id)?.stack ?? 0) / totalChips) * 100
             : 0;
           const delta = r.equityPercent - chipPercent;
-          const deltaColor = delta > 0.5 ? '#10b981' : delta < -0.5 ? '#f43f5e' : '#475569';
+          const deltaColor = delta > 0.5 ? 'var(--sim-color-emerald)' : delta < -0.5 ? 'var(--sim-color-rose)' : 'var(--sim-text-subtle)';
           const deltaSign = delta > 0 ? '+' : '';
           return (
             <div key={r.id} style={{ marginBottom: '0.6rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.3rem', alignItems: 'center' }}>
                 <span style={{ fontSize: '0.7rem', color: '#e2e8f0', fontWeight: 600 }}>{r.name}</span>
                 <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-                  <span className={styles.dataMono} style={{ fontSize: '0.6rem', color: '#64748b' }}>
+                  <span className={styles.dataMono} style={{ fontSize: '0.6rem', color: 'var(--sim-text-dim)', fontVariantNumeric: 'tabular-nums' }}>
                     Fichas {chipPercent.toFixed(1)}%
                   </span>
-                  <span className={styles.dataMono} style={{ fontSize: '0.7rem', color: '#6366f1', fontWeight: 700 }}>
+                  <span className={styles.dataMono} style={{ fontSize: '0.7rem', color: 'var(--sim-color-indigo)', fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>
                     <AnimatedNumber value={r.equityPercent} suffix="%" />
                   </span>
                   <span className={styles.dataMono} style={{
@@ -472,6 +475,7 @@ export default function EquityCalculator() {
                     padding: '0.15rem 0.4rem',
                     borderRadius: '4px',
                     background: delta > 0.5 ? 'rgba(16,185,129,0.1)' : delta < -0.5 ? 'rgba(244,63,94,0.1)' : 'transparent',
+                    fontVariantNumeric: 'tabular-nums'
                   }}>
                     {deltaSign}{delta.toFixed(1)}%
                   </span>
@@ -485,7 +489,7 @@ export default function EquityCalculator() {
                   left: 0,
                   height: '100%',
                   width: `${chipPercent}%`,
-                  background: '#334155',
+                  background: 'var(--sim-border-light)',
                   borderRadius: '3px',
                   transition: 'width 0.8s ease',
                 }} />
@@ -495,7 +499,8 @@ export default function EquityCalculator() {
                   left: 0,
                   height: '100%',
                   width: `${r.equityPercent}%`,
-                  background: 'linear-gradient(90deg, rgba(99,102,241,0.6), rgba(129,140,248,0.8))',
+                  background: 'var(--sim-color-indigo)',
+                  opacity: 0.85,
                   borderRadius: '3px',
                   transition: 'width 0.8s ease',
                 }} />

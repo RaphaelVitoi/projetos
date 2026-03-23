@@ -23,34 +23,43 @@ export default function LeituraICM() {
             </header>
 
             {/* Índice de Navegação */}
-            <section style={{ marginBottom: '4rem' }}>
+            <section style={{
+                marginBottom: '4rem',
+                background: 'var(--bg-card)',
+                border: '1px solid var(--glass-border)',
+                borderRadius: '12px',
+                padding: '2rem',
+                backdropFilter: 'blur(12px)'
+            }}>
                 {/* Eyebrow */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
                     <span style={{ flex: 1, height: '1px', background: 'linear-gradient(to right, transparent, rgba(99,102,241,0.2))' }} />
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', fontWeight: 800, color: '#334155', textTransform: 'uppercase', letterSpacing: '0.24em' }}>
+                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.24em' }}>
                         Índice
                     </span>
                     <span style={{ flex: 1, height: '1px', background: 'linear-gradient(to left, transparent, rgba(99,102,241,0.2))' }} />
                 </div>
 
                 {/* Linha superior */}
-                <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)', marginBottom: '0.25rem' }} />
+                <div style={{ height: '1px', background: 'var(--glass-border)', marginBottom: '0.25rem' }} />
 
                 {/* Linhas editoriais */}
                 {([
-                    { num: '01', id: 'modulo-1', label: 'Fundamento',  title: 'O Problema e o Mapa',    desc: 'ChipEV vs ICM, Risk Premium, Antevisão e Valuations de Stack.' },
-                    { num: '02', id: 'modulo-2', label: 'Laboratório', title: 'Toy-Games',               desc: '5 cenários progressivos de RP 0→24%, do ChipEV puro ao Teto do RP.' },
-                    { num: '03', id: 'parte-ii', label: 'Paradoxo',    title: 'Invertendo o RP',         desc: 'O que acontece quando o IP carrega RP maior que o OOP.' },
-                    { num: '04', id: 'modulo-3', label: 'Fronteira',   title: 'ICM Pós-Flop',            desc: 'Downward Drift, Dissipação de RP por street e dinâmica do Chip Leader.' },
-                    { num: '05', id: 'modulo-4', label: 'Aplicação',   title: 'Aplicação Prática',       desc: '10 erros mais comuns e Checklist de decisão em tempo real.' },
+                    { num: '01', id: 'modulo-1', label: 'Fundamento', title: 'O Problema e o Mapa', desc: 'ChipEV vs ICM, Risk Premium, Antevisão e Valuations de Stack.' },
+                    { num: '02', id: 'modulo-2', label: 'Laboratório', title: 'Toy-Games', desc: '5 cenários progressivos de RP 0→24%, do ChipEV puro ao Teto do RP.' },
+                    { num: '03', id: 'parte-ii', label: 'Paradoxo', title: 'Invertendo o RP', desc: 'O que acontece quando o IP carrega RP maior que o OOP.' },
+                    { num: '04', id: 'modulo-3', label: 'Fronteira', title: 'ICM Pós-Flop', desc: 'Downward Drift, Dissipação de RP por street e dinâmica do Chip Leader.' },
+                    { num: '05', id: 'modulo-4', label: 'Aplicação', title: 'Aplicação Prática', desc: '10 erros mais comuns e Checklist de decisão em tempo real.' },
                 ] as const).map(({ num, id, label, title, desc }) => (
                     <a key={id} href={`#${id}`} className="toc-row">
                         {/* Número */}
                         <span style={{
                             fontFamily: 'var(--font-mono)',
+                            fontVariantNumeric: 'tabular-nums',
                             fontSize: '1.1rem',
                             fontWeight: 900,
-                            color: 'rgba(99,102,241,0.35)',
+                            color: 'var(--accent-primary)',
+                            opacity: 0.6,
                             lineHeight: 1,
                         }}>{num}</span>
 
@@ -60,14 +69,14 @@ export default function LeituraICM() {
                                 fontFamily: 'var(--font-body)',
                                 fontSize: '0.9rem',
                                 fontWeight: 600,
-                                color: '#e2e8f0',
+                                color: 'var(--text-main)',
                                 display: 'block',
                                 marginBottom: '0.2rem',
                             }}>{title}</strong>
                             <span style={{
                                 fontFamily: 'var(--font-body)',
                                 fontSize: '0.78rem',
-                                color: '#475569',
+                                color: 'var(--text-muted)',
                                 lineHeight: 1.45,
                             }}>{desc}</span>
                         </div>
@@ -77,11 +86,11 @@ export default function LeituraICM() {
                             fontFamily: 'var(--font-mono)',
                             fontSize: '0.55rem',
                             fontWeight: 700,
-                            color: 'rgba(99,102,241,0.45)',
+                            color: 'var(--accent-primary)',
                             textTransform: 'uppercase',
                             letterSpacing: '0.12em',
                             whiteSpace: 'nowrap',
-                        }}>{label} &rarr;</span>
+                        }}>{label} <i className="fa-solid fa-arrow-right" style={{ marginLeft: '4px' }} /></span>
                     </a>
                 ))}
             </section>
@@ -96,7 +105,7 @@ export default function LeituraICM() {
 
                 <div className="callout">
                     <p><strong>Definição:</strong> Risk Premium é a equity adicional, acima do pot odds, que um jogador precisa ter para justificar um call de all-in sob a pressão do ICM. Ele mede o &quot;custo do risco&quot; que o modelo de torneio impõe a uma jogada.</p>
-                    <p style={{ marginBottom: 0, borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '0.75rem', marginTop: '0.75rem', fontSize: '0.9rem', color: '#94a3b8' }}>
+                    <p style={{ marginBottom: 0, borderTop: '1px solid var(--glass-border)', paddingTop: '0.75rem', marginTop: '0.75rem', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
                         <strong>Nota temporal:</strong> O RP aqui definido é o valor <strong>pré-flop</strong> — com a stack total em risco potencial. Post-flop, conforme fichas entram no pote e a stack restante diminui, o RP residual de cada decisão subsequente decresce proporcionalmente. No river de uma mão bem jogada, o RP pode ter dissipado mais de 70% do valor original.
                     </p>
                 </div>
@@ -113,7 +122,7 @@ export default function LeituraICM() {
                 <div className="callout">
                     <h4 style={{ marginTop: 0 }}>RP de Ida vs. RP de Volta</h4>
                     <p>Existem dois tipos de RPs em um cenário de Single Raised Pot (SRP): o <strong>&quot;RP de ida&quot;</strong> (do jogador que abre a rodada) e o <strong>&quot;RP de volta&quot;</strong> (do jogador que responde). Esses RPs geralmente diferem e a dinâmica entre eles é crucial:</p>
-                    <ul style={{ marginLeft: '1.5rem', color: '#cbd5e1' }}>
+                    <ul style={{ marginLeft: '1.5rem', color: 'var(--text-main)' }}>
                         <li>Se os RPs são similares, isso leva a uma estratégia mais passiva, como um acordo silencioso para evitar situações de risco.</li>
                         <li>Se o &quot;RP de ida&quot; for 25% maior que o &quot;RP de volta&quot;, essa diferença simboliza a pressão adicional que o jogador com menor RP pode aplicar.</li>
                         <li>Se o &quot;RP de volta&quot; for o dobro do &quot;RP de ida&quot;, o jogador com menor RP pode exercer pressão substancial tanto pré quanto pós-flop.</li>
@@ -143,7 +152,7 @@ export default function LeituraICM() {
 
                 <h3>Toy Game 1 (ChipEV Puro)</h3>
                 <p>IP possui 6 combos de value e 3 combos de bluff. KK paga 50% das vezes para neutralizar o EV dos bluffs do IP.</p>
-                <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--accent-primary)' }}>a = (100 / 200 = 0,5) &rarr; 1 - a = 50% de defesa</p>
+                <p style={{ fontFamily: 'var(--font-mono)', fontVariantNumeric: 'tabular-nums', fontSize: '0.85rem', color: 'var(--accent-primary)' }}>a = (100 / 200 = 0,5) <i className="fa-solid fa-arrow-right" style={{ margin: '0 4px' }} /> 1 - a = 50% de defesa</p>
 
                 <h3>Toy Game 2 (RP: IP 3% | OOP 6%)</h3>
                 <p>O IP aumentou os bluffs de 3 para 4,2 combinações, enquanto o OOP começou a desistir um pouco mais. Ambos possuem um Risk Premium relativamente baixo, indicando baixo risco, embora ainda presente. O IP possui uma <strong>vantagem de risco significativa</strong> e não enfrenta o risco de eliminação ao fazer um shove.</p>
@@ -214,13 +223,13 @@ export default function LeituraICM() {
                     </tbody>
                 </table>
 
-                <p style={{ fontSize: '0.85rem', color: '#64748b', fontStyle: 'italic', margin: '0.5rem 0 2rem' }}>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontStyle: 'italic', margin: '0.5rem 0 2rem' }}>
                     Nota: Os RPs acima são pré-flop (all-in imediato). Em Toy Games não há streets pós-flop, logo não há dissipação. Em cenários reais de Mesa Final, cada call ou aposta post-flop reduz o RP residual — veja o tab Dissipação RP no simulador.
                 </p>
 
                 <div style={{ textAlign: 'center', margin: '3rem 0' }}>
                     <Link href="/tools/simulador" className="btn-primary">
-                        &#127918; Abrir Simulador Interativo
+                        <i className="fa-solid fa-gamepad" style={{ marginRight: '8px' }} /> Abrir Simulador Interativo
                     </Link>
                 </div>
 
@@ -330,7 +339,7 @@ export default function LeituraICM() {
 
                 <h3>3.3 O Impacto das Configurações de Mesa</h3>
                 <p>As configurações da mesa geram diversos RPs e a estrutura de payjumps influencia diretamente esses valores:</p>
-                <ul style={{ marginLeft: '1.5rem', color: '#cbd5e1' }}>
+                <ul style={{ marginLeft: '1.5rem', color: 'var(--text-main)' }}>
                     <li><strong>Estruturas &quot;top-heavy&quot;</strong> (premiação concentrada no topo): o RP das stacks menores é reduzido, incentivando-os a arriscar mais.</li>
                     <li><strong>Estruturas equilibradas:</strong> o RP das stacks menores aumenta, pois a queda em posições inferiores é menos punitiva.</li>
                     <li>À medida que o número de jogadores diminui, o RP médio também cai.</li>
@@ -341,7 +350,7 @@ export default function LeituraICM() {
 
                 <h3>3.5 Ranges Condensados sob Pressão</h3>
                 <p>Jogar um range condensado versus um range linear pós-flop geralmente não é tão lucrativo. Ranges condensados são projetados para reter equity, não necessariamente para gerar EV. Quando enfrentamos uma desvantagem de risco e temos poucas fichas, o cenário se torna ainda mais complicado:</p>
-                <ul style={{ marginLeft: '1.5rem', color: '#cbd5e1' }}>
+                <ul style={{ marginLeft: '1.5rem', color: 'var(--text-main)' }}>
                     <li>Não temos incentivos para aumentar o pote com raises</li>
                     <li>Não veremos muitos shoves, pois um range condensado não é equipado para isso</li>
                     <li>Ao optar por call, a tendência é continuar enfrentando pressão no turn e river</li>
@@ -399,7 +408,7 @@ export default function LeituraICM() {
 
                 <div className="callout callout-emerald">
                     <h4 style={{ color: 'var(--accent-emerald)', marginTop: 0 }}>Checklist de Decisão (Tempo Real)</h4>
-                    <ol style={{ marginTop: '1rem', marginLeft: '1.5rem', listStyleType: 'decimal', color: '#cbd5e1' }}>
+                    <ol style={{ marginTop: '1rem', marginLeft: '1.5rem', listStyleType: 'decimal', color: 'var(--text-main)' }}>
                         <li><strong>Quem Cobre Quem?</strong> (Define a Vantagem de Risco)</li>
                         <li><strong>Short Stacks Presentes?</strong> (Eleva o RP geral)</li>
                         <li><strong>Estrutura de Pagamentos?</strong> (Flat vs Top-Heavy)</li>
@@ -416,8 +425,8 @@ export default function LeituraICM() {
             </article>
 
             <nav className="article-nav">
-                <Link href="/aula-icm">&larr; Voltar para a Aula</Link>
-                <Link href="/conceitos-icm">Glossário Formal &rarr;</Link>
+                <Link href="/aula-icm"><i className="fa-solid fa-arrow-left" style={{ marginRight: '4px' }} /> Voltar para a Aula</Link>
+                <Link href="/conceitos-icm">Glossário Formal <i className="fa-solid fa-arrow-right" style={{ marginLeft: '4px' }} /></Link>
             </nav>
         </main>
     );

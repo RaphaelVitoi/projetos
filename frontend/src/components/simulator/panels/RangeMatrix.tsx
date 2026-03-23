@@ -25,7 +25,7 @@ export default function RangeMatrix({ ipRp, oopRp, scenarioId }: Readonly<RangeM
     const [overrides, setOverrides] = useState<Record<string, string>>({});
     const [perspective, setPerspective] = useState<Perspective>('ip');
 
-    // Carrega as edições persistidas isoladas por cenário
+    // Carrega as edições persistidas isoladas por cenário no navegador do usuário
     useEffect(() => {
         try {
             const storageKey = `rangeMatrixOverrides_${scenarioId}`;
@@ -92,7 +92,7 @@ export default function RangeMatrix({ ipRp, oopRp, scenarioId }: Readonly<RangeM
         }
     };
 
-    const ipColor  = '#818cf8'; // índigo
+    const ipColor = '#818cf8'; // índigo
     const oopColor = '#f43f5e'; // rose
 
     return (

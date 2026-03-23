@@ -24,8 +24,8 @@ interface NashPanelProps {
   nashRiver: NashResult;
   streetFreqs: StreetChipEvFreqs;
   streetRps: {
-    flop:  { ip: number; oop: number };
-    turn:  { ip: number; oop: number };
+    flop: { ip: number; oop: number };
+    turn: { ip: number; oop: number };
     river: { ip: number; oop: number };
   };
   aggressionFactor: number;
@@ -46,28 +46,28 @@ function InfoTooltip({ text }: { text: string }) {
 
   const tooltipEl = pos && typeof document !== 'undefined'
     ? ReactDOM.createPortal(
-        <span style={{
-          position: 'fixed',
-          top: pos.y,
-          left: pos.x,
-          transform: 'translate(-50%, -100%)',
-          width: '240px',
-          background: '#0f172a',
-          border: '1px solid rgba(99,102,241,0.35)',
-          borderRadius: '6px',
-          padding: '0.5rem 0.7rem',
-          fontSize: '0.65rem',
-          color: '#cbd5e1',
-          lineHeight: 1.55,
-          zIndex: 9999,
-          pointerEvents: 'none',
-          whiteSpace: 'normal',
-          boxShadow: '0 4px 20px rgba(0,0,0,0.6)',
-        }}>
-          {text}
-        </span>,
-        document.body
-      )
+      <span style={{
+        position: 'fixed',
+        top: pos.y,
+        left: pos.x,
+        transform: 'translate(-50%, -100%)',
+        width: '260px',
+        background: 'var(--sim-bg-panel, #0f172a)',
+        border: '1px solid rgba(99,102,241,0.35)',
+        borderRadius: '6px',
+        padding: '0.5rem 0.7rem',
+        fontSize: '0.65rem',
+        color: 'var(--sim-text-main)',
+        lineHeight: 1.55,
+        zIndex: 9999,
+        pointerEvents: 'none',
+        whiteSpace: 'normal',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.6)',
+      }}>
+        {text}
+      </span>,
+      document.body
+    )
     : null;
 
   return (
@@ -77,7 +77,7 @@ function InfoTooltip({ text }: { text: string }) {
       onMouseEnter={handleEnter}
       onMouseLeave={() => setPos(null)}
     >
-      <span style={{ fontSize: '0.62rem', color: '#64748b', lineHeight: 1 }}>ⓘ</span>
+      <span style={{ fontSize: '0.62rem', color: 'var(--sim-text-dim)', lineHeight: 1 }}>ⓘ</span>
       {tooltipEl}
     </span>
   );
@@ -91,7 +91,7 @@ function fmt(delta: number): string {
 
 // Cor do delta via CSS vars — propaga mudanças de paleta automaticamente
 function deltaColor(delta: number): string {
-  if (delta > 1)  return 'var(--sim-color-emerald)';
+  if (delta > 1) return 'var(--sim-color-emerald)';
   if (delta < -1) return 'var(--sim-color-rose-light)';
   return 'var(--sim-text-faint)';
 }
@@ -132,7 +132,7 @@ function FreqInput({
           outline: 'none',
         }}
       />
-      <span style={{ fontSize: '0.58rem', color: '#475569' }}>% freq</span>
+      <span style={{ fontSize: '0.58rem', color: 'var(--sim-text-subtle)' }}>% freq</span>
     </div>
   );
 }
@@ -160,7 +160,7 @@ function ActionRow({
   return (
     <div style={{
       display: 'grid',
-      gridTemplateColumns: '60px 72px 24px 1fr 52px',
+      gridTemplateColumns: '60px 72px 24px 1fr 64px',
       alignItems: 'center',
       gap: '0.4rem',
       padding: '0.35rem 0',
@@ -193,6 +193,7 @@ function ActionRow({
           fontSize: '0.9rem',
           fontWeight: 800,
           color: 'var(--sim-text-main)',
+          fontVariantNumeric: 'tabular-nums',
           letterSpacing: '-0.02em',
         }}>
           <AnimatedNumber value={result.center} suffix="%" />
@@ -201,21 +202,48 @@ function ActionRow({
           fontSize: '0.58rem',
           color: 'var(--sim-text-dim)',
           fontFamily: 'var(--sim-font-mono)',
+          fontVariantNumeric: 'tabular-nums',
         }}>
           ±{result.spread.toFixed(0)}
         </span>
       </div>
 
       {/* Delta */}
-      <span style={{
-        fontSize: '0.6rem',
-        fontWeight: 700,
-        color: deltaColor(result.delta),
-        fontFamily: 'var(--sim-font-mono)',
-        textAlign: 'right',
-      }}>
-        {fmt(result.delta)}
-      </span>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '3px' }}>
+        <span style={{
+          fontSize: '0.6rem',
+          fontWeight: 700,
+          color: deltaColor(result.delta),
+          fontFamily: 'var(--sim-font-mono)',
+          fontVariantNumeric: 'tabular-nums',
+          textAlign: 'right',
+          lineHeight: 1,
+        }}>
+          {fmt(result.delta)}
+        </span>
+        {/* Sparkline de Contração/Expansão (Zero-centered) */}
+        <div style={{
+          width: '100%',
+          height: '4px',
+          background: 'rgba(0,0,0,0.3)',
+          border: '1px solid rgba(255,255,255,0.05)',
+          borderRadius: '2px',
+          position: 'relative',
+          overflow: 'hidden'
+        }}>
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            bottom: 0,
+            left: `${result.delta >= 0 ? 50 : Math.max(0, 50 - Math.abs(result.delta))}%`,
+            width: `${Math.min(50, Math.abs(result.delta))}%`,
+            background: deltaColor(result.delta),
+            borderRadius: '1px',
+            transition: 'all 0.4s ease'
+          }} />
+          <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: '1px', background: 'rgba(255,255,255,0.15)' }} />
+        </div>
+      </div>
     </div>
   );
 }
@@ -235,15 +263,15 @@ export default function NashPanel({
 
   // Mapa de dados por street — evita if/else espalhados pelo JSX
   const streetData = {
-    flop:  { nash: nashFlop,  freqs: streetFreqs.flop,  rps: streetRps.flop,  label: 'FLOP',  color: '#818cf8' },
-    turn:  { nash: nashTurn,  freqs: streetFreqs.turn,  rps: streetRps.turn,  label: 'TURN',  color: '#34d399' },
-    river: { nash: nashRiver, freqs: streetFreqs.river, rps: streetRps.river, label: 'RIVER', color: '#fb7185' },
+    flop: { nash: nashFlop, freqs: streetFreqs.flop, rps: streetRps.flop, label: 'FLOP', color: 'var(--sim-color-indigo)' },
+    turn: { nash: nashTurn, freqs: streetFreqs.turn, rps: streetRps.turn, label: 'TURN', color: 'var(--sim-color-emerald)' },
+    river: { nash: nashRiver, freqs: streetFreqs.river, rps: streetRps.river, label: 'RIVER', color: 'var(--sim-color-rose)' },
   };
 
   const current = streetData[activeStreet];
   const { deltaRp, bExponent } = current.nash;
 
-  const deltaSign  = deltaRp >= 0 ? '+' : '';
+  const deltaSign = deltaRp >= 0 ? '+' : '';
   const deltaLabel = `${deltaSign}${deltaRp.toFixed(1)} p.p.`;
   const deltaLabelColor = deltaRp > 1
     ? 'var(--sim-color-amber)'
@@ -269,7 +297,7 @@ export default function NashPanel({
               margin: 0,
               fontSize: '0.65rem',
               fontWeight: 900,
-              color: '#94a3b8',
+              color: 'var(--sim-text-main)',
               textTransform: 'uppercase',
               letterSpacing: '0.15em',
             }}>
@@ -278,7 +306,7 @@ export default function NashPanel({
             <p style={{
               margin: '0.25rem 0 0',
               fontSize: '0.6rem',
-              color: '#64748b',
+              color: 'var(--sim-text-dim)',
               lineHeight: 1.45,
             }}>
               Como o ICM distorce cada ação em relação ao equilíbrio GTO base — por flop, turn e river.
@@ -288,32 +316,34 @@ export default function NashPanel({
           {/* Parâmetros do modelo da street ativa */}
           <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center', flexShrink: 0 }}>
             <span style={{
-                padding: '0.15rem 0.5rem',
-                borderRadius: '4px',
-                background: 'rgba(15,23,42,0.6)',
-                border: '1px solid rgba(255,255,255,0.07)',
-                fontSize: '0.58rem',
-                fontWeight: 700,
-                color: deltaLabelColor,
-                fontFamily: 'var(--sim-font-mono)',
-                display: 'inline-flex',
-                alignItems: 'center',
-              }}>
+              padding: '0.15rem 0.5rem',
+              borderRadius: '4px',
+              background: 'rgba(15,23,42,0.6)',
+              border: '1px solid rgba(255,255,255,0.07)',
+              fontSize: '0.58rem',
+              fontWeight: 700,
+              color: deltaLabelColor,
+              fontFamily: 'var(--sim-font-mono)',
+              fontVariantNumeric: 'tabular-nums',
+              display: 'inline-flex',
+              alignItems: 'center',
+            }}>
               ΔRP {deltaLabel}
               <InfoTooltip text="ΔRP = Vantagem de Risco (Risk Premium IP − OOP). Positivo = IP sob maior pressão ICM." />
             </span>
             <span style={{
-                padding: '0.15rem 0.5rem',
-                borderRadius: '4px',
-                background: 'rgba(15,23,42,0.6)',
-                border: '1px solid rgba(255,255,255,0.07)',
-                fontSize: '0.58rem',
-                fontWeight: 700,
-                color: '#475569',
-                fontFamily: 'var(--sim-font-mono)',
-                display: 'inline-flex',
-                alignItems: 'center',
-              }}>
+              padding: '0.15rem 0.5rem',
+              borderRadius: '4px',
+              background: 'rgba(15,23,42,0.6)',
+              border: '1px solid rgba(255,255,255,0.07)',
+              fontSize: '0.58rem',
+              fontWeight: 700,
+              color: 'var(--sim-text-subtle)',
+              fontFamily: 'var(--sim-font-mono)',
+              fontVariantNumeric: 'tabular-nums',
+              display: 'inline-flex',
+              alignItems: 'center',
+            }}>
               Curv. {bExponent.toFixed(2)}
               <InfoTooltip text="Expoente da curva côncava: mede como a pressão ICM amortece conforme o RP médio aumenta. Próximo de 1 = quase linear; próximo de 0 = muito côncavo." />
             </span>
@@ -337,7 +367,7 @@ export default function NashPanel({
                 borderRadius: '6px',
                 border: `1px solid ${isActive ? d.color : 'rgba(255,255,255,0.06)'}`,
                 background: isActive ? `${d.color}18` : 'transparent',
-                color: isActive ? d.color : '#475569',
+                color: isActive ? d.color : 'var(--sim-text-subtle)',
                 fontSize: '0.58rem',
                 fontWeight: 700,
                 textTransform: 'uppercase',
@@ -348,7 +378,7 @@ export default function NashPanel({
             >
               {d.label}
               <br />
-              <span style={{ fontSize: '0.58rem', fontFamily: 'monospace', color: 'rgba(148,163,184,0.75)' }}>
+              <span style={{ fontSize: '0.58rem', fontFamily: 'var(--sim-font-mono)', fontVariantNumeric: 'tabular-nums', color: 'var(--sim-text-dim)', opacity: isActive ? 1 : 0.7 }}>
                 IP {d.rps.ip.toFixed(1)}% · OOP {d.rps.oop.toFixed(1)}%
               </span>
             </button>
@@ -359,23 +389,23 @@ export default function NashPanel({
       {/* Cabeçalho das colunas */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: '60px 72px 24px 1fr 52px',
+        gridTemplateColumns: '60px 72px 24px 1fr 64px',
         gap: '0.4rem',
         marginBottom: '0.15rem',
         paddingBottom: '0.4rem',
         borderBottom: '1px solid rgba(255,255,255,0.05)',
       }}>
-        <span style={{ fontSize: '0.58rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Ação</span>
-        <span style={{ fontSize: '0.58rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'flex', alignItems: 'center' }}>
+        <span style={{ fontSize: '0.58rem', color: 'var(--sim-text-dim)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Ação</span>
+        <span style={{ fontSize: '0.58rem', color: 'var(--sim-text-dim)', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'flex', alignItems: 'center' }}>
           Freq. GTO Base
           <InfoTooltip text="Com que frequência o solver usa essa ação neste spot, sem ICM. Não é o tamanho da aposta — é de quantas mãos você a executa. Insira os valores do seu solver." />
         </span>
         <span />
-        <span style={{ fontSize: '0.58rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'flex', alignItems: 'center' }}>
+        <span style={{ fontSize: '0.58rem', color: 'var(--sim-text-dim)', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'flex', alignItems: 'center' }}>
           Com ICM ±margem
           <InfoTooltip text="Estimativa de quanto você deveria executar essa ação levando o ICM em conta. A margem (±) indica que o modelo não é exato: use como referência direcional, não como número absoluto." />
         </span>
-        <span style={{ fontSize: '0.58rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', textAlign: 'right', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+        <span style={{ fontSize: '0.58rem', color: 'var(--sim-text-dim)', textTransform: 'uppercase', letterSpacing: '0.08em', textAlign: 'right', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
           Δ p.p.
           <InfoTooltip text="1 p.p. = 1% de frequência dessa ação. Δ = −15: a ação encolhe 15% — ex., de 60% para 45%. Os 15% de combos mais fracos saem primeiro: bluffs mais pobres, valor mais thin. Positivo: a ação expande — combos que o solver descartava passam a ser viáveis." />
         </span>
@@ -386,7 +416,7 @@ export default function NashPanel({
         <div style={{
           fontSize: '0.58rem',
           fontWeight: 700,
-          color: '#818cf8',
+          color: 'var(--sim-color-indigo)',
           textTransform: 'uppercase',
           letterSpacing: '0.12em',
           paddingTop: '0.5rem',
@@ -430,7 +460,7 @@ export default function NashPanel({
         <div style={{
           fontSize: '0.58rem',
           fontWeight: 700,
-          color: '#fb7185',
+          color: 'var(--sim-color-rose)',
           textTransform: 'uppercase',
           letterSpacing: '0.12em',
           paddingTop: '0.5rem',
@@ -492,6 +522,7 @@ export default function NashPanel({
               : aggressionFactor > 1.1
                 ? 'var(--sim-color-amber)'
                 : 'var(--sim-color-emerald)',
+            fontVariantNumeric: 'tabular-nums',
             letterSpacing: '-0.02em',
           }}>
             {aggressionFactor.toFixed(1)}×
@@ -508,9 +539,9 @@ export default function NashPanel({
           style={{ width: '100%', accentColor: 'var(--sim-color-indigo)' }}
         />
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.25rem' }}>
-          <span style={{ fontSize: '0.58rem', color: 'var(--sim-text-dim)' }}>Passivo 0.5×</span>
-          <span style={{ fontSize: '0.58rem', color: 'var(--sim-text-dim)' }}>GTO 1.0×</span>
-          <span style={{ fontSize: '0.58rem', color: 'var(--sim-text-dim)' }}>Agressivo 1.5×</span>
+          <span style={{ fontSize: '0.58rem', color: 'var(--sim-text-dim)', fontVariantNumeric: 'tabular-nums' }}>Passivo 0.5×</span>
+          <span style={{ fontSize: '0.58rem', color: 'var(--sim-text-dim)', fontVariantNumeric: 'tabular-nums' }}>GTO 1.0×</span>
+          <span style={{ fontSize: '0.58rem', color: 'var(--sim-text-dim)', fontVariantNumeric: 'tabular-nums' }}>Agressivo 1.5×</span>
         </div>
       </div>
 

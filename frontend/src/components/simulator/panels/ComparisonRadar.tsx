@@ -28,6 +28,59 @@ interface ComparisonRadarProps {
   nashFlop?: NashResult;
 }
 
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    const valA = payload[0]?.value;
+    const valB = payload.length > 1 ? payload[1]?.value : undefined;
+    const delta = valB !== undefined ? valB - valA : 0;
+
+    return (
+      <div style={{
+        backgroundColor: 'rgba(15, 23, 42, 0.95)',
+        border: '1px solid rgba(99, 102, 241, 0.3)',
+        borderRadius: '8px',
+        padding: '0.85rem',
+        color: '#e2e8f0',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.6)',
+        fontFamily: "'JetBrains Mono', monospace",
+        minWidth: '180px',
+        zIndex: 1000
+      }}>
+        <p style={{ margin: '0 0 0.6rem', fontSize: '0.65rem', fontWeight: 900, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
+          {label}
+        </p>
+        {payload.map((entry: any, index: number) => (
+          <div key={`item-${index}`} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
+            <span style={{ fontSize: '0.65rem', color: entry.color, fontWeight: 700 }}>{entry.name}</span>
+            <span style={{ fontSize: '0.75rem', color: entry.color, fontWeight: 900 }}>{Number(entry.value).toFixed(1)}%</span>
+          </div>
+        ))}
+
+        {valB !== undefined && (
+          <div style={{
+            marginTop: '0.6rem',
+            paddingTop: '0.6rem',
+            borderTop: '1px solid rgba(255,255,255,0.08)',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+            <span style={{ fontSize: '0.6rem', color: '#64748b', fontWeight: 800, letterSpacing: '0.1em' }}>DELTA (Δ)</span>
+            <span style={{
+              fontSize: '0.75rem',
+              fontWeight: 900,
+              color: delta > 0.1 ? '#10b981' : delta < -0.1 ? '#f43f5e' : '#94a3b8',
+            }}>
+              {delta > 0 ? '+' : ''}{delta.toFixed(1)} p.p.
+            </span>
+          </div>
+        )}
+      </div>
+    );
+  }
+  return null;
+};
+
 function buildRadarData(scenario: Scenario, nash?: NashResult) {
   // Bluff = soma das apostas IP (bet_small + bet_large)
   const bluff = nash
@@ -154,15 +207,7 @@ export default function ComparisonRadar({ scenarios, currentId, nashFlop }: Read
                 strokeWidth={2}
               />
             )}
-            <Tooltip
-              contentStyle={{
-                backgroundColor: 'rgba(15, 23, 42, 0.95)',
-                border: '1px solid rgba(99, 102, 241, 0.3)',
-                borderRadius: '8px',
-                color: '#e2e8f0'
-              }}
-              itemStyle={{ fontSize: '0.75rem', fontWeight: 600, fontFamily: "'JetBrains Mono', monospace" }}
-            />
+            <Tooltip content={<CustomTooltip />} />
             <Legend
               wrapperStyle={{ fontSize: '0.6rem', color: '#94a3b8' }}
             />

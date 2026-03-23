@@ -369,17 +369,17 @@ export default function PerspectivePanel() {
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
         <div>
-          <h3 style={{ margin: 0, fontSize: '0.65rem', fontWeight: 900, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
+          <h3 style={{ margin: 0, fontSize: '0.65rem', fontWeight: 900, color: 'var(--sim-text-subtle)', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
             Perspectiva &amp; Esperança Matemática
           </h3>
-          <p style={{ margin: '0.3rem 0 0', fontSize: '0.58rem', color: '#475569', lineHeight: 1.5 }}>
+          <p style={{ margin: '0.3rem 0 0', fontSize: '0.58rem', color: 'var(--sim-text-dim)', lineHeight: 1.5 }}>
             Framework original Raphael Vitoi · Malmuth-Harville posicional
           </p>
         </div>
         <span style={{
           fontSize: '0.58rem',
           fontWeight: 700,
-          color: '#6366f1',
+          color: 'var(--sim-color-indigo)',
           background: 'rgba(99,102,241,0.1)',
           border: '1px solid rgba(99,102,241,0.25)',
           borderRadius: '6px',
@@ -402,7 +402,7 @@ export default function PerspectivePanel() {
               borderRadius: '6px',
               background: 'rgba(30,41,59,0.5)',
               border: '1px solid rgba(255,255,255,0.05)',
-              color: '#94a3b8',
+              color: 'var(--sim-text-subtle)',
               fontSize: '0.58rem',
               fontWeight: 700,
               cursor: 'pointer',
@@ -444,7 +444,7 @@ export default function PerspectivePanel() {
                 borderRadius: '6px',
                 background: 'rgba(30,41,59,0.5)',
                 border: '1px dashed #334155',
-                color: playerCount >= 8 ? '#334155' : '#64748b',
+                color: playerCount >= 8 ? '#334155' : 'var(--sim-text-dim)',
                 fontSize: '0.58rem',
                 fontWeight: 700,
                 cursor: playerCount >= 8 ? 'default' : 'pointer',
@@ -460,7 +460,7 @@ export default function PerspectivePanel() {
                   borderRadius: '6px',
                   background: 'rgba(225,29,72,0.08)',
                   border: '1px solid rgba(225,29,72,0.2)',
-                  color: '#e11d48',
+                  color: 'var(--sim-color-rose)',
                   fontSize: '0.58rem',
                   fontWeight: 700,
                   cursor: 'pointer',
@@ -485,7 +485,7 @@ export default function PerspectivePanel() {
                 min={0}
                 value={prize}
                 onChange={(e) => updatePrize(idx, parseFloat(e.target.value) || 0)}
-                style={{ ...numInputStyle, flex: 1, width: 'auto', color: '#10b981' }}
+                style={{ ...numInputStyle, flex: 1, width: 'auto', color: 'var(--sim-color-emerald)' }}
               />
             </div>
           ))}
@@ -498,7 +498,7 @@ export default function PerspectivePanel() {
                 borderRadius: '6px',
                 background: 'rgba(30,41,59,0.5)',
                 border: '1px dashed #334155',
-                color: '#64748b',
+                color: 'var(--sim-text-dim)',
                 fontSize: '0.58rem',
                 fontWeight: 700,
                 cursor: 'pointer',
@@ -514,7 +514,7 @@ export default function PerspectivePanel() {
                   borderRadius: '6px',
                   background: 'rgba(225,29,72,0.08)',
                   border: '1px solid rgba(225,29,72,0.2)',
-                  color: '#e11d48',
+                  color: 'var(--sim-color-rose)',
                   fontSize: '0.58rem',
                   fontWeight: 700,
                   cursor: 'pointer',
@@ -533,11 +533,11 @@ export default function PerspectivePanel() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '0.75rem' }}>
           {/* Hero */}
           <div>
-            <label style={{ ...labelStyle, color: '#818cf8' }}>Hero</label>
+            <label style={{ ...labelStyle, color: 'var(--sim-color-indigo-light)' }}>Hero</label>
             <select
               value={heroIdx}
               onChange={(e) => setHeroIdx(Number(e.target.value))}
-              style={{ ...inputStyle, width: '100%', color: '#818cf8' }}
+              style={{ ...inputStyle, width: '100%', color: 'var(--sim-color-indigo-light)' }}
             >
               {Array.from({ length: playerCount }).map((_, i) => (
                 <option key={i} value={i}>{names[i] ?? `Jogador ${i + 1}`}</option>
@@ -547,11 +547,11 @@ export default function PerspectivePanel() {
 
           {/* Villain */}
           <div>
-            <label style={{ ...labelStyle, color: '#f43f5e' }}>Villain</label>
+            <label style={{ ...labelStyle, color: 'var(--sim-color-rose)' }}>Villain</label>
             <select
               value={villainIdx}
               onChange={(e) => setVillainIdx(Number(e.target.value))}
-              style={{ ...inputStyle, width: '100%', color: '#f43f5e' }}
+              style={{ ...inputStyle, width: '100%', color: 'var(--sim-color-rose)' }}
             >
               {Array.from({ length: playerCount }).map((_, i) => (
                 <option key={i} value={i}>{names[i] ?? `Jogador ${i + 1}`}</option>
@@ -593,7 +593,7 @@ export default function PerspectivePanel() {
               step={0.01}
               value={winProb}
               onChange={(e) => setWinProb(Math.min(1, Math.max(0, parseFloat(e.target.value) || 0)))}
-              style={{ ...numInputStyle, width: '100%', color: '#10b981' }}
+              style={{ ...numInputStyle, width: '100%', color: 'var(--sim-color-emerald)' }}
             />
           </div>
         </div>
@@ -606,7 +606,7 @@ export default function PerspectivePanel() {
             borderRadius: '6px',
             background: 'rgba(244,63,94,0.1)',
             border: '1px solid rgba(244,63,94,0.25)',
-            color: '#f43f5e',
+            color: 'var(--sim-color-rose)',
             fontSize: '0.58rem',
             fontWeight: 600,
           }}>
@@ -623,19 +623,19 @@ export default function PerspectivePanel() {
             <PerspectiveBlock
               label="Atual"
               probs={result.currentPerspectiva}
-              color="#94a3b8"
+              color="var(--sim-text-subtle)"
               prizes={prizes}
             />
             <PerspectiveBlock
               label="Se Ganhar"
               probs={result.winPerspectiva}
-              color="#10b981"
+              color="var(--sim-color-emerald)"
               prizes={prizes}
             />
             <PerspectiveBlock
               label="Se Perder"
               probs={result.losePerspectiva}
-              color="#f43f5e"
+              color="var(--sim-color-rose)"
               prizes={prizes}
             />
           </div>
@@ -648,7 +648,7 @@ export default function PerspectivePanel() {
             padding: '1rem',
             marginBottom: '1rem',
           }}>
-            <h4 style={{ fontSize: '0.58rem', fontWeight: 900, color: '#818cf8', textTransform: 'uppercase', letterSpacing: '0.15em', margin: '0 0 0.75rem' }}>
+            <h4 style={{ fontSize: '0.58rem', fontWeight: 900, color: 'var(--sim-color-indigo-light)', textTransform: 'uppercase', letterSpacing: '0.15em', margin: '0 0 0.75rem' }}>
               Análise Quantitativa
             </h4>
 
@@ -657,7 +657,7 @@ export default function PerspectivePanel() {
               label="Equity atual"
               value={`${result.currentEquityPct.toFixed(2)}%`}
               sub={`Tier: `}
-              color="#94a3b8"
+              color="var(--sim-text-subtle)"
             />
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '-0.3rem', marginBottom: '0.3rem' }}>
               {tierBadge(result.currentTier)}
@@ -665,12 +665,12 @@ export default function PerspectivePanel() {
 
             {/* Delta Win */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.3rem 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-              <span style={{ fontSize: '0.6rem', color: '#64748b' }}>
+              <span style={{ fontSize: '0.6rem', color: 'var(--sim-text-dim)' }}>
                 Delta se ganhar
                 <span style={{ marginLeft: '0.4rem' }}>{tierBadge(result.winTier)}</span>
               </span>
               <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                <span className={styles.dataMono} style={{ fontSize: '0.58rem', color: '#475569' }}>
+                <span className={styles.dataMono} style={{ fontSize: '0.58rem', color: 'var(--sim-text-subtle)' }}>
                   {result.winEquityPct.toFixed(2)}%
                 </span>
                 {deltaChip(result.deltaWinPct)}
@@ -679,12 +679,12 @@ export default function PerspectivePanel() {
 
             {/* Delta Lose */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.3rem 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-              <span style={{ fontSize: '0.6rem', color: '#64748b' }}>
+              <span style={{ fontSize: '0.6rem', color: 'var(--sim-text-dim)' }}>
                 Delta se perder
                 <span style={{ marginLeft: '0.4rem' }}>{tierBadge(result.loseTier)}</span>
               </span>
               <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                <span className={styles.dataMono} style={{ fontSize: '0.58rem', color: '#475569' }}>
+                <span className={styles.dataMono} style={{ fontSize: '0.58rem', color: 'var(--sim-text-subtle)' }}>
                   {result.loseEquityPct.toFixed(2)}%
                 </span>
                 {deltaChip(result.deltaLosePct)}
@@ -696,9 +696,9 @@ export default function PerspectivePanel() {
 
             {/* Esperança */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.35rem 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-              <span style={{ fontSize: '0.6rem', color: '#818cf8', fontWeight: 700 }}>Esperança Matemática</span>
+              <span style={{ fontSize: '0.6rem', color: 'var(--sim-color-indigo)', fontWeight: 700 }}>Esperança Matemática</span>
               <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                <span className={styles.dataMono} style={{ fontSize: '0.58rem', color: '#475569' }}>
+                <span className={styles.dataMono} style={{ fontSize: '0.58rem', color: 'var(--sim-text-subtle)' }}>
                   {result.esperanca >= 0 ? '+' : ''}{result.esperanca.toFixed(2)} chips
                 </span>
                 {deltaChip(result.esperancaPct)}
@@ -707,9 +707,9 @@ export default function PerspectivePanel() {
 
             {/* ICM EV Puro */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.35rem 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-              <span style={{ fontSize: '0.6rem', color: '#64748b' }}>ICM EV puro do pot</span>
+              <span style={{ fontSize: '0.6rem', color: 'var(--sim-text-dim)' }}>ICM EV puro do pot</span>
               <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                <span className={styles.dataMono} style={{ fontSize: '0.58rem', color: '#475569' }}>
+                <span className={styles.dataMono} style={{ fontSize: '0.58rem', color: 'var(--sim-text-subtle)' }}>
                   {result.potIcmEv >= 0 ? '+' : ''}{result.potIcmEv.toFixed(2)} chips
                 </span>
                 {deltaChip(result.potIcmEvPct)}
@@ -719,8 +719,8 @@ export default function PerspectivePanel() {
             {/* Externalidade */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.35rem 0' }}>
               <div>
-                <span style={{ fontSize: '0.6rem', color: '#f59e0b', fontWeight: 700 }}>Externalidade</span>
-                <p style={{ margin: '0.15rem 0 0', fontSize: '0.55rem', color: '#475569', lineHeight: 1.4 }}>
+                <span style={{ fontSize: '0.6rem', color: 'var(--sim-color-amber)', fontWeight: 700 }}>Externalidade</span>
+                <p style={{ margin: '0.15rem 0 0', fontSize: '0.55rem', color: 'var(--sim-text-subtle)', lineHeight: 1.4 }}>
                   Esperança &minus; ICM EV puro · impacto nos outros jogadores
                 </p>
               </div>
@@ -769,10 +769,10 @@ export default function PerspectivePanel() {
               background: 'rgba(99,102,241,0.06)',
               border: '1px solid rgba(99,102,241,0.15)',
               fontSize: '0.6rem',
-              color: '#94a3b8',
+              color: 'var(--sim-text-main)',
               lineHeight: 1.7,
             }}>
-              <i className="fa-solid fa-lightbulb" style={{ color: '#818cf8', marginRight: '6px' }} />
+              <i className="fa-solid fa-lightbulb" style={{ color: 'var(--sim-color-indigo-light)', marginRight: '6px' }} />
               {insight}
             </div>
           )}
@@ -784,13 +784,13 @@ export default function PerspectivePanel() {
         <div style={{
           padding: '1.5rem',
           textAlign: 'center',
-          color: '#475569',
+          color: 'var(--sim-text-subtle)',
           fontSize: '0.65rem',
           borderRadius: '10px',
           background: 'rgba(15,23,42,0.4)',
           border: '1px dashed #334155',
         }}>
-          <i className="fa-solid fa-triangle-exclamation" style={{ marginRight: '6px', color: '#f59e0b' }} />
+          <i className="fa-solid fa-triangle-exclamation" style={{ marginRight: '6px', color: 'var(--sim-color-amber)' }} />
           Verifique os parametros: stacks positivos, pot &gt; 0, P(Win) entre 0 e 1.
         </div>
       )}

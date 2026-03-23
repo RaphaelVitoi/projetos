@@ -127,8 +127,12 @@ if ($Chaos) {
     $env:TS_NODE_COMPILER_OPTIONS = '{"module":"CommonJS"}'
     
     # Invoca o caos on-the-fly
-    $ChaosCmd = "npx ts-node scripts/tests/chaos-core.ts --intensity $Intensity --target $Target"
-    & $ChaosCmd
+    $ChaosScript = Join-Path $ScriptDirectory "scripts\tests\chaos-core.ts"
+    if (-not (Test-Path $ChaosScript)) {
+        Write-Error "[FAIL] O motor de Engenharia do Caos nao foi encontrado em: $ChaosScript. Certifique-se de cria-lo antes de acionar a infeccao."
+        exit 1
+    }
+    Invoke-Expression "npx ts-node `"$ChaosScript`" --intensity $Intensity --target $Target"
     exit 0
 }
 

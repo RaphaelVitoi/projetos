@@ -63,16 +63,31 @@ export default async function PostSlugPage({ params }: PageProps) {
   if (!post) notFound();
 
   return (
-    <main className="container max-w-3xl mx-auto px-4" style={{ padding: '4rem 0' }}>
-      <Link href="/psicologia-hs" className="inline-flex items-center text-xs font-bold tracking-widest text-slate-400 hover:text-fuchsia-400 uppercase transition-colors mb-8 group">
-        <span className="mr-2 group-hover:-translate-x-1 transition-transform">&larr;</span> Voltar para Laboratório
-      </Link>
+    <main className="container" style={{ maxWidth: '900px', margin: '0 auto', padding: '4rem 1.5rem' }}>
+      <div style={{ marginBottom: '2rem' }}>
+        <Link 
+          href="/psicologia-hs" 
+          style={{
+            display: 'inline-flex', 
+            alignItems: 'center', 
+            gap: '0.5rem',
+            fontSize: '0.7rem', 
+            fontWeight: 700, 
+            color: 'var(--text-muted)',
+            textTransform: 'uppercase', 
+            letterSpacing: '0.15em', 
+            textDecoration: 'none',
+          }}
+        >
+          <i className="fa-solid fa-arrow-left" /> Voltar para Laboratório
+        </Link>
+      </div>
 
-      <article className="animate-fade-up">
-        <header className="mb-10 border-b border-white/5 pb-8">
-          <h1 className="text-3xl md:text-5xl font-heading font-bold text-white mb-4 leading-tight">{post.title}</h1>
+      <article className="animate-fade-up" style={{ marginTop: 0 }}>
+        <header className="article-header" style={{ textAlign: 'left', marginBottom: '2.5rem', paddingBottom: '1.5rem' }}>
+          <h1 className="article-title" style={{ marginTop: 0, marginBottom: '1rem', fontSize: 'clamp(2rem, 4vw, 3rem)' }}>{post.title}</h1>
         </header>
-        <div className="sales-article mt-8" dangerouslySetInnerHTML={{ __html: post.content || post.body || '<p>A entropia corrompeu este registro. Conteúdo em formatação...</p>' }} />
+        <div className="sales-article" style={{ marginTop: '2rem' }} dangerouslySetInnerHTML={{ __html: post.content || post.body || '<p>A entropia corrompeu este registro. Conteúdo em formatação...</p>' }} />
       </article>
     </main>
   );

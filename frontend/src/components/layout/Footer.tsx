@@ -6,7 +6,7 @@ export default function Footer() {
         <a href="https://www.twitch.tv/RaphaelVitoiPoker" target="_blank" rel="noopener" className="social-icon" aria-label="Twitch">
           <span className="fa-brands fa-twitch"></span>
         </a>
-        <a href="https://www.youtube.com/results?search_query=Raphael+Vitoi" target="_blank" rel="noopener" className="social-icon" aria-label="YouTube">
+        <a href="https://www.youtube.com/@RaphaelVitoiPoker" target="_blank" rel="noopener" className="social-icon" aria-label="YouTube">
           <span className="fa-brands fa-youtube"></span>
         </a>
         <a href="https://www.instagram.com/raphaelvitoi/" target="_blank" rel="noopener" className="social-icon" aria-label="Instagram">

@@ -29,7 +29,7 @@ function getRpCellStyle(val: number, isDiag: boolean, isHighlighted: boolean) {
   if (val >= 40) return { bg: 'rgba(255,0,85,0.25)', color: '#ff0055' };
   if (val >= 25) return { bg: 'rgba(245,158,11,0.20)', color: '#f59e0b' };
   if (val >= 15) return { bg: 'rgba(225,29,72,0.15)', color: '#f43f5e' };
-  if (val > 0)   return { bg: 'rgba(16,185,129,0.10)', color: '#10b981' };
+  if (val > 0) return { bg: 'rgba(16,185,129,0.10)', color: '#10b981' };
   return { bg: 'rgba(15,23,42,0.3)', color: '#64748b' };
 }
 
@@ -74,7 +74,7 @@ export default function MatchupSelector() {
         <p style={{
           fontSize: '0.58rem',
           fontWeight: 900,
-          color: '#6366f1',
+          color: 'var(--sim-color-indigo)',
           textTransform: 'uppercase',
           letterSpacing: '0.15em',
           margin: '0 0 0.35rem',
@@ -84,13 +84,13 @@ export default function MatchupSelector() {
         <h2 style={{
           fontSize: '1.1rem',
           fontWeight: 800,
-          color: '#f8fafc',
+          color: 'var(--sim-text-main)',
           margin: '0 0 0.35rem',
           letterSpacing: '-0.02em',
         }}>
           Pressão de Risco por Confronto
         </h2>
-        <p style={{ fontSize: '0.78rem', color: '#64748b', margin: 0, lineHeight: 1.5 }}>
+        <p style={{ fontSize: '0.78rem', color: 'var(--sim-text-dim)', margin: 0, lineHeight: 1.5 }}>
           Escolha o ambiente de FT, clique no agressor e depois no defensor para ver o RP aplicado.
         </p>
       </div>
@@ -116,10 +116,10 @@ export default function MatchupSelector() {
               }}
             >
               <div style={{
-                fontFamily: "'JetBrains Mono', monospace",
+                fontFamily: 'var(--sim-font-mono)',
                 fontSize: '0.65rem',
                 fontWeight: 900,
-                color: isActive ? '#c7d2fe' : '#475569',
+                color: isActive ? 'var(--sim-color-indigo-light)' : 'var(--sim-text-subtle)',
                 letterSpacing: '-0.01em',
               }}>
                 {e.id}
@@ -127,7 +127,7 @@ export default function MatchupSelector() {
               <div style={{
                 fontSize: '0.6rem',
                 marginTop: '2px',
-                color: isActive ? '#818cf8' : '#334155',
+                color: isActive ? 'var(--sim-color-indigo)' : 'var(--sim-border-light)',
                 fontWeight: 600,
               }}>
                 {e.title.replace(/^FT \d: /, '')}
@@ -166,12 +166,12 @@ export default function MatchupSelector() {
           <p style={{
             fontSize: '0.58rem',
             fontWeight: 800,
-            color: '#64748b',
+            color: 'var(--sim-text-dim)',
             textTransform: 'uppercase',
             letterSpacing: '0.1em',
             margin: '0 0 0.6rem',
           }}>
-            1º clique <span style={{ color: '#818cf8' }}>Agressor</span> · 2º clique <span style={{ color: '#f43f5e' }}>Defensor</span>
+            1º clique <span style={{ color: 'var(--sim-color-indigo)' }}>Agressor</span> · 2º clique <span style={{ color: 'var(--sim-color-rose)' }}>Defensor</span>
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
             {env.stacks.map(player => {
@@ -180,13 +180,13 @@ export default function MatchupSelector() {
               const borderColor = isA
                 ? 'rgba(99,102,241,0.45)'
                 : isD
-                ? 'rgba(225,29,72,0.45)'
-                : 'rgba(255,255,255,0.04)';
+                  ? 'rgba(225,29,72,0.45)'
+                  : 'rgba(255,255,255,0.04)';
               const bg = isA
                 ? 'rgba(99,102,241,0.14)'
                 : isD
-                ? 'rgba(225,29,72,0.14)'
-                : 'rgba(30,41,59,0.25)';
+                  ? 'rgba(225,29,72,0.14)'
+                  : 'rgba(30,41,59,0.25)';
 
               return (
                 <button
@@ -218,28 +218,29 @@ export default function MatchupSelector() {
                       justifyContent: 'center',
                       fontSize: '0.58rem',
                       fontWeight: 900,
-                      color: isA || isD ? '#fff' : '#475569',
+                      color: isA || isD ? '#fff' : 'var(--sim-text-subtle)',
                       flexShrink: 0,
-                      fontFamily: "'JetBrains Mono', monospace",
+                      fontFamily: 'var(--sim-font-mono)',
                     }}>
                       {isA ? 'A' : isD ? 'D' : player.id.replace('p', '')}
                     </div>
                     <span style={{
                       fontSize: '0.75rem',
                       fontWeight: 700,
-                      color: isA ? '#c7d2fe' : isD ? '#fda4af' : '#94a3b8',
+                      color: isA ? 'var(--sim-color-indigo-light)' : isD ? 'var(--sim-color-rose-light)' : 'var(--sim-text-subtle)',
                       lineHeight: 1.2,
                     }}>
                       {player.pos}
                     </span>
                   </div>
                   <span style={{
-                    fontFamily: "'JetBrains Mono', monospace",
+                    fontFamily: 'var(--sim-font-mono)',
+                    fontVariantNumeric: 'tabular-nums',
                     fontSize: '0.82rem',
                     fontWeight: 900,
-                    color: isA ? '#818cf8' : isD ? '#f43f5e' : '#64748b',
+                    color: isA ? 'var(--sim-color-indigo)' : isD ? 'var(--sim-color-rose)' : 'var(--sim-text-dim)',
                   }}>
-                    {player.bb.toFixed(1)}<span style={{ fontSize: '0.5rem', fontWeight: 600, marginLeft: '2px', opacity: 0.5 }}>bb</span>
+                    {player.bb.toFixed(1)}<span style={{ fontSize: '0.58rem', fontWeight: 600, marginLeft: '2px', opacity: 0.5 }}>bb</span>
                   </span>
                 </button>
               );
@@ -269,14 +270,15 @@ export default function MatchupSelector() {
             {rp === null ? (
               <>
                 <div style={{ fontSize: '2.5rem', opacity: 0.15, marginBottom: '0.5rem', lineHeight: 1 }}>⚔</div>
-                <p style={{ fontSize: '0.75rem', color: '#334155', margin: 0, fontStyle: 'italic' }}>
+                <p style={{ fontSize: '0.75rem', color: 'var(--sim-border-light)', margin: 0, fontStyle: 'italic' }}>
                   {!agressor ? 'Escolha o agressor' : 'Escolha o defensor'}
                 </p>
               </>
             ) : (
               <>
                 <div style={{
-                  fontFamily: "'JetBrains Mono', monospace",
+                  fontFamily: 'var(--sim-font-mono)',
+                  fontVariantNumeric: 'tabular-nums',
                   fontSize: '3.2rem',
                   fontWeight: 900,
                   color: classification!.color,
@@ -287,7 +289,7 @@ export default function MatchupSelector() {
                 </div>
                 <div style={{
                   fontSize: '0.58rem',
-                  color: '#64748b',
+                  color: 'var(--sim-text-dim)',
                   margin: '0.25rem 0 0.75rem',
                   textTransform: 'uppercase',
                   letterSpacing: '0.1em',
@@ -323,19 +325,19 @@ export default function MatchupSelector() {
               border: '1px solid rgba(255,255,255,0.04)',
             }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: defensorData ? '0.4rem' : 0 }}>
-                <span style={{ fontSize: '0.62rem', color: '#818cf8', fontWeight: 700 }}>
+                <span style={{ fontSize: '0.62rem', color: 'var(--sim-color-indigo)', fontWeight: 700 }}>
                   Agressor: {agressorData.pos}
                 </span>
-                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.65rem', color: '#818cf8', fontWeight: 900 }}>
+                <span style={{ fontFamily: 'var(--sim-font-mono)', fontVariantNumeric: 'tabular-nums', fontSize: '0.65rem', color: 'var(--sim-color-indigo)', fontWeight: 900 }}>
                   {agressorData.bb.toFixed(1)} bb
                 </span>
               </div>
               {defensorData && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: '0.62rem', color: '#f43f5e', fontWeight: 700 }}>
+                  <span style={{ fontSize: '0.62rem', color: 'var(--sim-color-rose)', fontWeight: 700 }}>
                     Defensor: {defensorData.pos}
                   </span>
-                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.65rem', color: '#f43f5e', fontWeight: 900 }}>
+                  <span style={{ fontFamily: 'var(--sim-font-mono)', fontVariantNumeric: 'tabular-nums', fontSize: '0.65rem', color: 'var(--sim-color-rose)', fontWeight: 900 }}>
                     {defensorData.bb.toFixed(1)} bb
                   </span>
                 </div>
@@ -400,7 +402,7 @@ export default function MatchupSelector() {
         <p style={{
           fontSize: '0.58rem',
           fontWeight: 800,
-          color: '#64748b',
+          color: 'var(--sim-text-dim)',
           textTransform: 'uppercase',
           letterSpacing: '0.1em',
           margin: '0 0 0.65rem',
@@ -411,7 +413,8 @@ export default function MatchupSelector() {
           <table style={{
             borderCollapse: 'separate',
             borderSpacing: '3px',
-            fontFamily: "'JetBrains Mono', monospace",
+            fontFamily: 'var(--sim-font-mono)',
+            fontVariantNumeric: 'tabular-nums',
             fontSize: '0.6rem',
             width: '100%',
           }}>
@@ -538,9 +541,10 @@ export default function MatchupSelector() {
                 {p.pos}
               </span>
               <span style={{
-                fontFamily: "'JetBrains Mono', monospace",
+                fontFamily: 'var(--sim-font-mono)',
+                fontVariantNumeric: 'tabular-nums',
                 fontSize: '0.62rem',
-                color: i < 3 ? '#c7d2fe' : '#64748b',
+                color: i < 3 ? 'var(--sim-color-indigo-light)' : 'var(--sim-text-dim)',
                 fontWeight: 900,
               }}>
                 {p.val}

@@ -5,6 +5,7 @@ import os
 import base64
 import re
 import subprocess
+import shlex
 import aiohttp
 from aiohttp import web
 import logging
@@ -318,7 +319,8 @@ class QueueManager:
                             WHEN 'low' THEN 4 
                             ELSE 3 
                         END,
-                        timestamp ASC
+                    timestamp ASC
+                LIMIT 50
                 """) as cursor:
                 rows = await cursor.fetchall()
 
@@ -1042,9 +1044,8 @@ async def apply_god_mode(text: str):
         try:
             logging.info(f"[EXECUCAO] Orquestrador rodando comando nativo: {cmd}")
             # Seguranca SOTA: shell=False e a unica opcao segura.
-            # O comando e dividido em argumentos para evitar Shell Injection.
-            # shlex.split() pode ser usado para parsing mais complexo, mas para comandos simples, split() e suficiente.
-            cmd_parts = cmd.split()
+            # shlex.split() garante suporte a argumentos com aspas (ex: git commit -m "msg") sem invocar o shell.
+            cmd_parts = shlex.split(cmd, posix=(os.name != 'nt'))
 
             # Executa o processo bloqueante em um executor de thread para não bloquear o loop de eventos do asyncio
             loop = asyncio.get_running_loop()
@@ -1242,12 +1243,67 @@ async def handle_get_status(request):
     except Exception as e:
         return web.json_response({"error": str(e)}, status=500)
 
+async def handle_get_state(request):
+    manager = request.app['manager']
+    try:
+        key = request.query.get('key')
+        if not key: return web.json_response({"error": "key param missing"}, status=400)
+        val = await manager.get_system_state(key)
+        return web.json_response({"value": val})
+    except Exception as e:
+        return web.json_response({"error": str(e)}, status=500)
+
+async def handle_set_state(request):
+    manager = request.app['manager']
+    try:
+        data = await request.json()
+        key = data.get('key')
+        value = data.get('value')
+        if not key: return web.json_response({"error": "key missing"}, status=400)
+        await manager.set_system_state(key, value)
+        return web.json_response({"status": "SUCCESS"})
+    except Exception as e:
+        return web.json_response({"error": str(e)}, status=500)
+
+async def handle_ask_oracle(request):
+    """Rota Híbrida do Oráculo para o Frontend SOTA (RAG Local)."""
+    try:
+        data = await request.json()
+        question = data.get('question')
+        n_results = data.get('n_results', 3)
+        if not question: 
+            return web.json_response({"error": "Parâmetro 'question' ausente."}, status=400)
+        
+        rag = get_rag()
+        # CUSTO ZERO GARANTIDO: local_only=True força a busca puramente matemática no ChromaDB (CPU local)
+        answer = await rag.query_memory(question, n_results=n_results, local_only=True)
+        return web.json_response({"status": "SUCCESS", "answer": answer})
+    except Exception as e:
+        logging.error(f"Falha na consulta ao Oráculo: {e}")
+        return web.json_response({"error": str(e)}, status=500)
+
+@web.middleware
+async def cors_middleware(request, handler):
+    if request.method == 'OPTIONS':
+        return web.Response(headers={'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type'})
+    try:
+        response = await handler(request)
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        return response
+    except web.HTTPException as ex:
+        if ex.headers is None: ex.headers = {}
+        ex.headers['Access-Control-Allow-Origin'] = '*'
+        raise
+
 async def start_api_server(manager: QueueManager, port: int = 17042):
-    app = web.Application()
+    app = web.Application(middlewares=[cors_middleware])
     app['manager'] = manager
     app.add_routes([
         web.post('/add', handle_add_task),
         web.get('/status', handle_get_status),
+        web.get('/state', handle_get_state),
+        web.post('/state', handle_set_state),
+        web.post('/ask-oracle', handle_ask_oracle),
     ])
     
     runner = web.AppRunner(app)
@@ -1284,9 +1340,8 @@ async def _create_system_task(manager: QueueManager, task_id: str, description: 
 async def execute_task_workflow(task: Task, manager: QueueManager):
     """
     Executa o workflow completo para uma unica tarefa.
-    Cria sua propria instancia de QueueManager para otimizacao de conexao de DB por thread.
+    Reaproveita a instancia do QueueManager ativa para economizar I/O.
     """
-    manager = QueueManager()
     start_time = time.time()
     response_text = ""
     try:
@@ -1467,7 +1522,7 @@ async def start_worker():
                     future.add_done_callback(running_tasks.discard)
                 else:
                     semaphore.release()
-                    await asyncio.sleep(5)
+                    await asyncio.sleep(0.5) # Fricção Zero: Pulso acelerado para latência indetectável
             except Exception as inner_e:
                 logging.error(f"[bold red]FATAL[/] Arritmia no loop central do worker: {inner_e}")
                 await asyncio.sleep(5)

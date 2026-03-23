@@ -96,7 +96,12 @@ export interface Scenario {
   name: string;
   category: ScenarioCategory;
   stacks: number[];
+  /** Estrutura de prêmios restantes (do 1º ao N-ésimo colocado).
+   *  Usado pelo rpDeriver para derivar RP automaticamente via Malmuth-Harville. */
+  prizes: number[];
+  /** RP manual (fallback). Quando prizes está definido, o motor deriva RP automaticamente. */
   ipRp: number;
+  /** RP manual (fallback). Quando prizes está definido, o motor deriva RP automaticamente. */
   oopRp: number;
   ipPos: string;
   ipMorph: string;

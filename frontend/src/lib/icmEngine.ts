@@ -62,12 +62,10 @@ export function calculateMalmuthHarville(
     currentStacks: number[],
     prizeIndex: number,
     probabilitySoFar: number,
-    originalIndices: number[]
+    originalIndices: number[],
+    currentTotalChips: number
   ) {
-    if (prizeIndex >= numPrizes || currentStacks.length === 0) return;
-
-    const currentTotalChips = currentStacks.reduce((sum, s) => sum + s, 0);
-    if (currentTotalChips === 0) return;
+    if (prizeIndex >= numPrizes || currentStacks.length === 0 || currentTotalChips <= 0) return;
 
     for (let i = 0; i < currentStacks.length; i++) {
       const stack = currentStacks[i];
@@ -84,7 +82,7 @@ export function calculateMalmuthHarville(
       const nextStacks = currentStacks.filter((_, idx) => idx !== i);
       const nextIndices = originalIndices.filter((_, idx) => idx !== i);
 
-      calculatePositionalProbabilities(nextStacks, prizeIndex + 1, pathProbability, nextIndices);
+      calculatePositionalProbabilities(nextStacks, prizeIndex + 1, pathProbability, nextIndices, currentTotalChips - stack);
     }
   }
 
@@ -93,7 +91,8 @@ export function calculateMalmuthHarville(
     players.map(p => p.stack),
     0,
     1,
-    players.map((_, i) => i)
+    players.map((_, i) => i),
+    totalChips
   );
 
   // Formata o resultado de saída

@@ -18,7 +18,7 @@ export default function QuemSouPage() {
 
       <header className="page-header" style={{ paddingBottom: '1rem' }}>
         <p className="page-label">
-          <span className="fa-solid fa-user"></span> Manifesto
+          <i className="fa-solid fa-user" /> Manifesto
         </p>
         <h1>Sobre o Autor</h1>
         <p className="page-subtitle">Educador, Estrategista, Profissional de Poker, Escritor e Especialista em Sistemas Complexos.</p>
@@ -54,9 +54,9 @@ export default function QuemSouPage() {
             <a href="https://trueicm.com" target="_blank" rel="noopener" className="badge-link badge-link-secondary">Criador trueICM.com</a>
           </div>
 
-          <div style={{ marginTop: '2.5rem' }}>
-            <Link href="/#metodo" className="card-cta" style={{ fontSize: '1rem' }}>
-              Conhecer o Método Poker Racional &rarr;
+          <div style={{ marginTop: '3rem' }}>
+            <Link href="/#metodo" className="btn-primary" style={{ fontSize: '0.85rem', padding: '0.8rem 2.5rem' }}>
+              Conhecer o Método Poker Racional <i className="fa-solid fa-arrow-right" style={{ marginLeft: '6px' }} />
             </Link>
           </div>
         </article>

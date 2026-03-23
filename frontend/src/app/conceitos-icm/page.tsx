@@ -81,24 +81,33 @@ export default function ConceitosICM() {
       </header>
 
       {/* ==================== ÍNDICE ==================== */}
-      <section style={{ marginBottom: '4rem' }}>
+      <section style={{
+        marginBottom: '4rem',
+        background: 'var(--bg-card)',
+        border: '1px solid var(--glass-border)',
+        borderRadius: '12px',
+        padding: '2rem',
+        backdropFilter: 'blur(12px)'
+      }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
           <span style={{ flex: 1, height: '1px', background: 'linear-gradient(to right, transparent, rgba(99,102,241,0.2))' }} />
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', fontWeight: 800, color: '#334155', textTransform: 'uppercase', letterSpacing: '0.24em' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.58rem', fontWeight: 800, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.24em' }}>
             Índice
           </span>
           <span style={{ flex: 1, height: '1px', background: 'linear-gradient(to left, transparent, rgba(99,102,241,0.2))' }} />
         </div>
 
-        <div style={{ height: '1px', background: 'rgba(255,255,255,0.06)', marginBottom: '0.25rem' }} />
+        <div style={{ height: '1px', background: 'var(--glass-border)', marginBottom: '0.25rem' }} />
 
         {toc.map(({ num, id, label, title, desc }) => (
           <a key={id} href={`#${id}`} className="toc-row">
             <span style={{
               fontFamily: 'var(--font-mono)',
+              fontVariantNumeric: 'tabular-nums',
               fontSize: '1.1rem',
               fontWeight: 900,
-              color: 'rgba(99,102,241,0.35)',
+              color: 'var(--accent-primary)',
+              opacity: 0.6,
               lineHeight: 1,
             }}>{num}</span>
             <div>
@@ -106,14 +115,14 @@ export default function ConceitosICM() {
                 fontFamily: 'var(--font-body)',
                 fontSize: '0.9rem',
                 fontWeight: 600,
-                color: '#e2e8f0',
+                color: 'var(--text-main)',
                 display: 'block',
                 marginBottom: '0.2rem',
               }}>{title}</strong>
               <span style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: '0.78rem',
-                color: '#475569',
+                color: 'var(--text-muted)',
                 lineHeight: 1.45,
               }}>{desc}</span>
             </div>
@@ -121,11 +130,11 @@ export default function ConceitosICM() {
               fontFamily: 'var(--font-mono)',
               fontSize: '0.55rem',
               fontWeight: 700,
-              color: 'rgba(99,102,241,0.45)',
+              color: 'var(--accent-primary)',
               textTransform: 'uppercase',
               letterSpacing: '0.12em',
               whiteSpace: 'nowrap',
-            }}>{label} &rarr;</span>
+            }}>{label} <i className="fa-solid fa-arrow-right" style={{ marginLeft: '4px' }} /></span>
           </a>
         ))}
       </section>
@@ -139,7 +148,7 @@ export default function ConceitosICM() {
           ICM impõe assimetria ao valor das fichas: cada chip perdido vale mais do que cada chip
           ganho, e a magnitude dessa assimetria varia por jogador conforme sua stack e a estrutura
           de pagamentos. Essa assimetria pode ser expressa de duas formas. O <strong>Risk
-          Premium (RP)</strong> e o <strong>Bubble Factor (BF)</strong> medem o mesmo fenômeno
+            Premium (RP)</strong> e o <strong>Bubble Factor (BF)</strong> medem o mesmo fenômeno
           — mas de ângulos diferentes.
         </p>
 
@@ -148,7 +157,7 @@ export default function ConceitosICM() {
           O RP é a equity adicional, acima dos pot odds puros, que um jogador precisa ter para
           justificar um call de all-in sob a pressão do ICM. É um percentual que responde à
           pergunta: <em>quanto a mais do que o equilíbrio de ChipEV eu preciso ganhar para que
-          este call tenha EV positivo em torneio?</em>
+            este call tenha EV positivo em torneio?</em>
         </p>
         <p>
           Um jogador com RP de 21% que enfrenta pot odds de 33% (call 1/3 do pote) precisa
@@ -183,7 +192,7 @@ export default function ConceitosICM() {
           Ambos são matematicamente equivalentes. A escolha de RP como eixo central do
           framework não é arbitrária — três razões convergem:
         </p>
-        <ol style={{ marginLeft: '1.5rem', color: '#cbd5e1', lineHeight: 1.8 }}>
+        <ol style={{ marginLeft: '1.5rem', color: 'var(--text-main)', lineHeight: 1.8 }}>
           <li>
             <strong>Escala percentual imediata.</strong> &ldquo;Seu RP é 21%&rdquo; é
             operacionalmente claro: você precisa de 21 pontos percentuais adicionais de equity.
@@ -348,7 +357,7 @@ export default function ConceitosICM() {
           <p>
             São camadas, não sinônimos:
           </p>
-          <ul style={{ marginLeft: '1.5rem', color: '#cbd5e1', lineHeight: 1.8, marginBottom: 0 }}>
+          <ul style={{ marginLeft: '1.5rem', color: 'var(--text-main)', lineHeight: 1.8, marginBottom: 0 }}>
             <li><strong>Expectativa</strong> — o referencial. Define o espaço do problema.</li>
             <li><strong>Perspectiva</strong> — o mapa. Quantifica onde cada jogador está no torneio.</li>
             <li><strong>Esperança</strong> — a bússola. Indica qual ação move a Perspectiva na direção certa.</li>
@@ -385,14 +394,14 @@ export default function ConceitosICM() {
         </div>
 
         <h3>O que ICM EV captura</h3>
-        <ul style={{ marginLeft: '1.5rem', color: '#cbd5e1', lineHeight: 1.8 }}>
+        <ul style={{ marginLeft: '1.5rem', color: 'var(--text-main)', lineHeight: 1.8 }}>
           <li>A assimetria de valor entre chips ganhos e chips perdidos, no contexto de um pot específico.</li>
           <li>A pressão da estrutura de payouts sobre a frequência ótima de call/fold.</li>
           <li>O Bubble Factor implícito em cada decisão de all-in.</li>
         </ul>
 
         <h3>O que o framework adiciona</h3>
-        <ul style={{ marginLeft: '1.5rem', color: '#cbd5e1', lineHeight: 1.8 }}>
+        <ul style={{ marginLeft: '1.5rem', color: 'var(--text-main)', lineHeight: 1.8 }}>
           <li>
             O mecanismo causal por trás dos fenômenos que solvers descrevem sem explicar:
             por que o CL é mais agressivo, por que large bets colapsam sob pressão ICM, por que
@@ -427,7 +436,7 @@ export default function ConceitosICM() {
             fontFamily: 'var(--font-mono)',
             fontSize: '0.58rem',
             fontWeight: 800,
-            color: '#334155',
+            color: 'var(--text-muted)',
             textTransform: 'uppercase',
             letterSpacing: '0.24em',
             marginBottom: '1.25rem',
@@ -435,19 +444,19 @@ export default function ConceitosICM() {
             Atribuições
           </p>
 
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-            <li style={{ padding: '1rem 0', borderBottom: '1px solid rgba(255,255,255,0.04)', color: '#94a3b8', fontSize: '0.875rem', lineHeight: 1.65 }}>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, borderTop: '1px solid var(--glass-border)' }}>
+            <li style={{ padding: '1rem 0', borderBottom: '1px solid var(--glass-border)', color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: 1.65 }}>
               O&apos;Kearney, D. &amp; Carter, B. <em>PKO Poker Strategy</em>. D&amp;B Poker, 2023.
-              &mdash; origem do conceito <strong style={{ color: '#cbd5e1' }}>Downward Drift</strong> (apostas grandes
+              &mdash; origem do conceito <strong style={{ color: 'var(--text-main)' }}>Downward Drift</strong> (apostas grandes
               migram para apostas menores, que migram para calls, conforme pressão ICM aumenta).
               A quantificação do fenômeno via coeficientes k<sub>A</sub> e expoente b é extensão
               original deste framework.
             </li>
-            <li style={{ padding: '1rem 0', borderBottom: '1px solid rgba(255,255,255,0.04)', color: '#94a3b8', fontSize: '0.875rem', lineHeight: 1.65 }}>
-              <strong style={{ color: '#cbd5e1' }}>Risk Premium (RP), ΔRP, Expectativa, Perspectiva e Esperança Matemática</strong>,
+            <li style={{ padding: '1rem 0', borderBottom: '1px solid var(--glass-border)', color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: 1.65 }}>
+              <strong style={{ color: 'var(--text-main)' }}>Risk Premium (RP), ΔRP, Expectativa, Perspectiva e Esperança Matemática</strong>,
               motor ICM pós-flop e equação de distorção côncava — Raphael Vitoi, 2025-2026.
             </li>
-            <li style={{ padding: '1rem 0', color: '#94a3b8', fontSize: '0.875rem', lineHeight: 1.65 }}>
+            <li style={{ padding: '1rem 0', color: 'var(--text-muted)', fontSize: '0.875rem', lineHeight: 1.65 }}>
               GTO Wizard Blog. &ldquo;MDF vs ICM: Rethinking Bluffing &amp; Defense Strategies in MTTs.&rdquo; 2025.
               &mdash; confirma que MDF quebra sob ICM e que o covering player pode ser mais agressivo
               (validação parcial dos mecanismos descritos neste framework).
@@ -458,8 +467,8 @@ export default function ConceitosICM() {
       </article>
 
       <nav className="article-nav">
-        <Link href="/leitura-icm">&larr; Whitepaper ICM</Link>
-        <Link href="/aula-icm">Aula ICM &rarr;</Link>
+        <Link href="/leitura-icm"><i className="fa-solid fa-arrow-left" style={{ marginRight: '4px' }} /> Whitepaper ICM</Link>
+        <Link href="/aula-icm">Aula ICM <i className="fa-solid fa-arrow-right" style={{ marginLeft: '4px' }} /></Link>
       </nav>
 
     </main>

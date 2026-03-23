@@ -7,6 +7,7 @@
  */
 
 import React from 'react';
+import type { Scenario } from '../engine/types';
 import RiskGauge from '../ui/RiskGauge';
 import styles from '../simulator.module.css';
 
@@ -39,7 +40,7 @@ const calcBF = (rp: number): string => {
   return (100 / (100 - rp)).toFixed(2);
 };
 
-export default function ScenarioStage({ scenario }: { scenario: any }) {
+export default function ScenarioStage({ scenario }: { scenario: Scenario }) {
   return (
     <div className={`${styles.glassPanel} ${styles.animateFadeUp}`} style={{ padding: '1.75rem' }}>
       {/* Narrativa + Verdict */}

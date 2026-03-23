@@ -37,3 +37,21 @@ model Content {
 
   @@index([category, slug])
 }
+
+// ==========================================
+// PROJETO PANÓPTICO: TELEMETRIA E APRENDIZADO
+// ==========================================
+model TelemetryEvent {
+  id              String   @id @default(uuid())
+  userId          String   @default("anonymous") // Evoluir para ID real com NextAuth
+  category        String   
+  scenarioContext String   
+  userAction      String   
+  optimalAction   String   
+  evLoss          Float    
+  isCorrect       Boolean  
+  createdAt       DateTime @default(now())
+
+  @@index([category])
+  @@index([userId, createdAt])
+}

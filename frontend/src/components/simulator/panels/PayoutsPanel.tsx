@@ -62,7 +62,27 @@ const PAYOUT_STRUCTURES: Record<string, { players: number; payouts: { place: num
 
 export default function PayoutsPanel() {
   const [activeStructure, setActiveStructure] = useState('STT (6p)');
-  const structure = PAYOUT_STRUCTURES[activeStructure];
+  const [customPayouts, setCustomPayouts] = useState<{ place: number; percent: number }[]>([
+    { place: 1, percent: 50 },
+    { place: 2, percent: 30 },
+    { place: 3, percent: 20 },
+  ]);
+
+  const isCustom = activeStructure === 'Custom';
+  const structure = isCustom
+    ? { players: customPayouts.length * 3, payouts: customPayouts } // Estimativa didática
+    : PAYOUT_STRUCTURES[activeStructure];
+
+  const updateCustomPayout = (index: number, newPercent: number) => {
+    const updated = [...customPayouts];
+    updated[index].percent = newPercent;
+    setCustomPayouts(updated);
+  };
+
+  const addCustomPayout = () => setCustomPayouts([...customPayouts, { place: customPayouts.length + 1, percent: 0 }]);
+  const removeCustomPayout = () => setCustomPayouts(customPayouts.length > 1 ? customPayouts.slice(0, -1) : customPayouts);
+
+  const totalPercent = structure?.payouts.reduce((s, p) => s + p.percent, 0) || 0;
 
   return (
     <div className={styles.glassPanel} style={{ padding: '1.5rem' }}>
@@ -72,7 +92,7 @@ export default function PayoutsPanel() {
 
       {/* Seletor de estrutura */}
       <div style={{ display: 'flex', gap: '0.35rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
-        {Object.keys(PAYOUT_STRUCTURES).map((key) => (
+        {[...Object.keys(PAYOUT_STRUCTURES), 'Custom'].map((key) => (
           <button
             key={key}
             onClick={() => setActiveStructure(key)}
@@ -116,7 +136,7 @@ export default function PayoutsPanel() {
             </tr>
           </thead>
           <tbody>
-            {structure?.payouts.map((p) => (
+            {structure?.payouts.map((p, idx) => (
               <tr
                 key={p.place}
                 style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.04)' }}
@@ -131,9 +151,32 @@ export default function PayoutsPanel() {
                   </span>
                 </td>
                 <td style={{ padding: '0.5rem 1rem', textAlign: 'right' }}>
-                  <span className={styles.dataMono} style={{ fontSize: '0.75rem', fontWeight: 700, color: '#10b981' }}>
-                    {p.percent}%
-                  </span>
+                  {isCustom ? (
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '4px' }}>
+                      <input
+                        type="number"
+                        value={p.percent}
+                        onChange={(e) => updateCustomPayout(idx, parseFloat(e.target.value) || 0)}
+                        style={{
+                          width: '50px',
+                          background: 'rgba(15, 23, 42, 0.8)',
+                          border: '1px solid #334155',
+                          borderRadius: '4px',
+                          color: '#10b981',
+                          fontSize: '0.75rem',
+                          padding: '2px 4px',
+                          textAlign: 'right',
+                          fontFamily: "'JetBrains Mono', monospace",
+                          fontWeight: 700
+                        }}
+                      />
+                      <span style={{ fontSize: '0.65rem', color: '#64748b' }}>%</span>
+                    </div>
+                  ) : (
+                    <span className={styles.dataMono} style={{ fontSize: '0.75rem', fontWeight: 700, color: '#10b981' }}>
+                      {p.percent}%
+                    </span>
+                  )}
                 </td>
                 <td style={{ padding: '0.5rem 1rem', textAlign: 'right' }}>
                   <div style={{
@@ -161,18 +204,52 @@ export default function PayoutsPanel() {
           </tbody>
         </table>
 
+        {/* Controles Custom */}
+        {isCustom && (
+          <div style={{ padding: '0.6rem 1rem', display: 'flex', gap: '0.5rem', background: 'rgba(15, 23, 42, 0.4)' }}>
+            <button onClick={addCustomPayout} style={{
+              padding: '0.3rem 0.6rem',
+              borderRadius: '6px',
+              background: 'rgba(16, 185, 129, 0.1)',
+              border: '1px solid rgba(16, 185, 129, 0.2)',
+              color: '#10b981',
+              fontSize: '0.58rem',
+              fontWeight: 700,
+              cursor: 'pointer'
+            }}>
+              + Posição
+            </button>
+            {customPayouts.length > 1 && (
+              <button onClick={removeCustomPayout} style={{
+                padding: '0.3rem 0.6rem',
+                borderRadius: '6px',
+                background: 'rgba(244, 63, 94, 0.1)',
+                border: '1px solid rgba(244, 63, 94, 0.2)',
+                color: '#f43f5e',
+                fontSize: '0.58rem',
+                fontWeight: 700,
+                cursor: 'pointer'
+              }}>
+                - Remover
+              </button>
+            )}
+          </div>
+        )}
+
         {/* Footer */}
         <div style={{
           padding: '0.6rem 1rem',
           borderTop: '1px solid rgba(255, 255, 255, 0.08)',
           display: 'flex',
           justifyContent: 'space-between',
+          alignItems: 'center'
         }}>
           <span style={{ fontSize: '0.58rem', color: '#64748b' }}>
-            {structure?.players} jogadores
+            {isCustom ? 'Estrutura Customizada' : `${structure?.players} jogadores`}
           </span>
-          <span className={styles.dataMono} style={{ fontSize: '0.6rem', color: '#10b981', fontWeight: 700 }}>
-            Total: {structure?.payouts.reduce((s, p) => s + p.percent, 0)}%
+          <span className={styles.dataMono} style={{ fontSize: '0.6rem', color: totalPercent === 100 ? '#10b981' : '#f59e0b', fontWeight: 700 }}>
+            Total: {totalPercent.toFixed(1)}%
+            {totalPercent !== 100 && <i className="fa-solid fa-triangle-exclamation" style={{ marginLeft: '6px' }} title="A soma dos prêmios deve ser idealmente 100%" />}
           </span>
         </div>
       </div>

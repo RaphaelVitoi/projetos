@@ -141,7 +141,7 @@ export default function AulaICMPage() {
     <main className={styles.page}>
       <header className={styles.hero}>
         <p className={styles.heroLabel}>
-          <span className="fa-solid fa-bolt" /> State of the Art
+          <i className="fa-solid fa-bolt" /> State of the Art
         </p>
         <h1 className={styles.heroTitle}>O Edge Mudou de Lugar.</h1>
         <p className={styles.heroSubtitle}>
@@ -153,7 +153,7 @@ export default function AulaICMPage() {
             Arsenal Tático
           </Link>
           <Link href="/tools/simulador" className={`btn-secondary ${styles.heroButton}`}>
-            Abrir Motor ICM &rarr;
+            Abrir Motor ICM <i className="fa-solid fa-arrow-right" style={{ marginLeft: '6px' }} />
           </Link>
         </div>
       </header>
@@ -162,7 +162,7 @@ export default function AulaICMPage() {
         <div className={`glass-panel ${styles.stateOfArtPanel}`}>
           <div className={styles.stateOfArtIntro}>
             <p className="page-label">
-              <span className="fa-solid fa-radar" /> Geometria do Risco
+              <i className="fa-solid fa-radar" /> Geometria do Risco
             </p>
             <h2>Operamos com dados de vanguarda.</h2>
             <p>
@@ -265,36 +265,36 @@ export default function AulaICMPage() {
 
       <section className={styles.arsenal} id="arsenal">
         <p className={styles.sectionTag}>
-          <span className="fa-solid fa-compass" /> Navegação
+          <i className="fa-solid fa-compass" /> Navegação
         </p>
         <h3>O Arsenal Tático</h3>
         <div className={styles.navGrid}>
           <Link href="/leitura-icm" className={styles.navCard}>
-            <span className="fa-solid fa-file-lines" />
+            <i className="fa-solid fa-file-lines" />
             <div>
               <strong>Whitepaper ICM</strong>
-              <span>Teoria completa &rarr;</span>
+              <span>Teoria completa <i className="fa-solid fa-arrow-right" style={{ marginLeft: '4px' }} /></span>
             </div>
           </Link>
           <a href="#simulador-section" className={styles.navCard}>
-            <span className="fa-solid fa-gamepad" />
+            <i className="fa-solid fa-gamepad" />
             <div>
               <strong>Motor ICM</strong>
-              <span>Laboratório interativo →</span>
+              <span>Laboratório interativo <i className="fa-solid fa-arrow-right" style={{ marginLeft: '4px' }} /></span>
             </div>
           </a>
           <Link href="/aula-1-2" className={styles.navCard}>
-            <span className="fa-solid fa-graduation-cap" />
+            <i className="fa-solid fa-graduation-cap" />
             <div>
               <strong>Aula 1.2</strong>
-              <span>Material complementar &rarr;</span>
+              <span>Material complementar <i className="fa-solid fa-arrow-right" style={{ marginLeft: '4px' }} /></span>
             </div>
           </Link>
           <Link href="/conceitos-icm" className={styles.navCard}>
-            <span className="fa-solid fa-book-open" />
+            <i className="fa-solid fa-book-open" />
             <div>
               <strong>Glossário Formal</strong>
-              <span>RP, Perspectiva, Esperança &rarr;</span>
+              <span>RP, Perspectiva, Esperança <i className="fa-solid fa-arrow-right" style={{ marginLeft: '4px' }} /></span>
             </div>
           </Link>
         </div>
@@ -302,8 +302,7 @@ export default function AulaICMPage() {
 
       <section id="simulador-section" className={styles.simInfo}>
         <p className="page-label">
-          <span className="fa-solid fa-chart-area" />
-          Geometria do Risco Engine
+          <i className="fa-solid fa-chart-area" /> Geometria do Risco Engine
         </p>
         <h2>Motor ICM</h2>
         <p>
@@ -311,8 +310,7 @@ export default function AulaICMPage() {
         </p>
         <div style={{ marginTop: '2rem' }}>
           <a href="/tools/simulador" className="btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
-            <span className="fa-solid fa-flask" />
-            Abrir Motor ICM
+            <i className="fa-solid fa-flask" /> Abrir Motor ICM
           </a>
         </div>
       </section>
@@ -334,8 +332,8 @@ export default function AulaICMPage() {
       </footer>
 
       <nav className={`${styles.articleNav} article-nav`}>
-        <Link href="/leitura-icm">&larr; Whitepaper ICM</Link>
-        <Link href="/aula-1-2">Aula 1.2 &rarr;</Link>
+        <Link href="/leitura-icm"><i className="fa-solid fa-arrow-left" style={{ marginRight: '4px' }} /> Whitepaper ICM</Link>
+        <Link href="/aula-1-2">Aula 1.2 <i className="fa-solid fa-arrow-right" style={{ marginLeft: '4px' }} /></Link>
       </nav>
     </main>
   );

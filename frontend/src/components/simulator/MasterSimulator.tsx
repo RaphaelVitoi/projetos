@@ -12,6 +12,7 @@ import React, { useState, useCallback, useMemo, lazy, Suspense } from 'react';
 import Link from 'next/link';
 import { useScenario } from './hooks/useScenario';
 import { solveIcmDistortion } from './engine/nashSolver';
+import { deriveRps } from '@/lib/rpDeriver';
 import ScenarioSelector from './ui/ScenarioSelector';
 import ScenarioStage from './panels/ScenarioStage';
 import NashPanel from './panels/NashPanel';
@@ -57,6 +58,22 @@ export default function MasterSimulator() {
   const [activeTool, setActiveTool] = useState<ActiveTool>('scenario');
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
+  // Derivar RP automaticamente via Malmuth-Harville quando prizes definido
+  // IP = stacks[0], OOP = stacks[1] (convencao do simulador)
+  const derivedRp = useMemo(() => {
+    if (scenario.prizes.length === 0) return null;
+    try {
+      return deriveRps(scenario.stacks, scenario.prizes, 0, 1);
+    } catch {
+      return null;
+    }
+  }, [scenario.stacks, scenario.prizes]);
+
+  // RP efetivo: derivado (M-H) quando disponivel, manual como fallback
+  const effectiveIpRp = derivedRp?.ipRp ?? scenario.ipRp;
+  const effectiveOopRp = derivedRp?.oopRp ?? scenario.oopRp;
+  const rpSource = derivedRp ? 'M-H' : 'manual';
+
   // Escalonamento de RP por street via sprData
   // A fórmula: rpStreet = rpBase * (sprData[street].rpValue / sprData['PRE'].rpValue)
   const sprPre = scenario.sprData.find(s => s.name === 'PRE');
@@ -69,12 +86,12 @@ export default function MasterSimulator() {
   const turnScale = preRp > 0 ? (sprTurn?.rpValue ?? preRp * 0.5) / preRp : 0.5;
   const riverScale = preRp > 0 ? (sprRiver?.rpValue ?? preRp * 0.2) / preRp : 0.2;
 
-  const ipRpFlop = scenario.ipRp * flopScale;
-  const oopRpFlop = scenario.oopRp * flopScale;
-  const ipRpTurn = scenario.ipRp * turnScale;
-  const oopRpTurn = scenario.oopRp * turnScale;
-  const ipRpRiver = scenario.ipRp * riverScale;
-  const oopRpRiver = scenario.oopRp * riverScale;
+  const ipRpFlop = effectiveIpRp * flopScale;
+  const oopRpFlop = effectiveOopRp * flopScale;
+  const ipRpTurn = effectiveIpRp * turnScale;
+  const oopRpTurn = effectiveOopRp * turnScale;
+  const ipRpRiver = effectiveIpRp * riverScale;
+  const oopRpRiver = effectiveOopRp * riverScale;
 
   // Calcula distorcao ICM para as tres streets em paralelo; so recalcula quando dependencias mudam
   const { nashFlop, nashTurn, nashRiver } = useMemo(() => ({
@@ -174,7 +191,16 @@ export default function MasterSimulator() {
                 color: '#475569',
                 fontWeight: 600,
               }}>
-                IP: {scenario.ipRp.toFixed(1)}% | OOP: {scenario.oopRp.toFixed(1)}%
+                IP: {effectiveIpRp.toFixed(1)}% | OOP: {effectiveOopRp.toFixed(1)}%
+              </span>
+              <span style={{
+                fontSize: '0.58rem',
+                color: rpSource === 'M-H' ? '#10b981' : '#64748b',
+                fontWeight: 600,
+                textTransform: 'uppercase',
+                letterSpacing: '0.08em',
+              }}>
+                RP {rpSource === 'M-H' ? 'derivado (M-H)' : 'manual'}
               </span>
             </div>
           </div>
@@ -330,6 +356,7 @@ export default function MasterSimulator() {
               <PerspectivePanel />
             </Suspense>
           )}
+
         </main>
       </div>
 

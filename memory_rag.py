@@ -177,10 +177,13 @@ class MemoryRAG:
             logging.error(f"[RAG] Erro inesperado na expansao de query: {e}")
         return [question] # Retorna a original em caso de falha
 
-    async def query_memory(self, question: str, n_results: int = 3) -> str:
+    async def query_memory(self, question: str, n_results: int = 3, local_only: bool = False) -> str:
         try:
             # 1. Expansao da Query com IA para Recall Semantico Superior
-            expanded_queries = await self._expand_query(question)
+            if local_only:
+                expanded_queries = [question] # CUSTO ZERO: Pula a LLM e usa apenas embeddings locais
+            else:
+                expanded_queries = await self._expand_query(question)
             results = await asyncio.to_thread(
                 self.collection.query,
                 query_texts=expanded_queries,
