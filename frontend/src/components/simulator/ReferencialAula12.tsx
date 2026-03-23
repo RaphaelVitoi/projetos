@@ -377,11 +377,11 @@ export default function ReferencialAula12() {
                 </div>
                 <div style={{ marginTop: '1rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '0.6rem' }}>
                   {(() => {
-                    const pct1 = ((PRIZES[0].val / TOTAL_PRIZES) * 100).toFixed(1);
+                    const pct1 = ((PRIZES[0].val / TOTAL_POOL) * 100).toFixed(1);
                     return ([
-                      { tag: 'TOP-HEAVY', icon: '▲', color: '#fbbf24', text: `1º ≥ 25% do prize pool (field curto). 1º e 2º concentrados. Laddering pouco valioso. BF elevado.`, active: false },
-                      { tag: 'FLAT',      icon: '▬', color: '#94a3b8', text: '1º ≤ 18% do prize pool. Saltos entre posições mais equilibrados. Laddering relevante. BF próximo de 1.', active: false },
-                      { tag: 'HÍBRIDA',   icon: '◆', color: '#c4b5fd', text: `Foge dos extremos (18–24%). Análise de exclusão: não é flat, não é top-heavy de forma clara. Esta estrutura: ${pct1}%. Avalie se o laddering se aproxima mais de um extremo ou do outro.`, active: true },
+                      { tag: 'TOP-HEAVY', icon: '▲', color: '#fbbf24', text: '1º ≥ 25% do prize pool total (field curto). 1º e 2º concentrados. Laddering pouco valioso. BF elevado.', active: false },
+                      { tag: 'FLAT',      icon: '▬', color: '#94a3b8', text: `Esta estrutura: 1º = ${pct1}% do pool total. Saltos entre posições equilibrados. Laddering relevante. BF próximo de 1.`, active: true },
+                      { tag: 'HÍBRIDA',   icon: '◆', color: '#c4b5fd', text: 'Foge dos extremos (18-24%). Análise de exclusão: não é flat nem top-heavy de forma clara. Avalie se o laddering se aproxima mais de um extremo ou do outro.', active: false },
                       { tag: 'PKO',       icon: '💥', color: '#f43f5e', text: 'Top-heavyssimo: dinheiro muito concentrado no 1º. Laddering muito menos valioso. A compensação vem pelo bounty acumulado.', active: false },
                       { tag: 'SATÉLITE',  icon: '🎫', color: '#10b981', text: 'Prêmios idênticos no topo (tickets de entrada). Sobrevivência pura: acumular fichas além do necessário tem EV zero.', active: false },
                     ]);
