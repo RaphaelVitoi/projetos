@@ -1,121 +1,172 @@
 /**
- * IDENTITY: Derivador de Risk Premium via Malmuth-Harville
+ * IDENTITY: Derivador de Risk Premium via Bubble Factor (Perspectiva)
  * PATH: src/lib/rpDeriver.ts
- * ROLE: Conectar o motor ICM (Malmuth-Harville) ao motor pós-flop (nashSolver).
- *       Deriva automaticamente os valores de Risk Premium (RP) para IP e OOP
- *       a partir da estrutura de stacks e prêmios do torneio, eliminando a
- *       necessidade de input manual por cenário.
+ * ROLE: Conectar o motor ICM (Perspectiva/M-H) ao motor pos-flop (nashSolver).
+ *       Deriva RP para IP e OOP via Bubble Factor: a razao entre o que se PERDE
+ *       em ICM equity ao perder um pot vs o que se GANHA ao ganhar.
  *
- * CONCEITO CENTRAL — O Paradoxo ICM:
- *   RP(i) = chip_percent(i) − icm_equity_percent(i)
+ * CONCEITO CENTRAL — Bubble Factor (BF):
+ *   BF(i) = ICM_loss(i) / ICM_gain(i)
  *
- *   Big stack:   chip% > ICM%  →  RP positivo (cada chip vale MENOS em ICM)
- *   Short stack: chip% < ICM%  →  RP negativo antes do clamp (ICM protege o short)
+ *   Quando BF > 1, o jogador precisa de mais equity que pot odds para justificar um call.
+ *   RP e derivado de BF: RP = 100 * (BF - 1) / BF
+ *   Equivalente: BF = 100 / (100 - RP)
  *
- *   Após clamp [0, 60]:
- *   - Short stacks ficam em RP ≈ 0 (quase nenhuma pressão ICM)
- *   - Big stacks ficam em RP alto (grande custo de colisão em ICM)
+ *   Short stack:  BF alto  → RP alto  (perder = eliminacao/catastrofe)
+ *   Big stack:    BF baixo → RP baixo (perder = dano absorvivel)
  *
- *   Isso é o inverso intuitivo: o chip leader tem o MAIOR Risk Premium porque
- *   tem mais a perder proporcionalmente em ICM do que em chip EV.
+ *   Ambos os jogadores tem RP > 0 (a direcao correta).
  *
  * BINDING:
- *   - [src/lib/icmEngine.ts]  → calculateMalmuthHarville (motor base)
+ *   - [src/lib/perspectiva.ts] → calculatePerspectiva (motor de equities posicionais)
  *   - [src/components/simulator/engine/nashSolver.ts] → solveNash (consumidor dos RPs)
  *
- * LIMITAÇÕES:
- *   - RP aqui é pré-flop (stacks iniciais do spot). RP por street não é
- *     quantificável sem range atual, board e histórico de ação.
- *   - Clamp em 60 é estimativa conservadora; spots extremos (HU final, satélite)
- *     podem exigir reavaliação do teto.
+ * LIMITACOES:
+ *   - BF depende do tamanho do pot de referencia. Usamos effective stack (all-in)
+ *     como caso base. Para pots menores, BF e ligeiramente menor.
+ *   - Com apenas 2 jogadores e 2 premios, a distorcao ICM e minima (BF ≈ 1.0).
+ *     Para cenarios HU, adicionar jogadores de fundo ou usar RP manual.
+ *   - RP aqui e pre-flop (stacks iniciais). RP por street requer simulacao
+ *     de investimento progressivo.
  */
 
-import { calculateMalmuthHarville } from './icmEngine';
-import type { ICMPlayer } from './icmEngine';
+import { calculatePerspectiva } from './perspectiva';
 
-// Limites razoáveis de RP para o contexto pós-flop (unidade: percentual)
+// Limites razoaveis de RP para contexto pos-flop (unidade: percentual)
 const RP_MIN = 0;
 const RP_MAX = 60;
 
-/** Resultado da derivação de Risk Premium para um spot de dois jogadores */
+/** Resultado da derivacao de Risk Premium para um spot */
 export interface RpDerivationResult {
-  /** RP do jogador In Position (0–60) */
+  /** RP do jogador In Position (0-60) */
   ipRp: number;
-  /** RP do jogador Out Of Position (0–60) */
+  /** RP do jogador Out Of Position (0-60) */
   oopRp: number;
-  /** Risk Advantage: ipRp − oopRp. Positivo = IP sob maior pressão ICM */
+  /** Risk Advantage: ipRp - oopRp. Positivo = IP sob maior pressao ICM */
   deltaRp: number;
   /** RP de todos os jogadores na mesa, na mesma ordem dos stacks recebidos */
   allRps: number[];
+  /** Bubble Factor de cada jogador (para diagnostico) */
+  allBfs: number[];
+}
+
+/** Converte Bubble Factor em Risk Premium percentual */
+function bfToRp(bf: number): number {
+  if (bf <= 1) return RP_MIN;
+  const rp = 100 * (bf - 1) / bf;
+  return Math.max(RP_MIN, Math.min(RP_MAX, rp));
 }
 
 /**
- * Deriva Risk Premium para IP e OOP a partir de stacks e estrutura de prêmios.
+ * Deriva Risk Premium para IP e OOP via Bubble Factor.
  *
- * @param stacks    Stacks de todos os jogadores na mesa (em qualquer unidade — fichas ou BB)
- * @param prizes    Array de prêmios do torneio, do 1º ao N-ésimo (mesma unidade monetária)
- * @param ipIndex   Índice do jogador IP dentro do array stacks
- * @param oopIndex  Índice do jogador OOP dentro do array stacks
- * @param totalPool Prize pool total (opcional). Quando fornecido, equityPercent usa o
- *                  denominador correto (pool inteiro). Quando omitido, usa soma dos prizes.
+ * Para cada jogador i no spot (IP vs OOP), simula um all-in pelo effective stack:
+ *   - Se i ganha: i.stack += effStack, oponente.stack -= effStack
+ *   - Se i perde: i.stack -= effStack, oponente.stack += effStack
+ *   - Calcula ICM equity em ambos os cenarios via Perspectiva (M-H)
+ *   - BF(i) = |ICM_loss(i)| / ICM_gain(i)
+ *   - RP(i) = 100 * (BF - 1) / BF
  *
- * @returns RpDerivationResult com ipRp, oopRp, deltaRp e allRps
+ * @param stacks    Stacks de todos os jogadores na mesa
+ * @param prizes    Array de premios (1o ao N-esimo)
+ * @param ipIndex   Indice do jogador IP no array stacks
+ * @param oopIndex  Indice do jogador OOP no array stacks
+ *
+ * @returns RpDerivationResult com ipRp, oopRp, deltaRp, allRps, allBfs
  *
  * @example
- * // Spot: BTN 40bb, BB 55bb, dois jogadores restantes
- * // Prêmios: [700, 300] (torneio com dois pagos)
- * const result = deriveRps([40, 55], [700, 300], 0, 1);
- * // BTN (CL ≈ 42%) tem RP alto; BB (mid ≈ 58%) ICM inverte — ver paradoxo
+ * // 4-handed FT: BTN(50) vs BB(12), shorts 8 e 9
+ * const result = deriveRps([50, 12, 8, 9], [237.34, 170.96, 135.17, 109.99], 0, 1);
+ * // BB (12bb, risco de eliminacao) tera RP >> BTN (50bb, absorve o golpe)
  */
 export function deriveRps(
   stacks: number[],
   prizes: number[],
   ipIndex: number,
   oopIndex: number,
-  totalPool?: number,
-): RpDerivationResult {
+): RpDerivationResult | null {
   if (stacks.length < 2) {
-    throw new Error('deriveRps: é necessário ao menos 2 jogadores para calcular ICM.');
+    throw new Error('deriveRps: necessario ao menos 2 jogadores.');
   }
   if (ipIndex < 0 || ipIndex >= stacks.length) {
-    throw new Error(`deriveRps: ipIndex ${ipIndex} fora do range de stacks (${stacks.length} jogadores).`);
+    throw new Error(`deriveRps: ipIndex ${ipIndex} fora do range (${stacks.length} jogadores).`);
   }
   if (oopIndex < 0 || oopIndex >= stacks.length) {
-    throw new Error(`deriveRps: oopIndex ${oopIndex} fora do range de stacks (${stacks.length} jogadores).`);
+    throw new Error(`deriveRps: oopIndex ${oopIndex} fora do range (${stacks.length} jogadores).`);
   }
   if (ipIndex === oopIndex) {
-    throw new Error('deriveRps: ipIndex e oopIndex devem ser jogadores distintos.');
+    throw new Error('deriveRps: ipIndex e oopIndex devem ser distintos.');
   }
 
-  const totalChips = stacks.reduce((sum, s) => sum + s, 0);
-  if (totalChips <= 0) {
-    throw new Error('deriveRps: soma dos stacks deve ser maior que zero.');
+  // Effective stack: maximo que pode ser disputado entre IP e OOP
+  const effStack = Math.min(stacks[ipIndex], stacks[oopIndex]);
+  if (effStack <= 0) {
+    return {
+      ipRp: 0, oopRp: 0, deltaRp: 0,
+      allRps: stacks.map(() => 0),
+      allBfs: stacks.map(() => 1),
+    };
   }
 
-  // Constrói o array de ICMPlayer para o motor Malmuth-Harville
-  const players: ICMPlayer[] = stacks.map((stack, i) => ({
-    id: String(i),
-    name: `P${i}`,
-    stack,
-  }));
+  // Epsilon: stack minimo para evitar edge case de eliminacao no M-H
+  // (stack=0 nao recebe premio na recursao, distorcendo o BF)
+  const EPS = 0.001;
 
-  // Executa o cálculo ICM
-  const icmResults = calculateMalmuthHarville(players, prizes, totalPool);
+  // ICM equity baseline (estado atual)
+  const baseline = calculatePerspectiva(stacks, prizes);
 
-  // Deriva RP para cada jogador:
-  //   chip_percent(i) = stack(i) / totalChips * 100
-  //   icm_equity_percent(i) = equityPercent do resultado ICM
-  //   RP(i) = chip_percent(i) − icm_equity_percent(i), clampado em [RP_MIN, RP_MAX]
-  const allRps: number[] = stacks.map((stack, i) => {
-    const chipPercent = (stack / totalChips) * 100;
-    const icmPercent  = icmResults[i].equityPercent;
-    const raw         = chipPercent - icmPercent;
-    return Math.max(RP_MIN, Math.min(RP_MAX, raw));
+  // Cenario: IP ganha o all-in (IP +effStack, OOP -effStack)
+  const stacksIpWin = stacks.map((s, i) => {
+    if (i === ipIndex) return s + effStack;
+    if (i === oopIndex) return Math.max(EPS, s - effStack);
+    return s;
   });
 
-  const ipRp    = allRps[ipIndex];
-  const oopRp   = allRps[oopIndex];
+  // Cenario: OOP ganha o all-in (OOP +effStack, IP -effStack)
+  const stacksOopWin = stacks.map((s, i) => {
+    if (i === oopIndex) return s + effStack;
+    if (i === ipIndex) return Math.max(EPS, s - effStack);
+    return s;
+  });
+
+  const perspIpWin = calculatePerspectiva(stacksIpWin, prizes);
+  const perspOopWin = calculatePerspectiva(stacksOopWin, prizes);
+
+  // BF para cada jogador: |ICM_loss| / ICM_gain
+  // IP ganha: IP gain, OOP loss
+  // OOP ganha: OOP gain, IP loss
+  const allBfs: number[] = stacks.map((_, i) => {
+    // IP: gain quando IP wins, loss quando OOP wins
+    if (i === ipIndex) {
+      const gain = perspIpWin.equities[i] - baseline.equities[i];
+      const loss = baseline.equities[i] - perspOopWin.equities[i];
+      return gain > 0 ? loss / gain : 1;
+    }
+    // OOP: gain quando OOP wins, loss quando IP wins
+    if (i === oopIndex) {
+      const gain = perspOopWin.equities[i] - baseline.equities[i];
+      const loss = baseline.equities[i] - perspIpWin.equities[i];
+      return gain > 0 ? loss / gain : 1;
+    }
+    // Bystander: BF = 1 (nao esta no pot)
+    return 1;
+  });
+
+  const allRps = allBfs.map(bf => bfToRp(bf));
+
+  const ipRp = allRps[ipIndex];
+  const oopRp = allRps[oopIndex];
   const deltaRp = ipRp - oopRp;
 
-  return { ipRp, oopRp, deltaRp, allRps };
+  // Se ambos BFs sao ~1.0 (sem distorcao ICM detectavel),
+  // retorna null para que o consumidor use RP manual como fallback.
+  // Tipico em cenarios HU com apenas 2 premios.
+  const BF_THRESHOLD = 1.01;
+  const ipBf = allBfs[ipIndex];
+  const oopBf = allBfs[oopIndex];
+  if (ipBf < BF_THRESHOLD && oopBf < BF_THRESHOLD) {
+    return null;
+  }
+
+  return { ipRp, oopRp, deltaRp, allRps, allBfs };
 }

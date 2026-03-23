@@ -695,12 +695,12 @@ export const SCENARIOS: Scenario[] = [
     category: 'clinical',
     stacks: [35, 80, 12],
     prizes: [237.34, 170.96, 135.17],
-    ipRp: 8.2,
-    oopRp: 38,
-    ipPos: 'CO (Mid)',
-    ipMorph: 'Especulativo Passivo',
-    oopPos: 'BB (CL)',
-    oopMorph: 'Agressor Obrigatório',
+    ipRp: 38,
+    oopRp: 8.2,
+    ipPos: 'BTN (CL)',
+    ipMorph: 'Agressor Obrigatório',
+    oopPos: 'BB (Mid)',
+    oopMorph: 'Especulativo Passivo',
     verdict: 'Implied Odds de ICM',
     narrativeTitle: 'O Parasita Silencioso',
     narrativeSubtitle: 'Mid-Stack vs Chip Leader',
@@ -717,7 +717,7 @@ export const SCENARIOS: Scenario[] = [
       'Realize equity passivamente: check-call > check-raise na maioria das texturas. O CL bleffa por obrigacao, e voce capitaliza sem aumentar o risco de eliminacao. O river e seu aliado.',
       'Evite confronto direto pre-flop: 3-bet so com o topo absoluto. Cada ficha investida pre tem custo de ICM para voce, mas cada ficha ganha pos-flop tem valor amplificado pela perspectiva de ultrapassar o CL.',
     ],
-    // RP residual por street: mid-stack com RP baixo, dissipacao lenta
+    // RP residual por street: OOP (mid) com RP baixo, dissipacao lenta
     sprData: [
       { name: 'PRE',   potSize: 2.5,  rpValue: 8.2 },
       { name: 'FLOP',  potSize: 7,    rpValue: 6.8 },
