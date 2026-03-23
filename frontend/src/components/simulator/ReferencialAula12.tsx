@@ -192,12 +192,12 @@ const TABLE_PLAYERS = [
 function toRad(deg: number) { return (deg * Math.PI) / 180; }
 
 export default function ReferencialAula12() {
-  const W = 300; const H = 200;
+  const W = 360; const H = 210;
   const rx = 110; const ry = 64;
   const cx = W / 2; const cy = H / 2;
 
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '0 1.5rem' }}>
+    <div style={{ padding: '0 1.5rem' }}>
       <details style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
         <summary style={{
           cursor: 'pointer', listStyle: 'none', display: 'flex', alignItems: 'center',
@@ -294,11 +294,9 @@ export default function ReferencialAula12() {
                   const btnY = cy + iRy * Math.sin(toRad(-50));
                   return (
                     <>
-                      {/* SB — meia ficha (curva voltada ao centro) */}
-                      <path d={`M ${sbX} ${sbY - r} A ${r} ${r} 0 0 0 ${sbX} ${sbY + r} Z`}
-                        fill="rgba(245,158,11,0.85)" stroke="#f59e0b" strokeWidth="1.2" />
-                      <line x1={sbX} y1={sbY - r} x2={sbX} y2={sbY + r} stroke="#f59e0b" strokeWidth="0.8" strokeDasharray="2,1.5" />
-                      <text x={sbX - 4.5} y={sbY + 3.5} textAnchor="middle" fill="white" fontSize="5" fontWeight="900">SB</text>
+                      {/* SB — ficha completa com valor 0.5 */}
+                      <circle cx={sbX} cy={sbY} r={r} fill="rgba(245,158,11,0.85)" stroke="#f59e0b" strokeWidth="1.2" />
+                      <text x={sbX} y={sbY + 2.5} textAnchor="middle" fill="white" fontSize="6" fontWeight="900">0.5</text>
                       {/* BB — 1 ficha */}
                       <circle cx={bbX} cy={bbY} r={r} fill="rgba(16,185,129,0.8)" stroke="#10b981" strokeWidth="1.2" />
                       <text x={bbX} y={bbY + 3.5} textAnchor="middle" fill="white" fontSize="5" fontWeight="900">BB</text>
@@ -374,7 +372,7 @@ export default function ReferencialAula12() {
               <div style={{ marginTop: '0.5rem', display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
                 {([
                   { tag: 'TOP-HEAVY', icon: '▲', color: '#fbbf24', text: '1º >20% · BF extremo' },
-                  { tag: 'FLAT',      icon: '▬', color: '#94a3b8', text: 'linear · BF≈1' },
+                  { tag: 'FLAT',      icon: '▬', color: '#94a3b8', text: 'decréscimo linear · BF próximo de 1 · jogo ~ChipEV' },
                   { tag: 'HÍBRIDA',   icon: '◆', color: '#c4b5fd', text: 'top inflado · cauda gradual · esta estrutura' },
                 ] as const).map(({ tag, icon, color, text }) => (
                   <div key={tag} style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '3px 8px', borderRadius: '4px', background: `${color}12`, border: `1px solid ${color}30` }}>
@@ -387,8 +385,8 @@ export default function ReferencialAula12() {
             </div>
           </div>
 
-          {/* Ranges */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+          {/* Ranges — lado a lado */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem 2.5rem', alignItems: 'flex-start' }}>
             <RangeGrid freqs={BTN_FREQS} color="indigo" title="BTN — Range de Abertura (RFI)" pct="33.6% open · fold 66.4%" />
             <RangeGrid freqs={BB_FREQS}  color="emerald" title="BB — Defesa vs minirraise" pct="82.9% continue · fold 17.1%" />
           </div>
